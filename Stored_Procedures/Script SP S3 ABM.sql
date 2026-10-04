@@ -4,8 +4,8 @@
     Integrantes: [Nombres]
     Fecha: 01/10/2026
 
-    DescripciÛn:
-    Script de creaciÛn de Stored Procedures ABM (Alta, Baja, ModificaciÛn)
+    Descripci√≥n:
+    Script de creaci√≥n de Stored Procedures ABM (Alta, Baja, Modificaci√≥n)
     para las tablas:
         - dbo.Reemplazo
         - dbo.Partido
@@ -13,7 +13,7 @@
         - dbo.Formacion
         - dbo.Formacion_Jugador
 
-    Cada SP realiza validaciones y agrupa los errores en un ˙nico mensaje.
+    Cada SP realiza validaciones y agrupa los errores en un √∫nico mensaje.
 */
 
 USE MundialDB;
@@ -34,19 +34,19 @@ BEGIN
 
     DECLARE @errores NVARCHAR(MAX) = N'';
 
-    -- ValidaciÛn 1: jugadores distintos
+    -- Validaci√≥n 1: jugadores distintos
     IF @id_jugador_baja = @id_jugador_alta
         SET @errores += N'- El jugador de baja y el de alta no pueden ser el mismo. ';
 
-    -- ValidaciÛn 2: existencia del jugador de baja
+    -- Validaci√≥n 2: existencia del jugador de baja
     IF NOT EXISTS (SELECT 1 FROM dbo.Jugador WHERE id_jugador = @id_jugador_baja)
         SET @errores += N'- No existe el jugador de baja indicado. ';
 
-    -- ValidaciÛn 3: existencia del jugador de alta
+    -- Validaci√≥n 3: existencia del jugador de alta
     IF NOT EXISTS (SELECT 1 FROM dbo.Jugador WHERE id_jugador = @id_jugador_alta)
         SET @errores += N'- No existe el jugador de alta indicado. ';
 
-    -- ValidaciÛn 4: mismo paÌs (selecciÛn) para ambos jugadores
+    -- Validaci√≥n 4: mismo pa√≠s (selecci√≥n) para ambos jugadores
     IF EXISTS (
         SELECT 1
         FROM dbo.Jugador jb
@@ -54,13 +54,13 @@ BEGIN
         WHERE jb.id_jugador = @id_jugador_baja
           AND jb.id_seleccion <> ja.id_seleccion
     )
-        SET @errores += N'- Ambos jugadores deben pertenecer a la misma selecciÛn. ';
+        SET @errores += N'- Ambos jugadores deben pertenecer a la misma selecci√≥n. ';
 
-    -- ValidaciÛn 5: fecha no futura
+    -- Validaci√≥n 5: fecha no futura
     IF @fecha_cambio > CAST(GETDATE() AS DATE)
         SET @errores += N'- La fecha del cambio no puede ser futura. ';
 
-    -- ValidaciÛn 6: motivo no vacÌo
+    -- Validaci√≥n 6: motivo no vac√≠o
     IF LTRIM(RTRIM(ISNULL(@motivo, ''))) = ''
         SET @errores += N'- El motivo es obligatorio. ';
 
@@ -140,7 +140,7 @@ BEGIN
         WHERE jb.id_jugador = @id_jugador_baja
           AND jb.id_seleccion <> ja.id_seleccion
     )
-        SET @errores += N'- Ambos jugadores deben pertenecer a la misma selecciÛn. ';
+        SET @errores += N'- Ambos jugadores deben pertenecer a la misma selecci√≥n. ';
 
     IF @fecha_cambio > CAST(GETDATE() AS DATE)
         SET @errores += N'- La fecha del cambio no puede ser futura. ';
@@ -193,23 +193,23 @@ BEGIN
         ('GRUPOS'), ('DIECISEISAVOS'), ('OCTAVOS'), ('CUARTOS'),
         ('SEMIFINAL'), ('TERCER PUESTO'), ('FINAL');
 
-    -- ValidaciÛn 1: sede existente
+    -- Validaci√≥n 1: sede existente
     IF NOT EXISTS (SELECT 1 FROM dbo.Sede WHERE id_sede = @id_sede)
         SET @errores += N'- No existe la sede indicada. ';
 
-    -- ValidaciÛn 2: fase v·lida
+    -- Validaci√≥n 2: fase v√°lida
     IF NOT EXISTS (SELECT 1 FROM @fasesValidas WHERE f = @fase)
-        SET @errores += N'- La fase indicada no es v·lida. ';
+        SET @errores += N'- La fase indicada no es v√°lida. ';
 
-    -- ValidaciÛn 3: horario local y UTC no nulos
+    -- Validaci√≥n 3: horario local y UTC no nulos
     IF @horario_local IS NULL OR @horario_UTC IS NULL
         SET @errores += N'- Los horarios local y UTC son obligatorios. ';
 
-    -- ValidaciÛn 4: asistencia no negativa
+    -- Validaci√≥n 4: asistencia no negativa
     IF @asistencia_publico IS NOT NULL AND @asistencia_publico < 0
         SET @errores += N'- La asistencia no puede ser negativa. ';
 
-    -- ValidaciÛn 5: asistencia no supera capacidad de la sede
+    -- Validaci√≥n 5: asistencia no supera capacidad de la sede
     IF @asistencia_publico IS NOT NULL
        AND EXISTS (
             SELECT 1 FROM dbo.Sede
@@ -218,7 +218,7 @@ BEGIN
        )
         SET @errores += N'- La asistencia supera la capacidad de la sede. ';
 
-    -- ValidaciÛn 6: fecha coherente con horario local
+    -- Validaci√≥n 6: fecha coherente con horario local
     IF @horario_local IS NOT NULL AND CAST(@horario_local AS DATE) <> @fecha
         SET @errores += N'- La fecha no coincide con la del horario local. ';
 
@@ -253,7 +253,7 @@ BEGIN
     IF NOT EXISTS (SELECT 1 FROM dbo.Partido WHERE id_partido = @id_partido)
         SET @errores += N'- No existe el partido indicado. ';
 
-    -- ValidaciÛn de dependencias: no borrar si tiene datos asociados
+    -- Validaci√≥n de dependencias: no borrar si tiene datos asociados
     IF EXISTS (SELECT 1 FROM dbo.Formacion WHERE id_partido = @id_partido)
         SET @errores += N'- No se puede eliminar: el partido tiene formaciones asociadas. ';
 
@@ -276,7 +276,7 @@ BEGIN
     END
 
     BEGIN TRY
-        -- Primero eliminamos la relaciÛn N:N
+        -- Primero eliminamos la relaci√≥n N:N
         DELETE FROM dbo.Partido_Seleccion WHERE id_partido = @id_partido;
         DELETE FROM dbo.Partido WHERE id_partido = @id_partido;
 
@@ -314,7 +314,7 @@ BEGIN
         SET @errores += N'- No existe la sede indicada. ';
 
     IF NOT EXISTS (SELECT 1 FROM @fasesValidas WHERE f = @fase)
-        SET @errores += N'- La fase indicada no es v·lida. ';
+        SET @errores += N'- La fase indicada no es v√°lida. ';
 
     IF @horario_local IS NULL OR @horario_UTC IS NULL
         SET @errores += N'- Los horarios local y UTC son obligatorios. ';
@@ -362,7 +362,7 @@ GO
    TABLA: dbo.Partido_Seleccion
    ========================================================= */
 
-CREATE PROCEDURE OR ALTER dbo.SP_PartidoSeleccion_Alta
+CREATE OR ALTER PROCEDURE dbo.SP_PartidoSeleccion_Alta
     @id_partido   INT,
     @id_seleccion INT
 AS
@@ -375,16 +375,16 @@ BEGIN
         SET @errores += N'- No existe el partido indicado. ';
 
     IF NOT EXISTS (SELECT 1 FROM dbo.Seleccion WHERE id_seleccion = @id_seleccion)
-        SET @errores += N'- No existe la selecciÛn indicada. ';
+        SET @errores += N'- No existe la selecci√≥n indicada. ';
 
-    -- ValidaciÛn: no m·s de 2 selecciones por partido
+    -- Validaci√≥n: no m√°s de 2 selecciones por partido
     IF (SELECT COUNT(*) FROM dbo.Partido_Seleccion WHERE id_partido = @id_partido) >= 2
         SET @errores += N'- El partido ya tiene dos selecciones asignadas. ';
 
-    -- ValidaciÛn: evitar duplicado exacto
+    -- Validaci√≥n: evitar duplicado exacto
     IF EXISTS (SELECT 1 FROM dbo.Partido_Seleccion
                WHERE id_partido = @id_partido AND id_seleccion = @id_seleccion)
-        SET @errores += N'- La selecciÛn ya est· asignada a este partido. ';
+        SET @errores += N'- La selecci√≥n ya est√° asignada a este partido. ';
 
     IF @errores <> N''
     BEGIN
@@ -415,12 +415,12 @@ BEGIN
 
     IF NOT EXISTS (SELECT 1 FROM dbo.Partido_Seleccion
                    WHERE id_partido = @id_partido AND id_seleccion = @id_seleccion)
-        SET @errores += N'- No existe la relaciÛn partido-selecciÛn indicada. ';
+        SET @errores += N'- No existe la relaci√≥n partido-selecci√≥n indicada. ';
 
     -- No eliminar si hay formaciones asociadas
     IF EXISTS (SELECT 1 FROM dbo.Formacion
                WHERE id_partido = @id_partido AND id_seleccion = @id_seleccion)
-        SET @errores += N'- No se puede eliminar: existe una formaciÛn asociada. ';
+        SET @errores += N'- No se puede eliminar: existe una formaci√≥n asociada. ';
 
     IF @errores <> N''
     BEGIN
@@ -453,18 +453,18 @@ BEGIN
 
     IF NOT EXISTS (SELECT 1 FROM dbo.Partido_Seleccion
                    WHERE id_partido = @id_partido AND id_seleccion = @id_seleccion)
-        SET @errores += N'- No existe la relaciÛn partido-selecciÛn original. ';
+        SET @errores += N'- No existe la relaci√≥n partido-selecci√≥n original. ';
 
     IF NOT EXISTS (SELECT 1 FROM dbo.Partido WHERE id_partido = @nuevo_id_partido)
         SET @errores += N'- No existe el nuevo partido indicado. ';
 
     IF NOT EXISTS (SELECT 1 FROM dbo.Seleccion WHERE id_seleccion = @nueva_id_seleccion)
-        SET @errores += N'- No existe la nueva selecciÛn indicada. ';
+        SET @errores += N'- No existe la nueva selecci√≥n indicada. ';
 
     IF (@id_partido <> @nuevo_id_partido OR @id_seleccion <> @nueva_id_seleccion)
        AND EXISTS (SELECT 1 FROM dbo.Partido_Seleccion
                    WHERE id_partido = @nuevo_id_partido AND id_seleccion = @nueva_id_seleccion)
-        SET @errores += N'- Ya existe la nueva relaciÛn partido-selecciÛn. ';
+        SET @errores += N'- Ya existe la nueva relaci√≥n partido-selecci√≥n. ';
 
     IF (SELECT COUNT(*) FROM dbo.Partido_Seleccion
         WHERE id_partido = @nuevo_id_partido
@@ -510,21 +510,21 @@ BEGIN
         SET @errores += N'- No existe el partido indicado. ';
 
     IF NOT EXISTS (SELECT 1 FROM dbo.Seleccion WHERE id_seleccion = @id_seleccion)
-        SET @errores += N'- No existe la selecciÛn indicada. ';
+        SET @errores += N'- No existe la selecci√≥n indicada. ';
 
-    -- ValidaciÛn: la selecciÛn debe estar asociada al partido
+    -- Validaci√≥n: la selecci√≥n debe estar asociada al partido
     IF NOT EXISTS (SELECT 1 FROM dbo.Partido_Seleccion
                    WHERE id_partido = @id_partido AND id_seleccion = @id_seleccion)
-        SET @errores += N'- La selecciÛn no participa en el partido indicado. ';
+        SET @errores += N'- La selecci√≥n no participa en el partido indicado. ';
 
-    -- ValidaciÛn: no repetir formaciÛn para el mismo partido-selecciÛn
+    -- Validaci√≥n: no repetir formaci√≥n para el mismo partido-selecci√≥n
     IF EXISTS (SELECT 1 FROM dbo.Formacion
                WHERE id_partido = @id_partido AND id_seleccion = @id_seleccion)
-        SET @errores += N'- Ya existe una formaciÛn para ese partido y selecciÛn. ';
+        SET @errores += N'- Ya existe una formaci√≥n para ese partido y selecci√≥n. ';
 
-    -- ValidaciÛn: esquema t·ctico obligatorio
+    -- Validaci√≥n: esquema t√°ctico obligatorio
     IF LTRIM(RTRIM(ISNULL(@esquema_tactico, ''))) = ''
-        SET @errores += N'- El esquema t·ctico es obligatorio. ';
+        SET @errores += N'- El esquema t√°ctico es obligatorio. ';
 
     IF @errores <> N''
     BEGIN
@@ -553,11 +553,11 @@ BEGIN
     DECLARE @errores NVARCHAR(MAX) = N'';
 
     IF NOT EXISTS (SELECT 1 FROM dbo.Formacion WHERE id_formacion = @id_formacion)
-        SET @errores += N'- No existe la formaciÛn indicada. ';
+        SET @errores += N'- No existe la formaci√≥n indicada. ';
 
     -- No borrar si tiene jugadores asociados
     IF EXISTS (SELECT 1 FROM dbo.Formacion_Jugador WHERE id_formacion = @id_formacion)
-        SET @errores += N'- No se puede eliminar: la formaciÛn tiene jugadores asociados. ';
+        SET @errores += N'- No se puede eliminar: la formaci√≥n tiene jugadores asociados. ';
 
     IF @errores <> N''
     BEGIN
@@ -587,27 +587,27 @@ BEGIN
     DECLARE @errores NVARCHAR(MAX) = N'';
 
     IF NOT EXISTS (SELECT 1 FROM dbo.Formacion WHERE id_formacion = @id_formacion)
-        SET @errores += N'- No existe la formaciÛn indicada. ';
+        SET @errores += N'- No existe la formaci√≥n indicada. ';
 
     IF NOT EXISTS (SELECT 1 FROM dbo.Partido WHERE id_partido = @id_partido)
         SET @errores += N'- No existe el partido indicado. ';
 
     IF NOT EXISTS (SELECT 1 FROM dbo.Seleccion WHERE id_seleccion = @id_seleccion)
-        SET @errores += N'- No existe la selecciÛn indicada. ';
+        SET @errores += N'- No existe la selecci√≥n indicada. ';
 
     IF NOT EXISTS (SELECT 1 FROM dbo.Partido_Seleccion
                    WHERE id_partido = @id_partido AND id_seleccion = @id_seleccion)
-        SET @errores += N'- La selecciÛn no participa en el partido indicado. ';
+        SET @errores += N'- La selecci√≥n no participa en el partido indicado. ';
 
-    -- No permitir cambiar a una combinaciÛn ya usada por otra formaciÛn
+    -- No permitir cambiar a una combinaci√≥n ya usada por otra formaci√≥n
     IF EXISTS (SELECT 1 FROM dbo.Formacion
                WHERE id_partido = @id_partido
                  AND id_seleccion = @id_seleccion
                  AND id_formacion <> @id_formacion)
-        SET @errores += N'- Ya existe otra formaciÛn para ese partido y selecciÛn. ';
+        SET @errores += N'- Ya existe otra formaci√≥n para ese partido y selecci√≥n. ';
 
     IF LTRIM(RTRIM(ISNULL(@esquema_tactico, ''))) = ''
-        SET @errores += N'- El esquema t·ctico es obligatorio. ';
+        SET @errores += N'- El esquema t√°ctico es obligatorio. ';
 
     IF @errores <> N''
     BEGIN
@@ -648,12 +648,12 @@ BEGIN
     DECLARE @errores NVARCHAR(MAX) = N'';
 
     IF NOT EXISTS (SELECT 1 FROM dbo.Formacion WHERE id_formacion = @id_formacion)
-        SET @errores += N'- No existe la formaciÛn indicada. ';
+        SET @errores += N'- No existe la formaci√≥n indicada. ';
 
     IF NOT EXISTS (SELECT 1 FROM dbo.Jugador WHERE id_jugador = @id_jugador)
         SET @errores += N'- No existe el jugador indicado. ';
 
-    -- ValidaciÛn: el jugador debe pertenecer a la selecciÛn de la formaciÛn
+    -- Validaci√≥n: el jugador debe pertenecer a la selecci√≥n de la formaci√≥n
     IF EXISTS (
         SELECT 1
         FROM dbo.Formacion f
@@ -661,31 +661,31 @@ BEGIN
         WHERE f.id_formacion = @id_formacion
           AND f.id_seleccion <> j.id_seleccion
     )
-        SET @errores += N'- El jugador no pertenece a la selecciÛn de la formaciÛn. ';
+        SET @errores += N'- El jugador no pertenece a la selecci√≥n de la formaci√≥n. ';
 
-    -- ValidaciÛn: no repetir jugador en la misma formaciÛn
+    -- Validaci√≥n: no repetir jugador en la misma formaci√≥n
     IF EXISTS (SELECT 1 FROM dbo.Formacion_Jugador
                WHERE id_formacion = @id_formacion AND id_jugador = @id_jugador)
-        SET @errores += N'- El jugador ya est· cargado en esta formaciÛn. ';
+        SET @errores += N'- El jugador ya est√° cargado en esta formaci√≥n. ';
 
-    -- ValidaciÛn: dorsal en cancha entre 1 y 99
+    -- Validaci√≥n: dorsal en cancha entre 1 y 99
     IF @dorsal_en_cancha IS NULL OR @dorsal_en_cancha NOT BETWEEN 1 AND 99
         SET @errores += N'- El dorsal en cancha debe estar entre 1 y 99. ';
 
-    -- ValidaciÛn: no repetir dorsal en la misma formaciÛn
+    -- Validaci√≥n: no repetir dorsal en la misma formaci√≥n
     IF EXISTS (SELECT 1 FROM dbo.Formacion_Jugador
                WHERE id_formacion = @id_formacion AND dorsal_en_cancha = @dorsal_en_cancha)
-        SET @errores += N'- El dorsal en cancha ya est· usado en esta formaciÛn. ';
+        SET @errores += N'- El dorsal en cancha ya est√° usado en esta formaci√≥n. ';
 
-    -- ValidaciÛn: es_titular obligatorio
+    -- Validaci√≥n: es_titular obligatorio
     IF @es_titular IS NULL
         SET @errores += N'- Debe indicar si el jugador es titular. ';
 
-    -- ValidaciÛn: m·ximo 11 titulares por formaciÛn
+    -- Validaci√≥n: m√°ximo 11 titulares por formaci√≥n
     IF @es_titular = 1
        AND (SELECT COUNT(*) FROM dbo.Formacion_Jugador
             WHERE id_formacion = @id_formacion AND es_titular = 1) >= 11
-        SET @errores += N'- La formaciÛn ya tiene 11 titulares. ';
+        SET @errores += N'- La formaci√≥n ya tiene 11 titulares. ';
 
     IF @errores <> N''
     BEGIN
@@ -718,7 +718,7 @@ BEGIN
 
     IF NOT EXISTS (SELECT 1 FROM dbo.Formacion_Jugador
                    WHERE id_formacion = @id_formacion AND id_jugador = @id_jugador)
-        SET @errores += N'- No existe la relaciÛn formaciÛn-jugador indicada. ';
+        SET @errores += N'- No existe la relaci√≥n formaci√≥n-jugador indicada. ';
 
     IF @errores <> N''
     BEGIN
@@ -750,33 +750,33 @@ BEGIN
 
     DECLARE @errores NVARCHAR(MAX) = N'';
 
-    -- ValidaciÛn 1: la relaciÛn original debe existir
+    -- Validaci√≥n 1: la relaci√≥n original debe existir
     IF NOT EXISTS (SELECT 1 FROM dbo.Formacion_Jugador
                    WHERE id_formacion = @id_formacion AND id_jugador = @id_jugador)
-        SET @errores += N'- No existe la relaciÛn formaciÛn-jugador indicada. ';
+        SET @errores += N'- No existe la relaci√≥n formaci√≥n-jugador indicada. ';
 
-    -- ValidaciÛn 2: dorsal entre 1 y 99
+    -- Validaci√≥n 2: dorsal entre 1 y 99
     IF @dorsal_en_cancha IS NULL OR @dorsal_en_cancha NOT BETWEEN 1 AND 99
         SET @errores += N'- El dorsal en cancha debe estar entre 1 y 99. ';
 
-    -- ValidaciÛn 3: no repetir dorsal en la misma formaciÛn (excluyendo el registro actual)
+    -- Validaci√≥n 3: no repetir dorsal en la misma formaci√≥n (excluyendo el registro actual)
     IF EXISTS (SELECT 1 FROM dbo.Formacion_Jugador
                WHERE id_formacion = @id_formacion
                  AND dorsal_en_cancha = @dorsal_en_cancha
                  AND id_jugador <> @id_jugador)
-        SET @errores += N'- El dorsal en cancha ya est· usado en esta formaciÛn. ';
+        SET @errores += N'- El dorsal en cancha ya est√° usado en esta formaci√≥n. ';
 
-    -- ValidaciÛn 4: es_titular obligatorio
+    -- Validaci√≥n 4: es_titular obligatorio
     IF @es_titular IS NULL
         SET @errores += N'- Debe indicar si el jugador es titular. ';
 
-    -- ValidaciÛn 5: m·ximo 11 titulares por formaciÛn (si pasa a titular)
+    -- Validaci√≥n 5: m√°ximo 11 titulares por formaci√≥n (si pasa a titular)
     IF @es_titular = 1
        AND (SELECT COUNT(*) FROM dbo.Formacion_Jugador
             WHERE id_formacion = @id_formacion
               AND es_titular = 1
               AND id_jugador <> @id_jugador) >= 11
-        SET @errores += N'- La formaciÛn ya tiene 11 titulares. ';
+        SET @errores += N'- La formaci√≥n ya tiene 11 titulares. ';
 
     IF @errores <> N''
     BEGIN
