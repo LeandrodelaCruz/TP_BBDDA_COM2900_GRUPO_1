@@ -50,12 +50,6 @@ BEGIN
 
         CONSTRAINT CK_Region_PrimeTime
             CHECK (hora_prime_inicio < hora_prime_fin),
-
-        CONSTRAINT CK_Hora_Prime_Inicio_Mayor_Cero
-            CHECK (hora_prime_inicio > 0),
-
-        CONSTRAINT CK_Hora_Prime_Fin_Mayor_Cero
-            CHECK (hora_prime_fin > 0)
     );
 END;
 GO
