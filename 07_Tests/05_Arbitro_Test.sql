@@ -8,6 +8,10 @@
     Descripción:
     Casos de prueba de dbo.Arbitro. Deja un registro TEST_ para inspección; 99_Limpiar_Tests.sql lo elimina.
 */
+
+USE MundialDB;
+GO
+
 SET NOCOUNT ON;
 GO
 
