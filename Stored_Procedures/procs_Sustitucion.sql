@@ -1,11 +1,22 @@
 /*
-    Universidad: [Nombre Universidad]
-    Materia: Bases de Datos Aplicada
-    Integrantes: [Nombres]
-    Fecha: 04/10/2026
+    Universidad: Universidad Nacional de La Matanza - UNLaM
+    Materia: Bases de Datos Aplicada - 2C-2026
+    Comisión: Com: 01-2900
+    Grupo 01: 
+    - Caro, Nicolás Darío
+    - Clara, Lucas
+    - De La Cruz, Leandro Ariel
+    - Rodríguez Elías Uriel
 
     Descripción:
     Stored Procedures ABM para la tabla Sustitucion
+
+    PROCEDIMIENTOS INCLUIDOS:
+    - sp_Sustitucion_Insert (con validaciones)
+    - sp_Sustitucion_GetById
+    - sp_Sustitucion_GetByPartido
+    - sp_Sustitucion_Update
+    - sp_Sustitucion_Delete
     
     Validaciones de NEGOCIO:
     - El jugador que entra NO puede ser TITULAR (debe ser SUPLENTE)
@@ -20,11 +31,7 @@ GO
 -- CREATE - Insertar una nueva sustitución
 -- =========================================================
 
-IF OBJECT_ID('dbo.SP_Sustitucion_Insert', 'P') IS NOT NULL
-    DROP PROCEDURE dbo.SP_Sustitucion_Insert;
-GO
-
-CREATE PROCEDURE dbo.SP_Sustitucion_Insert
+CREATE OR ALTER PROCEDURE dbo.SP_Sustitucion_Insert
     @id_partido INT,
     @id_jugador_sale INT,
     @id_jugador_entra INT,
@@ -224,12 +231,7 @@ GO
 -- =========================================================
 -- READ - Obtener sustitución por ID
 -- =========================================================
-
-IF OBJECT_ID('dbo.SP_Sustitucion_GetById', 'P') IS NOT NULL
-    DROP PROCEDURE dbo.SP_Sustitucion_GetById;
-GO
-
-CREATE PROCEDURE dbo.SP_Sustitucion_GetById
+CREATE OR ALTER PROCEDURE dbo.SP_Sustitucion_GetById
     @id_sustitucion INT
 AS
 BEGIN
@@ -260,11 +262,7 @@ GO
 -- READ - Obtener sustituciones por partido
 -- =========================================================
 
-IF OBJECT_ID('dbo.SP_Sustitucion_GetByPartido', 'P') IS NOT NULL
-    DROP PROCEDURE dbo.SP_Sustitucion_GetByPartido;
-GO
-
-CREATE PROCEDURE dbo.SP_Sustitucion_GetByPartido
+CREATE OR ALTER PROCEDURE dbo.SP_Sustitucion_GetByPartido
     @id_partido INT
 AS
 BEGIN
@@ -296,11 +294,7 @@ GO
 -- UPDATE - Actualizar sustitución
 -- =========================================================
 
-IF OBJECT_ID('dbo.SP_Sustitucion_Update', 'P') IS NOT NULL
-    DROP PROCEDURE dbo.SP_Sustitucion_Update;
-GO
-
-CREATE PROCEDURE dbo.SP_Sustitucion_Update
+CREATE OR ALTER PROCEDURE dbo.SP_Sustitucion_Update
     @id_sustitucion INT,
     @motivo VARCHAR(100) = NULL
 AS
@@ -343,11 +337,7 @@ GO
 -- DELETE - Eliminar sustitución
 -- =========================================================
 
-IF OBJECT_ID('dbo.SP_Sustitucion_Delete', 'P') IS NOT NULL
-    DROP PROCEDURE dbo.SP_Sustitucion_Delete;
-GO
-
-CREATE PROCEDURE dbo.SP_Sustitucion_Delete
+CREATE OR ALTER PROCEDURE dbo.SP_Sustitucion_Delete
     @id_sustitucion INT
 AS
 BEGIN
