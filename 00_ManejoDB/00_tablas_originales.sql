@@ -1,3 +1,6 @@
+USE MundialDB;
+GO
+
 IF OBJECT_ID('dbo.Anunciante', 'U') IS NULL
 BEGIN
     CREATE TABLE dbo.Anunciante
@@ -30,13 +33,7 @@ BEGIN
             PRIMARY KEY (id_region),
 
         CONSTRAINT CK_Region_PrimeTime
-            CHECK (hora_prime_inicio < hora_prime_fin),
-
-        CONSTRAINT CK_Hora_Prime_Inicio_Mayor_Cero
-            CHECK (hora_prime_inicio > 0),
-
-        CONSTRAINT CK_Hora_Prime_Fin_Mayor_Cero
-            CHECK (hora_prime_fin > 0)
+            CHECK (hora_prime_inicio < hora_prime_fin)
     );
 END;
 GO

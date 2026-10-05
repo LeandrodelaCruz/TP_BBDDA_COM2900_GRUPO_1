@@ -8,6 +8,10 @@
     Descripción:
     Validaciones centralizadas para la tabla dbo.Seleccion.
 */
+
+USE MundialDB;
+GO
+
 SET NOCOUNT ON;
 GO
 

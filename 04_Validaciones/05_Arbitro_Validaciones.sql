@@ -8,6 +8,10 @@
     Descripción:
     Validaciones centralizadas para la tabla dbo.Arbitro.
 */
+
+USE MundialDB;
+GO
+
 SET NOCOUNT ON;
 GO
 

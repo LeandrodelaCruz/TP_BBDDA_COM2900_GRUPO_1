@@ -8,6 +8,10 @@
     Descripción:
     Validaciones centralizadas para la tabla dbo.Anunciante.
 */
+
+USE MundialDB;
+GO
+
 SET NOCOUNT ON;
 GO
 

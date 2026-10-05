@@ -8,6 +8,10 @@
     Descripción:
     Cinco procedimientos de manejo de dbo.Region: Alta, Modificar, Baja, Consultar por ID y Listar.
 */
+
+USE MundialDB;
+GO
+
 SET NOCOUNT ON;
 GO
 
