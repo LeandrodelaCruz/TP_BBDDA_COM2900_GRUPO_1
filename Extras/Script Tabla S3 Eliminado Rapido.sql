@@ -1,4 +1,4 @@
-USE MundialDB;
+USE MUNDIALDEFUTBOL;
 GO
 
 delete dbo.Reemplazo
@@ -12,11 +12,11 @@ SELECT TOP (4) [id_reemplazo]
       ,[id_jugador_alta]
       ,[fecha_cambio]
       ,[motivo]
-  FROM [MundialDB].[dbo].[Reemplazo]
+  FROM [MUNDIALDEFUTBOL].[dbo].[Reemplazo]
 
 SELECT TOP (4) [id_partido]
       ,[id_seleccion]
-  FROM [MundialDB].[dbo].[Partido_Seleccion]
+  FROM [MUNDIALDEFUTBOL].[dbo].[Partido_Seleccion]
 
 SELECT TOP (4) [id_partido]
       ,[id_sede]
@@ -26,17 +26,17 @@ SELECT TOP (4) [id_partido]
       ,[fase]
       ,[resultado_final]
       ,[asistencia_publico]
-  FROM [MundialDB].[dbo].[Partido]
+  FROM [MUNDIALDEFUTBOL].[dbo].[Partido]
   
 SELECT TOP (4) [id_formacion]
       ,[id_partido]
       ,[id_seleccion]
       ,[esquema_tactico]
-  FROM [MundialDB].[dbo].[Formacion]
+  FROM [MUNDIALDEFUTBOL].[dbo].[Formacion]
 
 SELECT TOP (4) [id_formacion]
       ,[id_jugador]
       ,[posicion_en_cancha]
       ,[dorsal_en_cancha]
       ,[es_titular]
-  FROM [MundialDB].[dbo].[Formacion_Jugador]
+  FROM [MUNDIALDEFUTBOL].[dbo].[Formacion_Jugador]

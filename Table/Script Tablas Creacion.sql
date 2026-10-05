@@ -9,7 +9,7 @@
     del Sistema de Registro y Gestión del Mundial.
 */
 
-USE MundialDB;
+USE MUNDIALDEFUTBOL;
 GO
 
 
@@ -426,7 +426,17 @@ BEGIN
             CHECK (id_jugador_sale <> id_jugador_entra),
 
         CONSTRAINT CK_Sustitucion_Minuto
-            CHECK (minuto >= 0)
+            CHECK (minuto >= 0),
+        
+        CONSTRAINT CK_Sustitucion_Periodo
+            CHECK (
+                periodo IN (
+                    'PRIMER TIEMPO',
+                    'SEGUNDO TIEMPO',
+                    'PRIMER SUPLEMENTARIO',
+                    'SEGUNDO SUPLEMENTARIO'
+                )
+            )
     );
 END;
 GO
@@ -549,7 +559,7 @@ BEGIN
         id_incidencia INT IDENTITY(1,1) NOT NULL,
         id_partido INT NOT NULL,
         id_jugador INT NOT NULL,
-        id_jugador_victima INT NULL,
+        id_jugador_involucrado INT NULL,
 
         tipo VARCHAR(30) NOT NULL,
         motivo VARCHAR(200) NULL,
@@ -567,8 +577,8 @@ BEGIN
             FOREIGN KEY (id_jugador)
             REFERENCES dbo.Jugador(id_jugador),
 
-        CONSTRAINT FK_Incidencia_JugadorVictima
-            FOREIGN KEY (id_jugador_victima)
+        CONSTRAINT FK_Incidencia_JugadorInvolucrado
+            FOREIGN KEY (id_jugador_involucrado)
             REFERENCES dbo.Jugador(id_jugador),
 
         CONSTRAINT CK_Incidencia_Tipo

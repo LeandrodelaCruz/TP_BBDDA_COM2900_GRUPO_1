@@ -4,35 +4,35 @@
     Integrantes: [Nombres]
     Fecha: 01/10/2026
 
-    Descripción:
+    Descripciï¿½n:
     Script de testing de los Stored Procedures ABM de las tablas:
         - dbo.Partido
 
     Cada bloque incluye el RESULTADO ESPERADO en comentarios.
     Se prueban tanto casos exitosos como casos con validaciones fallidas.
 
-    Ejecutar después de Script Tabla S3 ABM.sql
+    Ejecutar despuï¿½s de Script Tabla S3 ABM.sql
 */
 
-USE MundialDB;
+USE MUNDIALDEFUTBOL;
 GO
 
 SET NOCOUNT ON;
 GO
 
 /* =========================================================
-   PREPARACIÓN: datos mínimos de apoyo
+   PREPARACIï¿½N: datos mï¿½nimos de apoyo
    =========================================================
    Resultado esperado: se insertan (si no existen) una sede,
-   dos selecciones, dos jugadores por selección, un partido
-   y la relación partido-selección. Todo con IDs conocidos
+   dos selecciones, dos jugadores por selecciï¿½n, un partido
+   y la relaciï¿½n partido-selecciï¿½n. Todo con IDs conocidos
    para poder referenciarlos en las pruebas.
    ========================================================= */
 
 -- Sede de prueba
 IF NOT EXISTS (SELECT 1 FROM dbo.Sede WHERE nombre_estadio = N'Estadio Testing')
     INSERT INTO dbo.Sede (nombre_estadio, ciudad, pais, capacidad, huso_horario)
-    VALUES (N'Estadio Testing', N'Ciudad Test', N'País Test', 50000, 'UTC-03:00');
+    VALUES (N'Estadio Testing', N'Ciudad Test', N'Paï¿½s Test', 50000, 'UTC-03:00');
 
 -- Selecciones de prueba
 IF NOT EXISTS (SELECT 1 FROM dbo.Seleccion WHERE pais = N'Testlandia')
@@ -47,7 +47,7 @@ DECLARE @id_sede_test    INT = (SELECT id_sede FROM dbo.Sede WHERE nombre_estadi
 DECLARE @id_sel_test1    INT = (SELECT id_seleccion FROM dbo.Seleccion WHERE pais = N'Testlandia');
 DECLARE @id_sel_test2    INT = (SELECT id_seleccion FROM dbo.Seleccion WHERE pais = N'Pruebalandia');
 
--- Jugadores de prueba (2 por selección)
+-- Jugadores de prueba (2 por selecciï¿½n)
 IF NOT EXISTS (SELECT 1 FROM dbo.Jugador WHERE nombre = N'JugadorBaja1')
     INSERT INTO dbo.Jugador (id_seleccion, nombre, apellido, fecha_nacimiento, club_origen, posicion, dorsal)
     VALUES (@id_sel_test1, N'JugadorBaja1', N'Test', '1995-01-01', N'Club Test', N'Delantero', 10);
@@ -71,7 +71,7 @@ IF NOT EXISTS (SELECT 1 FROM dbo.Partido WHERE resultado_final = N'TEST-ABM')
 
 DECLARE @id_partido_test INT = (SELECT id_partido FROM dbo.Partido WHERE resultado_final = N'TEST-ABM');
 
--- Relación partido-selección de prueba
+-- Relaciï¿½n partido-selecciï¿½n de prueba
 IF NOT EXISTS (SELECT 1 FROM dbo.Partido_Seleccion
                WHERE id_partido = @id_partido_test AND id_seleccion = @id_sel_test1)
     INSERT INTO dbo.Partido_Seleccion (id_partido, id_seleccion)
@@ -112,9 +112,9 @@ GO
 
 
 -- ---------------------------------------------------------
--- CASO 9: Alta fallida - fase inválida
+-- CASO 9: Alta fallida - fase invï¿½lida
 -- RESULTADO ESPERADO: error con mensaje
--- "- La fase indicada no es válida."
+-- "- La fase indicada no es vï¿½lida."
 -- ---------------------------------------------------------
 DECLARE @id_sede INT = (SELECT id_sede FROM dbo.Sede WHERE nombre_estadio = N'Estadio Testing');
 
@@ -125,7 +125,7 @@ BEGIN TRY
         @horario_local = '2026-06-21 15:00:00',
         @horario_UTC   = '2026-06-21 18:00:00',
         @fase          = 'FASE_INVENTADA';
-    PRINT 'ERROR: no se lanzó la excepción esperada';
+    PRINT 'ERROR: no se lanzï¿½ la excepciï¿½n esperada';
 END TRY
 BEGIN CATCH
     PRINT 'OK - Error esperado: ' + ERROR_MESSAGE();
@@ -145,7 +145,7 @@ BEGIN TRY
         @horario_local = '2026-06-22 15:00:00',
         @horario_UTC   = '2026-06-22 18:00:00',
         @fase          = 'GRUPOS';
-    PRINT 'ERROR: no se lanzó la excepción esperada';
+    PRINT 'ERROR: no se lanzï¿½ la excepciï¿½n esperada';
 END TRY
 BEGIN CATCH
     PRINT 'OK - Error esperado: ' + ERROR_MESSAGE();
@@ -168,7 +168,7 @@ BEGIN TRY
         @horario_UTC        = '2026-06-23 18:00:00',
         @fase               = 'GRUPOS',
         @asistencia_publico = 999999;
-    PRINT 'ERROR: no se lanzó la excepción esperada';
+    PRINT 'ERROR: no se lanzï¿½ la excepciï¿½n esperada';
 END TRY
 BEGIN CATCH
     PRINT 'OK - Error esperado: ' + ERROR_MESSAGE();
@@ -177,7 +177,7 @@ GO
 
 
 -- ---------------------------------------------------------
--- CASO 12: Modificación exitosa
+-- CASO 12: Modificaciï¿½n exitosa
 -- RESULTADO ESPERADO: se actualiza el partido de prueba TEST-ABM.
 -- ---------------------------------------------------------
 DECLARE @id_partido INT = (SELECT id_partido FROM dbo.Partido WHERE resultado_final = N'TEST-ABM');
@@ -194,7 +194,7 @@ BEGIN
         @fase               = 'GRUPOS',
         @resultado_final    = N'TEST-ABM',
         @asistencia_publico = 40000;
-    PRINT 'OK - Modificación de Partido ejecutada';
+    PRINT 'OK - Modificaciï¿½n de Partido ejecutada';
 END
 GO
 
@@ -208,7 +208,7 @@ DECLARE @id_partido INT = (SELECT id_partido FROM dbo.Partido WHERE resultado_fi
 
 BEGIN TRY
     EXEC dbo.SP_Partido_Baja @id_partido = @id_partido;
-    PRINT 'ERROR: no se lanzó la excepción esperada';
+    PRINT 'ERROR: no se lanzï¿½ la excepciï¿½n esperada';
 END TRY
 BEGIN CATCH
     PRINT 'OK - Error esperado: ' + ERROR_MESSAGE();
@@ -222,7 +222,7 @@ GO
 -- ---------------------------------------------------------
 BEGIN TRY
     EXEC dbo.SP_Partido_Baja @id_partido = -99999;
-    PRINT 'ERROR: no se lanzó la excepción esperada';
+    PRINT 'ERROR: no se lanzï¿½ la excepciï¿½n esperada';
 END TRY
 BEGIN CATCH
     PRINT 'OK - Error esperado: ' + ERROR_MESSAGE();

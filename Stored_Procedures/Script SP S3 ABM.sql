@@ -16,7 +16,7 @@
     Cada SP realiza validaciones y agrupa los errores en un único mensaje.
 */
 
-USE MundialDB;
+USE MUNDIALDEFUTBOL;
 GO
 
 /* =========================================================

@@ -4,7 +4,7 @@
     Integrantes: [Nombres]
     Fecha: 01/10/2026
 
-    Descripción:
+    Descripciï¿½n:
     Script de testing de los Stored Procedures ABM de las tablas:
         - dbo.Reemplazo
         - dbo.Partido
@@ -15,28 +15,28 @@
     Cada bloque incluye el RESULTADO ESPERADO en comentarios.
     Se prueban tanto casos exitosos como casos con validaciones fallidas.
 
-    Ejecutar después de Script Tabla S3 ABM.sql
+    Ejecutar despuï¿½s de Script Tabla S3 ABM.sql
 */
 
-USE MundialDB;
+USE MUNDIALDEFUTBOL;
 GO
 
 SET NOCOUNT ON;
 GO
 
 /* =========================================================
-   PREPARACIÓN: datos mínimos de apoyo
+   PREPARACIï¿½N: datos mï¿½nimos de apoyo
    =========================================================
    Resultado esperado: se insertan (si no existen) una sede,
-   dos selecciones, dos jugadores por selección, un partido
-   y la relación partido-selección. Todo con IDs conocidos
+   dos selecciones, dos jugadores por selecciï¿½n, un partido
+   y la relaciï¿½n partido-selecciï¿½n. Todo con IDs conocidos
    para poder referenciarlos en las pruebas.
    ========================================================= */
 
 -- Sede de prueba
 IF NOT EXISTS (SELECT 1 FROM dbo.Sede WHERE nombre_estadio = N'Estadio Testing')
     INSERT INTO dbo.Sede (nombre_estadio, ciudad, pais, capacidad, huso_horario)
-    VALUES (N'Estadio Testing', N'Ciudad Test', N'País Test', 50000, 'UTC-03:00');
+    VALUES (N'Estadio Testing', N'Ciudad Test', N'Paï¿½s Test', 50000, 'UTC-03:00');
 
 -- Selecciones de prueba
 IF NOT EXISTS (SELECT 1 FROM dbo.Seleccion WHERE pais = N'Testlandia')
@@ -51,7 +51,7 @@ DECLARE @id_sede_test    INT = (SELECT id_sede FROM dbo.Sede WHERE nombre_estadi
 DECLARE @id_sel_test1    INT = (SELECT id_seleccion FROM dbo.Seleccion WHERE pais = N'Testlandia');
 DECLARE @id_sel_test2    INT = (SELECT id_seleccion FROM dbo.Seleccion WHERE pais = N'Pruebalandia');
 
--- Jugadores de prueba (2 por selección)
+-- Jugadores de prueba (2 por selecciï¿½n)
 IF NOT EXISTS (SELECT 1 FROM dbo.Jugador WHERE nombre = N'JugadorBaja1')
     INSERT INTO dbo.Jugador (id_seleccion, nombre, apellido, fecha_nacimiento, club_origen, posicion, dorsal)
     VALUES (@id_sel_test1, N'JugadorBaja1', N'Test', '1995-01-01', N'Club Test', N'Delantero', 10);
@@ -75,7 +75,7 @@ IF NOT EXISTS (SELECT 1 FROM dbo.Partido WHERE resultado_final = N'TEST-ABM')
 
 DECLARE @id_partido_test INT = (SELECT id_partido FROM dbo.Partido WHERE resultado_final = N'TEST-ABM');
 
--- Relación partido-selección de prueba
+-- Relaciï¿½n partido-selecciï¿½n de prueba
 IF NOT EXISTS (SELECT 1 FROM dbo.Partido_Seleccion
                WHERE id_partido = @id_partido_test AND id_seleccion = @id_sel_test1)
     INSERT INTO dbo.Partido_Seleccion (id_partido, id_seleccion)
@@ -99,7 +99,7 @@ PRINT '=============================================';
 
 -- ---------------------------------------------------------
 -- CASO 25: Alta exitosa
--- RESULTADO ESPERADO: se inserta el jugador en la formación.
+-- RESULTADO ESPERADO: se inserta el jugador en la formaciï¿½n.
 -- ---------------------------------------------------------
 DECLARE @id_formacion INT = (SELECT TOP 1 id_formacion FROM dbo.Formacion ORDER BY id_formacion);
 DECLARE @id_jug1 INT = (SELECT id_jugador FROM dbo.Jugador WHERE nombre = N'JugadorBaja1');
@@ -114,9 +114,9 @@ PRINT 'OK - Alta Formacion_Jugador ejecutada';
 GO
 
 -- ---------------------------------------------------------
--- CASO 26: Alta fallida - dorsal duplicado en la misma formación
+-- CASO 26: Alta fallida - dorsal duplicado en la misma formaciï¿½n
 -- RESULTADO ESPERADO: error
--- "- El dorsal en cancha ya está usado en esta formación."
+-- "- El dorsal en cancha ya estï¿½ usado en esta formaciï¿½n."
 -- ---------------------------------------------------------
 DECLARE @id_formacion INT = (SELECT TOP 1 id_formacion FROM dbo.Formacion ORDER BY id_formacion);
 DECLARE @id_jug2 INT = (SELECT id_jugador FROM dbo.Jugador WHERE nombre = N'JugadorAlta1');
@@ -128,7 +128,7 @@ BEGIN TRY
         @posicion_en_cancha = 'Delantero',
         @dorsal_en_cancha   = 10,  -- duplicado
         @es_titular         = 1;
-    PRINT 'ERROR: no se lanzó la excepción esperada';
+    PRINT 'ERROR: no se lanzï¿½ la excepciï¿½n esperada';
 END TRY
 BEGIN CATCH
     PRINT 'OK - Error esperado: ' + ERROR_MESSAGE();
@@ -137,15 +137,15 @@ GO
 
 
 -- ---------------------------------------------------------
--- CASO 27: Baja fallida - formación con jugadores
+-- CASO 27: Baja fallida - formaciï¿½n con jugadores
 -- RESULTADO ESPERADO: error
--- "- No se puede eliminar: la formación tiene jugadores asociados."
+-- "- No se puede eliminar: la formaciï¿½n tiene jugadores asociados."
 -- ---------------------------------------------------------
 DECLARE @id_formacion INT = (SELECT TOP 1 id_formacion FROM dbo.Formacion ORDER BY id_formacion);
 
 BEGIN TRY
     EXEC dbo.SP_Formacion_Baja @id_formacion = @id_formacion;
-    PRINT 'ERROR: no se lanzó la excepción esperada';
+    PRINT 'ERROR: no se lanzï¿½ la excepciï¿½n esperada';
 END TRY
 BEGIN CATCH
     PRINT 'OK - Error esperado: ' + ERROR_MESSAGE();
@@ -155,7 +155,7 @@ GO
 
 -- ---------------------------------------------------------
 -- CASO 28: Baja exitosa de Formacion_Jugador
--- RESULTADO ESPERADO: se elimina la relación.
+-- RESULTADO ESPERADO: se elimina la relaciï¿½n.
 -- ---------------------------------------------------------
 DECLARE @id_formacion INT = (SELECT TOP 1 id_formacion FROM dbo.Formacion ORDER BY id_formacion);
 DECLARE @id_jug1 INT = (SELECT id_jugador FROM dbo.Jugador WHERE nombre = N'JugadorBaja1');
@@ -169,7 +169,7 @@ GO
 
 -- ---------------------------------------------------------
 -- CASO 29: Baja exitosa de Formacion (ya sin jugadores)
--- RESULTADO ESPERADO: se elimina la formación.
+-- RESULTADO ESPERADO: se elimina la formaciï¿½n.
 -- ---------------------------------------------------------
 DECLARE @id_formacion INT = (SELECT TOP 1 id_formacion FROM dbo.Formacion
                              WHERE esquema_tactico = '4-2-3-1'
@@ -178,21 +178,21 @@ DECLARE @id_formacion INT = (SELECT TOP 1 id_formacion FROM dbo.Formacion
 IF @id_formacion IS NOT NULL
 BEGIN
     EXEC dbo.SP_Formacion_Baja @id_formacion = @id_formacion;
-    PRINT 'OK - Baja de Formación ejecutada';
+    PRINT 'OK - Baja de Formaciï¿½n ejecutada';
 END
 ELSE
-    PRINT 'No hay formación de prueba para eliminar';
+    PRINT 'No hay formaciï¿½n de prueba para eliminar';
 GO
 
 
 -- ---------------------------------------------------------
 -- CASO 30: Baja fallida - Formacion_Jugador inexistente
 -- RESULTADO ESPERADO: error
--- "- No existe la relación formación-jugador indicada."
+-- "- No existe la relaciï¿½n formaciï¿½n-jugador indicada."
 -- ---------------------------------------------------------
 BEGIN TRY
     EXEC dbo.SP_FormacionJugador_Baja @id_formacion = -99999, @id_jugador = -99999;
-    PRINT 'ERROR: no se lanzó la excepción esperada';
+    PRINT 'ERROR: no se lanzï¿½ la excepciï¿½n esperada';
 END TRY
 BEGIN CATCH
     PRINT 'OK - Error esperado: ' + ERROR_MESSAGE();
