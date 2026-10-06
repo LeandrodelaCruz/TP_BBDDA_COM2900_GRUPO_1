@@ -200,7 +200,7 @@ BEGIN
         id_seleccion INT NOT NULL,
         nombre NVARCHAR(60) NOT NULL,
         apellido NVARCHAR(60) NOT NULL,
-        rol NVARCHAR(50) NOT NULL, -- 'Director Técnico', 'Ayudante de Campo', etc.
+        rol VARCHAR(50) NOT NULL,
 
         CONSTRAINT PK_Personal_Tecnico 
             PRIMARY KEY (id_personal),
