@@ -1,15 +1,4 @@
-/*
-    Universidad: [Nombre Universidad]
-    Materia: Bases de Datos Aplicada
-    Integrantes: [Nombres]
-    Fecha: 01/10/2026
-
-    Descripción:
-    Script de creación de tablas y restricciones
-    del Sistema de Registro y Gestión del Mundial.
-*/
-
-USE MundialDB;
+USE MUNDIALDEFUTBOL;
 GO
 
 

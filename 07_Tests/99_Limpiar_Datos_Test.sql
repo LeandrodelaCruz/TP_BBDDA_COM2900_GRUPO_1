@@ -1,8 +1,8 @@
 /*
-    Universidad: [COMPLETAR]
-    Materia: Bases de Datos Aplicada
-    Trabajo Práctico: Entrega 5 - Base de Datos
-    Integrantes: [COMPLETAR]
+    Universidad: Universidad Nacional de la Matanza
+    Materia: Bases de Datos Aplicada - Com 01-2900
+    Trabajo Práctico: Entrega 5
+    Integrantes: Rodríguez, Elías Uriel - Clara, Lucas Nicolas - Caro, Nicolas Dario - de la Cruz, Leandro Ariel
     Fecha: 2026-10-04
 
     Descripción:
@@ -24,7 +24,7 @@ SET @id = (
 );
 WHILE @id IS NOT NULL
 BEGIN
-    EXEC dbo.sp_Anunciante_Baja @id;
+    EXEC dbo.SP_Anunciante_Baja @id;
     SET @id = (
         SELECT TOP 1 id_anunciante FROM dbo.Anunciante
         WHERE nombre LIKE N'TEST_ANUNCIANTE%'
@@ -40,7 +40,7 @@ SET @id = (
 );
 WHILE @id IS NOT NULL
 BEGIN
-    EXEC dbo.sp_Region_Baja @id;
+    EXEC dbo.SP_Region_Baja @id;
     SET @id = (
         SELECT TOP 1 id_region FROM dbo.Region
         WHERE nombre LIKE N'TEST_REGION%'
@@ -56,7 +56,7 @@ SET @id = (
 );
 WHILE @id IS NOT NULL
 BEGIN
-    EXEC dbo.sp_Sede_Baja @id;
+    EXEC dbo.SP_Sede_Baja @id;
     SET @id = (
         SELECT TOP 1 id_sede FROM dbo.Sede
         WHERE nombre_estadio LIKE N'TEST_ESTADIO%'
@@ -72,7 +72,7 @@ SET @id = (
 );
 WHILE @id IS NOT NULL
 BEGIN
-    EXEC dbo.sp_Seleccion_Baja @id;
+    EXEC dbo.SP_Seleccion_Baja @id;
     SET @id = (
         SELECT TOP 1 id_seleccion FROM dbo.Seleccion
         WHERE pais LIKE N'TEST_PAIS_SELECCION%'
@@ -88,7 +88,7 @@ SET @id = (
 );
 WHILE @id IS NOT NULL
 BEGIN
-    EXEC dbo.sp_Arbitro_Baja @id;
+    EXEC dbo.SP_Arbitro_Baja @id;
     SET @id = (
         SELECT TOP 1 id_arbitro FROM dbo.Arbitro
         WHERE nombre LIKE N'TEST_ARBITRO%'

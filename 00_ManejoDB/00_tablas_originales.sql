@@ -1,4 +1,12 @@
-USE MundialDB;
+/*
+    Universidad: Universidad Nacional de la Matanza
+    Materia: Bases de Datos Aplicada - Com 01-2900
+    Trabajo Práctico: Entrega 5
+    Integrantes: Rodríguez, Elías Uriel - Clara, Lucas Nicolas - Caro, Nicolas Dario - de la Cruz, Leandro Ariel
+    Fecha: 2026-10-04
+*/
+
+USE MUNDIALDEFUTBOL;
 GO
 
 IF OBJECT_ID('dbo.Anunciante', 'U') IS NULL

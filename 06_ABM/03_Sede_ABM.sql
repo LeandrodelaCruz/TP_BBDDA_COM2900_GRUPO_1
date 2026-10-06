@@ -1,22 +1,21 @@
 /*
-    Universidad: [COMPLETAR]
-    Materia: Bases de Datos Aplicada
-    Trabajo Práctico: Entrega 5 - Base de Datos
-    Integrantes: [COMPLETAR]
+    Universidad: Universidad Nacional de la Matanza
+    Materia: Bases de Datos Aplicada - Com 01-2900
+    Trabajo Práctico: Entrega 5
+    Integrantes: Rodríguez, Elías Uriel - Clara, Lucas Nicolas - Caro, Nicolas Dario - de la Cruz, Leandro Ariel
     Fecha: 2026-10-04
-
     Descripción:
     Cinco procedimientos de manejo de dbo.Sede: Alta, Modificar, Baja, Consultar por ID y Listar.
 */
 
-USE MundialDB;
+USE MUNDIALDEFUTBOL;
 GO
 
 SET NOCOUNT ON;
 GO
 
 
-CREATE OR ALTER PROCEDURE dbo.sp_Sede_Alta
+CREATE OR ALTER PROCEDURE dbo.SP_Sede_Alta
     @nombre_estadio NVARCHAR(4000),
     @ciudad NVARCHAR(4000),
     @pais NVARCHAR(4000),
@@ -43,7 +42,7 @@ BEGIN
 END;
 GO
 
-CREATE OR ALTER PROCEDURE dbo.sp_Sede_Modificar
+CREATE OR ALTER PROCEDURE dbo.SP_Sede_Modificar
     @id_sede INT,
     @nombre_estadio NVARCHAR(4000),
     @ciudad NVARCHAR(4000),
@@ -54,7 +53,7 @@ AS
 BEGIN
     SET NOCOUNT ON;
     DECLARE @errores NVARCHAR(2048);
-    EXEC dbo.sp_Validar_Sede 'MODIFICAR', @id_sede, @nombre_estadio, @ciudad, @pais, @capacidad,
+    EXEC dbo.SP_Validar_Sede 'MODIFICAR', @id_sede, @nombre_estadio, @ciudad, @pais, @capacidad,
          @huso_horario, @errores OUTPUT;
     IF @errores <> N'' THROW 50202, @errores, 1;
 
@@ -70,7 +69,7 @@ BEGIN
 END;
 GO
 
-CREATE OR ALTER PROCEDURE dbo.sp_Sede_Baja
+CREATE OR ALTER PROCEDURE dbo.SP_Sede_Baja
     @id_sede INT
 AS
 BEGIN
@@ -83,7 +82,7 @@ BEGIN
 END;
 GO
 
-CREATE OR ALTER PROCEDURE dbo.sp_Sede_ConsultarPorId
+CREATE OR ALTER PROCEDURE dbo.SP_Sede_ConsultarPorId
     @id_sede INT
 AS
 BEGIN
@@ -96,7 +95,7 @@ BEGIN
 END;
 GO
 
-CREATE OR ALTER PROCEDURE dbo.sp_Sede_Listar
+CREATE OR ALTER PROCEDURE dbo.SP_Sede_Listar
 AS
 BEGIN
     SET NOCOUNT ON;

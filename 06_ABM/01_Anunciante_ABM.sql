@@ -1,22 +1,22 @@
 /*
-    Universidad: [COMPLETAR]
-    Materia: Bases de Datos Aplicada
-    Trabajo Práctico: Entrega 5 - Base de Datos
-    Integrantes: [COMPLETAR]
+    Universidad: Universidad Nacional de la Matanza
+    Materia: Bases de Datos Aplicada - Com 01-2900
+    Trabajo Práctico: Entrega 5
+    Integrantes: Rodríguez, Elías Uriel - Clara, Lucas Nicolas - Caro, Nicolas Dario - de la Cruz, Leandro Ariel
     Fecha: 2026-10-04
 
     Descripción:
     Cinco procedimientos de manejo de dbo.Anunciante: Alta, Modificar, Baja, Consultar por ID y Listar.
 */
 
-USE MundialDB;
+USE MUNDIALDEFUTBOL;
 GO
 
 SET NOCOUNT ON;
 GO
 
 
-CREATE OR ALTER PROCEDURE dbo.sp_Anunciante_Alta
+CREATE OR ALTER PROCEDURE dbo.SP_Anunciante_Alta
     @nombre NVARCHAR(4000)
 AS
 BEGIN
@@ -32,7 +32,7 @@ BEGIN
 END;
 GO
 
-CREATE OR ALTER PROCEDURE dbo.sp_Anunciante_Modificar
+CREATE OR ALTER PROCEDURE dbo.SP_Anunciante_Modificar
     @id_anunciante INT,
     @nombre NVARCHAR(4000)
 AS
@@ -50,7 +50,7 @@ BEGIN
 END;
 GO
 
-CREATE OR ALTER PROCEDURE dbo.sp_Anunciante_Baja
+CREATE OR ALTER PROCEDURE dbo.SP_Anunciante_Baja
     @id_anunciante INT
 AS
 BEGIN
@@ -63,7 +63,7 @@ BEGIN
 END;
 GO
 
-CREATE OR ALTER PROCEDURE dbo.sp_Anunciante_ConsultarPorId
+CREATE OR ALTER PROCEDURE dbo.SP_Anunciante_ConsultarPorId
     @id_anunciante INT
 AS
 BEGIN
@@ -76,7 +76,7 @@ BEGIN
 END;
 GO
 
-CREATE OR ALTER PROCEDURE dbo.sp_Anunciante_Listar
+CREATE OR ALTER PROCEDURE dbo.SP_Anunciante_Listar
 AS
 BEGIN
     SET NOCOUNT ON;

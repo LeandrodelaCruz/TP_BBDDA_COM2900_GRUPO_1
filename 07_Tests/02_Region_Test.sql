@@ -1,15 +1,15 @@
 /*
-    Universidad: [COMPLETAR]
-    Materia: Bases de Datos Aplicada
-    Trabajo Práctico: Entrega 5 - Base de Datos
-    Integrantes: [COMPLETAR]
+    Universidad: Universidad Nacional de la Matanza
+    Materia: Bases de Datos Aplicada - Com 01-2900
+    Trabajo Práctico: Entrega 5
+    Integrantes: Rodríguez, Elías Uriel - Clara, Lucas Nicolas - Caro, Nicolas Dario - de la Cruz, Leandro Ariel
     Fecha: 2026-10-04
 
     Descripción:
     Casos de prueba de dbo.Region. Deja un registro TEST_ para inspección; 99_Limpiar_Tests.sql lo elimina.
 */
 
-USE MundialDB;
+USE MUNDIALDEFUTBOL;
 GO
 
 SET NOCOUNT ON;
@@ -25,7 +25,7 @@ DECLARE @id_prev INT = (
 );
 WHILE @id_prev IS NOT NULL
 BEGIN
-    EXEC dbo.sp_Region_Baja @id_prev;
+    EXEC dbo.SP_Region_Baja @id_prev;
     SET @id_prev = (
         SELECT TOP 1 id_region FROM dbo.Region
         WHERE nombre IN (N'TEST_REGION_PRINCIPAL', N'TEST_REGION_MODIFICADA', N'TEST_REGION_BAJA')
@@ -34,17 +34,17 @@ BEGIN
 END;
 
 -- 1) Alta exitosa
-EXEC dbo.sp_Region_Alta N'TEST_REGION_PRINCIPAL', N'Español', 'UTC-03:00', '19:00', '23:00';
+EXEC dbo.SP_Region_Alta N'TEST_REGION_PRINCIPAL', N'Español', 'UTC-03:00', '19:00', '23:00';
 DECLARE @id INT = (SELECT id_region FROM dbo.Region WHERE nombre = N'TEST_REGION_PRINCIPAL');
 
 -- 2) Consulta
-EXEC dbo.sp_Region_ConsultarPorId @id;
+EXEC dbo.SP_Region_ConsultarPorId @id;
 
 -- 3) Modificación
-EXEC dbo.sp_Region_Modificar @id, N'TEST_REGION_MODIFICADA', N'Español', 'UTC-03:00', '18:00', '22:00';
+EXEC dbo.SP_Region_Modificar @id, N'TEST_REGION_MODIFICADA', N'Español', 'UTC-03:00', '18:00', '22:00';
 
 -- 4) Listado
-EXEC dbo.sp_Region_Listar;
+EXEC dbo.SP_Region_Listar;
 
 -- 5) Baja sobre un segundo registro
 EXEC dbo.sp_Region_Alta N'TEST_REGION_BAJA', N'Inglés', 'UTC-05:00', '19:00', '23:00';
@@ -53,7 +53,7 @@ EXEC dbo.sp_Region_Baja @id_baja;
 
 -- VALIDACIÓN: rango prime time inválido
 BEGIN TRY
-    EXEC dbo.sp_Region_Alta N'TEST_REGION_ERROR', N'Español', 'UTC-03:00', '23:00', '19:00';
+    EXEC dbo.SP_Region_Alta N'TEST_REGION_ERROR', N'Español', 'UTC-03:00', '23:00', '19:00';
 END TRY
 BEGIN CATCH
     SELECT 'OK - error esperado: prime time inválido' AS prueba, ERROR_MESSAGE() AS mensaje;
@@ -61,7 +61,7 @@ END CATCH;
 
 -- VALIDACIÓN: región duplicada
 BEGIN TRY
-    EXEC dbo.sp_Region_Alta N'TEST_REGION_MODIFICADA', N'Español', 'UTC-03:00', '19:00', '23:00';
+    EXEC dbo.SP_Region_Alta N'TEST_REGION_MODIFICADA', N'Español', 'UTC-03:00', '19:00', '23:00';
 END TRY
 BEGIN CATCH
     SELECT 'OK - error esperado: región duplicada' AS prueba, ERROR_MESSAGE() AS mensaje;

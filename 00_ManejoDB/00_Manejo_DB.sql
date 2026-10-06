@@ -1,8 +1,8 @@
 /*
-    Universidad: [COMPLETAR]
-    Materia: Bases de Datos Aplicada
+    Universidad: Universidad Nacional de la Matanza
+    Materia: Bases de Datos Aplicada - Com 01-2900
     Trabajo Práctico: Entrega 5
-    Integrantes: [COMPLETAR]
+    Integrantes: Rodríguez, Elías Uriel - Clara, Lucas Nicolas - Caro, Nicolas Dario - de la Cruz, Leandro Ariel
     Fecha: 2026-10-04
 
     Descripción:
@@ -13,28 +13,21 @@
 USE master;
 GO
 
-IF DB_ID(N'MundialDB') IS NOT NULL
+IF DB_ID(N'MUNDIALDEFUTBOL') IS NOT NULL
 BEGIN
-    ALTER DATABASE MundialDB SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
-    DROP DATABASE MundialDB;
+    ALTER DATABASE MUNDIALDEFUTBOL SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+    DROP DATABASE MUNDIALDEFUTBOL;
 END;
 GO
 
-CREATE DATABASE MundialDB;
+CREATE DATABASE MUNDIALDEFUTBOL;
 GO
 
-ALTER DATABASE MundialDB SET MULTI_USER;
+ALTER DATABASE MUNDIALDEFUTBOL SET MULTI_USER;
 GO
 
 SELECT name, state_desc, user_access_desc
 FROM sys.databases
-WHERE name = N'MundialDB';
+WHERE name = N'MUNDIALDEFUTBOL';
 GO
-
-USE MundialDB;
-GO
-
-SELECT TABLE_NAME
-FROM INFORMATION_SCHEMA.TABLES
-WHERE TABLE_TYPE = 'BASE TABLE'
-ORDER BY TABLE_NAME;
+---

@@ -1,22 +1,22 @@
 /*
-    Universidad: [COMPLETAR]
-    Materia: Bases de Datos Aplicada
-    Trabajo Práctico: Entrega 5 - Base de Datos
-    Integrantes: [COMPLETAR]
+    Universidad: Universidad Nacional de la Matanza
+    Materia: Bases de Datos Aplicada - Com 01-2900
+    Trabajo Práctico: Entrega 5
+    Integrantes: Rodríguez, Elías Uriel - Clara, Lucas Nicolas - Caro, Nicolas Dario - de la Cruz, Leandro Ariel
     Fecha: 2026-10-04
 
     Descripción:
     Cinco procedimientos de manejo de dbo.Seleccion: Alta, Modificar, Baja, Consultar por ID y Listar.
 */
 
-USE MundialDB;
+USE MUNDIALDEFUTBOL;
 GO
 
 SET NOCOUNT ON;
 GO
 
 
-CREATE OR ALTER PROCEDURE dbo.sp_Seleccion_Alta
+CREATE OR ALTER PROCEDURE dbo.SP_Seleccion_Alta
     @pais NVARCHAR(4000),
     @confederacion NVARCHAR(4000),
     @grupo_asignado VARCHAR(4000)
@@ -38,7 +38,7 @@ BEGIN
 END;
 GO
 
-CREATE OR ALTER PROCEDURE dbo.sp_Seleccion_Modificar
+CREATE OR ALTER PROCEDURE dbo.SP_Seleccion_Modificar
     @id_seleccion INT,
     @pais NVARCHAR(4000),
     @confederacion NVARCHAR(4000),
@@ -47,7 +47,7 @@ AS
 BEGIN
     SET NOCOUNT ON;
     DECLARE @errores NVARCHAR(2048);
-    EXEC dbo.sp_Validar_Seleccion 'MODIFICAR', @id_seleccion, @pais, @confederacion,
+    EXEC dbo.SP_Validar_Seleccion 'MODIFICAR', @id_seleccion, @pais, @confederacion,
          @grupo_asignado, @errores OUTPUT;
     IF @errores <> N'' THROW 50302, @errores, 1;
 
@@ -61,7 +61,7 @@ BEGIN
 END;
 GO
 
-CREATE OR ALTER PROCEDURE dbo.sp_Seleccion_Baja
+CREATE OR ALTER PROCEDURE dbo.SP_Seleccion_Baja
     @id_seleccion INT
 AS
 BEGIN
@@ -74,7 +74,7 @@ BEGIN
 END;
 GO
 
-CREATE OR ALTER PROCEDURE dbo.sp_Seleccion_ConsultarPorId
+CREATE OR ALTER PROCEDURE dbo.SP_Seleccion_ConsultarPorId
     @id_seleccion INT
 AS
 BEGIN
@@ -87,7 +87,7 @@ BEGIN
 END;
 GO
 
-CREATE OR ALTER PROCEDURE dbo.sp_Seleccion_Listar
+CREATE OR ALTER PROCEDURE dbo.SP_Seleccion_Listar
 AS
 BEGIN
     SET NOCOUNT ON;

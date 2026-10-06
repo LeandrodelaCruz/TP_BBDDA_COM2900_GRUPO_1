@@ -1,22 +1,21 @@
 /*
-    Universidad: [COMPLETAR]
-    Materia: Bases de Datos Aplicada
-    Trabajo Práctico: Entrega 5 - Base de Datos
-    Integrantes: [COMPLETAR]
+    Universidad: Universidad Nacional de la Matanza
+    Materia: Bases de Datos Aplicada - Com 01-2900
+    Trabajo Práctico: Entrega 5
+    Integrantes: Rodríguez, Elías Uriel - Clara, Lucas Nicolas - Caro, Nicolas Dario - de la Cruz, Leandro Ariel
     Fecha: 2026-10-04
-
     Descripción:
     Validaciones centralizadas para la tabla dbo.Sede.
 */
 
-USE MundialDB;
+USE MUNDIALDEFUTBOL;
 GO
 
 SET NOCOUNT ON;
 GO
 
 
-CREATE OR ALTER PROCEDURE dbo.sp_Validar_Sede
+CREATE OR ALTER PROCEDURE dbo.SP_Validar_Sede
     @operacion       VARCHAR(12),
     @id_sede         INT = NULL,
     @nombre_estadio  NVARCHAR(4000) = NULL,

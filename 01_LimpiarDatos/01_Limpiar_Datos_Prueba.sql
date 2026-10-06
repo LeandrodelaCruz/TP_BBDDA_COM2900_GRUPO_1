@@ -1,10 +1,10 @@
 /*
-    Universidad: [COMPLETAR]
-    Materia: Bases de Datos Aplicada
+    Universidad: Universidad Nacional de la Matanza
+    Materia: Bases de Datos Aplicada - Com 01-2900
     Trabajo Práctico: Entrega 5
-    Integrantes: [COMPLETAR]
+    Integrantes: Rodríguez, Elías Uriel - Clara, Lucas Nicolas - Caro, Nicolas Dario - de la Cruz, Leandro Ariel
     Fecha: 2026-10-04
-
+    
     Descripción:
     Limpia exclusivamente los datos creados por los scripts de prueba
     de las cinco tablas: Anunciante, Region, Sede, Seleccion y Arbitro.
@@ -14,7 +14,7 @@
     No realiza DELETE directo sobre las tablas.
 */
 
-USE MundialDB;
+USE MUNDIALDEFUTBOL;
 GO
 
 SET NOCOUNT ON;

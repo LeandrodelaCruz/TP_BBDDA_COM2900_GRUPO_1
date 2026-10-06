@@ -1,22 +1,22 @@
 /*
-    Universidad: [COMPLETAR]
-    Materia: Bases de Datos Aplicada
-    Trabajo Práctico: Entrega 5 - Base de Datos
-    Integrantes: [COMPLETAR]
+    Universidad: Universidad Nacional de la Matanza
+    Materia: Bases de Datos Aplicada - Com 01-2900
+    Trabajo Práctico: Entrega 5
+    Integrantes: Rodríguez, Elías Uriel - Clara, Lucas Nicolas - Caro, Nicolas Dario - de la Cruz, Leandro Ariel
     Fecha: 2026-10-04
 
     Descripción:
     Cinco procedimientos de manejo de dbo.Arbitro: Alta, Modificar, Baja, Consultar por ID y Listar.
 */
 
-USE MundialDB;
+USE MUNDIALDEFUTBOL;
 GO
 
 SET NOCOUNT ON;
 GO
 
 
-CREATE OR ALTER PROCEDURE dbo.sp_Arbitro_Alta
+CREATE OR ALTER PROCEDURE dbo.SP_Arbitro_Alta
     @nombre NVARCHAR(4000),
     @apellido NVARCHAR(4000),
     @fecha_nacimiento DATE,
@@ -45,7 +45,7 @@ BEGIN
 END;
 GO
 
-CREATE OR ALTER PROCEDURE dbo.sp_Arbitro_Modificar
+CREATE OR ALTER PROCEDURE dbo.SP_Arbitro_Modificar
     @id_arbitro INT,
     @nombre NVARCHAR(4000),
     @apellido NVARCHAR(4000),
@@ -57,7 +57,7 @@ AS
 BEGIN
     SET NOCOUNT ON;
     DECLARE @errores NVARCHAR(2048);
-    EXEC dbo.sp_Validar_Arbitro 'MODIFICAR', @id_arbitro, @nombre, @apellido, @fecha_nacimiento,
+    EXEC dbo.SP_Validar_Arbitro 'MODIFICAR', @id_arbitro, @nombre, @apellido, @fecha_nacimiento,
          @pais, @puesto, @idiomas, @errores OUTPUT;
     IF @errores <> N'' THROW 50402, @errores, 1;
 
@@ -74,7 +74,7 @@ BEGIN
 END;
 GO
 
-CREATE OR ALTER PROCEDURE dbo.sp_Arbitro_Baja
+CREATE OR ALTER PROCEDURE dbo.SP_Arbitro_Baja
     @id_arbitro INT
 AS
 BEGIN
@@ -87,7 +87,7 @@ BEGIN
 END;
 GO
 
-CREATE OR ALTER PROCEDURE dbo.sp_Arbitro_ConsultarPorId
+CREATE OR ALTER PROCEDURE dbo.SP_Arbitro_ConsultarPorId
     @id_arbitro INT
 AS
 BEGIN
@@ -100,7 +100,7 @@ BEGIN
 END;
 GO
 
-CREATE OR ALTER PROCEDURE dbo.sp_Arbitro_Listar
+CREATE OR ALTER PROCEDURE dbo.SP_Arbitro_Listar
 AS
 BEGIN
     SET NOCOUNT ON;

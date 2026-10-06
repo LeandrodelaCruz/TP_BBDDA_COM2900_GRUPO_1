@@ -1,15 +1,15 @@
 /*
-    Universidad: [COMPLETAR]
-    Materia: Bases de Datos Aplicada
-    Trabajo Práctico: Entrega 5 - Base de Datos
-    Integrantes: [COMPLETAR]
+    Universidad: Universidad Nacional de la Matanza
+    Materia: Bases de Datos Aplicada - Com 01-2900
+    Trabajo Práctico: Entrega 5
+    Integrantes: Rodríguez, Elías Uriel - Clara, Lucas Nicolas - Caro, Nicolas Dario - de la Cruz, Leandro Ariel
     Fecha: 2026-10-04
 
     Descripción:
     Casos de prueba de dbo.Anunciante. Deja un registro TEST_ para inspección; 99_Limpiar_Tests.sql lo elimina.
 */
 
-USE MundialDB;
+USE MUNDIALDEFUTBOL;
 GO
 
 SET NOCOUNT ON;
@@ -35,26 +35,26 @@ BEGIN
 END;
 
 -- 1) Alta exitosa
-EXEC dbo.sp_Anunciante_Alta N'TEST_ANUNCIANTE_PRINCIPAL';
+EXEC dbo.SP_Anunciante_Alta N'TEST_ANUNCIANTE_PRINCIPAL';
 DECLARE @id INT = (SELECT id_anunciante FROM dbo.Anunciante WHERE nombre = N'TEST_ANUNCIANTE_PRINCIPAL');
 
 -- 2) Consulta por ID
-EXEC dbo.sp_Anunciante_ConsultarPorId @id;
+EXEC dbo.SP_Anunciante_ConsultarPorId @id;
 
 -- 3) Modificación exitosa
-EXEC dbo.sp_Anunciante_Modificar @id, N'TEST_ANUNCIANTE_MODIFICADO';
+EXEC dbo.SP_Anunciante_Modificar @id, N'TEST_ANUNCIANTE_MODIFICADO';
 
 -- 4) Listado
-EXEC dbo.sp_Anunciante_Listar;
+EXEC dbo.SP_Anunciante_Listar;
 
 -- 5) Baja exitosa sobre un segundo registro
-EXEC dbo.sp_Anunciante_Alta N'TEST_ANUNCIANTE_BAJA';
+EXEC dbo.SP_Anunciante_Alta N'TEST_ANUNCIANTE_BAJA';
 DECLARE @id_baja INT = (SELECT id_anunciante FROM dbo.Anunciante WHERE nombre = N'TEST_ANUNCIANTE_BAJA');
-EXEC dbo.sp_Anunciante_Baja @id_baja;
+EXEC dbo.SP_Anunciante_Baja @id_baja;
 
 -- VALIDACIÓN: nombre vacío
 BEGIN TRY
-    EXEC dbo.sp_Anunciante_Alta N'';
+    EXEC dbo.SP_Anunciante_Alta N'';
 END TRY
 BEGIN CATCH
     SELECT 'OK - error esperado: nombre vacío' AS prueba, ERROR_MESSAGE() AS mensaje;
@@ -62,7 +62,7 @@ END CATCH;
 
 -- VALIDACIÓN: nombre duplicado
 BEGIN TRY
-    EXEC dbo.sp_Anunciante_Alta N'TEST_ANUNCIANTE_MODIFICADO';
+    EXEC dbo.SP_Anunciante_Alta N'TEST_ANUNCIANTE_MODIFICADO';
 END TRY
 BEGIN CATCH
     SELECT 'OK - error esperado: anunciante duplicado' AS prueba, ERROR_MESSAGE() AS mensaje;

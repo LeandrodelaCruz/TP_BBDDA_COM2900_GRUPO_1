@@ -1,11 +1,27 @@
 /*
+    Universidad: Universidad Nacional de la Matanza
+    Materia: Bases de Datos Aplicada - Com 01-2900
+    Trabajo Práctico: Entrega 5
+    Integrantes: Rodríguez, Elías Uriel - Clara, Lucas Nicolas - Caro, Nicolas Dario - de la Cruz, Leandro Ariel
+    Fecha: 2026-10-04
     Script auxiliar de consulta rápida.
     No modifica datos.
 */
 
---Creacion de procedimientos 
+--Creacion de tablas
 
-USE MundialDB;
+USE MUNDIALDEFUTBOL;
+GO
+
+SELECT TABLE_NAME
+FROM INFORMATION_SCHEMA.TABLES
+WHERE TABLE_TYPE = 'BASE TABLE'
+ORDER BY TABLE_NAME;
+GO
+
+--Creacion de validaciones
+
+USE MUNDIALDEFUTBOL;
 GO
 
 SELECT name
@@ -14,9 +30,9 @@ WHERE name LIKE 'sp_Validar_%'
 ORDER BY name;
 GO
 
---Creacion de 25 procedimientos
+--Creacion de 25 ABM
 
-USE MundialDB;
+USE MUNDIALDEFUTBOL;
 GO
 
 SELECT name
@@ -30,7 +46,7 @@ ORDER BY name;
 
 --Ver tablas
 
-USE MundialDB;
+USE MUNDIALDEFUTBOL;
 GO
 
 SELECT * FROM dbo.Anunciante;

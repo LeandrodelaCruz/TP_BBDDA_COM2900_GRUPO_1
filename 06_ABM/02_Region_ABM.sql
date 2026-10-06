@@ -1,22 +1,22 @@
 /*
-    Universidad: [COMPLETAR]
-    Materia: Bases de Datos Aplicada
-    Trabajo Práctico: Entrega 5 - Base de Datos
-    Integrantes: [COMPLETAR]
+    Universidad: Universidad Nacional de la Matanza
+    Materia: Bases de Datos Aplicada - Com 01-2900
+    Trabajo Práctico: Entrega 5
+    Integrantes: Rodríguez, Elías Uriel - Clara, Lucas Nicolas - Caro, Nicolas Dario - de la Cruz, Leandro Ariel
     Fecha: 2026-10-04
 
     Descripción:
     Cinco procedimientos de manejo de dbo.Region: Alta, Modificar, Baja, Consultar por ID y Listar.
 */
 
-USE MundialDB;
+USE MUNDIALDEFUTBOL;
 GO
 
 SET NOCOUNT ON;
 GO
 
 
-CREATE OR ALTER PROCEDURE dbo.sp_Region_Alta
+CREATE OR ALTER PROCEDURE dbo.SP_Region_Alta
     @nombre NVARCHAR(4000),
     @idioma NVARCHAR(4000) = NULL,
     @huso_horario VARCHAR(4000),
