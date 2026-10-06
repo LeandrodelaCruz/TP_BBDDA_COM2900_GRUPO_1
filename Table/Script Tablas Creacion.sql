@@ -1,15 +1,19 @@
 /*
-    Universidad: [Nombre Universidad]
-    Materia: Bases de Datos Aplicada
-    Integrantes: [Nombres]
-    Fecha: 01/10/2026
+    Universidad: Universidad Nacional de La Matanza - UNLaM
+    Materia: Bases de Datos Aplicada - 2C-2026
+    Comisión: Com: 01-2900
+    Grupo 01: 
+    - Caro, Nicolás Darío
+    - Clara, Lucas
+    - De La Cruz, Leandro Ariel
+    - Rodríguez Elías Uriel
 
     Descripción:
     Script de creación de tablas y restricciones
     del Sistema de Registro y Gestión del Mundial.
 */
 
-USE MundialDB;
+USE MUNDIALDEFUTBOL;
 GO
 
 
@@ -41,7 +45,7 @@ BEGIN
         id_region INT IDENTITY(1,1) NOT NULL,
         nombre NVARCHAR(80) NOT NULL,
         idioma NVARCHAR(50) NULL,
-        huso_horario NVARCHAR(100) NOT NULL,
+        huso_horario VARCHAR(100) NOT NULL,
         hora_prime_inicio TIME(0) NOT NULL,
         hora_prime_fin TIME(0) NOT NULL,
 
@@ -50,12 +54,6 @@ BEGIN
 
         CONSTRAINT CK_Region_PrimeTime
             CHECK (hora_prime_inicio < hora_prime_fin),
-
-        CONSTRAINT CK_Hora_Prime_Inicio_Mayor_Cero
-            CHECK (hora_prime_inicio > 0),
-
-        CONSTRAINT CK_Hora_Prime_Fin_Mayor_Cero
-            CHECK (hora_prime_fin > 0)
     );
 END;
 GO
@@ -70,7 +68,7 @@ BEGIN
         ciudad NVARCHAR(80) NOT NULL,
         pais NVARCHAR(80) NOT NULL,
         capacidad INT NOT NULL,
-        huso_horario NVARCHAR(100) NOT NULL,
+        huso_horario VARCHAR(100) NOT NULL,
 
         CONSTRAINT PK_Sede
             PRIMARY KEY (id_sede),
@@ -110,7 +108,7 @@ BEGIN
         apellido NVARCHAR(60) NOT NULL,
         fecha_nacimiento DATE NOT NULL,
         pais NVARCHAR(80) NOT NULL,
-        categoria NVARCHAR(50) NOT NULL,
+        puesto VARCHAR(50) NOT NULL,
         idiomas NVARCHAR(200) NULL,
 
         CONSTRAINT PK_Arbitro
@@ -151,7 +149,7 @@ BEGIN
         id_pieza INT IDENTITY(1,1) NOT NULL,
         id_campania INT NOT NULL,
         nombre NVARCHAR(120) NOT NULL,
-        contenido NVARCHAR(500) NULL,
+        contenido NVARCHAR(500) NOT NULL,
         idioma NVARCHAR(50) NOT NULL,
 
         CONSTRAINT PK_Pieza_Publicitaria
@@ -167,14 +165,14 @@ GO
 
 /* Relación N:N entre Pieza y Región */
 
-IF OBJECT_ID('dbo.Pieza_Region', 'U') IS NULL
+IF OBJECT_ID('dbo.Pieza_Para_Region', 'U') IS NULL
 BEGIN
-    CREATE TABLE dbo.Pieza_Region
+    CREATE TABLE dbo.Pieza_Para_Region
     (
         id_pieza INT NOT NULL,
         id_region INT NOT NULL,
 
-        CONSTRAINT PK_Pieza_Region
+        CONSTRAINT PK_Pieza_Para_Region
             PRIMARY KEY (id_pieza, id_region),
 
         CONSTRAINT FK_PiezaRegion_Pieza
@@ -196,25 +194,20 @@ GO
 
 IF OBJECT_ID('dbo.Personal_Tecnico', 'U') IS NULL
 BEGIN
-    CREATE TABLE dbo.Personal_Tecnico
+    CREATE TABLE dbo.Personal_Tecnico 
     (
         id_personal INT IDENTITY(1,1) NOT NULL,
         id_seleccion INT NOT NULL,
-        id_ayudante INT NULL,
         nombre NVARCHAR(60) NOT NULL,
         apellido NVARCHAR(60) NOT NULL,
-        rol NVARCHAR(50) NOT NULL,
+        rol NVARCHAR(50) NOT NULL, -- 'Director Técnico', 'Ayudante de Campo', etc.
 
-        CONSTRAINT PK_Personal_Tecnico
+        CONSTRAINT PK_Personal_Tecnico 
             PRIMARY KEY (id_personal),
 
-        CONSTRAINT FK_Personal_Seleccion
-            FOREIGN KEY (id_seleccion)
-            REFERENCES dbo.Seleccion(id_seleccion),
-
-        CONSTRAINT FK_Personal_Ayudante
-            FOREIGN KEY (id_ayudante)
-            REFERENCES dbo.Personal_Tecnico(id_personal)
+        CONSTRAINT FK_Personal_Seleccion 
+            FOREIGN KEY (id_seleccion) 
+            REFERENCES dbo.Seleccion(id_seleccion)
     );
 END;
 GO
@@ -230,7 +223,7 @@ BEGIN
         apellido NVARCHAR(60) NOT NULL,
         fecha_nacimiento DATE NOT NULL,
         club_origen NVARCHAR(100) NOT NULL,
-        posicion NVARCHAR(40) NOT NULL,
+        posicion VARCHAR(40) NOT NULL,
         dorsal TINYINT NOT NULL,
 
         CONSTRAINT PK_Jugador
@@ -241,7 +234,7 @@ BEGIN
             REFERENCES dbo.Seleccion(id_seleccion),
 
         CONSTRAINT CK_Jugador_Dorsal
-            CHECK (dorsal BETWEEN 1 AND 99)
+            CHECK (dorsal BETWEEN 1 AND 26)
     );
 END;
 GO
@@ -253,9 +246,9 @@ BEGIN
     (
         id_reemplazo INT IDENTITY(1,1) NOT NULL,
         id_jugador_baja INT NOT NULL,
-        id_jugador_alta INT NULL,
+        id_jugador_alta INT NOT NULL,
         fecha_cambio DATE NOT NULL,
-        motivo NVARCHAR(200) NOT NULL,
+        motivo VARCHAR(200) NOT NULL,
 
         CONSTRAINT PK_Reemplazo
             PRIMARY KEY (id_reemplazo),
@@ -270,8 +263,7 @@ BEGIN
 
         CONSTRAINT CK_Reemplazo_JugadoresDistintos
             CHECK (
-                id_jugador_alta IS NULL
-                OR id_jugador_alta <> id_jugador_baja
+                id_jugador_alta <> id_jugador_baja
             )
     );
 END;
@@ -290,10 +282,10 @@ BEGIN
         id_partido INT IDENTITY(1,1) NOT NULL,
         id_sede INT NOT NULL,
         fecha DATE NOT NULL,
-        horario_local DATETIME2(0) NOT NULL,
+        horario_local DATETIME2(0) NOT NULL, --Datetime2(0) no usa milisegundos y nos ahora 2 bytes!!! (esta carisima la memoria)
         horario_UTC DATETIME2(0) NOT NULL,
-        fase NVARCHAR(30) NOT NULL,
-        resultado_final NVARCHAR(20) NULL,
+        fase VARCHAR(30) NOT NULL,
+        resultado_final VARCHAR(20) NULL,
         asistencia_publico INT NULL,
 
         CONSTRAINT PK_Partido
@@ -377,7 +369,7 @@ BEGIN
     (
         id_formacion INT NOT NULL,
         id_jugador INT NOT NULL,
-        posicion_en_cancha NVARCHAR(40) NULL,
+        posicion_en_cancha VARCHAR(40) NULL,
         dorsal_en_cancha TINYINT NOT NULL,
         es_titular BIT NOT NULL,
 
@@ -409,9 +401,9 @@ BEGIN
         id_partido INT NOT NULL,
         id_jugador_sale INT NOT NULL,
         id_jugador_entra INT NOT NULL,
-        minuto SMALLINT NOT NULL,
-        periodo NVARCHAR(30) NOT NULL,
-        motivo NVARCHAR(100) NULL,
+        minuto TINYINT NOT NULL,
+        periodo VARCHAR(30) NOT NULL,
+        motivo VARCHAR(100) NULL,
         numero_ventana TINYINT NULL,
 
         CONSTRAINT PK_Sustitucion
@@ -433,7 +425,17 @@ BEGIN
             CHECK (id_jugador_sale <> id_jugador_entra),
 
         CONSTRAINT CK_Sustitucion_Minuto
-            CHECK (minuto >= 0)
+            CHECK (minuto >= 0),
+        
+        CONSTRAINT CK_Sustitucion_Periodo
+            CHECK (
+                periodo IN (
+                    'PRIMER TIEMPO',
+                    'SEGUNDO TIEMPO',
+                    'PRIMER SUPLEMENTARIO',
+                    'SEGUNDO SUPLEMENTARIO'
+                )
+            )
     );
 END;
 GO
@@ -452,7 +454,7 @@ BEGIN
     (
         id_partido INT NOT NULL,
         id_arbitro INT NOT NULL,
-        rol_arbitro NVARCHAR(30) NOT NULL,
+        rol_arbitro VARCHAR(30) NOT NULL,
 
         CONSTRAINT PK_Designacion_Arbitral
             PRIMARY KEY (id_partido, id_arbitro),
@@ -471,7 +473,8 @@ BEGIN
                     'PRINCIPAL',
                     'ASISTENTE',
                     'CUARTO ARBITRO',
-                    'VAR'
+                    'VAR',
+                    'AVAR' --asistente de var
                 )
             )
     );
@@ -487,8 +490,8 @@ BEGIN
         id_arbitro INT NOT NULL,
         id_partido INT NULL,
         fecha DATE NOT NULL,
-        motivo NVARCHAR(300) NOT NULL,
-        tipo_sancion NVARCHAR(50) NOT NULL,
+        motivo VARCHAR(300) NOT NULL,
+        tipo_sancion VARCHAR(50) NOT NULL,
 
         CONSTRAINT PK_Sancion_Arbitral
             PRIMARY KEY (id_sancion),
@@ -510,30 +513,6 @@ GO
    8. PUBLICIDAD
    ========================================================= */
 
-IF OBJECT_ID('dbo.Espacio_Publicitario', 'U') IS NULL
-BEGIN
-    CREATE TABLE dbo.Espacio_Publicitario
-    (
-        id_espacio_publicitario INT IDENTITY(1,1) NOT NULL,
-        id_sede INT NOT NULL,
-        numero_espacio TINYINT NOT NULL,
-
-        CONSTRAINT PK_Espacio_Publicitario
-            PRIMARY KEY (id_espacio_publicitario),
-
-        CONSTRAINT FK_Espacio_Sede
-            FOREIGN KEY (id_sede)
-            REFERENCES dbo.Sede(id_sede),
-
-        CONSTRAINT CK_Espacio_Numero
-            CHECK (numero_espacio BETWEEN 1 AND 4),
-
-        CONSTRAINT UQ_Espacio_SedeNumero
-            UNIQUE (id_sede, numero_espacio)
-    );
-END;
-GO
-
 
 IF OBJECT_ID('dbo.Asignacion_Publicitaria', 'U') IS NULL
 BEGIN
@@ -541,8 +520,8 @@ BEGIN
     (
         id_asignacion INT IDENTITY(1,1) NOT NULL,
         id_partido INT NOT NULL,
-        id_espacio_publicitario INT NOT NULL,
         id_pieza INT NOT NULL,
+        numero_espacio TINYINT NOT NULL,
         costo_aplicado DECIMAL(14,2) NOT NULL,
 
         CONSTRAINT PK_Asignacion_Publicitaria
@@ -552,10 +531,6 @@ BEGIN
             FOREIGN KEY (id_partido)
             REFERENCES dbo.Partido(id_partido),
 
-        CONSTRAINT FK_Asignacion_Espacio
-            FOREIGN KEY (id_espacio_publicitario)
-            REFERENCES dbo.Espacio_Publicitario(id_espacio_publicitario),
-
         CONSTRAINT FK_Asignacion_Pieza
             FOREIGN KEY (id_pieza)
             REFERENCES dbo.Pieza_Publicitaria(id_pieza),
@@ -563,10 +538,73 @@ BEGIN
         CONSTRAINT CK_Asignacion_Costo
             CHECK (costo_aplicado >= 0),
 
-        /* Un espacio no puede tener dos piezas distintas
-           asignadas para el mismo partido */
+        CONSTRAINT CK_Asignacion_NumeroEspacio
+            CHECK (numero_espacio BETWEEN 1 AND 4),
+
         CONSTRAINT UQ_Asignacion_PartidoEspacio
-            UNIQUE (id_partido, id_espacio_publicitario)
+            UNIQUE (id_partido, numero_espacio) -- Impide que no pueda ocuparse el mismo espacio dos veces o mas el mismo partido
+    );
+END;
+GO
+
+/* =========================================================
+   INCIDENCIAS DEL PARTIDO
+   ========================================================= */
+
+IF OBJECT_ID('dbo.Incidencia', 'U') IS NULL
+BEGIN
+    CREATE TABLE dbo.Incidencia
+    (
+        id_incidencia INT IDENTITY(1,1) NOT NULL,
+        id_partido INT NOT NULL,
+        id_jugador INT NOT NULL,
+        id_jugador_involucrado INT NULL,
+
+        tipo VARCHAR(30) NOT NULL,
+        motivo VARCHAR(200) NULL,
+        minuto TINYINT NULL,
+        periodo VARCHAR(30) NOT NULL,
+
+        CONSTRAINT PK_Incidencia
+            PRIMARY KEY (id_incidencia),
+
+        CONSTRAINT FK_Incidencia_Partido
+            FOREIGN KEY (id_partido)
+            REFERENCES dbo.Partido(id_partido),
+
+        CONSTRAINT FK_Incidencia_Jugador
+            FOREIGN KEY (id_jugador)
+            REFERENCES dbo.Jugador(id_jugador),
+
+        CONSTRAINT FK_Incidencia_JugadorInvolucrado
+            FOREIGN KEY (id_jugador_involucrado)
+            REFERENCES dbo.Jugador(id_jugador),
+
+        CONSTRAINT CK_Incidencia_Tipo
+            CHECK (
+                tipo IN (
+                    'GOL',
+                    'AMONESTACION', --Tarjeta Amarilla
+                    'EXPULSION' --Tarjeta Roja
+                )
+            ),
+
+        CONSTRAINT CK_Incidencia_Minuto
+            CHECK (
+                minuto IS NULL
+                OR minuto >= 0
+            ),
+
+        CONSTRAINT CK_Incidencia_Periodo
+            CHECK (
+                periodo IN (
+                    'PRIMER TIEMPO',
+                    'SEGUNDO TIEMPO',
+                    'PRIMER SUPLEMENTARIO',
+                    'SEGUNDO SUPLEMENTARIO',
+                    'PENALES'
+                )
+            )
     );
 END;
 GO
