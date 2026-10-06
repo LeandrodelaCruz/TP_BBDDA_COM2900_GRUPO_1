@@ -1,8 +1,12 @@
 /*
-    Universidad: [Nombre Universidad]
-    Materia: Bases de Datos Aplicada
-    Integrantes: [Nombres]
-    Fecha: 01/10/2026
+    Universidad: Universidad Nacional de La Matanza - UNLaM
+    Materia: Bases de Datos Aplicada - 2C-2026
+    Comisión: Com: 01-2900
+    Grupo 01: 
+    - Caro, Nicolás Darío
+    - Clara, Lucas
+    - De La Cruz, Leandro Ariel
+    - Rodríguez Elías Uriel
 
     Descripción:
     Script de creación de tablas y restricciones
@@ -190,25 +194,20 @@ GO
 
 IF OBJECT_ID('dbo.Personal_Tecnico', 'U') IS NULL
 BEGIN
-    CREATE TABLE dbo.Personal_Tecnico
+    CREATE TABLE dbo.Personal_Tecnico 
     (
         id_personal INT IDENTITY(1,1) NOT NULL,
         id_seleccion INT NOT NULL,
-        id_ayudante INT NULL,
         nombre NVARCHAR(60) NOT NULL,
         apellido NVARCHAR(60) NOT NULL,
         rol VARCHAR(50) NOT NULL,
 
-        CONSTRAINT PK_Personal_Tecnico
+        CONSTRAINT PK_Personal_Tecnico 
             PRIMARY KEY (id_personal),
 
-        CONSTRAINT FK_Personal_Seleccion
-            FOREIGN KEY (id_seleccion)
-            REFERENCES dbo.Seleccion(id_seleccion),
-
-        CONSTRAINT FK_Personal_Ayudante
-            FOREIGN KEY (id_ayudante)
-            REFERENCES dbo.Personal_Tecnico(id_personal)
+        CONSTRAINT FK_Personal_Seleccion 
+            FOREIGN KEY (id_seleccion) 
+            REFERENCES dbo.Seleccion(id_seleccion)
     );
 END;
 GO
@@ -235,7 +234,7 @@ BEGIN
             REFERENCES dbo.Seleccion(id_seleccion),
 
         CONSTRAINT CK_Jugador_Dorsal
-            CHECK (dorsal BETWEEN 1 AND 99)
+            CHECK (dorsal BETWEEN 1 AND 26)
     );
 END;
 GO
