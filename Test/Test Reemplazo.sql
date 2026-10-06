@@ -1,17 +1,21 @@
 /*
-    Universidad: [Nombre Universidad]
+    Universidad: Universidad Nacional de la Matanza
     Materia: Bases de Datos Aplicada
-    Integrantes: [Nombres]
-    Fecha: 01/10/2026
+    Integrantes: 
+				Rodr�guez, El�as Uriel 44143869
+				Clara, Lucas Nicolas 46265738
+				Caro, Nicolas Dario 40766722
+				de la Cruz, Leandro Ariel 42022547
+    Fecha: 06/10/2026
 
     Descripci�n:
-    Script de testing de los Stored Procedures ABM de las tablas:
+    Script de testing del Stored Procedure ABM de la tabla:
         - dbo.Reemplazo
 
     Cada bloque incluye el RESULTADO ESPERADO en comentarios.
     Se prueban tanto casos exitosos como casos con validaciones fallidas.
 
-    Ejecutar despu�s de Script Tabla S3 ABM.sql
+    Ejecutar despu�s de SP Reemplazo ABM.sql
 */
 
 USE MUNDIALDEFUTBOL;
@@ -20,14 +24,9 @@ GO
 SET NOCOUNT ON;
 GO
 
-/* =========================================================
-   PREPARACI�N: datos m�nimos de apoyo
-   =========================================================
-   Resultado esperado: se insertan (si no existen) una sede,
-   dos selecciones, dos jugadores por selecci�n, un partido
-   y la relaci�n partido-selecci�n. Todo con IDs conocidos
-   para poder referenciarlos en las pruebas.
-   ========================================================= */
+/*
+   datos m�nimos para tests
+*/
 
 -- Sede de prueba
 IF NOT EXISTS (SELECT 1 FROM dbo.Sede WHERE nombre_estadio = N'Estadio Testing')
@@ -85,20 +84,16 @@ IF NOT EXISTS (SELECT 1 FROM dbo.Partido_Seleccion
 PRINT '=== Datos de apoyo preparados ===';
 GO
 
-
-/* =========================================================
-   PRUEBAS: dbo.Reemplazo
-   ========================================================= */
-
 PRINT '=============================================';
 PRINT ' PRUEBAS TABLA: dbo.Reemplazo';
 PRINT '=============================================';
 
--- ---------------------------------------------------------
--- CASO 1: Alta exitosa
--- RESULTADO ESPERADO: se inserta el reemplazo y se devuelve
--- el id_reemplazo_generado. Sin errores.
--- ---------------------------------------------------------
+/*
+	CASO 1: Alta exitosa
+	RESULTADO ESPERADO: se inserta el reemplazo y se devuelve
+	el id_reemplazo_generado. Sin errores.
+*/
+
 DECLARE @id_jug_baja INT = (SELECT id_jugador FROM dbo.Jugador WHERE nombre = N'JugadorBaja1');
 DECLARE @id_jug_alta INT = (SELECT id_jugador FROM dbo.Jugador WHERE nombre = N'JugadorAlta1');
 
@@ -107,17 +102,17 @@ EXEC dbo.SP_Reemplazo_Alta
     @id_jugador_alta = @id_jug_alta,
     @fecha_cambio    = '2026-06-01',
     @motivo          = 'Lesi�n muscular';
--- Esperado: 1 fila con id_reemplazo_generado > 0
+PRINT 'OK - Alta Reemplazo ejecutada';
 
-DECLARE @id_reemplazo_creado INT = SCOPE_IDENTITY();
 GO
 
 
--- ---------------------------------------------------------
--- CASO 2: Alta fallida - jugadores iguales
--- RESULTADO ESPERADO: error con mensaje
--- "- El jugador de baja y el de alta no pueden ser el mismo."
--- ---------------------------------------------------------
+/*
+	CASO 2: Alta fallida - jugadores iguales
+	RESULTADO ESPERADO: error con mensaje
+	"- El jugador de baja y el de alta no pueden ser el mismo."
+*/ 
+
 DECLARE @id_jug_baja INT = (SELECT id_jugador FROM dbo.Jugador WHERE nombre = N'JugadorBaja1');
 
 BEGIN TRY
@@ -134,11 +129,12 @@ END CATCH
 GO
 
 
--- ---------------------------------------------------------
--- CASO 3: Alta fallida - jugadores de distinta selecci�n
--- RESULTADO ESPERADO: error con mensaje
--- "- Ambos jugadores deben pertenecer a la misma selecci�n."
--- ---------------------------------------------------------
+/*
+	CASO 3: Alta fallida - jugadores de distinta selecci�n
+	 RESULTADO ESPERADO: error con mensaje
+	"- Ambos jugadores deben pertenecer a la misma selecci�n."
+*/
+
 DECLARE @id_jug_baja INT = (SELECT id_jugador FROM dbo.Jugador WHERE nombre = N'JugadorBaja1');
 DECLARE @id_jug_sel2 INT = (SELECT id_jugador FROM dbo.Jugador WHERE nombre = N'JugadorSel2');
 
@@ -156,11 +152,12 @@ END CATCH
 GO
 
 
--- ---------------------------------------------------------
--- CASO 4: Alta fallida - fecha futura
--- RESULTADO ESPERADO: error con mensaje
--- "- La fecha del cambio no puede ser futura."
--- ---------------------------------------------------------
+/*
+	CASO 4: Alta fallida - fecha futura
+	RESULTADO ESPERADO: error con mensaje
+	"- La fecha del cambio no puede ser futura."
+*/
+
 DECLARE @id_jug_baja INT = (SELECT id_jugador FROM dbo.Jugador WHERE nombre = N'JugadorBaja1');
 DECLARE @id_jug_alta INT = (SELECT id_jugador FROM dbo.Jugador WHERE nombre = N'JugadorAlta1');
 
@@ -178,10 +175,11 @@ END CATCH
 GO
 
 
--- ---------------------------------------------------------
--- CASO 5: Modificaci�n exitosa
--- RESULTADO ESPERADO: se actualiza el reemplazo creado en el caso 1.
--- ---------------------------------------------------------
+/*
+	CASO 5: Modificaci�n exitosa
+	RESULTADO ESPERADO: se actualiza el reemplazo creado en el caso 1.
+*/
+
 DECLARE @id_reemplazo INT = (SELECT MIN(id_reemplazo) FROM dbo.Reemplazo
                              WHERE motivo = 'Lesi�n muscular');
 DECLARE @id_jug_baja INT = (SELECT id_jugador FROM dbo.Jugador WHERE nombre = N'JugadorBaja1');
@@ -203,10 +201,11 @@ ELSE
 GO
 
 
--- ---------------------------------------------------------
--- CASO 6: Baja exitosa
--- RESULTADO ESPERADO: se elimina el reemplazo.
--- ---------------------------------------------------------
+/*
+	CASO 6: Baja exitosa
+	RESULTADO ESPERADO: se elimina el reemplazo.
+*/
+
 DECLARE @id_reemplazo INT = (SELECT MIN(id_reemplazo) FROM dbo.Reemplazo
                              WHERE motivo = 'Lesi�n muscular - actualizado');
 
@@ -220,11 +219,11 @@ ELSE
 GO
 
 
--- ---------------------------------------------------------
--- CASO 7: Baja fallida - reemplazo inexistente
--- RESULTADO ESPERADO: error con mensaje
--- "- No existe el reemplazo indicado."
--- ---------------------------------------------------------
+/*
+	CASO 7: Baja fallida - reemplazo inexistente
+	RESULTADO ESPERADO: error con mensaje
+	"- No existe el reemplazo indicado."
+*/
 BEGIN TRY
     EXEC dbo.SP_Reemplazo_Baja @id_reemplazo = -99999;
     PRINT 'ERROR: no se lanz� la excepci�n esperada';
@@ -235,17 +234,19 @@ END CATCH
 GO
 
 -- Borramos lote de prueba
+delete dbo.Formacion
+delete dbo.Jugador
+delete dbo.Partido_Seleccion
+delete dbo.Partido
 delete dbo.Sede
 delete dbo.Seleccion
-delete dbo.Jugador
-delete dbo.Partido
-delete dbo.Partido_Seleccion
 delete dbo.Reemplazo
 
 -- Confirmamos borrado de lote de prueba
-select * from [MUNDIALDEFUTBOL].[dbo].[Sede]
-select * from [MUNDIALDEFUTBOL].[dbo].[Seleccion]
-select * from [MUNDIALDEFUTBOL].[dbo].[Jugador]
-select * from [MUNDIALDEFUTBOL].[dbo].[Partido]
-select * from [MUNDIALDEFUTBOL].[dbo].[Partido_Seleccion]
-select * from [MUNDIALDEFUTBOL].[dbo].[Reemplazo]
+select top 20 * from [MUNDIALDEFUTBOL].[dbo].[Sede]
+select top 20 * from [MUNDIALDEFUTBOL].[dbo].[Seleccion]
+select top 20 * from [MUNDIALDEFUTBOL].[dbo].[Jugador]
+select top 20 * from [MUNDIALDEFUTBOL].[dbo].[Partido]
+select top 20 * from [MUNDIALDEFUTBOL].[dbo].[Partido_Seleccion]
+select top 20 * from [MUNDIALDEFUTBOL].[dbo].[Formacion]
+select top 20 * from [MUNDIALDEFUTBOL].[dbo].[Reemplazo]

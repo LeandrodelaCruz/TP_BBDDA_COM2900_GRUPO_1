@@ -1,4 +1,5 @@
 /*
+
     Universidad: Universidad Nacional de La Matanza - UNLaM
     Materia: Bases de Datos Aplicada - 2C-2026
     Comisión: Com: 01-2900
@@ -8,14 +9,13 @@
     - De La Cruz, Leandro Ariel
     - Rodríguez Elías Uriel
 
-    Descripción:
-    Script de creación de tablas y restricciones
-    del Sistema de Registro y Gestión del Mundial.
+    Descripci�n:
+    Script de creaci�n de tablas y restricciones
+    del Sistema de Registro y Gesti�n del Mundial.
 */
 
 USE MUNDIALDEFUTBOL;
 GO
-
 
 /* =========================================================
    1. TABLAS INDEPENDIENTES
@@ -23,7 +23,7 @@ GO
 
 IF OBJECT_ID('dbo.Anunciante', 'U') IS NULL
 BEGIN
-    CREATE TABLE dbo.Anunciante
+	CREATE TABLE dbo.Anunciante
     (
         id_anunciante INT IDENTITY(1,1) NOT NULL,
         nombre NVARCHAR(120) NOT NULL,
@@ -163,7 +163,7 @@ END;
 GO
 
 
-/* Relación N:N entre Pieza y Región */
+/* Relaci�n N:N entre Pieza y Regi�n */
 
 IF OBJECT_ID('dbo.Pieza_Para_Region', 'U') IS NULL
 BEGIN
@@ -189,7 +189,7 @@ GO
 
 
 /* =========================================================
-   3. SELECCIONES, CUERPO TÉCNICO Y JUGADORES
+   3. SELECCIONES, CUERPO T�CNICO Y JUGADORES
    ========================================================= */
 
 IF OBJECT_ID('dbo.Personal_Tecnico', 'U') IS NULL
@@ -305,7 +305,7 @@ END;
 GO
 
 
-/* Relación N:N Partido - Selección */
+/* Relaci�n N:N Partido - Selecci�n */
 
 IF OBJECT_ID('dbo.Partido_Seleccion', 'U') IS NULL
 BEGIN
@@ -361,7 +361,7 @@ END;
 GO
 
 
-/* Relación CONFORMA */
+/* Relaci�n CONFORMA */
 
 IF OBJECT_ID('dbo.Formacion_Jugador', 'U') IS NULL
 BEGIN
@@ -443,10 +443,10 @@ GO
 
 
 /* =========================================================
-   7. ÁRBITROS
+   7. �RBITROS
    ========================================================= */
 
-/* La relación PARTICIPA EN se convierte en tabla */
+/* La relaci�n PARTICIPA EN se convierte en tabla */
 
 IF OBJECT_ID('dbo.Designacion_Arbitral', 'U') IS NULL
 BEGIN
