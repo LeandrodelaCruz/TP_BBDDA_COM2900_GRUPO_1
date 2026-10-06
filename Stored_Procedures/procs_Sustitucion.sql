@@ -12,11 +12,11 @@
     Stored Procedures ABM para la tabla Sustitucion
 
     PROCEDIMIENTOS INCLUIDOS:
-    - sp_Sustitucion_Insert (con validaciones)
+    - sp_Sustitucion_Alta (con validaciones)
     - sp_Sustitucion_GetById
     - sp_Sustitucion_GetByPartido
-    - sp_Sustitucion_Update
-    - sp_Sustitucion_Delete
+    - sp_Sustitucion_Modificacion
+    - sp_Sustitucion_Baja
     
     Validaciones de NEGOCIO:
     - El jugador que entra NO puede ser TITULAR (debe ser SUPLENTE)
@@ -31,7 +31,7 @@ GO
 -- CREATE - Insertar una nueva sustitución
 -- =========================================================
 
-CREATE OR ALTER PROCEDURE dbo.SP_Sustitucion_Insert
+CREATE OR ALTER PROCEDURE dbo.SP_Sustitucion_Alta
     @id_partido INT,
     @id_jugador_sale INT,
     @id_jugador_entra INT,
@@ -294,7 +294,7 @@ GO
 -- UPDATE - Actualizar sustitución
 -- =========================================================
 
-CREATE OR ALTER PROCEDURE dbo.SP_Sustitucion_Update
+CREATE OR ALTER PROCEDURE dbo.SP_Sustitucion_Modificacion
     @id_sustitucion INT,
     @motivo VARCHAR(100) = NULL
 AS
@@ -337,7 +337,7 @@ GO
 -- DELETE - Eliminar sustitución
 -- =========================================================
 
-CREATE OR ALTER PROCEDURE dbo.SP_Sustitucion_Delete
+CREATE OR ALTER PROCEDURE dbo.SP_Sustitucion_Baja
     @id_sustitucion INT
 AS
 BEGIN

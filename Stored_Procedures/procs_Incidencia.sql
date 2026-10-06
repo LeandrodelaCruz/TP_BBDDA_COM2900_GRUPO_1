@@ -17,9 +17,9 @@
     - EXPULSION: Tarjeta roja a id_jugador, id_jugador_involucrado es agredido
 
     PROCEDIMIENTOS INCLUIDOS:
-    - SP_Incidencia_Insert (con validaciones)
-    - SP_Incidencia_Update (solo motivo)
-    - SP_Incidencia_Delete
+    - SP_Incidencia_Alta (con validaciones)
+    - SP_Incidencia_Modificacion (solo motivo)
+    - SP_Incidencia_Baja
     
     GET especializados:
     - SP_Incidencia_GetGoles: Muestra goles con asistencias
@@ -35,7 +35,7 @@ GO
 -- CREATE - Insertar una nueva incidencia
 -- =========================================================
 
-CREATE OR ALTER PROCEDURE dbo.SP_Incidencia_Insert
+CREATE OR ALTER PROCEDURE dbo.SP_Incidencia_Alta
     @id_partido INT,
     @id_jugador INT,
     @tipo VARCHAR(30),
@@ -286,7 +286,7 @@ GO
 -- UPDATE - Actualizar incidencia (solo motivo)
 -- =========================================================
 
-CREATE OR ALTER PROCEDURE dbo.SP_Incidencia_Update
+CREATE OR ALTER PROCEDURE dbo.SP_Incidencia_Modificacion
     @id_incidencia INT,
     @motivo VARCHAR(200) = NULL
 AS
@@ -325,7 +325,7 @@ GO
 -- DELETE - Eliminar incidencia
 -- =========================================================
 
-CREATE OR ALTER PROCEDURE dbo.SP_Incidencia_Delete
+CREATE OR ALTER PROCEDURE dbo.SP_Incidencia_Baja
     @id_incidencia INT
 AS
 BEGIN
