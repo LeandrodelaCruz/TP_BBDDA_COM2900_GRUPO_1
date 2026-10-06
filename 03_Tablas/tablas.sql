@@ -1,21 +1,6 @@
-/*
-
-    Universidad: Universidad Nacional de La Matanza - UNLaM
-    Materia: Bases de Datos Aplicada - 2C-2026
-    Comisión: Com: 01-2900
-    Grupo 01: 
-    - Caro, Nicolás Darío
-    - Clara, Lucas
-    - De La Cruz, Leandro Ariel
-    - Rodríguez Elías Uriel
-
-    Descripci�n:
-    Script de creaci�n de tablas y restricciones
-    del Sistema de Registro y Gesti�n del Mundial.
-*/
-
 USE MUNDIALDEFUTBOL;
 GO
+
 
 /* =========================================================
    1. TABLAS INDEPENDIENTES
@@ -23,7 +8,7 @@ GO
 
 IF OBJECT_ID('dbo.Anunciante', 'U') IS NULL
 BEGIN
-	CREATE TABLE dbo.Anunciante
+    CREATE TABLE dbo.Anunciante
     (
         id_anunciante INT IDENTITY(1,1) NOT NULL,
         nombre NVARCHAR(120) NOT NULL,
@@ -163,7 +148,7 @@ END;
 GO
 
 
-/* Relaci�n N:N entre Pieza y Regi�n */
+/* Relación N:N entre Pieza y Región */
 
 IF OBJECT_ID('dbo.Pieza_Para_Region', 'U') IS NULL
 BEGIN
@@ -189,25 +174,30 @@ GO
 
 
 /* =========================================================
-   3. SELECCIONES, CUERPO T�CNICO Y JUGADORES
+   3. SELECCIONES, CUERPO TÉCNICO Y JUGADORES
    ========================================================= */
 
 IF OBJECT_ID('dbo.Personal_Tecnico', 'U') IS NULL
 BEGIN
-    CREATE TABLE dbo.Personal_Tecnico 
+    CREATE TABLE dbo.Personal_Tecnico
     (
         id_personal INT IDENTITY(1,1) NOT NULL,
         id_seleccion INT NOT NULL,
+        id_ayudante INT NULL,
         nombre NVARCHAR(60) NOT NULL,
         apellido NVARCHAR(60) NOT NULL,
         rol VARCHAR(50) NOT NULL,
 
-        CONSTRAINT PK_Personal_Tecnico 
+        CONSTRAINT PK_Personal_Tecnico
             PRIMARY KEY (id_personal),
 
-        CONSTRAINT FK_Personal_Seleccion 
-            FOREIGN KEY (id_seleccion) 
-            REFERENCES dbo.Seleccion(id_seleccion)
+        CONSTRAINT FK_Personal_Seleccion
+            FOREIGN KEY (id_seleccion)
+            REFERENCES dbo.Seleccion(id_seleccion),
+
+        CONSTRAINT FK_Personal_Ayudante
+            FOREIGN KEY (id_ayudante)
+            REFERENCES dbo.Personal_Tecnico(id_personal)
     );
 END;
 GO
@@ -234,7 +224,7 @@ BEGIN
             REFERENCES dbo.Seleccion(id_seleccion),
 
         CONSTRAINT CK_Jugador_Dorsal
-            CHECK (dorsal BETWEEN 1 AND 26)
+            CHECK (dorsal BETWEEN 1 AND 99)
     );
 END;
 GO
@@ -305,7 +295,7 @@ END;
 GO
 
 
-/* Relaci�n N:N Partido - Selecci�n */
+/* Relación N:N Partido - Selección */
 
 IF OBJECT_ID('dbo.Partido_Seleccion', 'U') IS NULL
 BEGIN
@@ -361,7 +351,7 @@ END;
 GO
 
 
-/* Relaci�n CONFORMA */
+/* Relación CONFORMA */
 
 IF OBJECT_ID('dbo.Formacion_Jugador', 'U') IS NULL
 BEGIN
@@ -425,17 +415,7 @@ BEGIN
             CHECK (id_jugador_sale <> id_jugador_entra),
 
         CONSTRAINT CK_Sustitucion_Minuto
-            CHECK (minuto >= 0),
-        
-        CONSTRAINT CK_Sustitucion_Periodo
-            CHECK (
-                periodo IN (
-                    'PRIMER TIEMPO',
-                    'SEGUNDO TIEMPO',
-                    'PRIMER SUPLEMENTARIO',
-                    'SEGUNDO SUPLEMENTARIO'
-                )
-            )
+            CHECK (minuto >= 0)
     );
 END;
 GO
@@ -443,10 +423,10 @@ GO
 
 
 /* =========================================================
-   7. �RBITROS
+   7. ÁRBITROS
    ========================================================= */
 
-/* La relaci�n PARTICIPA EN se convierte en tabla */
+/* La relación PARTICIPA EN se convierte en tabla */
 
 IF OBJECT_ID('dbo.Designacion_Arbitral', 'U') IS NULL
 BEGIN
@@ -558,7 +538,7 @@ BEGIN
         id_incidencia INT IDENTITY(1,1) NOT NULL,
         id_partido INT NOT NULL,
         id_jugador INT NOT NULL,
-        id_jugador_involucrado INT NULL,
+        id_jugador_victima INT NULL,
 
         tipo VARCHAR(30) NOT NULL,
         motivo VARCHAR(200) NULL,
@@ -576,8 +556,8 @@ BEGIN
             FOREIGN KEY (id_jugador)
             REFERENCES dbo.Jugador(id_jugador),
 
-        CONSTRAINT FK_Incidencia_JugadorInvolucrado
-            FOREIGN KEY (id_jugador_involucrado)
+        CONSTRAINT FK_Incidencia_JugadorVictima
+            FOREIGN KEY (id_jugador_victima)
             REFERENCES dbo.Jugador(id_jugador),
 
         CONSTRAINT CK_Incidencia_Tipo

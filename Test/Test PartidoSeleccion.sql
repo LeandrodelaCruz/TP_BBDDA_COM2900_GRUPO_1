@@ -2,20 +2,20 @@
     Universidad: Universidad Nacional de la Matanza
     Materia: Bases de Datos Aplicada
     Integrantes: 
-				Rodríguez, Elías Uriel 44143869
+				Rodrï¿½guez, Elï¿½as Uriel 44143869
 				Clara, Lucas Nicolas 46265738
 				Caro, Nicolas Dario 40766722
 				de la Cruz, Leandro Ariel 42022547
     Fecha: 06/10/2026
 
-    Descripción:
+    Descripciï¿½n:
     Script de testing del Stored Procedure ABM de la tabla:
         - dbo.Partido_Seleccion
 
     Cada bloque incluye el RESULTADO ESPERADO en comentarios.
     Se prueban tanto casos exitosos como casos con validaciones fallidas.
 
-    Ejecutar después de SP PartidoSeleccion ABM.sql
+    Ejecutar despuï¿½s de SP PartidoSeleccion ABM.sql
 */
 
 USE MUNDIALDEFUTBOL;
@@ -25,13 +25,13 @@ SET NOCOUNT ON;
 GO
 
 /*
-   datos mínimos para tests
+   datos mï¿½nimos para tests
 */
 
 -- Sede de prueba
 IF NOT EXISTS (SELECT 1 FROM dbo.Sede WHERE nombre_estadio = N'Estadio Testing')
     INSERT INTO dbo.Sede (nombre_estadio, ciudad, pais, capacidad, huso_horario)
-    VALUES (N'Estadio Testing', N'Ciudad Test', N'País Test', 50000, 'UTC-03:00');
+    VALUES (N'Estadio Testing', N'Ciudad Test', N'Paï¿½s Test', 50000, 'UTC-03:00');
 
 -- Selecciones de prueba
 IF NOT EXISTS (SELECT 1 FROM dbo.Seleccion WHERE pais = N'Testlandia')
@@ -46,7 +46,7 @@ DECLARE @id_sede_test    INT = (SELECT id_sede FROM dbo.Sede WHERE nombre_estadi
 DECLARE @id_sel_test1    INT = (SELECT id_seleccion FROM dbo.Seleccion WHERE pais = N'Testlandia');
 DECLARE @id_sel_test2    INT = (SELECT id_seleccion FROM dbo.Seleccion WHERE pais = N'Pruebalandia');
 
--- Jugadores de prueba (2 por selección)
+-- Jugadores de prueba (2 por selecciï¿½n)
 IF NOT EXISTS (SELECT 1 FROM dbo.Jugador WHERE nombre = N'JugadorBaja1')
     INSERT INTO dbo.Jugador (id_seleccion, nombre, apellido, fecha_nacimiento, club_origen, posicion, dorsal)
     VALUES (@id_sel_test1, N'JugadorBaja1', N'Test', '1995-01-01', N'Club Test', N'Delantero', 10);
@@ -70,7 +70,7 @@ IF NOT EXISTS (SELECT 1 FROM dbo.Partido WHERE resultado_final = N'TEST-ABM')
 
 DECLARE @id_partido_test INT = (SELECT id_partido FROM dbo.Partido WHERE resultado_final = N'TEST-ABM');
 
--- Relación partido-selección de prueba
+-- Relaciï¿½n partido-selecciï¿½n de prueba
 IF NOT EXISTS (SELECT 1 FROM dbo.Partido_Seleccion
                WHERE id_partido = @id_partido_test AND id_seleccion = @id_sel_test1)
     INSERT INTO dbo.Partido_Seleccion (id_partido, id_seleccion)
@@ -90,7 +90,7 @@ PRINT '=============================================';
 
 /*
 	 CASO 1: Alta exitosa
-	RESULTADO ESPERADO: se agrega la selección al partido.
+	RESULTADO ESPERADO: se agrega la selecciï¿½n al partido.
 	(Se crea un partido nuevo para no tocar el de prueba existente.)
 */
 
@@ -109,7 +109,7 @@ GO
 
 
 /*
-	CASO 2: Alta fallida - tercera selección en el mismo partido
+	CASO 2: Alta fallida - tercera selecciï¿½n en el mismo partido
 	RESULTADO ESPERADO: error
 	"- El partido ya tiene dos selecciones asignadas."
 */
@@ -119,7 +119,7 @@ DECLARE @id_sel2 INT = (SELECT id_seleccion FROM dbo.Seleccion WHERE pais = N'Pr
 
 EXEC dbo.SP_PartidoSeleccion_Alta @id_partido = @id_partido_ps, @id_seleccion = @id_sel2;
 
--- Tercera selección (creamos una auxiliar)
+-- Tercera selecciï¿½n (creamos una auxiliar)
 IF NOT EXISTS (SELECT 1 FROM dbo.Seleccion WHERE pais = N'ExtraTest')
     INSERT INTO dbo.Seleccion (pais, confederacion, grupo_asignado)
     VALUES (N'ExtraTest', N'TEST', 'B');
@@ -130,7 +130,7 @@ BEGIN TRY
     EXEC dbo.SP_PartidoSeleccion_Alta
         @id_partido   = @id_partido_ps,
         @id_seleccion = @id_sel3;
-    PRINT 'ERROR: no se lanzó la excepción esperada';
+    PRINT 'ERROR: no se lanzï¿½ la excepciï¿½n esperada';
 END TRY
 BEGIN CATCH
     PRINT 'OK - Error esperado: ' + ERROR_MESSAGE();
@@ -141,7 +141,7 @@ GO
 /*
 	CASO 3: Alta fallida - duplicado exacto
 	RESULTADO ESPERADO: error
-	"- La selección ya está asignada a este partido."
+	"- La selecciï¿½n ya estï¿½ asignada a este partido."
 */
 
 DECLARE @id_partido_ps INT = (SELECT id_partido FROM dbo.Partido WHERE resultado_final = N'TEST-PS');
@@ -151,7 +151,7 @@ BEGIN TRY
     EXEC dbo.SP_PartidoSeleccion_Alta
         @id_partido   = @id_partido_ps,
         @id_seleccion = @id_sel1;
-    PRINT 'ERROR: no se lanzó la excepción esperada';
+    PRINT 'ERROR: no se lanzï¿½ la excepciï¿½n esperada';
 END TRY
 BEGIN CATCH
     PRINT 'OK - Error esperado: ' + ERROR_MESSAGE();
@@ -160,7 +160,7 @@ GO
 
 /*
 	CASO 4: Baja exitosa
-	RESULTADO ESPERADO: se elimina la relación.
+	RESULTADO ESPERADO: se elimina la relaciï¿½n.
 */
 
 DECLARE @id_partido_ps INT = (SELECT id_partido FROM dbo.Partido WHERE resultado_final = N'TEST-PS');
@@ -171,14 +171,14 @@ PRINT 'OK - Baja Partido_Seleccion ejecutada';
 GO
 
 /*
-	CASO 5: Baja fallida - relación inexistente
+	CASO 5: Baja fallida - relaciï¿½n inexistente
 	RESULTADO ESPERADO: error
-	"- No existe la relación partido-selección indicada."
+	"- No existe la relaciï¿½n partido-selecciï¿½n indicada."
 */
 
 BEGIN TRY
     EXEC dbo.SP_PartidoSeleccion_Baja @id_partido = -99999, @id_seleccion = -99999;
-    PRINT 'ERROR: no se lanzó la excepción esperada';
+    PRINT 'ERROR: no se lanzï¿½ la excepciï¿½n esperada';
 END TRY
 BEGIN CATCH
     PRINT 'OK - Error esperado: ' + ERROR_MESSAGE();
@@ -186,16 +186,16 @@ END CATCH
 GO
 
 /*
-	CASO 6: Modificación exitosa
-	RESULTADO ESPERADO: se actualiza la relación partido-selección
-	cambiando la selección asociada a un partido.
+	CASO 6: Modificaciï¿½n exitosa
+	RESULTADO ESPERADO: se actualiza la relaciï¿½n partido-selecciï¿½n
+	cambiando la selecciï¿½n asociada a un partido.
 */
 
 DECLARE @id_sede INT = (SELECT id_sede FROM dbo.Sede WHERE nombre_estadio = N'Estadio Testing');
 DECLARE @id_sel1 INT = (SELECT id_seleccion FROM dbo.Seleccion WHERE pais = N'Testlandia');
 DECLARE @id_sel2 INT = (SELECT id_seleccion FROM dbo.Seleccion WHERE pais = N'Pruebalandia');
 
--- Creamos partido nuevo con una sola selección
+-- Creamos partido nuevo con una sola selecciï¿½n
 INSERT INTO dbo.Partido (id_sede, fecha, horario_local, horario_UTC, fase, resultado_final)
 VALUES (@id_sede, '2026-07-01', '2026-07-01 18:00:00', '2026-07-01 21:00:00', 'GRUPOS', N'TEST-MOD');
 
@@ -204,20 +204,20 @@ DECLARE @id_partido_mod INT = SCOPE_IDENTITY();
 INSERT INTO dbo.Partido_Seleccion (id_partido, id_seleccion)
 VALUES (@id_partido_mod, @id_sel1);
 
--- Modificamos: cambiamos selección Testlandia por Pruebalandia
+-- Modificamos: cambiamos selecciï¿½n Testlandia por Pruebalandia
 EXEC dbo.SP_PartidoSeleccion_Modificacion
     @id_partido         = @id_partido_mod,
     @id_seleccion       = @id_sel1,
     @nuevo_id_partido   = @id_partido_mod,   -- mismo partido
-    @nueva_id_seleccion = @id_sel2;          -- nueva selección
+    @nueva_id_seleccion = @id_sel2;          -- nueva selecciï¿½n
 
-PRINT 'OK - Modificación Partido_Seleccion ejecutada';
+PRINT 'OK - Modificaciï¿½n Partido_Seleccion ejecutada';
 GO
 
 /*
--- CASO 7: Modificación fallida - relación original inexistente
+-- CASO 7: Modificaciï¿½n fallida - relaciï¿½n original inexistente
 -- RESULTADO ESPERADO: error
--- "- No existe la relación partido-selección original."
+-- "- No existe la relaciï¿½n partido-selecciï¿½n original."
 */
 
 BEGIN TRY
@@ -226,7 +226,7 @@ BEGIN TRY
         @id_seleccion       = -99999,
         @nuevo_id_partido   = 1,
         @nueva_id_seleccion = 1;
-    PRINT 'ERROR: no se lanzó la excepción esperada';
+    PRINT 'ERROR: no se lanzï¿½ la excepciï¿½n esperada';
 END TRY
 BEGIN CATCH
     PRINT 'OK - Error esperado: ' + ERROR_MESSAGE();
@@ -234,11 +234,11 @@ END CATCH
 GO
 
 /*
-	CASO 8: Modificación fallida - la nueva relación ya existe
+	CASO 8: Modificaciï¿½n fallida - la nueva relaciï¿½n ya existe
 	RESULTADO ESPERADO: error
-	"- Ya existe la nueva relación partido-selección."
+	"- Ya existe la nueva relaciï¿½n partido-selecciï¿½n."
 	(o bien "- El nuevo partido ya tiene dos selecciones asignadas."
-	si el partido destino ya alcanzó el cupo de 2)
+	si el partido destino ya alcanzï¿½ el cupo de 2)
 */
 
 DECLARE @id_sel1 INT = (SELECT id_seleccion FROM dbo.Seleccion WHERE pais = N'Testlandia');
@@ -247,14 +247,14 @@ DECLARE @id_sel2 INT = (SELECT id_seleccion FROM dbo.Seleccion WHERE pais = N'Pr
 -- Reutilizamos el partido TEST-ABM (ya tiene 2 selecciones)
 DECLARE @id_partido_lleno INT = (SELECT id_partido FROM dbo.Partido WHERE resultado_final = N'TEST-ABM');
 
--- Intentamos mover una relación hacia un partido que ya está completo
+-- Intentamos mover una relaciï¿½n hacia un partido que ya estï¿½ completo
 BEGIN TRY
     EXEC dbo.SP_PartidoSeleccion_Modificacion
         @id_partido         = @id_partido_lleno,
         @id_seleccion       = @id_sel1,
         @nuevo_id_partido   = @id_partido_lleno,
-        @nueva_id_seleccion = @id_sel2;  -- ya existe esa combinación
-    PRINT 'ERROR: no se lanzó la excepción esperada';
+        @nueva_id_seleccion = @id_sel2;  -- ya existe esa combinaciï¿½n
+    PRINT 'ERROR: no se lanzï¿½ la excepciï¿½n esperada';
 END TRY
 BEGIN CATCH
     PRINT 'OK - Error esperado: ' + ERROR_MESSAGE();
