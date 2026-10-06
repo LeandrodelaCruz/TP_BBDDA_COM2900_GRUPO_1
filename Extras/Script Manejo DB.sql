@@ -1,3 +1,15 @@
+	/*
+	Universidad: Universidad Nacional de la Matanza
+    Materia: Bases de Datos Aplicada
+    Integrantes: 
+				Rodríguez, Elías Uriel 44143869
+				Clara, Lucas Nicolas 46265738
+				Caro, Nicolas Dario 40766722
+				de la Cruz, Leandro Ariel 42022547
+    Fecha: 06/10/2026
+	*/
+
+
 -- Primero, cambiar a otra base de datos
 USE master;
 GO

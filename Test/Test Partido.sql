@@ -1,8 +1,12 @@
 /*
-    Universidad: [Nombre Universidad]
+    Universidad: Universidad Nacional de la Matanza
     Materia: Bases de Datos Aplicada
-    Integrantes: [Nombres]
-    Fecha: 01/10/2026
+    Integrantes: 
+				Rodríguez, Elías Uriel 44143869
+				Clara, Lucas Nicolas 46265738
+				Caro, Nicolas Dario 40766722
+				de la Cruz, Leandro Ariel 42022547
+    Fecha: 06/10/2026
 
     Descripción:
     Script de testing del Stored Procedure ABM de la tabla:
@@ -20,14 +24,9 @@ GO
 SET NOCOUNT ON;
 GO
 
-/* =========================================================
-   PREPARACIÓN: datos mínimos de apoyo
-   =========================================================
-   Resultado esperado: se insertan (si no existen) una sede,
-   dos selecciones, dos jugadores por selección, un partido
-   y la relación partido-selección. Todo con IDs conocidos
-   para poder referenciarlos en las pruebas.
-   ========================================================= */
+/*
+   datos mínimos para tests
+*/
 
 -- Sede de prueba
 IF NOT EXISTS (SELECT 1 FROM dbo.Sede WHERE nombre_estadio = N'Estadio Testing')
@@ -92,18 +91,15 @@ IF NOT EXISTS (SELECT 1 FROM dbo.Formacion
 PRINT '=== Datos de apoyo preparados ===';
 GO
 
-/* =========================================================
-   PRUEBAS: dbo.Partido
-   ========================================================= */
-
 PRINT '=============================================';
 PRINT ' PRUEBAS TABLA: dbo.Partido';
 PRINT '=============================================';
 
--- ---------------------------------------------------------
--- CASO 8: Alta exitosa de partido
--- RESULTADO ESPERADO: id_partido_generado > 0
--- ---------------------------------------------------------
+/*
+	CASO 1: Alta exitosa de partido
+	RESULTADO ESPERADO: id_partido_generado > 0
+*/
+
 DECLARE @id_sede INT = (SELECT id_sede FROM dbo.Sede WHERE nombre_estadio = N'Estadio Testing');
 
 EXEC dbo.SP_Partidos_Alta
@@ -114,15 +110,16 @@ EXEC dbo.SP_Partidos_Alta
     @fase               = 'GRUPOS',
     @resultado_final    = NULL,
     @asistencia_publico = 45000;
--- Esperado: 1 fila con id_partido_generado > 0
+PRINT 'OK - Alta Partido ejecutada';
 GO
 
 
--- ---------------------------------------------------------
--- CASO 9: Alta fallida - fase inválida
--- RESULTADO ESPERADO: error con mensaje
--- "- La fase indicada no es válida."
--- ---------------------------------------------------------
+/*
+	CASO 2: Alta fallida - fase inválida
+	RESULTADO ESPERADO: error con mensaje
+	"- La fase indicada no es válida."
+*/
+
 DECLARE @id_sede INT = (SELECT id_sede FROM dbo.Sede WHERE nombre_estadio = N'Estadio Testing');
 
 BEGIN TRY
@@ -140,11 +137,12 @@ END CATCH
 GO
 
 
--- ---------------------------------------------------------
--- CASO 10: Alta fallida - sede inexistente + asistencia > capacidad
--- RESULTADO ESPERADO: mensaje agrupado con al menos:
---   "- No existe la sede indicada."
--- ---------------------------------------------------------
+/*
+	CASO 3: Alta fallida - sede inexistente + asistencia > capacidad
+	RESULTADO ESPERADO: mensaje agrupado con al menos:
+	"- No existe la sede indicada."
+*/
+
 BEGIN TRY
     EXEC dbo.SP_Partidos_Alta
         @id_sede       = -99999,
@@ -159,12 +157,12 @@ BEGIN CATCH
 END CATCH
 GO
 
+/*
+	CASO 4: Alta fallida - asistencia supera capacidad
+	RESULTADO ESPERADO: error
+	"- La asistencia supera la capacidad de la sede."
+*/
 
--- ---------------------------------------------------------
--- CASO 11: Alta fallida - asistencia supera capacidad
--- RESULTADO ESPERADO: error
--- "- La asistencia supera la capacidad de la sede."
--- ---------------------------------------------------------
 DECLARE @id_sede INT = (SELECT id_sede FROM dbo.Sede WHERE nombre_estadio = N'Estadio Testing');
 
 BEGIN TRY
@@ -182,11 +180,11 @@ BEGIN CATCH
 END CATCH
 GO
 
+/*
+	CASO 5: Modificación exitosa
+	RESULTADO ESPERADO: se actualiza el partido de prueba TEST-ABM.
+*/
 
--- ---------------------------------------------------------
--- CASO 12: Modificación exitosa
--- RESULTADO ESPERADO: se actualiza el partido de prueba TEST-ABM.
--- ---------------------------------------------------------
 DECLARE @id_partido INT = (SELECT id_partido FROM dbo.Partido WHERE resultado_final = N'TEST-ABM');
 DECLARE @id_sede INT = (SELECT id_sede FROM dbo.Sede WHERE nombre_estadio = N'Estadio Testing');
 
@@ -205,12 +203,12 @@ BEGIN
 END
 GO
 
+/*
+	CASO 6: Baja fallida - partido con dependencias (formaciones)
+	RESULTADO ESPERADO: error
+	"- No se puede eliminar: el partido tiene formaciones asociadas."
+*/
 
--- ---------------------------------------------------------
--- CASO 13: Baja fallida - partido con dependencias (formaciones)
--- RESULTADO ESPERADO: error
--- "- No se puede eliminar: el partido tiene formaciones asociadas."
--- ---------------------------------------------------------
 DECLARE @id_partido INT = (SELECT id_partido FROM dbo.Partido WHERE resultado_final = N'TEST-ABM');
 
 BEGIN TRY
@@ -222,11 +220,11 @@ BEGIN CATCH
 END CATCH
 GO
 
+/*
+	CASO 7: Baja fallida - partido inexistente
+	RESULTADO ESPERADO: error "- No existe el partido indicado."
+*/
 
--- ---------------------------------------------------------
--- CASO 14: Baja fallida - partido inexistente
--- RESULTADO ESPERADO: error "- No existe el partido indicado."
--- ---------------------------------------------------------
 BEGIN TRY
     EXEC dbo.SP_Partidos_Baja @id_partido = -99999;
     PRINT 'ERROR: no se lanzó la excepción esperada';

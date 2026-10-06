@@ -1,8 +1,12 @@
 /*
-    Universidad: [Nombre Universidad]
+    Universidad: Universidad Nacional de la Matanza
     Materia: Bases de Datos Aplicada
-    Integrantes: [Nombres]
-    Fecha: 01/10/2026
+    Integrantes: 
+				Rodríguez, Elías Uriel 44143869
+				Clara, Lucas Nicolas 46265738
+				Caro, Nicolas Dario 40766722
+				de la Cruz, Leandro Ariel 42022547
+    Fecha: 06/10/2026
 
     Descripción:
     Script de testing del Stored Procedure ABM de la tabla:
@@ -20,14 +24,9 @@ GO
 SET NOCOUNT ON;
 GO
 
-/* =========================================================
-   PREPARACIÓN: datos mínimos de apoyo
-   =========================================================
-   Resultado esperado: se insertan (si no existen) una sede,
-   dos selecciones, dos jugadores por selección, un partido
-   y la relación partido-selección. Todo con IDs conocidos
-   para poder referenciarlos en las pruebas.
-   ========================================================= */
+/*
+   datos mínimos para tests
+*/
 
 -- Sede de prueba
 IF NOT EXISTS (SELECT 1 FROM dbo.Sede WHERE nombre_estadio = N'Estadio Testing')
@@ -85,19 +84,16 @@ IF NOT EXISTS (SELECT 1 FROM dbo.Partido_Seleccion
 PRINT '=== Datos de apoyo preparados ===';
 GO
 
-/* =========================================================
-   PRUEBAS: dbo.Partido_Seleccion
-   ========================================================= */
-
 PRINT '=============================================';
 PRINT ' PRUEBAS TABLA: dbo.Partido_Seleccion';
 PRINT '=============================================';
 
--- ---------------------------------------------------------
--- CASO 15: Alta exitosa
--- RESULTADO ESPERADO: se agrega la selección al partido.
--- (Se crea un partido nuevo para no tocar el de prueba existente.)
--- ---------------------------------------------------------
+/*
+	 CASO 1: Alta exitosa
+	RESULTADO ESPERADO: se agrega la selección al partido.
+	(Se crea un partido nuevo para no tocar el de prueba existente.)
+*/
+
 DECLARE @id_sede INT = (SELECT id_sede FROM dbo.Sede WHERE nombre_estadio = N'Estadio Testing');
 DECLARE @id_sel1 INT = (SELECT id_seleccion FROM dbo.Seleccion WHERE pais = N'Testlandia');
 
@@ -112,11 +108,12 @@ PRINT 'OK - Alta Partido_Seleccion ejecutada';
 GO
 
 
--- ---------------------------------------------------------
--- CASO 16: Alta fallida - tercera selección en el mismo partido
--- RESULTADO ESPERADO: error
--- "- El partido ya tiene dos selecciones asignadas."
--- ---------------------------------------------------------
+/*
+	CASO 2: Alta fallida - tercera selección en el mismo partido
+	RESULTADO ESPERADO: error
+	"- El partido ya tiene dos selecciones asignadas."
+*/
+
 DECLARE @id_partido_ps INT = (SELECT id_partido FROM dbo.Partido WHERE resultado_final = N'TEST-PS');
 DECLARE @id_sel2 INT = (SELECT id_seleccion FROM dbo.Seleccion WHERE pais = N'Pruebalandia');
 
@@ -141,11 +138,12 @@ END CATCH
 GO
 
 
--- ---------------------------------------------------------
--- CASO 17: Alta fallida - duplicado exacto
--- RESULTADO ESPERADO: error
--- "- La selección ya está asignada a este partido."
--- ---------------------------------------------------------
+/*
+	CASO 3: Alta fallida - duplicado exacto
+	RESULTADO ESPERADO: error
+	"- La selección ya está asignada a este partido."
+*/
+
 DECLARE @id_partido_ps INT = (SELECT id_partido FROM dbo.Partido WHERE resultado_final = N'TEST-PS');
 DECLARE @id_sel1 INT = (SELECT id_seleccion FROM dbo.Seleccion WHERE pais = N'Testlandia');
 
@@ -160,11 +158,11 @@ BEGIN CATCH
 END CATCH
 GO
 
+/*
+	CASO 4: Baja exitosa
+	RESULTADO ESPERADO: se elimina la relación.
+*/
 
--- ---------------------------------------------------------
--- CASO 18: Baja exitosa
--- RESULTADO ESPERADO: se elimina la relación.
--- ---------------------------------------------------------
 DECLARE @id_partido_ps INT = (SELECT id_partido FROM dbo.Partido WHERE resultado_final = N'TEST-PS');
 DECLARE @id_sel1 INT = (SELECT id_seleccion FROM dbo.Seleccion WHERE pais = N'Testlandia');
 
@@ -172,12 +170,12 @@ EXEC dbo.SP_PartidoSeleccion_Baja @id_partido = @id_partido_ps, @id_seleccion = 
 PRINT 'OK - Baja Partido_Seleccion ejecutada';
 GO
 
+/*
+	CASO 5: Baja fallida - relación inexistente
+	RESULTADO ESPERADO: error
+	"- No existe la relación partido-selección indicada."
+*/
 
--- ---------------------------------------------------------
--- CASO 19: Baja fallida - relación inexistente
--- RESULTADO ESPERADO: error
--- "- No existe la relación partido-selección indicada."
--- ---------------------------------------------------------
 BEGIN TRY
     EXEC dbo.SP_PartidoSeleccion_Baja @id_partido = -99999, @id_seleccion = -99999;
     PRINT 'ERROR: no se lanzó la excepción esperada';
@@ -187,16 +185,17 @@ BEGIN CATCH
 END CATCH
 GO
 
--- ---------------------------------------------------------
--- CASO 20: Modificación exitosa
--- RESULTADO ESPERADO: se actualiza la relación partido-selección
--- cambiando la selección asociada a un partido.
--- ---------------------------------------------------------
+/*
+	CASO 6: Modificación exitosa
+	RESULTADO ESPERADO: se actualiza la relación partido-selección
+	cambiando la selección asociada a un partido.
+*/
+
 DECLARE @id_sede INT = (SELECT id_sede FROM dbo.Sede WHERE nombre_estadio = N'Estadio Testing');
 DECLARE @id_sel1 INT = (SELECT id_seleccion FROM dbo.Seleccion WHERE pais = N'Testlandia');
 DECLARE @id_sel2 INT = (SELECT id_seleccion FROM dbo.Seleccion WHERE pais = N'Pruebalandia');
 
--- Creamos un partido nuevo con una sola selección asignada
+-- Creamos partido nuevo con una sola selección
 INSERT INTO dbo.Partido (id_sede, fecha, horario_local, horario_UTC, fase, resultado_final)
 VALUES (@id_sede, '2026-07-01', '2026-07-01 18:00:00', '2026-07-01 21:00:00', 'GRUPOS', N'TEST-MOD');
 
@@ -205,7 +204,7 @@ DECLARE @id_partido_mod INT = SCOPE_IDENTITY();
 INSERT INTO dbo.Partido_Seleccion (id_partido, id_seleccion)
 VALUES (@id_partido_mod, @id_sel1);
 
--- Modificamos: cambiamos la selección Testlandia por Pruebalandia
+-- Modificamos: cambiamos selección Testlandia por Pruebalandia
 EXEC dbo.SP_PartidoSeleccion_Modificacion
     @id_partido         = @id_partido_mod,
     @id_seleccion       = @id_sel1,
@@ -215,11 +214,12 @@ EXEC dbo.SP_PartidoSeleccion_Modificacion
 PRINT 'OK - Modificación Partido_Seleccion ejecutada';
 GO
 
--- ---------------------------------------------------------
--- CASO 21: Modificación fallida - relación original inexistente
+/*
+-- CASO 7: Modificación fallida - relación original inexistente
 -- RESULTADO ESPERADO: error
 -- "- No existe la relación partido-selección original."
--- ---------------------------------------------------------
+*/
+
 BEGIN TRY
     EXEC dbo.SP_PartidoSeleccion_Modificacion
         @id_partido         = -99999,
@@ -233,13 +233,14 @@ BEGIN CATCH
 END CATCH
 GO
 
--- ---------------------------------------------------------
--- CASO 22: Modificación fallida - la nueva relación ya existe
--- RESULTADO ESPERADO: error
--- "- Ya existe la nueva relación partido-selección."
--- (o bien "- El nuevo partido ya tiene dos selecciones asignadas."
---  si el partido destino ya alcanzó el cupo de 2)
--- ---------------------------------------------------------
+/*
+	CASO 8: Modificación fallida - la nueva relación ya existe
+	RESULTADO ESPERADO: error
+	"- Ya existe la nueva relación partido-selección."
+	(o bien "- El nuevo partido ya tiene dos selecciones asignadas."
+	si el partido destino ya alcanzó el cupo de 2)
+*/
+
 DECLARE @id_sel1 INT = (SELECT id_seleccion FROM dbo.Seleccion WHERE pais = N'Testlandia');
 DECLARE @id_sel2 INT = (SELECT id_seleccion FROM dbo.Seleccion WHERE pais = N'Pruebalandia');
 

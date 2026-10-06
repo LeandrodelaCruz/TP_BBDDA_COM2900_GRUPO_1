@@ -1,17 +1,17 @@
 /*
-    Universidad: [Nombre Universidad]
+    Universidad: Universidad Nacional de la Matanza
     Materia: Bases de Datos Aplicada
-    Integrantes: [Nombres]
-    Fecha: 01/10/2026
+    Integrantes: 
+				Rodríguez, Elías Uriel 44143869
+				Clara, Lucas Nicolas 46265738
+				Caro, Nicolas Dario 40766722
+				de la Cruz, Leandro Ariel 42022547
+    Fecha: 06/10/2026
 
     Descripción:
     Script de creación de Stored Procedures ABM (Alta, Baja, Modificación)
-    para las tablas:
-        - dbo.Reemplazo
+    para la tabla:
         - dbo.Partido
-        - dbo.Partido_Seleccion
-        - dbo.Formacion
-        - dbo.Formacion_Jugador
 
     Cada SP realiza validaciones y agrupa los errores en un único mensaje.
 */
