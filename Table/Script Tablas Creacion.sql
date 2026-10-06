@@ -1,17 +1,16 @@
-/*
+    /*
     Universidad: [Nombre Universidad]
     Materia: Bases de Datos Aplicada
     Integrantes: [Nombres]
     Fecha: 01/10/2026
 
-    Descripci贸n:
-    Script de creaci贸n de tablas y restricciones
-    del Sistema de Registro y Gesti贸n del Mundial.
+    Descripci髇:
+    Script de creaci髇 de tablas y restricciones
+    del Sistema de Registro y Gesti髇 del Mundial.
 */
 
-USE MundialDB;
+USE MUNDIALDEFUTBOL;
 GO
-
 
 /* =========================================================
    1. TABLAS INDEPENDIENTES
@@ -19,7 +18,7 @@ GO
 
 IF OBJECT_ID('dbo.Anunciante', 'U') IS NULL
 BEGIN
-    CREATE TABLE dbo.Anunciante
+	CREATE TABLE dbo.Anunciante
     (
         id_anunciante INT IDENTITY(1,1) NOT NULL,
         nombre NVARCHAR(120) NOT NULL,
@@ -159,7 +158,7 @@ END;
 GO
 
 
-/* Relaci贸n N:N entre Pieza y Regi贸n */
+/* Relaci髇 N:N entre Pieza y Regi髇 */
 
 IF OBJECT_ID('dbo.Pieza_Para_Region', 'U') IS NULL
 BEGIN
@@ -185,7 +184,7 @@ GO
 
 
 /* =========================================================
-   3. SELECCIONES, CUERPO T脡CNICO Y JUGADORES
+   3. SELECCIONES, CUERPO T蒀NICO Y JUGADORES
    ========================================================= */
 
 IF OBJECT_ID('dbo.Personal_Tecnico', 'U') IS NULL
@@ -306,7 +305,7 @@ END;
 GO
 
 
-/* Relaci贸n N:N Partido - Selecci贸n */
+/* Relaci髇 N:N Partido - Selecci髇 */
 
 IF OBJECT_ID('dbo.Partido_Seleccion', 'U') IS NULL
 BEGIN
@@ -362,7 +361,7 @@ END;
 GO
 
 
-/* Relaci贸n CONFORMA */
+/* Relaci髇 CONFORMA */
 
 IF OBJECT_ID('dbo.Formacion_Jugador', 'U') IS NULL
 BEGIN
@@ -434,10 +433,10 @@ GO
 
 
 /* =========================================================
-   7. 脕RBITROS
+   7. 罵BITROS
    ========================================================= */
 
-/* La relaci贸n PARTICIPA EN se convierte en tabla */
+/* La relaci髇 PARTICIPA EN se convierte en tabla */
 
 IF OBJECT_ID('dbo.Designacion_Arbitral', 'U') IS NULL
 BEGIN
