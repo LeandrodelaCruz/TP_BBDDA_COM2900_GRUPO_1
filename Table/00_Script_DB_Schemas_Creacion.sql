@@ -17,6 +17,7 @@
 USE master;
 GO
 
+
 -- 1. Crear la Base de Datos si no existe
 IF NOT EXISTS (SELECT * FROM sys.databases WHERE name = 'MUNDIALDEFUTBOL')
 BEGIN
