@@ -16,11 +16,11 @@ GO
 
 
 CREATE OR ALTER PROCEDURE dbo.SP_Sede_Alta
-    @nombre_estadio NVARCHAR(4000),
-    @ciudad NVARCHAR(4000),
-    @pais NVARCHAR(4000),
+    @nombre_estadio NVARCHAR(120),
+    @ciudad NVARCHAR(80),
+    @pais NVARCHAR(80),
     @capacidad INT,
-    @huso_horario VARCHAR(4000)
+    @huso_horario VARCHAR(100)
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -44,11 +44,11 @@ GO
 
 CREATE OR ALTER PROCEDURE dbo.SP_Sede_Modificar
     @id_sede INT,
-    @nombre_estadio NVARCHAR(4000),
-    @ciudad NVARCHAR(4000),
-    @pais NVARCHAR(4000),
+    @nombre_estadio NVARCHAR(120),
+    @ciudad NVARCHAR(80),
+    @pais NVARCHAR(80),
     @capacidad INT,
-    @huso_horario VARCHAR(4000)
+    @huso_horario VARCHAR(100)
 AS
 BEGIN
     SET NOCOUNT ON;
