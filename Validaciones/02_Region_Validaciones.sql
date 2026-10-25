@@ -19,9 +19,9 @@ GO
 CREATE OR ALTER PROCEDURE dbo.SP_Validar_Region
     @operacion          VARCHAR(12),
     @id_region          INT = NULL,
-    @nombre             NVARCHAR(4000) = NULL,
-    @idioma             NVARCHAR(4000) = NULL,
-    @huso_horario       VARCHAR(4000) = NULL,
+    @nombre             NVARCHAR(80) = NULL,
+    @idioma             NVARCHAR(50) = NULL,
+    @huso_horario       VARCHAR(100) = NULL,
     @hora_prime_inicio  TIME(0) = NULL,
     @hora_prime_fin     TIME(0) = NULL,
     @errores            NVARCHAR(2048) OUTPUT

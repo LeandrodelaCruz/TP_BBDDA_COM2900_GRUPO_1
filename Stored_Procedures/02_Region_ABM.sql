@@ -17,9 +17,9 @@ GO
 
 
 CREATE OR ALTER PROCEDURE dbo.SP_Region_Alta
-    @nombre NVARCHAR(4000),
-    @idioma NVARCHAR(4000) = NULL,
-    @huso_horario VARCHAR(4000),
+    @nombre NVARCHAR(80),
+    @idioma NVARCHAR(50) = NULL,
+    @huso_horario VARCHAR(100),
     @hora_prime_inicio TIME(0),
     @hora_prime_fin TIME(0)
 AS
@@ -45,9 +45,9 @@ GO
 
 CREATE OR ALTER PROCEDURE dbo.sp_Region_Modificar
     @id_region INT,
-    @nombre NVARCHAR(4000),
-    @idioma NVARCHAR(4000) = NULL,
-    @huso_horario VARCHAR(4000),
+    @nombre NVARCHAR(80),
+    @idioma NVARCHAR(50) = NULL,
+    @huso_horario VARCHAR(100),
     @hora_prime_inicio TIME(0),
     @hora_prime_fin TIME(0)
 AS

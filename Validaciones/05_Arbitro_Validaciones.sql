@@ -19,12 +19,12 @@ GO
 CREATE OR ALTER PROCEDURE dbo.SP_Validar_Arbitro
     @operacion         VARCHAR(12),
     @id_arbitro        INT = NULL,
-    @nombre            NVARCHAR(4000) = NULL,
-    @apellido          NVARCHAR(4000) = NULL,
+    @nombre            NVARCHAR(60) = NULL,
+    @apellido          NVARCHAR(60) = NULL,
     @fecha_nacimiento  DATE = NULL,
-    @pais              NVARCHAR(4000) = NULL,
-    @puesto            VARCHAR(4000) = NULL,
-    @idiomas           NVARCHAR(4000) = NULL,
+    @pais              NVARCHAR(80) = NULL,
+    @puesto            VARCHAR(50) = NULL,
+    @idiomas           NVARCHAR(200) = NULL,
     @errores           NVARCHAR(2048) OUTPUT
 AS
 BEGIN

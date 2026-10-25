@@ -17,9 +17,9 @@ GO
 
 
 CREATE OR ALTER PROCEDURE dbo.SP_Seleccion_Alta
-    @pais NVARCHAR(4000),
-    @confederacion NVARCHAR(4000),
-    @grupo_asignado VARCHAR(4000)
+    @pais NVARCHAR(80),
+    @confederacion NVARCHAR(50),
+    @grupo_asignado VARCHAR(5)
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -40,9 +40,9 @@ GO
 
 CREATE OR ALTER PROCEDURE dbo.SP_Seleccion_Modificar
     @id_seleccion INT,
-    @pais NVARCHAR(4000),
-    @confederacion NVARCHAR(4000),
-    @grupo_asignado VARCHAR(4000)
+    @pais NVARCHAR(80),
+    @confederacion NVARCHAR(50),
+    @grupo_asignado VARCHAR(5)
 AS
 BEGIN
     SET NOCOUNT ON;

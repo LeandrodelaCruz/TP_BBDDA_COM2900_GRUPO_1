@@ -19,7 +19,7 @@ GO
 CREATE OR ALTER PROCEDURE dbo.SP_Validar_Anunciante
     @operacion      VARCHAR(12),
     @id_anunciante  INT = NULL,
-    @nombre         NVARCHAR(4000) = NULL,
+    @nombre         NVARCHAR(120) = NULL,
     @errores        NVARCHAR(2048) OUTPUT
 AS
 BEGIN
