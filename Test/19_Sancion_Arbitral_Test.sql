@@ -15,12 +15,12 @@
     ejecutarse individualmente o corriendo todo el archivo.
     
     PROCEDIMIENTOS A PROBAR:
-    - SP_Sancion_Arbitral_Alta (con validaciones)
-    - SP_Sancion_Arbitral_GetById
-    - SP_Sancion_Arbitral_GetByArbitro
-    - SP_Sancion_Arbitral_GetByPartido
-    - SP_Sancion_Arbitral_Modificacion
-    - SP_Sancion_Arbitral_Baja
+    - Sancion_Arbitral_Alta (con validaciones)
+    - Sancion_Arbitral_GetById
+    - Sancion_Arbitral_GetByArbitro
+    - Sancion_Arbitral_GetByPartido
+    - Sancion_Arbitral_Modificacion
+    - Sancion_Arbitral_Baja
 */
 
 USE MUNDIALDEFUTBOL;
@@ -141,7 +141,7 @@ DECLARE @id_partido_test INT = (SELECT TOP 1 id_partido FROM dbo.Partido WHERE r
 DECLARE @id_sancion1 INT;
 
 BEGIN TRY
-    EXEC dbo.SP_Sancion_Arbitral_Alta
+    EXEC dbo.Sancion_Arbitral_Alta
         @id_arbitro = @id_arbitro_designado,
         @id_partido = @id_partido_test,
         @fecha = '2026-06-10',
@@ -166,7 +166,7 @@ DECLARE @id_arbitro_sin_partido INT = (SELECT TOP 1 id_arbitro FROM dbo.Arbitro 
 DECLARE @id_sancion2 INT;
 
 BEGIN TRY
-    EXEC dbo.SP_Sancion_Arbitral_Alta
+    EXEC dbo.Sancion_Arbitral_Alta
         @id_arbitro = @id_arbitro_sin_partido,
         @id_partido = NULL,
         @fecha = '2026-06-01',
@@ -192,7 +192,7 @@ DECLARE @id_partido_test INT = (SELECT TOP 1 id_partido FROM dbo.Partido WHERE r
 DECLARE @id_sancion3 INT;
 
 BEGIN TRY
-    EXEC dbo.SP_Sancion_Arbitral_Alta
+    EXEC dbo.Sancion_Arbitral_Alta
         @id_arbitro = @id_arbitro_designado,
         @id_partido = @id_partido_test,
         @fecha = '2026-06-10',
@@ -218,7 +218,7 @@ DECLARE @id_partido_test INT = (SELECT TOP 1 id_partido FROM dbo.Partido WHERE r
 DECLARE @id_sancion_fail1 INT;
 
 BEGIN TRY
-    EXEC dbo.SP_Sancion_Arbitral_Alta
+    EXEC dbo.Sancion_Arbitral_Alta
         @id_arbitro = @id_arbitro_sin_partido,
         @id_partido = @id_partido_test,
         @fecha = '2026-06-10',
@@ -243,7 +243,7 @@ DECLARE @id_arbitro_designado INT = (SELECT TOP 1 id_arbitro FROM dbo.Arbitro WH
 DECLARE @id_sancion_fail2 INT;
 
 BEGIN TRY
-    EXEC dbo.SP_Sancion_Arbitral_Alta
+    EXEC dbo.Sancion_Arbitral_Alta
         @id_arbitro = @id_arbitro_designado,
         @id_partido = 999999,
         @fecha = '2026-06-10',
@@ -273,7 +273,7 @@ DECLARE @id_sancion_get INT = (
 
 IF @id_sancion_get IS NOT NULL
 BEGIN
-    EXEC dbo.SP_Sancion_Arbitral_GetById @id_sancion = @id_sancion_get;
+    EXEC dbo.Sancion_Arbitral_GetById @id_sancion = @id_sancion_get;
 END
 ELSE
     PRINT 'No hay sanciones para consultar';
@@ -289,7 +289,7 @@ DECLARE @id_arbitro_get INT = (SELECT TOP 1 id_arbitro FROM dbo.Arbitro WHERE no
 
 IF @id_arbitro_get IS NOT NULL
 BEGIN
-    EXEC dbo.SP_Sancion_Arbitral_GetByArbitro @id_arbitro = @id_arbitro_get;
+    EXEC dbo.Sancion_Arbitral_GetByArbitro @id_arbitro = @id_arbitro_get;
 END
 ELSE
     PRINT 'No hay árbitro de prueba para consultar';
@@ -305,7 +305,7 @@ DECLARE @id_partido_get INT = (SELECT TOP 1 id_partido FROM dbo.Partido WHERE re
 
 IF @id_partido_get IS NOT NULL
 BEGIN
-    EXEC dbo.SP_Sancion_Arbitral_GetByPartido @id_partido = @id_partido_get;
+    EXEC dbo.Sancion_Arbitral_GetByPartido @id_partido = @id_partido_get;
 END
 ELSE
     PRINT 'No hay partido de prueba para consultar';
@@ -328,14 +328,14 @@ IF @id_sancion_update IS NOT NULL
 BEGIN
     BEGIN TRY
         PRINT 'Datos antes:';
-        EXEC dbo.SP_Sancion_Arbitral_GetById @id_sancion = @id_sancion_update;
+        EXEC dbo.Sancion_Arbitral_GetById @id_sancion = @id_sancion_update;
 
-        EXEC dbo.SP_Sancion_Arbitral_Modificacion
+        EXEC dbo.Sancion_Arbitral_Modificacion
             @id_sancion = @id_sancion_update,
             @motivo = N'Motivo actualizado por revisión';
 
         PRINT 'Datos después:';
-        EXEC dbo.SP_Sancion_Arbitral_GetById @id_sancion = @id_sancion_update;
+        EXEC dbo.Sancion_Arbitral_GetById @id_sancion = @id_sancion_update;
     END TRY
     BEGIN CATCH
         PRINT 'ERROR: ' + ERROR_MESSAGE();
@@ -352,7 +352,7 @@ PRINT '';
 PRINT '--- CASO 10: UPDATE fallido - ID inexistente ---';
 
 BEGIN TRY
-    EXEC dbo.SP_Sancion_Arbitral_Modificacion
+    EXEC dbo.Sancion_Arbitral_Modificacion
         @id_sancion = 999999,
         @motivo = N'Sanción inexistente';
 
@@ -379,7 +379,7 @@ DECLARE @id_sancion_delete INT = (
 IF @id_sancion_delete IS NOT NULL
 BEGIN
     BEGIN TRY
-        EXEC dbo.SP_Sancion_Arbitral_Baja @id_sancion = @id_sancion_delete;
+        EXEC dbo.Sancion_Arbitral_Baja @id_sancion = @id_sancion_delete;
 
         PRINT 'OK - Sanción eliminada';
 
@@ -403,7 +403,7 @@ PRINT '';
 PRINT '--- CASO 12: DELETE fallido - ID inexistente ---';
 
 BEGIN TRY
-    EXEC dbo.SP_Sancion_Arbitral_Baja @id_sancion = 999999;
+    EXEC dbo.Sancion_Arbitral_Baja @id_sancion = 999999;
 
     PRINT 'ERROR: Debería haber fallado';
 END TRY

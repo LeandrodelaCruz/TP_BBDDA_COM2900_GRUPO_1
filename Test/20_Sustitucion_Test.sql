@@ -13,11 +13,11 @@
     Incluye pruebas exitosas y pruebas de validaciones fallidas
     
     PROCEDIMIENTOS A PROBAR:
-    - sp_Sustitucion_Alta (con validaciones)
-    - sp_Sustitucion_GetById
-    - sp_Sustitucion_GetByPartido
-    - sp_Sustitucion_Modificacion
-    - sp_Sustitucion_Baja
+    - Sustitucion_Alta (con validaciones)
+    - Sustitucion_GetById
+    - Sustitucion_GetByPartido
+    - Sustitucion_Modificacion
+    - Sustitucion_Baja
     
     Cada bloque incluye el RESULTADO ESPERADO en comentarios.
 */
@@ -234,7 +234,7 @@ DECLARE @id_suplente1 INT = (SELECT id_jugador FROM dbo.Jugador WHERE nombre = N
 DECLARE @id_sustitucion_generado INT;
 
 BEGIN TRY
-    EXEC dbo.sp_Sustitucion_Alta
+    EXEC dbo.Sustitucion_Alta
         @id_partido = @id_partido_test,
         @id_jugador_sale = @id_titular1,
         @id_jugador_entra = @id_suplente1,
@@ -265,7 +265,7 @@ DECLARE @id_titular1 INT = (SELECT id_jugador FROM dbo.Jugador WHERE nombre = N'
 DECLARE @id_titular2 INT = (SELECT id_jugador FROM dbo.Jugador WHERE nombre = N'Titular2Sel1');
 DECLARE @id_sustitucion_generado INT;
 BEGIN TRY
-    EXEC dbo.sp_Sustitucion_Alta
+    EXEC dbo.Sustitucion_Alta
         @id_partido = @id_partido_test,
         @id_jugador_sale = @id_titular1,
         @id_jugador_entra = @id_titular2,
@@ -296,7 +296,7 @@ DECLARE @id_suplente2 INT = (SELECT id_jugador FROM dbo.Jugador WHERE nombre = N
 DECLARE @id_sustitucion_generado INT;
 
 BEGIN TRY
-    EXEC dbo.sp_Sustitucion_Alta
+    EXEC dbo.Sustitucion_Alta
         @id_partido = @id_partido_test,
         @id_jugador_sale = @id_titular1,
         @id_jugador_entra = @id_suplente2,
@@ -327,7 +327,7 @@ DECLARE @id_suplente2 INT = (SELECT id_jugador FROM dbo.Jugador WHERE nombre = N
 DECLARE @id_sustitucion_generado INT;
 
 BEGIN TRY
-    EXEC dbo.sp_Sustitucion_Alta
+    EXEC dbo.Sustitucion_Alta
         @id_partido = @id_partido_test,
         @id_jugador_sale = @id_suplente1,
         @id_jugador_entra = @id_suplente2,
@@ -374,7 +374,7 @@ DECLARE @id_suplente3 INT = (SELECT id_jugador FROM dbo.Jugador WHERE nombre = N
 DECLARE @id_sustitucion_generado2 INT;
 
 BEGIN TRY
-    EXEC dbo.sp_Sustitucion_Alta
+    EXEC dbo.Sustitucion_Alta
         @id_partido = @id_partido_test2,
         @id_jugador_sale = @id_suplente2_v2,
         @id_jugador_entra = @id_suplente3,
@@ -418,7 +418,7 @@ DECLARE @id_suplente4 INT = (SELECT id_jugador FROM dbo.Jugador WHERE nombre = N
 DECLARE @id_sustitucion_generado3 INT;
 
 BEGIN TRY
-    EXEC dbo.sp_Sustitucion_Alta
+    EXEC dbo.Sustitucion_Alta
         @id_partido = @id_partido_test3,
         @id_jugador_sale = @id_suplente3_v2,
         @id_jugador_entra = @id_suplente4,
@@ -449,7 +449,7 @@ DECLARE @id_titular2 INT = (SELECT id_jugador FROM dbo.Jugador WHERE nombre = N'
 DECLARE @id_sustitucion_generado4 INT;
 
 BEGIN TRY
-    EXEC dbo.sp_Sustitucion_Alta
+    EXEC dbo.Sustitucion_Alta
         @id_partido = @id_partido_test4,
         @id_jugador_sale = @id_suplente4_v2,
         @id_jugador_entra = @id_titular2,
@@ -480,7 +480,7 @@ DECLARE @id_sustitucion_creado INT = (SELECT MIN(id_sustitucion) FROM dbo.Sustit
 IF @id_sustitucion_creado IS NOT NULL
 BEGIN
     PRINT 'Datos de la sustitución ' + CAST(@id_sustitucion_creado AS VARCHAR(10)) + ':';
-    EXEC dbo.sp_Sustitucion_GetById @id_sustitucion = @id_sustitucion_creado;
+    EXEC dbo.Sustitucion_GetById @id_sustitucion = @id_sustitucion_creado;
 END
 ELSE
     PRINT 'No se encontraron sustituciones registradas';
@@ -496,7 +496,7 @@ PRINT '--- CASO 10: GET por Partido ---';
 
 DECLARE @id_partido_test INT = (SELECT id_partido FROM dbo.Partido WHERE resultado_final = N'TEST-SUSTITUCION');
 PRINT 'Sustituciones del partido ' + CAST(@id_partido_test AS VARCHAR(10)) + ':';
-EXEC dbo.sp_Sustitucion_GetByPartido @id_partido = @id_partido_test;
+EXEC dbo.Sustitucion_GetByPartido @id_partido = @id_partido_test;
 GO
 
 
@@ -512,12 +512,12 @@ DECLARE @id_sustitucion_creado INT = (SELECT MIN(id_sustitucion) FROM dbo.Sustit
 
 IF @id_sustitucion_creado IS NOT NULL
 BEGIN
-    EXEC dbo.sp_Sustitucion_Modificacion
+    EXEC dbo.Sustitucion_Modificacion
         @id_sustitucion = @id_sustitucion_creado,
         @motivo = 'Cambio actualizado - jugador lesionado';
     
     PRINT 'Sustitución actualizada:';
-    EXEC dbo.sp_Sustitucion_GetById @id_sustitucion = @id_sustitucion_creado;
+    EXEC dbo.Sustitucion_GetById @id_sustitucion = @id_sustitucion_creado;
 END
 GO
 
@@ -530,7 +530,7 @@ PRINT '';
 PRINT '--- CASO 12: UPDATE fallido - ID inexistente ---';
 
 BEGIN TRY
-    EXEC dbo.sp_Sustitucion_Modificacion
+    EXEC dbo.Sustitucion_Modificacion
         @id_sustitucion = 999999,
         @motivo = 'Test';
     
@@ -554,7 +554,7 @@ DECLARE @id_sustitucion_creado INT = (SELECT MIN(id_sustitucion) FROM dbo.Sustit
 
 IF @id_sustitucion_creado IS NOT NULL
 BEGIN
-    EXEC dbo.sp_Sustitucion_Baja @id_sustitucion = @id_sustitucion_creado;
+    EXEC dbo.Sustitucion_Baja @id_sustitucion = @id_sustitucion_creado;
     
     -- Verificar que fue eliminada
     IF NOT EXISTS (SELECT 1 FROM dbo.Sustitucion WHERE id_sustitucion = @id_sustitucion_creado)

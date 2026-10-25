@@ -16,11 +16,11 @@
     - Rol de árbitro debe ser válido (PRINCIPAL, ASISTENTE, CUARTO ARBITRO, VAR, AVAR)
     
     Procedimientos:
-    - SP_Designacion_Arbitral_Alta: Inserta designación con validaciones
-    - SP_Designacion_Arbitral_GetByPartido: Obtiene árbitros designados para un partido
-    - SP_Designacion_Arbitral_GetByArbitro: Obtiene partidos donde arbitró
-    - SP_Designacion_Arbitral_Modificacion: Actualiza rol del árbitro
-    - SP_Designacion_Arbitral_Baja: Elimina designación
+    - Designacion_Arbitral_Alta: Inserta designación con validaciones
+    - Designacion_Arbitral_GetByPartido: Obtiene árbitros designados para un partido
+    - Designacion_Arbitral_GetByArbitro: Obtiene partidos donde arbitró
+    - Designacion_Arbitral_Modificacion: Actualiza rol del árbitro
+    - Designacion_Arbitral_Baja: Elimina designación
 */
 
 USE MUNDIALDEFUTBOL;
@@ -30,7 +30,7 @@ GO
 -- CREATE - Insertar una nueva designación arbitral
 -- =========================================================
 
-CREATE OR ALTER PROCEDURE dbo.SP_Designacion_Arbitral_Alta
+CREATE OR ALTER PROCEDURE dbo.Designacion_Arbitral_Alta
     @id_partido INT,
     @id_arbitro INT,
     @rol_arbitro VARCHAR(30)
@@ -123,7 +123,7 @@ GO
 -- READ - Obtener árbitros por partido
 -- =========================================================
 
-CREATE OR ALTER PROCEDURE dbo.SP_Designacion_Arbitral_GetByPartido
+CREATE OR ALTER PROCEDURE dbo.Designacion_Arbitral_GetByPartido
     @id_partido INT
 AS
 BEGIN
@@ -172,7 +172,7 @@ GO
 -- READ - Obtener partidos donde arbitró un árbitro
 -- =========================================================
 
-CREATE OR ALTER PROCEDURE dbo.SP_Designacion_Arbitral_GetByArbitro
+CREATE OR ALTER PROCEDURE dbo.Designacion_Arbitral_GetByArbitro
     @id_arbitro INT
 AS
 BEGIN
@@ -202,7 +202,7 @@ GO
 -- UPDATE - Actualizar rol del árbitro
 -- =========================================================
 
-CREATE OR ALTER PROCEDURE dbo.SP_Designacion_Arbitral_Modificacion
+CREATE OR ALTER PROCEDURE dbo.Designacion_Arbitral_Modificacion
     @id_partido INT,
     @id_arbitro INT,
     @rol_arbitro VARCHAR(30)
@@ -249,7 +249,7 @@ GO
 -- DELETE - Eliminar designación arbitral
 -- =========================================================
 
-CREATE OR ALTER PROCEDURE dbo.SP_Designacion_Arbitral_Baja
+CREATE OR ALTER PROCEDURE dbo.Designacion_Arbitral_Baja
     @id_partido INT,
     @id_arbitro INT
 AS

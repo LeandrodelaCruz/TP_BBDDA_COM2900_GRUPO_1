@@ -12,11 +12,11 @@
     Incluye pruebas exitosas y pruebas de validaciones fallidas
     
     PROCEDIMIENTOS A PROBAR:
-    - sp_Designacion_Arbitral_Alta (con validación de país)
-    - sp_Designacion_Arbitral_GetByPartido
-    - sp_Designacion_Arbitral_GetByArbitro
-    - sp_Designacion_Arbitral_Modificacion
-    - sp_Designacion_Arbitral_Baja
+    - Designacion_Arbitral_Alta (con validación de país)
+    - Designacion_Arbitral_GetByPartido
+    - Designacion_Arbitral_GetByArbitro
+    - Designacion_Arbitral_Modificacion
+    - Designacion_Arbitral_Baja
     
     Estructura correcta:
     PK: (id_partido, id_arbitro)
@@ -158,7 +158,7 @@ PRINT ''
 PRINT '--- CASO 1: Insertar árbitro PRINCIPAL (país diferente) - EXITOSA ---'
 
 BEGIN TRY
-    EXEC dbo.sp_Designacion_Arbitral_Alta
+    EXEC dbo.Designacion_Arbitral_Alta
         @id_partido = @id_partido_test,
         @id_arbitro = @id_arbitro_extranjero,
         @rol_arbitro = N'PRINCIPAL';
@@ -192,7 +192,7 @@ PRINT ''
 PRINT '--- CASO 2: Árbitro del MISMO PAÍS que selección - RECHAZADA ---'
 
 BEGIN TRY
-    EXEC dbo.sp_Designacion_Arbitral_Alta
+    EXEC dbo.Designacion_Arbitral_Alta
         @id_partido = @id_partido_test,
         @id_arbitro = @id_arbitro_pais1,
         @rol_arbitro = N'ASISTENTE';
@@ -219,7 +219,7 @@ DECLARE @id_partido_test INT = (SELECT id_partido FROM dbo.Partido WHERE resulta
 PRINT ''
 PRINT '--- Árbitros designados para el partido de prueba ---'
 
-EXEC dbo.sp_Designacion_Arbitral_GetByPartido @id_partido = @id_partido_test;
+EXEC dbo.Designacion_Arbitral_GetByPartido @id_partido = @id_partido_test;
 GO
 
 -- =========================================================
@@ -237,7 +237,7 @@ DECLARE @id_arbitro_extranjero INT = (SELECT id_arbitro FROM dbo.Arbitro WHERE n
 PRINT ''
 PRINT '--- Partidos designados al árbitro de prueba ---'
 
-EXEC dbo.sp_Designacion_Arbitral_GetByArbitro @id_arbitro = @id_arbitro_extranjero;
+EXEC dbo.Designacion_Arbitral_GetByArbitro @id_arbitro = @id_arbitro_extranjero;
 GO
 
 -- =========================================================
@@ -257,7 +257,7 @@ PRINT ''
 PRINT '--- CASO 5: Cambiar rol de PRINCIPAL a VAR - EXITOSA ---'
 
 BEGIN TRY
-    EXEC dbo.sp_Designacion_Arbitral_Modificacion
+    EXEC dbo.Designacion_Arbitral_Modificacion
         @id_partido = @id_partido_test,
         @id_arbitro = @id_arbitro_extranjero,
         @rol_arbitro = N'VAR';
@@ -291,7 +291,7 @@ PRINT ''
 PRINT '--- CASO 6: Eliminar designación - EXITOSA ---'
 
 BEGIN TRY
-    EXEC dbo.sp_Designacion_Arbitral_Baja
+    EXEC dbo.Designacion_Arbitral_Baja
         @id_partido = @id_partido_test,
         @id_arbitro = @id_arbitro_extranjero;
     
