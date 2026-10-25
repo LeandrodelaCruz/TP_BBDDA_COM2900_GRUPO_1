@@ -16,7 +16,7 @@ SET NOCOUNT ON;
 GO
 
 
-CREATE OR ALTER PROCEDURE dbo.SP_Validar_Anunciante
+CREATE OR ALTER PROCEDURE dbo.Validar_Anunciante
     @operacion      VARCHAR(12),
     @id_anunciante  INT = NULL,
     @nombre         NVARCHAR(120) = NULL,

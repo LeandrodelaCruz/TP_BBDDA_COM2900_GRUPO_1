@@ -12,15 +12,15 @@
     Stored Procedures ABM para la tabla Pieza_Publicitaria
 
     PROCEDIMIENTOS INCLUIDOS:
-    - SP_Pieza_Publicitaria_Alta
-    - SP_Pieza_Publicitaria_Modificar
-    - SP_Pieza_Publicitaria_Baja
+    - Pieza_Publicitaria_Alta
+    - Pieza_Publicitaria_Modificar
+    - Pieza_Publicitaria_Baja
 
 */
 
 
 /* ==================== Pieza_Publicitaria: ALTA ==================== */
-CREATE OR ALTER PROCEDURE dbo.SP_Pieza_Publicitaria_Alta
+CREATE OR ALTER PROCEDURE dbo.Pieza_Publicitaria_Alta
     @id_campania INT,
     @nombre NVARCHAR(120),
     @contenido NVARCHAR(500) = NULL,
@@ -49,7 +49,7 @@ END;
 GO
 
 /* ==================== Pieza_Publicitaria: MODIFICACIÓN ==================== */
-CREATE OR ALTER PROCEDURE dbo.SP_Pieza_Publicitaria_Modificar
+CREATE OR ALTER PROCEDURE dbo.Pieza_Publicitaria_Modificar
     @id_pieza INT,
     @id_campania INT,
     @nombre NVARCHAR(120),
@@ -85,7 +85,7 @@ END;
 GO
 
 /* ==================== Pieza_Publicitaria: BAJA ==================== */
-CREATE OR ALTER PROCEDURE dbo.SP_Pieza_Publicitaria_Baja
+CREATE OR ALTER PROCEDURE dbo.Pieza_Publicitaria_Baja
     @id_pieza INT
 AS
 BEGIN

@@ -26,7 +26,7 @@ DECLARE @id_prev INT = (
 );
 WHILE @id_prev IS NOT NULL
 BEGIN
-    EXEC dbo.sp_Anunciante_Baja @id_prev;
+    EXEC dbo.Anunciante_Baja @id_prev;
     SET @id_prev = (
         SELECT TOP 1 id_anunciante FROM dbo.Anunciante
         WHERE nombre IN (N'TEST_ANUNCIANTE_PRINCIPAL', N'TEST_ANUNCIANTE_MODIFICADO', N'TEST_ANUNCIANTE_BAJA')
@@ -35,26 +35,26 @@ BEGIN
 END;
 
 -- 1) Alta exitosa
-EXEC dbo.SP_Anunciante_Alta N'TEST_ANUNCIANTE_PRINCIPAL';
+EXEC dbo.Anunciante_Alta N'TEST_ANUNCIANTE_PRINCIPAL';
 DECLARE @id INT = (SELECT id_anunciante FROM dbo.Anunciante WHERE nombre = N'TEST_ANUNCIANTE_PRINCIPAL');
 
 -- 2) Consulta por ID
-EXEC dbo.SP_Anunciante_ConsultarPorId @id;
+EXEC dbo.Anunciante_ConsultarPorId @id;
 
 -- 3) Modificación exitosa
-EXEC dbo.SP_Anunciante_Modificar @id, N'TEST_ANUNCIANTE_MODIFICADO';
+EXEC dbo.Anunciante_Modificar @id, N'TEST_ANUNCIANTE_MODIFICADO';
 
 -- 4) Listado
-EXEC dbo.SP_Anunciante_Listar;
+EXEC dbo.Anunciante_Listar;
 
 -- 5) Baja exitosa sobre un segundo registro
-EXEC dbo.SP_Anunciante_Alta N'TEST_ANUNCIANTE_BAJA';
+EXEC dbo.Anunciante_Alta N'TEST_ANUNCIANTE_BAJA';
 DECLARE @id_baja INT = (SELECT id_anunciante FROM dbo.Anunciante WHERE nombre = N'TEST_ANUNCIANTE_BAJA');
-EXEC dbo.SP_Anunciante_Baja @id_baja;
+EXEC dbo.Anunciante_Baja @id_baja;
 
 -- VALIDACIÓN: nombre vacío
 BEGIN TRY
-    EXEC dbo.SP_Anunciante_Alta N'';
+    EXEC dbo.Anunciante_Alta N'';
 END TRY
 BEGIN CATCH
     SELECT 'OK - error esperado: nombre vacío' AS prueba, ERROR_MESSAGE() AS mensaje;
@@ -62,7 +62,7 @@ END CATCH;
 
 -- VALIDACIÓN: nombre duplicado
 BEGIN TRY
-    EXEC dbo.SP_Anunciante_Alta N'TEST_ANUNCIANTE_MODIFICADO';
+    EXEC dbo.Anunciante_Alta N'TEST_ANUNCIANTE_MODIFICADO';
 END TRY
 BEGIN CATCH
     SELECT 'OK - error esperado: anunciante duplicado' AS prueba, ERROR_MESSAGE() AS mensaje;

@@ -12,14 +12,14 @@
     Stored Procedures ABM para la tabla Pieza_Para_Region
 
     PROCEDIMIENTOS INCLUIDOS:
-    - SP_Pieza_Region_Alta
-    - SP_Pieza_Region_Baja
+    - Pieza_Region_Alta
+    - Pieza_Region_Baja
     
 */
 
 
 /* ==================== Pieza_Para_Region: ALTA ==================== */
-CREATE OR ALTER PROCEDURE dbo.SP_Pieza_Para_Region_Alta
+CREATE OR ALTER PROCEDURE dbo.Pieza_Para_Region_Alta
     @id_pieza INT,
     @id_region INT
 AS
@@ -48,7 +48,7 @@ Pieza_Region es una tabla intermedia que sirve para identificar la relación ent
 Si se quisiera modificar alguna de estas relaciones, se podría dar de baja la relación deseada y crear una nueva. La "Modificación" de relaciones
 es redundante en este caso, por lo que no se llevará a cabo.
 
-CREATE OR ALTER PROCEDURE dbo.SP_Pieza_Region_Modificar
+CREATE OR ALTER PROCEDURE dbo.Pieza_Region_Modificar
     @id_pieza INT,
     @id_region INT
 AS
@@ -65,7 +65,7 @@ END;*/
 GO
 
 /* ==================== Pieza_Para_Region: BAJA ==================== */
-CREATE OR ALTER PROCEDURE dbo.SP_Pieza_Para_Region_Baja
+CREATE OR ALTER PROCEDURE dbo.Pieza_Para_Region_Baja
     @id_pieza INT,
     @id_region INT
 AS

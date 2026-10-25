@@ -2,18 +2,18 @@
     Universidad: Universidad Nacional de la Matanza
     Materia: Bases de Datos Aplicada
     Integrantes: 
-				Rodríguez, Elías Uriel 44143869
+				Rodrï¿½guez, Elï¿½as Uriel 44143869
 				Clara, Lucas Nicolas 46265738
 				Caro, Nicolas Dario 40766722
 				de la Cruz, Leandro Ariel 42022547
     Fecha: 06/10/2026
 
-    Descripción:
-    Script de creación de Stored Procedures ABM (Alta, Baja, Modificación)
+    Descripciï¿½n:
+    Script de creaciï¿½n de Stored Procedures ABM (Alta, Baja, Modificaciï¿½n)
     para la tabla:
         - dbo.Formacion_Jugador
 
-    Cada SP realiza validaciones y agrupa los errores en un único mensaje.
+    Cada SP realiza validaciones y agrupa los errores en un ï¿½nico mensaje.
 */
 
 USE MUNDIALDEFUTBOL;
@@ -24,7 +24,7 @@ GO
    TABLA: dbo.Formacion_Jugador
    ========================================================= */
 
-CREATE OR ALTER PROCEDURE dbo.SP_FormacionJugador_Alta
+CREATE OR ALTER PROCEDURE dbo.FormacionJugador_Alta
     @id_formacion       INT,
     @id_jugador         INT,
     @posicion_en_cancha VARCHAR(40) = NULL,
@@ -38,18 +38,18 @@ BEGIN
 
 	DECLARE @id_partido_formacion   INT;
 
-    -- datos de la formación
+    -- datos de la formaciï¿½n
     SELECT @id_partido_formacion = id_partido
     FROM dbo.Formacion
     WHERE id_formacion = @id_formacion;
 
     IF NOT EXISTS (SELECT 1 FROM dbo.Formacion WHERE id_formacion = @id_formacion)
-        SET @errores += N'- No existe la formación indicada. ';
+        SET @errores += N'- No existe la formaciï¿½n indicada. ';
 
     IF NOT EXISTS (SELECT 1 FROM dbo.Jugador WHERE id_jugador = @id_jugador)
         SET @errores += N'- No existe el jugador indicado. ';
 
-    -- Validación: el jugador debe pertenecer a la selección de la formación
+    -- Validaciï¿½n: el jugador debe pertenecer a la selecciï¿½n de la formaciï¿½n
 	IF NOT EXISTS (
 		SELECT 1
 		FROM dbo.Formacion f
@@ -57,33 +57,33 @@ BEGIN
 		WHERE f.id_formacion = @id_formacion
 		  AND f.id_seleccion = j.id_seleccion
 	)	
-		SET @errores += N'- El jugador no pertenece a la selección de la formación. ';
+		SET @errores += N'- El jugador no pertenece a la selecciï¿½n de la formaciï¿½n. ';
 
-    -- Validación: no repetir jugador en la misma formación
+    -- Validaciï¿½n: no repetir jugador en la misma formaciï¿½n
     IF EXISTS (SELECT 1 FROM dbo.Formacion_Jugador
                WHERE id_formacion = @id_formacion AND id_jugador = @id_jugador)
-        SET @errores += N'- El jugador ya está cargado en esta formación. ';
+        SET @errores += N'- El jugador ya estï¿½ cargado en esta formaciï¿½n. ';
 
-    -- Validación: dorsal en cancha entre 1 y 99
+    -- Validaciï¿½n: dorsal en cancha entre 1 y 99
     IF @dorsal_en_cancha IS NULL OR @dorsal_en_cancha NOT BETWEEN 1 AND 99
         SET @errores += N'- El dorsal en cancha debe estar entre 1 y 99. ';
 
-    -- Validación: no repetir dorsal en la misma formación
+    -- Validaciï¿½n: no repetir dorsal en la misma formaciï¿½n
     IF EXISTS (SELECT 1 FROM dbo.Formacion_Jugador
                WHERE id_formacion = @id_formacion AND dorsal_en_cancha = @dorsal_en_cancha)
-        SET @errores += N'- El dorsal en cancha ya está usado en esta formación. ';
+        SET @errores += N'- El dorsal en cancha ya estï¿½ usado en esta formaciï¿½n. ';
 
-    -- Validación: es_titular obligatorio
+    -- Validaciï¿½n: es_titular obligatorio
     IF @es_titular IS NULL
         SET @errores += N'- Debe indicar si el jugador es titular. ';
 
-    -- Validación: máximo 11 titulares por formación
+    -- Validaciï¿½n: mï¿½ximo 11 titulares por formaciï¿½n
     IF @es_titular = 1
        AND (SELECT COUNT(*) FROM dbo.Formacion_Jugador
             WHERE id_formacion = @id_formacion AND es_titular = 1) >= 11
-        SET @errores += N'- La formación ya tiene 11 titulares. ';
+        SET @errores += N'- La formaciï¿½n ya tiene 11 titulares. ';
 
-	-- Validación: el jugador no debe estar expulsado en el partido de la formación
+	-- Validaciï¿½n: el jugador no debe estar expulsado en el partido de la formaciï¿½n
     IF @id_partido_formacion IS NOT NULL
        AND EXISTS (
             SELECT 1
@@ -92,7 +92,7 @@ BEGIN
               AND i.id_jugador = @id_jugador
               AND i.tipo = 'EXPULSION'
        )
-        SET @errores += N'- El jugador está expulsado en este partido y no puede integrar la formación. ';
+        SET @errores += N'- El jugador estï¿½ expulsado en este partido y no puede integrar la formaciï¿½n. ';
 
     IF @errores <> N''
     BEGIN
@@ -114,7 +114,7 @@ BEGIN
 END;
 GO
 
-CREATE OR ALTER PROCEDURE dbo.SP_FormacionJugador_Baja
+CREATE OR ALTER PROCEDURE dbo.FormacionJugador_Baja
     @id_formacion INT,
     @id_jugador   INT
 AS
@@ -125,7 +125,7 @@ BEGIN
 
     IF NOT EXISTS (SELECT 1 FROM dbo.Formacion_Jugador
                    WHERE id_formacion = @id_formacion AND id_jugador = @id_jugador)
-        SET @errores += N'- No existe la relación formación-jugador indicada. ';
+        SET @errores += N'- No existe la relaciï¿½n formaciï¿½n-jugador indicada. ';
 
     IF @errores <> N''
     BEGIN
@@ -145,7 +145,7 @@ BEGIN
 END;
 GO
 
-CREATE OR ALTER PROCEDURE dbo.SP_FormacionJugador_Modificacion
+CREATE OR ALTER PROCEDURE dbo.FormacionJugador_Modificacion
     @id_formacion          INT,
     @id_jugador            INT,
     @posicion_en_cancha    VARCHAR(40) = NULL,
@@ -157,33 +157,33 @@ BEGIN
 
     DECLARE @errores NVARCHAR(MAX) = N'';
 
-    -- Validación 1: la relación original debe existir
+    -- Validaciï¿½n 1: la relaciï¿½n original debe existir
     IF NOT EXISTS (SELECT 1 FROM dbo.Formacion_Jugador
                    WHERE id_formacion = @id_formacion AND id_jugador = @id_jugador)
-        SET @errores += N'- No existe la relación formación-jugador indicada. ';
+        SET @errores += N'- No existe la relaciï¿½n formaciï¿½n-jugador indicada. ';
 
-    -- Validación 2: dorsal entre 1 y 99
+    -- Validaciï¿½n 2: dorsal entre 1 y 99
     IF @dorsal_en_cancha IS NULL OR @dorsal_en_cancha NOT BETWEEN 1 AND 99
         SET @errores += N'- El dorsal en cancha debe estar entre 1 y 99. ';
 
-    -- Validación 3: no repetir dorsal en la misma formación (excluyendo el registro actual)
+    -- Validaciï¿½n 3: no repetir dorsal en la misma formaciï¿½n (excluyendo el registro actual)
     IF EXISTS (SELECT 1 FROM dbo.Formacion_Jugador
                WHERE id_formacion = @id_formacion
                  AND dorsal_en_cancha = @dorsal_en_cancha
                  AND id_jugador <> @id_jugador)
-        SET @errores += N'- El dorsal en cancha ya está usado en esta formación. ';
+        SET @errores += N'- El dorsal en cancha ya estï¿½ usado en esta formaciï¿½n. ';
 
-    -- Validación 4: es_titular obligatorio
+    -- Validaciï¿½n 4: es_titular obligatorio
     IF @es_titular IS NULL
         SET @errores += N'- Debe indicar si el jugador es titular. ';
 
-    -- Validación 5: máximo 11 titulares por formación (si pasa a titular)
+    -- Validaciï¿½n 5: mï¿½ximo 11 titulares por formaciï¿½n (si pasa a titular)
     IF @es_titular = 1
        AND (SELECT COUNT(*) FROM dbo.Formacion_Jugador
             WHERE id_formacion = @id_formacion
               AND es_titular = 1
               AND id_jugador <> @id_jugador) >= 11
-        SET @errores += N'- La formación ya tiene 11 titulares. ';
+        SET @errores += N'- La formaciï¿½n ya tiene 11 titulares. ';
 
     IF @errores <> N''
     BEGIN

@@ -12,15 +12,15 @@
     Stored Procedures ABM para la tabla Jugador
 
     PROCEDIMIENTOS INCLUIDOS:
-    - SP_Jugador_Alta
-    - SP_Jugador_Modificar
-    - SP_Jugador_Baja
+    - Jugador_Alta
+    - Jugador_Modificar
+    - Jugador_Baja
    
 */
 
 
 /* ==================== Jugador: ALTA ==================== */
-CREATE OR ALTER PROCEDURE dbo.SP_Jugador_Alta
+CREATE OR ALTER PROCEDURE dbo.Jugador_Alta
     @fecha_nacimiento DATE,
     @club_origen NVARCHAR(100),
     @apellido NVARCHAR(60),
@@ -67,7 +67,7 @@ END;
 GO
 
 /* ==================== Jugador: MODIFICACIÓN ==================== */
-CREATE OR ALTER PROCEDURE dbo.SP_Jugador_Modificar
+CREATE OR ALTER PROCEDURE dbo.Jugador_Modificar
     @id_jugador INT,
     @fecha_nacimiento DATE,
     @club_origen NVARCHAR(100),
@@ -114,7 +114,7 @@ END;
 GO
 
 /* ==================== Jugador: BAJA ==================== */
-CREATE OR ALTER PROCEDURE dbo.SP_Jugador_Baja
+CREATE OR ALTER PROCEDURE dbo.Jugador_Baja
     @id_jugador INT
 AS
 BEGIN

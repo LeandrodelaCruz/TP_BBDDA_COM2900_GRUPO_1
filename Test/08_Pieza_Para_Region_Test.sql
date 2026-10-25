@@ -13,8 +13,8 @@
     Incluye pruebas exitosas y validaciones de errores.
 
     PROCEDIMIENTOS A PROBAR:
-    - SP_Pieza_Para_Region_Alta
-    - SP_Pieza_Para_Region_Baja
+    - Pieza_Para_Region_Alta
+    - Pieza_Para_Region_Baja
 */
 
 USE MUNDIALDEFUTBOL;
@@ -91,7 +91,7 @@ DECLARE @id_pieza INT = (SELECT id_pieza FROM dbo.Pieza_Publicitaria WHERE nombr
 DECLARE @id_region INT = (SELECT id_region FROM dbo.Region WHERE nombre = N'Región Test ABM');
 
 BEGIN TRY
-    EXEC dbo.SP_Pieza_Para_Region_Alta
+    EXEC dbo.Pieza_Para_Region_Alta
         @id_pieza = @id_pieza,
         @id_region = @id_region;
 
@@ -112,7 +112,7 @@ PRINT '--- CASO 2: Alta fallida - Región inexistente ---';
 DECLARE @id_pieza INT = (SELECT id_pieza FROM dbo.Pieza_Publicitaria WHERE nombre = N'Pieza Test ABM Region');
 
 BEGIN TRY
-    EXEC dbo.SP_Pieza_Para_Region_Alta
+    EXEC dbo.Pieza_Para_Region_Alta
         @id_pieza = @id_pieza,
         @id_region = -999;
 
@@ -133,7 +133,7 @@ DECLARE @id_pieza INT = (SELECT id_pieza FROM dbo.Pieza_Publicitaria WHERE nombr
 DECLARE @id_region INT = (SELECT id_region FROM dbo.Region WHERE nombre = N'Región Test ABM');
 
 BEGIN TRY
-    EXEC dbo.SP_Pieza_Para_Region_Baja
+    EXEC dbo.Pieza_Para_Region_Baja
         @id_pieza = @id_pieza,
         @id_region = @id_region;
 
@@ -153,7 +153,7 @@ PRINT '';
 PRINT '--- CASO 4: Baja fallida - Registro inexistente ---';
 
 BEGIN TRY
-    EXEC dbo.SP_Pieza_Para_Region_Baja
+    EXEC dbo.Pieza_Para_Region_Baja
         @id_pieza = -999,
         @id_region = -999;
 

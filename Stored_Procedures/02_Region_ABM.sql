@@ -16,7 +16,7 @@ SET NOCOUNT ON;
 GO
 
 
-CREATE OR ALTER PROCEDURE dbo.SP_Region_Alta
+CREATE OR ALTER PROCEDURE dbo.Region_Alta
     @nombre NVARCHAR(80),
     @idioma NVARCHAR(50) = NULL,
     @huso_horario VARCHAR(100),
@@ -26,7 +26,7 @@ AS
 BEGIN
     SET NOCOUNT ON;
     DECLARE @errores NVARCHAR(2048);
-    EXEC dbo.sp_Validar_Region 'ALTA', NULL, @nombre, @idioma, @huso_horario,
+    EXEC dbo.Validar_Region 'ALTA', NULL, @nombre, @idioma, @huso_horario,
          @hora_prime_inicio, @hora_prime_fin, @errores OUTPUT;
     IF @errores <> N'' THROW 50101, @errores, 1;
 
@@ -43,7 +43,7 @@ BEGIN
 END;
 GO
 
-CREATE OR ALTER PROCEDURE dbo.sp_Region_Modificar
+CREATE OR ALTER PROCEDURE dbo.Region_Modificar
     @id_region INT,
     @nombre NVARCHAR(80),
     @idioma NVARCHAR(50) = NULL,
@@ -54,7 +54,7 @@ AS
 BEGIN
     SET NOCOUNT ON;
     DECLARE @errores NVARCHAR(2048);
-    EXEC dbo.sp_Validar_Region 'MODIFICAR', @id_region, @nombre, @idioma, @huso_horario,
+    EXEC dbo.Validar_Region 'MODIFICAR', @id_region, @nombre, @idioma, @huso_horario,
          @hora_prime_inicio, @hora_prime_fin, @errores OUTPUT;
     IF @errores <> N'' THROW 50102, @errores, 1;
 
@@ -70,33 +70,33 @@ BEGIN
 END;
 GO
 
-CREATE OR ALTER PROCEDURE dbo.sp_Region_Baja
+CREATE OR ALTER PROCEDURE dbo.Region_Baja
     @id_region INT
 AS
 BEGIN
     SET NOCOUNT ON;
     DECLARE @errores NVARCHAR(2048);
-    EXEC dbo.sp_Validar_Region 'BAJA', @id_region, NULL, NULL, NULL, NULL, NULL, @errores OUTPUT;
+    EXEC dbo.Validar_Region 'BAJA', @id_region, NULL, NULL, NULL, NULL, NULL, @errores OUTPUT;
     IF @errores <> N'' THROW 50103, @errores, 1;
 
     DELETE FROM dbo.Region WHERE id_region = @id_region;
 END;
 GO
 
-CREATE OR ALTER PROCEDURE dbo.sp_Region_ConsultarPorId
+CREATE OR ALTER PROCEDURE dbo.Region_ConsultarPorId
     @id_region INT
 AS
 BEGIN
     SET NOCOUNT ON;
     DECLARE @errores NVARCHAR(2048);
-    EXEC dbo.sp_Validar_Region 'CONSULTAR', @id_region, NULL, NULL, NULL, NULL, NULL, @errores OUTPUT;
+    EXEC dbo.Validar_Region 'CONSULTAR', @id_region, NULL, NULL, NULL, NULL, NULL, @errores OUTPUT;
     IF @errores <> N'' THROW 50104, @errores, 1;
 
     SELECT * FROM dbo.Region WHERE id_region = @id_region;
 END;
 GO
 
-CREATE OR ALTER PROCEDURE dbo.sp_Region_Listar
+CREATE OR ALTER PROCEDURE dbo.Region_Listar
 AS
 BEGIN
     SET NOCOUNT ON;

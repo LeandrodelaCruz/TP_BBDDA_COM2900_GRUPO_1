@@ -16,7 +16,7 @@ SET NOCOUNT ON;
 GO
 
 
-CREATE OR ALTER PROCEDURE dbo.SP_Arbitro_Alta
+CREATE OR ALTER PROCEDURE dbo.Arbitro_Alta
     @nombre NVARCHAR(60),
     @apellido NVARCHAR(60),
     @fecha_nacimiento DATE,
@@ -27,7 +27,7 @@ AS
 BEGIN
     SET NOCOUNT ON;
     DECLARE @errores NVARCHAR(2048);
-    EXEC dbo.sp_Validar_Arbitro 'ALTA', NULL, @nombre, @apellido, @fecha_nacimiento,
+    EXEC dbo.Validar_Arbitro 'ALTA', NULL, @nombre, @apellido, @fecha_nacimiento,
          @pais, @puesto, @idiomas, @errores OUTPUT;
     IF @errores <> N'' THROW 50401, @errores, 1;
 
@@ -45,7 +45,7 @@ BEGIN
 END;
 GO
 
-CREATE OR ALTER PROCEDURE dbo.SP_Arbitro_Modificar
+CREATE OR ALTER PROCEDURE dbo.Arbitro_Modificar
     @nombre NVARCHAR(60),
     @apellido NVARCHAR(60),
     @fecha_nacimiento DATE,
@@ -56,7 +56,7 @@ AS
 BEGIN
     SET NOCOUNT ON;
     DECLARE @errores NVARCHAR(2048);
-    EXEC dbo.SP_Validar_Arbitro 'MODIFICAR', @id_arbitro, @nombre, @apellido, @fecha_nacimiento,
+    EXEC dbo.Validar_Arbitro 'MODIFICAR', @id_arbitro, @nombre, @apellido, @fecha_nacimiento,
          @pais, @puesto, @idiomas, @errores OUTPUT;
     IF @errores <> N'' THROW 50402, @errores, 1;
 
@@ -73,33 +73,33 @@ BEGIN
 END;
 GO
 
-CREATE OR ALTER PROCEDURE dbo.SP_Arbitro_Baja
+CREATE OR ALTER PROCEDURE dbo.Arbitro_Baja
     @id_arbitro INT
 AS
 BEGIN
     SET NOCOUNT ON;
     DECLARE @errores NVARCHAR(2048);
-    EXEC dbo.sp_Validar_Arbitro 'BAJA', @id_arbitro, NULL, NULL, NULL, NULL, NULL, NULL, @errores OUTPUT;
+    EXEC dbo.Validar_Arbitro 'BAJA', @id_arbitro, NULL, NULL, NULL, NULL, NULL, NULL, @errores OUTPUT;
     IF @errores <> N'' THROW 50403, @errores, 1;
 
     DELETE FROM dbo.Arbitro WHERE id_arbitro = @id_arbitro;
 END;
 GO
 
-CREATE OR ALTER PROCEDURE dbo.SP_Arbitro_ConsultarPorId
+CREATE OR ALTER PROCEDURE dbo.Arbitro_ConsultarPorId
     @id_arbitro INT
 AS
 BEGIN
     SET NOCOUNT ON;
     DECLARE @errores NVARCHAR(2048);
-    EXEC dbo.sp_Validar_Arbitro 'CONSULTAR', @id_arbitro, NULL, NULL, NULL, NULL, NULL, NULL, @errores OUTPUT;
+    EXEC dbo.Validar_Arbitro 'CONSULTAR', @id_arbitro, NULL, NULL, NULL, NULL, NULL, NULL, @errores OUTPUT;
     IF @errores <> N'' THROW 50404, @errores, 1;
 
     SELECT * FROM dbo.Arbitro WHERE id_arbitro = @id_arbitro;
 END;
 GO
 
-CREATE OR ALTER PROCEDURE dbo.SP_Arbitro_Listar
+CREATE OR ALTER PROCEDURE dbo.Arbitro_Listar
 AS
 BEGIN
     SET NOCOUNT ON;

@@ -15,7 +15,7 @@ SET NOCOUNT ON;
 GO
 
 
-CREATE OR ALTER PROCEDURE dbo.SP_Validar_Sede
+CREATE OR ALTER PROCEDURE dbo.Validar_Sede
     @operacion       VARCHAR(12),
     @id_sede         INT = NULL,
     @nombre_estadio  NVARCHAR(120) = NULL,
