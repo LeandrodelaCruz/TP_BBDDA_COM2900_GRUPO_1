@@ -14,13 +14,13 @@
     Incluye pruebas exitosas y pruebas de validaciones fallidas
     
     PROCEDIMIENTOS A PROBAR:
-    - sp_Incidencia_Alta (con validaciones)
-    - sp_Incidencia_GetGoles (goles con asistencias)
-    - sp_Incidencia_GetAmonestaciones (amarillas con agredido)
-    - sp_Incidencia_GetExpulsiones (rojas con agredido)
-    - sp_Incidencia_GetByPartido (todas las incidencias)
-    - sp_Incidencia_Modificacion (solo motivo)
-    - sp_Incidencia_Baja
+    - Incidencia_Alta (con validaciones)
+    - Incidencia_GetGoles (goles con asistencias)
+    - Incidencia_GetAmonestaciones (amarillas con agredido)
+    - Incidencia_GetExpulsiones (rojas con agredido)
+    - Incidencia_GetByPartido (todas las incidencias)
+    - Incidencia_Modificacion (solo motivo)
+    - Incidencia_Baja
 */
 
 USE MUNDIALDEFUTBOL;
@@ -168,7 +168,7 @@ DECLARE @id_goleador INT = (SELECT id_jugador FROM dbo.Jugador WHERE nombre = N'
 DECLARE @id_incidencia_gol INT;
 
 BEGIN TRY
-    EXEC dbo.sp_Incidencia_Alta
+    EXEC dbo.Incidencia_Alta
         @id_partido = @id_partido_test,
         @id_jugador = @id_goleador,
         @tipo = 'GOL',
@@ -197,7 +197,7 @@ DECLARE @id_defensa2 INT = (SELECT id_jugador FROM dbo.Jugador WHERE nombre = N'
 DECLARE @id_incidencia_amarilla INT;
 
 BEGIN TRY
-    EXEC dbo.sp_Incidencia_Alta
+    EXEC dbo.Incidencia_Alta
         @id_partido = @id_partido_test,
         @id_jugador = @id_defensa1,
         @tipo = 'AMONESTACION',
@@ -226,7 +226,7 @@ DECLARE @id_goleador1 INT = (SELECT id_jugador FROM dbo.Jugador WHERE nombre = N
 DECLARE @id_incidencia_roja INT;
 
 BEGIN TRY
-    EXEC dbo.sp_Incidencia_Alta
+    EXEC dbo.Incidencia_Alta
         @id_partido = @id_partido_test,
         @id_jugador = @id_mediocampista2,
         @tipo = 'EXPULSION',
@@ -254,7 +254,7 @@ DECLARE @id_jugador INT = (SELECT TOP 1 id_jugador FROM dbo.Jugador WHERE nombre
 DECLARE @id_incidencia_test INT;
 
 BEGIN TRY
-    EXEC dbo.sp_Incidencia_Alta
+    EXEC dbo.Incidencia_Alta
         @id_partido = @id_partido_test,
         @id_jugador = @id_jugador,
         @tipo = 'TIPO_INVALIDO',
@@ -280,7 +280,7 @@ DECLARE @id_jugador INT = (SELECT TOP 1 id_jugador FROM dbo.Jugador WHERE nombre
 DECLARE @id_incidencia_test INT;
 
 BEGIN TRY
-    EXEC dbo.sp_Incidencia_Alta
+    EXEC dbo.Incidencia_Alta
         @id_partido = @id_partido_test,
         @id_jugador = @id_jugador,
         @tipo = 'AMONESTACION',
@@ -303,7 +303,7 @@ PRINT '';
 PRINT '--- CASO 6: GET GOLES ---';
 
 DECLARE @id_partido_test INT = (SELECT id_partido FROM dbo.Partido WHERE resultado_final = N'TEST-INCIDENCIA');
-EXEC dbo.sp_Incidencia_GetGoles @id_partido = @id_partido_test;
+EXEC dbo.Incidencia_GetGoles @id_partido = @id_partido_test;
 GO
 
 -- ---------------------------------------------------------
@@ -313,7 +313,7 @@ PRINT '';
 PRINT '--- CASO 7: GET AMONESTACIONES ---';
 
 DECLARE @id_partido_test INT = (SELECT id_partido FROM dbo.Partido WHERE resultado_final = N'TEST-INCIDENCIA');
-EXEC dbo.sp_Incidencia_GetAmonestaciones @id_partido = @id_partido_test;
+EXEC dbo.Incidencia_GetAmonestaciones @id_partido = @id_partido_test;
 GO
 
 -- ---------------------------------------------------------
@@ -323,7 +323,7 @@ PRINT '';
 PRINT '--- CASO 8: GET EXPULSIONES ---';
 
 DECLARE @id_partido_test INT = (SELECT id_partido FROM dbo.Partido WHERE resultado_final = N'TEST-INCIDENCIA');
-EXEC dbo.sp_Incidencia_GetExpulsiones @id_partido = @id_partido_test;
+EXEC dbo.Incidencia_GetExpulsiones @id_partido = @id_partido_test;
 GO
 
 -- ---------------------------------------------------------
@@ -333,7 +333,7 @@ PRINT '';
 PRINT '--- CASO 9: GET TODAS LAS INCIDENCIAS ---';
 
 DECLARE @id_partido_test INT = (SELECT id_partido FROM dbo.Partido WHERE resultado_final = N'TEST-INCIDENCIA');
-EXEC dbo.sp_Incidencia_GetByPartido @id_partido = @id_partido_test;
+EXEC dbo.Incidencia_GetByPartido @id_partido = @id_partido_test;
 GO
 
 -- ---------------------------------------------------------
@@ -349,7 +349,7 @@ DECLARE @id_incidencia_update INT = (SELECT TOP 1 id_incidencia FROM dbo.Inciden
 IF @id_incidencia_update IS NOT NULL
 BEGIN
     BEGIN TRY
-        EXEC dbo.sp_Incidencia_Modificacion
+        EXEC dbo.Incidencia_Modificacion
             @id_incidencia = @id_incidencia_update,
             @motivo = 'Motivo actualizado - análisis de video';
         
@@ -378,7 +378,7 @@ DECLARE @id_incidencia_delete INT = (SELECT TOP 1 id_incidencia FROM dbo.Inciden
 IF @id_incidencia_delete IS NOT NULL
 BEGIN
     BEGIN TRY
-        EXEC dbo.sp_Incidencia_Baja @id_incidencia = @id_incidencia_delete;
+        EXEC dbo.Incidencia_Baja @id_incidencia = @id_incidencia_delete;
         
         PRINT 'OK - Incidencia eliminada';
         
