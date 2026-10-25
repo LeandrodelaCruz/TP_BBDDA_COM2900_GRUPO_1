@@ -18,11 +18,11 @@ GO
 CREATE OR ALTER PROCEDURE dbo.SP_Validar_Sede
     @operacion       VARCHAR(12),
     @id_sede         INT = NULL,
-    @nombre_estadio  NVARCHAR(4000) = NULL,
-    @ciudad          NVARCHAR(4000) = NULL,
-    @pais            NVARCHAR(4000) = NULL,
+    @nombre_estadio  NVARCHAR(120) = NULL,
+    @ciudad          NVARCHAR(80) = NULL,
+    @pais            NVARCHAR(80) = NULL,
     @capacidad       INT = NULL,
-    @huso_horario    VARCHAR(4000) = NULL,
+    @huso_horario    VARCHAR(100) = NULL,
     @errores         NVARCHAR(2048) OUTPUT
 AS
 BEGIN

@@ -17,7 +17,7 @@ GO
 
 
 CREATE OR ALTER PROCEDURE dbo.SP_Anunciante_Alta
-    @nombre NVARCHAR(4000)
+    @nombre NVARCHAR(120)
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -34,7 +34,7 @@ GO
 
 CREATE OR ALTER PROCEDURE dbo.SP_Anunciante_Modificar
     @id_anunciante INT,
-    @nombre NVARCHAR(4000)
+    @nombre NVARCHAR(120)
 AS
 BEGIN
     SET NOCOUNT ON;

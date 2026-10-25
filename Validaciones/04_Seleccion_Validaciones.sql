@@ -19,9 +19,9 @@ GO
 CREATE OR ALTER PROCEDURE dbo.SP_Validar_Seleccion
     @operacion       VARCHAR(12),
     @id_seleccion    INT = NULL,
-    @pais            NVARCHAR(4000) = NULL,
-    @confederacion   NVARCHAR(4000) = NULL,
-    @grupo_asignado  VARCHAR(4000) = NULL,
+    @pais            NVARCHAR(80) = NULL,
+    @confederacion   NVARCHAR(50) = NULL,
+    @grupo_asignado  VARCHAR(5) = NULL,
     @errores         NVARCHAR(2048) OUTPUT
 AS
 BEGIN

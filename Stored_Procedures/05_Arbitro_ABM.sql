@@ -17,12 +17,12 @@ GO
 
 
 CREATE OR ALTER PROCEDURE dbo.SP_Arbitro_Alta
-    @nombre NVARCHAR(4000),
-    @apellido NVARCHAR(4000),
+    @nombre NVARCHAR(60),
+    @apellido NVARCHAR(60),
     @fecha_nacimiento DATE,
-    @pais NVARCHAR(4000),
-    @puesto VARCHAR(4000),
-    @idiomas NVARCHAR(4000) = NULL
+    @pais NVARCHAR(80),
+    @puesto VARCHAR(50),
+    @idiomas NVARCHAR(200) = NULL
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -46,13 +46,12 @@ END;
 GO
 
 CREATE OR ALTER PROCEDURE dbo.SP_Arbitro_Modificar
-    @id_arbitro INT,
-    @nombre NVARCHAR(4000),
-    @apellido NVARCHAR(4000),
+    @nombre NVARCHAR(60),
+    @apellido NVARCHAR(60),
     @fecha_nacimiento DATE,
-    @pais NVARCHAR(4000),
-    @puesto VARCHAR(4000),
-    @idiomas NVARCHAR(4000) = NULL
+    @pais NVARCHAR(80),
+    @puesto VARCHAR(50),
+    @idiomas NVARCHAR(200) = NULL
 AS
 BEGIN
     SET NOCOUNT ON;
