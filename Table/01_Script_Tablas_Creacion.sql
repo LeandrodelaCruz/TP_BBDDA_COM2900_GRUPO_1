@@ -287,6 +287,8 @@ BEGIN
         fase VARCHAR(30) NOT NULL,
         resultado_final VARCHAR(20) NULL,
         asistencia_publico INT NULL,
+        id_seleccion_1 INT NOT NULL,
+        id_seleccion_2 INT NOT NULL,
 
         CONSTRAINT PK_Partido
             PRIMARY KEY (id_partido),
@@ -299,11 +301,24 @@ BEGIN
             CHECK (
                 asistencia_publico IS NULL
                 OR asistencia_publico >= 0
-            )
+            ),
+
+        CONSTRAINT FK_Partido_Seleccion1
+            FOREIGN KEY (id_seleccion_1)
+            REFERENCES dbo.Seleccion(id_seleccion),
+
+        CONSTRAINT FK_Partido_Seleccion2
+            FOREIGN KEY (id_seleccion_2)
+            REFERENCES dbo.Seleccion(id_seleccion)
     );
 END;
 GO
 
+/*
+Se quita por:
+
+partido selección está demás, genera 2 filas en una tabla aparte y complica mas las consultas conjuntas,
+es mejor tener 2 campos id selección en la tabla partido. 
 
 /* Relaci�n N:N Partido - Selecci�n */
 
@@ -327,7 +342,7 @@ BEGIN
     );
 END;
 GO
-
+*/
 
 
 /* =========================================================
