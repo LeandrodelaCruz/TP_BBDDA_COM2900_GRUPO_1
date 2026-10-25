@@ -12,71 +12,76 @@
 USE MUNDIALDEFUTBOL;
 GO
 
-SET NOCOUNT ON;
-GO
-
-
-PRINT '===== TEST ARBITRO =====';
-
-DECLARE @id_prev INT = (
-    SELECT TOP 1 id_arbitro FROM dbo.Arbitro
-    WHERE nombre IN (N'TEST_ARBITRO', N'TEST_ARBITRO_MOD', N'TEST_ARBITRO_BAJA')
-    ORDER BY id_arbitro
-);
-WHILE @id_prev IS NOT NULL
+CREATE OR ALTER PROCEDURE test.Arbitro_Test
+AS
 BEGIN
-    EXEC dbo.Arbitro_Baja @id_prev;
-    SET @id_prev = (
+    SET NOCOUNT ON;
+
+    PRINT '===== TEST ARBITRO =====';
+
+    DECLARE @id_prev INT = (
         SELECT TOP 1 id_arbitro FROM dbo.Arbitro
         WHERE nombre IN (N'TEST_ARBITRO', N'TEST_ARBITRO_MOD', N'TEST_ARBITRO_BAJA')
         ORDER BY id_arbitro
     );
+    WHILE @id_prev IS NOT NULL
+    BEGIN
+        EXEC abm.Arbitro_Baja @id_prev;
+        SET @id_prev = (
+            SELECT TOP 1 id_arbitro FROM dbo.Arbitro
+            WHERE nombre IN (N'TEST_ARBITRO', N'TEST_ARBITRO_MOD', N'TEST_ARBITRO_BAJA')
+            ORDER BY id_arbitro
+        );
+    END;
+
+    -- 1) Alta exitosa
+    EXEC abm.Arbitro_Alta
+         N'TEST_ARBITRO', N'PRUEBA', '1985-05-10', N'TEST_PAIS', 'FIFA', N'Español, Inglés';
+    DECLARE @id INT = (
+        SELECT id_arbitro FROM dbo.Arbitro
+        WHERE nombre = N'TEST_ARBITRO' AND apellido = N'PRUEBA'
+    );
+
+    -- 2) Consulta
+    EXEC abm.Arbitro_ConsultarPorId @id;
+
+    -- 3) Modificación
+    EXEC abm.Arbitro_Modificar
+         @id, N'TEST_ARBITRO_MOD', N'PRUEBA', '1985-05-10', N'TEST_PAIS', 'FIFA', N'Español, Inglés';
+
+    -- 4) Listado
+    EXEC abm.Arbitro_Listar;
+
+    -- 5) Baja sobre un segundo registro
+    EXEC abm.Arbitro_Alta
+         N'TEST_ARBITRO_BAJA', N'PRUEBA', '1990-01-01', N'TEST_PAIS', 'FIFA', N'Español';
+    DECLARE @id_baja INT = (
+        SELECT id_arbitro FROM dbo.Arbitro
+        WHERE nombre = N'TEST_ARBITRO_BAJA' AND apellido = N'PRUEBA'
+    );
+    EXEC abm.Arbitro_Baja @id_baja;
+
+    -- VALIDACIÓN: fecha futura
+    BEGIN TRY
+        EXEC abm.Arbitro_Alta
+             N'TEST_ARBITRO_ERROR', N'FUTURO', '2099-01-01', N'TEST_PAIS', 'FIFA', N'Español';
+    END TRY
+    BEGIN CATCH
+        SELECT 'OK - error esperado: fecha futura' AS prueba, ERROR_MESSAGE() AS mensaje;
+    END CATCH;
+
+    -- VALIDACIÓN: árbitro duplicado
+    BEGIN TRY
+        EXEC abm.Arbitro_Alta
+             N'TEST_ARBITRO_MOD', N'PRUEBA', '1985-05-10', N'TEST_PAIS', 'FIFA', N'Español';
+    END TRY
+    BEGIN CATCH
+        SELECT 'OK - error esperado: árbitro duplicado' AS prueba, ERROR_MESSAGE() AS mensaje;
+    END CATCH;
+
+    SELECT * FROM dbo.Arbitro WHERE nombre LIKE N'TEST_ARBITRO%';
 END;
+GO
 
--- 1) Alta exitosa
-EXEC dbo.Arbitro_Alta
-     N'TEST_ARBITRO', N'PRUEBA', '1985-05-10', N'TEST_PAIS', 'FIFA', N'Español, Inglés';
-DECLARE @id INT = (
-    SELECT id_arbitro FROM dbo.Arbitro
-    WHERE nombre = N'TEST_ARBITRO' AND apellido = N'PRUEBA'
-);
-
--- 2) Consulta
-EXEC dbo.Arbitro_ConsultarPorId @id;
-
--- 3) Modificación
-EXEC dbo.Arbitro_Modificar
-     @id, N'TEST_ARBITRO_MOD', N'PRUEBA', '1985-05-10', N'TEST_PAIS', 'FIFA', N'Español, Inglés';
-
--- 4) Listado
-EXEC dbo.Arbitro_Listar;
-
--- 5) Baja sobre un segundo registro
-EXEC dbo.Arbitro_Alta
-     N'TEST_ARBITRO_BAJA', N'PRUEBA', '1990-01-01', N'TEST_PAIS', 'FIFA', N'Español';
-DECLARE @id_baja INT = (
-    SELECT id_arbitro FROM dbo.Arbitro
-    WHERE nombre = N'TEST_ARBITRO_BAJA' AND apellido = N'PRUEBA'
-);
-EXEC dbo.Arbitro_Baja @id_baja;
-
--- VALIDACIÓN: fecha futura
-BEGIN TRY
-    EXEC dbo.Arbitro_Alta
-         N'TEST_ARBITRO_ERROR', N'FUTURO', '2099-01-01', N'TEST_PAIS', 'FIFA', N'Español';
-END TRY
-BEGIN CATCH
-    SELECT 'OK - error esperado: fecha futura' AS prueba, ERROR_MESSAGE() AS mensaje;
-END CATCH;
-
--- VALIDACIÓN: árbitro duplicado
-BEGIN TRY
-    EXEC dbo.Arbitro_Alta
-         N'TEST_ARBITRO_MOD', N'PRUEBA', '1985-05-10', N'TEST_PAIS', 'FIFA', N'Español';
-END TRY
-BEGIN CATCH
-    SELECT 'OK - error esperado: árbitro duplicado' AS prueba, ERROR_MESSAGE() AS mensaje;
-END CATCH;
-
-SELECT * FROM dbo.Arbitro WHERE nombre LIKE N'TEST_ARBITRO%';
+EXEC test.Arbitro_Test;
 GO

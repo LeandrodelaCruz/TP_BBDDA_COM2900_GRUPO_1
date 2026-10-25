@@ -23,7 +23,7 @@ GO
    TABLA: dbo.Formacion
 */
 
-CREATE OR ALTER PROCEDURE dbo.Formacion_Alta
+CREATE OR ALTER PROCEDURE abm.Formacion_Alta
     @id_partido       INT,
     @id_seleccion     INT,
     @esquema_tactico  VARCHAR(10)
@@ -71,7 +71,7 @@ BEGIN
 END;
 GO
 
-CREATE OR ALTER PROCEDURE dbo.Formacion_Baja
+CREATE OR ALTER PROCEDURE abm.Formacion_Baja
     @id_formacion INT
 AS
 BEGIN
@@ -102,7 +102,7 @@ BEGIN
 END;
 GO
 
-CREATE OR ALTER PROCEDURE dbo.Formacion_Modificacion
+CREATE OR ALTER PROCEDURE abm.Formacion_Modificacion
     @id_formacion     INT,
     @id_partido       INT,
     @id_seleccion     INT,

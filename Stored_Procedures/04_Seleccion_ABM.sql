@@ -16,15 +16,43 @@ SET NOCOUNT ON;
 GO
 
 
-CREATE OR ALTER PROCEDURE dbo.Seleccion_Alta
+CREATE OR ALTER PROCEDURE abm.Seleccion_Alta
     @pais NVARCHAR(80),
     @confederacion NVARCHAR(50),
     @grupo_asignado VARCHAR(5)
 AS
 BEGIN
     SET NOCOUNT ON;
-    DECLARE @errores NVARCHAR(2048);
-    EXEC dbo.Validar_Seleccion 'ALTA', NULL, @pais, @confederacion, @grupo_asignado, @errores OUTPUT;
+    DECLARE @errores NVARCHAR(2048) = N'';
+
+    IF @pais IS NULL OR LTRIM(RTRIM(@pais)) = N''
+        SET @errores += N'- El país de la selección es obligatorio. ';
+    IF @pais IS NOT NULL AND LEN(@pais) > 80
+        SET @errores += N'- El país no puede superar 80 caracteres. ';
+
+    IF @confederacion IS NULL OR LTRIM(RTRIM(@confederacion)) = N''
+        SET @errores += N'- La confederación es obligatoria. ';
+    IF @confederacion IS NOT NULL AND LEN(@confederacion) > 50
+        SET @errores += N'- La confederación no puede superar 50 caracteres. ';
+
+    IF @confederacion IS NOT NULL
+       AND UPPER(LTRIM(RTRIM(@confederacion))) NOT IN
+           (N'AFC', N'CAF', N'CONCACAF', N'CONMEBOL', N'OFC', N'UEFA')
+        SET @errores += N'- Confederación inválida. Use AFC, CAF, CONCACAF, CONMEBOL, OFC o UEFA. ';
+
+    IF @grupo_asignado IS NULL OR LTRIM(RTRIM(@grupo_asignado)) = ''
+        SET @errores += N'- El grupo asignado es obligatorio. ';
+    IF @grupo_asignado IS NOT NULL AND LEN(@grupo_asignado) > 5
+        SET @errores += N'- El grupo asignado no puede superar 5 caracteres. ';
+
+    IF @pais IS NOT NULL
+       AND EXISTS (
+            SELECT 1
+            FROM dbo.Seleccion
+            WHERE UPPER(LTRIM(RTRIM(pais))) = UPPER(LTRIM(RTRIM(@pais)))
+       )
+        SET @errores += N'- Ya existe una selección registrada para ese país. ';
+
     IF @errores <> N'' THROW 50301, @errores, 1;
 
     INSERT INTO dbo.Seleccion(pais, confederacion, grupo_asignado)
@@ -38,7 +66,7 @@ BEGIN
 END;
 GO
 
-CREATE OR ALTER PROCEDURE dbo.Seleccion_Modificar
+CREATE OR ALTER PROCEDURE abm.Seleccion_Modificar
     @id_seleccion INT,
     @pais NVARCHAR(80),
     @confederacion NVARCHAR(50),
@@ -46,9 +74,44 @@ CREATE OR ALTER PROCEDURE dbo.Seleccion_Modificar
 AS
 BEGIN
     SET NOCOUNT ON;
-    DECLARE @errores NVARCHAR(2048);
-    EXEC dbo.Validar_Seleccion 'MODIFICAR', @id_seleccion, @pais, @confederacion,
-         @grupo_asignado, @errores OUTPUT;
+    DECLARE @errores NVARCHAR(2048) = N'';
+
+    IF @id_seleccion IS NULL OR @id_seleccion <= 0
+        SET @errores += N'- El id_seleccion debe ser mayor que cero. ';
+    ELSE IF NOT EXISTS (
+        SELECT 1 FROM dbo.Seleccion WHERE id_seleccion = @id_seleccion
+    )
+        SET @errores += N'- La selección indicada no existe. ';
+
+    IF @pais IS NULL OR LTRIM(RTRIM(@pais)) = N''
+        SET @errores += N'- El país de la selección es obligatorio. ';
+    IF @pais IS NOT NULL AND LEN(@pais) > 80
+        SET @errores += N'- El país no puede superar 80 caracteres. ';
+
+    IF @confederacion IS NULL OR LTRIM(RTRIM(@confederacion)) = N''
+        SET @errores += N'- La confederación es obligatoria. ';
+    IF @confederacion IS NOT NULL AND LEN(@confederacion) > 50
+        SET @errores += N'- La confederación no puede superar 50 caracteres. ';
+
+    IF @confederacion IS NOT NULL
+       AND UPPER(LTRIM(RTRIM(@confederacion))) NOT IN
+           (N'AFC', N'CAF', N'CONCACAF', N'CONMEBOL', N'OFC', N'UEFA')
+        SET @errores += N'- Confederación inválida. Use AFC, CAF, CONCACAF, CONMEBOL, OFC o UEFA. ';
+
+    IF @grupo_asignado IS NULL OR LTRIM(RTRIM(@grupo_asignado)) = ''
+        SET @errores += N'- El grupo asignado es obligatorio. ';
+    IF @grupo_asignado IS NOT NULL AND LEN(@grupo_asignado) > 5
+        SET @errores += N'- El grupo asignado no puede superar 5 caracteres. ';
+
+    IF @pais IS NOT NULL
+       AND EXISTS (
+            SELECT 1
+            FROM dbo.Seleccion
+            WHERE UPPER(LTRIM(RTRIM(pais))) = UPPER(LTRIM(RTRIM(@pais)))
+              AND id_seleccion <> @id_seleccion
+       )
+        SET @errores += N'- Ya existe una selección registrada para ese país. ';
+
     IF @errores <> N'' THROW 50302, @errores, 1;
 
     UPDATE dbo.Seleccion
@@ -61,33 +124,47 @@ BEGIN
 END;
 GO
 
-CREATE OR ALTER PROCEDURE dbo.Seleccion_Baja
+CREATE OR ALTER PROCEDURE abm.Seleccion_Baja
     @id_seleccion INT
 AS
 BEGIN
     SET NOCOUNT ON;
-    DECLARE @errores NVARCHAR(2048);
-    EXEC dbo.Validar_Seleccion 'BAJA', @id_seleccion, NULL, NULL, NULL, @errores OUTPUT;
+    DECLARE @errores NVARCHAR(2048) = N'';
+
+    IF @id_seleccion IS NULL OR @id_seleccion <= 0
+        SET @errores += N'- El id_seleccion debe ser mayor que cero. ';
+    ELSE IF NOT EXISTS (
+        SELECT 1 FROM dbo.Seleccion WHERE id_seleccion = @id_seleccion
+    )
+        SET @errores += N'- La selección indicada no existe. ';
+
     IF @errores <> N'' THROW 50303, @errores, 1;
 
     DELETE FROM dbo.Seleccion WHERE id_seleccion = @id_seleccion;
 END;
 GO
 
-CREATE OR ALTER PROCEDURE dbo.Seleccion_ConsultarPorId
+CREATE OR ALTER PROCEDURE abm.Seleccion_ConsultarPorId
     @id_seleccion INT
 AS
 BEGIN
     SET NOCOUNT ON;
-    DECLARE @errores NVARCHAR(2048);
-    EXEC dbo.Validar_Seleccion 'CONSULTAR', @id_seleccion, NULL, NULL, NULL, @errores OUTPUT;
+    DECLARE @errores NVARCHAR(2048) = N'';
+
+    IF @id_seleccion IS NULL OR @id_seleccion <= 0
+        SET @errores += N'- El id_seleccion debe ser mayor que cero. ';
+    ELSE IF NOT EXISTS (
+        SELECT 1 FROM dbo.Seleccion WHERE id_seleccion = @id_seleccion
+    )
+        SET @errores += N'- La selección indicada no existe. ';
+
     IF @errores <> N'' THROW 50304, @errores, 1;
 
     SELECT * FROM dbo.Seleccion WHERE id_seleccion = @id_seleccion;
 END;
 GO
 
-CREATE OR ALTER PROCEDURE dbo.Seleccion_Listar
+CREATE OR ALTER PROCEDURE abm.Seleccion_Listar
 AS
 BEGIN
     SET NOCOUNT ON;

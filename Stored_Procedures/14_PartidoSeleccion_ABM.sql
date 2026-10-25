@@ -23,7 +23,7 @@ GO
    TABLA: dbo.Partido_Seleccion
    ========================================================= */
 
-CREATE OR ALTER PROCEDURE dbo.PartidoSeleccion_Alta
+CREATE OR ALTER PROCEDURE abm.PartidoSeleccion_Alta
     @id_partido   INT,
     @id_seleccion INT
 AS
@@ -65,7 +65,7 @@ BEGIN
 END;
 GO
 
-CREATE OR ALTER PROCEDURE dbo.PartidoSeleccion_Baja
+CREATE OR ALTER PROCEDURE abm.PartidoSeleccion_Baja
     @id_partido   INT,
     @id_seleccion INT
 AS
@@ -101,7 +101,7 @@ BEGIN
 END;
 GO
 
-CREATE OR ALTER PROCEDURE dbo.PartidoSeleccion_Modificacion
+CREATE OR ALTER PROCEDURE abm.PartidoSeleccion_Modificacion
     @id_partido       INT,
     @id_seleccion     INT,
     @nuevo_id_partido INT,

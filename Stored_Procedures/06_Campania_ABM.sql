@@ -19,7 +19,7 @@
 */
 
 /* ==================== Campania: ALTA ==================== */
-CREATE OR ALTER PROCEDURE dbo.Campania_Alta
+CREATE OR ALTER PROCEDURE abm.Campania_Alta
     @descripcion NVARCHAR(250),
     @id_anunciante INT
 AS
@@ -43,7 +43,7 @@ END;
 GO
 
 /* ==================== Campania: MODIFICACIÓN ==================== */
-CREATE OR ALTER PROCEDURE dbo.Campania_Modificar
+CREATE OR ALTER PROCEDURE abm.Campania_Modificar
     @id_campania INT,
     @descripcion NVARCHAR(250),
     @id_anunciante INT
@@ -71,7 +71,7 @@ END;
 GO
 
 /* ==================== Campania: BAJA ==================== */
-CREATE OR ALTER PROCEDURE dbo.Campania_Baja
+CREATE OR ALTER PROCEDURE abm.Campania_Baja
     @id_campania INT
 AS
 BEGIN

@@ -23,7 +23,7 @@ GO
    TABLA: dbo.Reemplazo
    ========================================================= */
 
-CREATE OR ALTER PROCEDURE dbo.Reemplazo_Alta
+CREATE OR ALTER PROCEDURE abm.Reemplazo_Alta
     @id_jugador_baja INT,
     @id_jugador_alta INT,
     @fecha_cambio    DATE,
@@ -82,7 +82,7 @@ BEGIN
 END;
 GO
 
-CREATE OR ALTER PROCEDURE dbo.Reemplazo_Baja
+CREATE OR ALTER PROCEDURE abm.Reemplazo_Baja
     @id_reemplazo INT
 AS
 BEGIN
@@ -109,7 +109,7 @@ BEGIN
 END;
 GO
 
-CREATE OR ALTER PROCEDURE dbo.Reemplazo_Modificacion
+CREATE OR ALTER PROCEDURE abm.Reemplazo_Modificacion
     @id_reemplazo    INT,
     @id_jugador_baja INT,
     @id_jugador_alta INT,
