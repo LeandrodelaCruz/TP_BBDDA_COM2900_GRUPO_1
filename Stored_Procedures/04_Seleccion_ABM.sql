@@ -16,7 +16,7 @@ SET NOCOUNT ON;
 GO
 
 
-CREATE OR ALTER PROCEDURE dbo.SP_Seleccion_Alta
+CREATE OR ALTER PROCEDURE dbo.Seleccion_Alta
     @pais NVARCHAR(80),
     @confederacion NVARCHAR(50),
     @grupo_asignado VARCHAR(5)
@@ -24,7 +24,7 @@ AS
 BEGIN
     SET NOCOUNT ON;
     DECLARE @errores NVARCHAR(2048);
-    EXEC dbo.sp_Validar_Seleccion 'ALTA', NULL, @pais, @confederacion, @grupo_asignado, @errores OUTPUT;
+    EXEC dbo.Validar_Seleccion 'ALTA', NULL, @pais, @confederacion, @grupo_asignado, @errores OUTPUT;
     IF @errores <> N'' THROW 50301, @errores, 1;
 
     INSERT INTO dbo.Seleccion(pais, confederacion, grupo_asignado)
@@ -38,7 +38,7 @@ BEGIN
 END;
 GO
 
-CREATE OR ALTER PROCEDURE dbo.SP_Seleccion_Modificar
+CREATE OR ALTER PROCEDURE dbo.Seleccion_Modificar
     @id_seleccion INT,
     @pais NVARCHAR(80),
     @confederacion NVARCHAR(50),
@@ -47,7 +47,7 @@ AS
 BEGIN
     SET NOCOUNT ON;
     DECLARE @errores NVARCHAR(2048);
-    EXEC dbo.SP_Validar_Seleccion 'MODIFICAR', @id_seleccion, @pais, @confederacion,
+    EXEC dbo.Validar_Seleccion 'MODIFICAR', @id_seleccion, @pais, @confederacion,
          @grupo_asignado, @errores OUTPUT;
     IF @errores <> N'' THROW 50302, @errores, 1;
 
@@ -61,33 +61,33 @@ BEGIN
 END;
 GO
 
-CREATE OR ALTER PROCEDURE dbo.SP_Seleccion_Baja
+CREATE OR ALTER PROCEDURE dbo.Seleccion_Baja
     @id_seleccion INT
 AS
 BEGIN
     SET NOCOUNT ON;
     DECLARE @errores NVARCHAR(2048);
-    EXEC dbo.sp_Validar_Seleccion 'BAJA', @id_seleccion, NULL, NULL, NULL, @errores OUTPUT;
+    EXEC dbo.Validar_Seleccion 'BAJA', @id_seleccion, NULL, NULL, NULL, @errores OUTPUT;
     IF @errores <> N'' THROW 50303, @errores, 1;
 
     DELETE FROM dbo.Seleccion WHERE id_seleccion = @id_seleccion;
 END;
 GO
 
-CREATE OR ALTER PROCEDURE dbo.SP_Seleccion_ConsultarPorId
+CREATE OR ALTER PROCEDURE dbo.Seleccion_ConsultarPorId
     @id_seleccion INT
 AS
 BEGIN
     SET NOCOUNT ON;
     DECLARE @errores NVARCHAR(2048);
-    EXEC dbo.sp_Validar_Seleccion 'CONSULTAR', @id_seleccion, NULL, NULL, NULL, @errores OUTPUT;
+    EXEC dbo.Validar_Seleccion 'CONSULTAR', @id_seleccion, NULL, NULL, NULL, @errores OUTPUT;
     IF @errores <> N'' THROW 50304, @errores, 1;
 
     SELECT * FROM dbo.Seleccion WHERE id_seleccion = @id_seleccion;
 END;
 GO
 
-CREATE OR ALTER PROCEDURE dbo.SP_Seleccion_Listar
+CREATE OR ALTER PROCEDURE dbo.Seleccion_Listar
 AS
 BEGIN
     SET NOCOUNT ON;

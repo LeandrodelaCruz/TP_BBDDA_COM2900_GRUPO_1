@@ -12,11 +12,11 @@
     Stored Procedures ABM para la tabla Sustitucion
 
     PROCEDIMIENTOS INCLUIDOS:
-    - sp_Sustitucion_Alta (con validaciones)
-    - sp_Sustitucion_GetById
-    - sp_Sustitucion_GetByPartido
-    - sp_Sustitucion_Modificacion
-    - sp_Sustitucion_Baja
+    - Sustitucion_Alta (con validaciones)
+    - Sustitucion_GetById
+    - Sustitucion_GetByPartido
+    - Sustitucion_Modificacion
+    - Sustitucion_Baja
     
     Validaciones de NEGOCIO:
     - El jugador que entra NO puede ser TITULAR (debe ser SUPLENTE)

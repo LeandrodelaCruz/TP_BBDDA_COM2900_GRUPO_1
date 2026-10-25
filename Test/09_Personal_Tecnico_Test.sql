@@ -13,9 +13,9 @@
     Incluye pruebas exitosas y validaciones de errores.
 
     PROCEDIMIENTOS A PROBAR:
-    - SP_Personal_Tecnico_Alta
-    - SP_Personal_Tecnico_Modificar
-    - SP_Personal_Tecnico_Baja
+    - Personal_Tecnico_Alta
+    - Personal_Tecnico_Modificar
+    - Personal_Tecnico_Baja
 */
 
 USE MUNDIALDEFUTBOL;
@@ -69,7 +69,7 @@ PRINT '--- CASO 1: Alta exitosa ---';
 DECLARE @id_sel INT = (SELECT id_seleccion FROM dbo.Seleccion WHERE pais = N'Selección Test ABM Personal');
 
 BEGIN TRY
-    EXEC dbo.SP_Personal_Tecnico_Alta
+    EXEC dbo.Personal_Tecnico_Alta
         @nombre = N'Lionel',
         @apellido = N'Scaloni',
         @rol = N'Director Técnico',
@@ -92,7 +92,7 @@ PRINT '--- CASO 2: Alta fallida - Nombre vacío ---';
 DECLARE @id_sel INT = (SELECT id_seleccion FROM dbo.Seleccion WHERE pais = N'Selección Test ABM Personal');
 
 BEGIN TRY
-    EXEC dbo.SP_Personal_Tecnico_Alta
+    EXEC dbo.Personal_Tecnico_Alta
         @nombre = N'   ',
         @apellido = N'Aimar',
         @rol = N'Ayudante Campo',
@@ -115,7 +115,7 @@ DECLARE @id_sel INT = (SELECT id_seleccion FROM dbo.Seleccion WHERE pais = N'Sel
 DECLARE @id_personal INT = (SELECT TOP 1 id_personal FROM dbo.Personal_Tecnico WHERE id_seleccion = @id_sel);
 
 BEGIN TRY
-    EXEC dbo.SP_Personal_Tecnico_Modificar
+    EXEC dbo.Personal_Tecnico_Modificar
         @id_personal = @id_personal,
         @nombre = N'Lionel Sebastián',
         @apellido = N'Scaloni',
@@ -140,7 +140,7 @@ DECLARE @id_sel INT = (SELECT id_seleccion FROM dbo.Seleccion WHERE pais = N'Sel
 DECLARE @id_personal_del INT = (SELECT TOP 1 id_personal FROM dbo.Personal_Tecnico WHERE id_seleccion = @id_sel);
 
 BEGIN TRY
-    EXEC dbo.SP_Personal_Tecnico_Baja @id_personal = @id_personal_del;
+    EXEC dbo.Personal_Tecnico_Baja @id_personal = @id_personal_del;
 
     PRINT 'OK - Personal técnico eliminado correctamente.';
     IF NOT EXISTS (SELECT 1 FROM dbo.Personal_Tecnico WHERE id_personal = @id_personal_del)
@@ -158,7 +158,7 @@ PRINT '';
 PRINT '--- CASO 5: Baja fallida - ID inexistente ---';
 
 BEGIN TRY
-    EXEC dbo.SP_Personal_Tecnico_Baja @id_personal = -999;
+    EXEC dbo.Personal_Tecnico_Baja @id_personal = -999;
     PRINT 'ERROR: Debería haber fallado.';
 END TRY
 BEGIN CATCH

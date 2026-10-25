@@ -12,14 +12,14 @@
     Stored Procedures ABM para la tabla Campania
 
     PROCEDIMIENTOS INCLUIDOS:
-    - SP_Campania_Alta
-    - SP_Campania_Modificar
-    - SP_Campania_Baja
+    - Campania_Alta
+    - Campania_Modificar
+    - Campania_Baja
 
 */
 
 /* ==================== Campania: ALTA ==================== */
-CREATE OR ALTER PROCEDURE dbo.SP_Campania_Alta
+CREATE OR ALTER PROCEDURE dbo.Campania_Alta
     @descripcion NVARCHAR(250),
     @id_anunciante INT
 AS
@@ -43,7 +43,7 @@ END;
 GO
 
 /* ==================== Campania: MODIFICACIÓN ==================== */
-CREATE OR ALTER PROCEDURE dbo.SP_Campania_Modificar
+CREATE OR ALTER PROCEDURE dbo.Campania_Modificar
     @id_campania INT,
     @descripcion NVARCHAR(250),
     @id_anunciante INT
@@ -71,7 +71,7 @@ END;
 GO
 
 /* ==================== Campania: BAJA ==================== */
-CREATE OR ALTER PROCEDURE dbo.SP_Campania_Baja
+CREATE OR ALTER PROCEDURE dbo.Campania_Baja
     @id_campania INT
 AS
 BEGIN

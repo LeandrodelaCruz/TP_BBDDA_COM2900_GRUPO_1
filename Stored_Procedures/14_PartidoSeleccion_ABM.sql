@@ -2,18 +2,18 @@
     Universidad: Universidad Nacional de la Matanza
     Materia: Bases de Datos Aplicada
     Integrantes: 
-				Rodríguez, Elías Uriel 44143869
+				Rodrï¿½guez, Elï¿½as Uriel 44143869
 				Clara, Lucas Nicolas 46265738
 				Caro, Nicolas Dario 40766722
 				de la Cruz, Leandro Ariel 42022547
     Fecha: 06/10/2026
 
-    Descripción:
-    Script de creación de Stored Procedures ABM (Alta, Baja, Modificación)
+    Descripciï¿½n:
+    Script de creaciï¿½n de Stored Procedures ABM (Alta, Baja, Modificaciï¿½n)
     para la tabla:
         - dbo.Partido_Seleccion
 
-    Cada SP realiza validaciones y agrupa los errores en un único mensaje.
+    Cada SP realiza validaciones y agrupa los errores en un ï¿½nico mensaje.
 */
 
 USE MUNDIALDEFUTBOL;
@@ -23,7 +23,7 @@ GO
    TABLA: dbo.Partido_Seleccion
    ========================================================= */
 
-CREATE OR ALTER PROCEDURE dbo.SP_PartidoSeleccion_Alta
+CREATE OR ALTER PROCEDURE dbo.PartidoSeleccion_Alta
     @id_partido   INT,
     @id_seleccion INT
 AS
@@ -36,16 +36,16 @@ BEGIN
         SET @errores += N'- No existe el partido indicado. ';
 
     IF NOT EXISTS (SELECT 1 FROM dbo.Seleccion WHERE id_seleccion = @id_seleccion)
-        SET @errores += N'- No existe la selección indicada. ';
+        SET @errores += N'- No existe la selecciï¿½n indicada. ';
 
-    -- Validación: no más de 2 selecciones por partido
+    -- Validaciï¿½n: no mï¿½s de 2 selecciones por partido
     IF (SELECT COUNT(*) FROM dbo.Partido_Seleccion WHERE id_partido = @id_partido) >= 2
         SET @errores += N'- El partido ya tiene dos selecciones asignadas. ';
 
-    -- Validación: evitar duplicado exacto
+    -- Validaciï¿½n: evitar duplicado exacto
     IF EXISTS (SELECT 1 FROM dbo.Partido_Seleccion
                WHERE id_partido = @id_partido AND id_seleccion = @id_seleccion)
-        SET @errores += N'- La selección ya está asignada a este partido. ';
+        SET @errores += N'- La selecciï¿½n ya estï¿½ asignada a este partido. ';
 
     IF @errores <> N''
     BEGIN
@@ -65,7 +65,7 @@ BEGIN
 END;
 GO
 
-CREATE OR ALTER PROCEDURE dbo.SP_PartidoSeleccion_Baja
+CREATE OR ALTER PROCEDURE dbo.PartidoSeleccion_Baja
     @id_partido   INT,
     @id_seleccion INT
 AS
@@ -76,12 +76,12 @@ BEGIN
 
     IF NOT EXISTS (SELECT 1 FROM dbo.Partido_Seleccion
                    WHERE id_partido = @id_partido AND id_seleccion = @id_seleccion)
-        SET @errores += N'- No existe la relación partido-selección indicada. ';
+        SET @errores += N'- No existe la relaciï¿½n partido-selecciï¿½n indicada. ';
 
     -- No eliminar si hay formaciones asociadas
     IF EXISTS (SELECT 1 FROM dbo.Formacion
                WHERE id_partido = @id_partido AND id_seleccion = @id_seleccion)
-        SET @errores += N'- No se puede eliminar: existe una formación asociada. ';
+        SET @errores += N'- No se puede eliminar: existe una formaciï¿½n asociada. ';
 
     IF @errores <> N''
     BEGIN
@@ -101,7 +101,7 @@ BEGIN
 END;
 GO
 
-CREATE OR ALTER PROCEDURE dbo.SP_PartidoSeleccion_Modificacion
+CREATE OR ALTER PROCEDURE dbo.PartidoSeleccion_Modificacion
     @id_partido       INT,
     @id_seleccion     INT,
     @nuevo_id_partido INT,
@@ -114,18 +114,18 @@ BEGIN
 
     IF NOT EXISTS (SELECT 1 FROM dbo.Partido_Seleccion
                    WHERE id_partido = @id_partido AND id_seleccion = @id_seleccion)
-        SET @errores += N'- No existe la relación partido-selección original. ';
+        SET @errores += N'- No existe la relaciï¿½n partido-selecciï¿½n original. ';
 
     IF NOT EXISTS (SELECT 1 FROM dbo.Partido WHERE id_partido = @nuevo_id_partido)
         SET @errores += N'- No existe el nuevo partido indicado. ';
 
     IF NOT EXISTS (SELECT 1 FROM dbo.Seleccion WHERE id_seleccion = @nueva_id_seleccion)
-        SET @errores += N'- No existe la nueva selección indicada. ';
+        SET @errores += N'- No existe la nueva selecciï¿½n indicada. ';
 
     IF (@id_partido <> @nuevo_id_partido OR @id_seleccion <> @nueva_id_seleccion)
        AND EXISTS (SELECT 1 FROM dbo.Partido_Seleccion
                    WHERE id_partido = @nuevo_id_partido AND id_seleccion = @nueva_id_seleccion)
-        SET @errores += N'- Ya existe la nueva relación partido-selección. ';
+        SET @errores += N'- Ya existe la nueva relaciï¿½n partido-selecciï¿½n. ';
 
     IF (SELECT COUNT(*) FROM dbo.Partido_Seleccion
         WHERE id_partido = @nuevo_id_partido

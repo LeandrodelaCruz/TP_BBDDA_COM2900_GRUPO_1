@@ -12,9 +12,9 @@
     Incluye pruebas exitosas y validaciones de errores.
 
     PROCEDIMIENTOS A PROBAR:
-    - SP_Campania_Alta
-    - SP_Campania_Modificar
-    - SP_Campania_Baja
+    - Campania_Alta
+    - Campania_Modificar
+    - Campania_Baja
 */
 
 USE MUNDIALDEFUTBOL;
@@ -71,7 +71,7 @@ PRINT '--- CASO 1: Alta exitosa ---';
 DECLARE @id_anunc INT = (SELECT id_anunciante FROM dbo.Anunciante WHERE nombre = N'Anunciante Test ABM');
 
 BEGIN TRY
-    EXEC dbo.SP_Campania_Alta
+    EXEC dbo.Campania_Alta
         @descripcion = N'Campaña Test ABM Mundial 2026',
         @id_anunciante = @id_anunc;
 
@@ -92,7 +92,7 @@ PRINT '--- CASO 2: Alta fallida - Descripción vacía ---';
 DECLARE @id_anunc INT = (SELECT id_anunciante FROM dbo.Anunciante WHERE nombre = N'Anunciante Test ABM');
 
 BEGIN TRY
-    EXEC dbo.SP_Campania_Alta
+    EXEC dbo.Campania_Alta
         @descripcion = N'   ',
         @id_anunciante = @id_anunc;
 
@@ -113,7 +113,7 @@ DECLARE @id_anunc INT = (SELECT id_anunciante FROM dbo.Anunciante WHERE nombre =
 DECLARE @id_campania INT = (SELECT TOP 1 id_campania FROM dbo.Campania WHERE descripcion LIKE N'%Test%ABM%');
 
 BEGIN TRY
-    EXEC dbo.SP_Campania_Modificar
+    EXEC dbo.Campania_Modificar
         @id_campania = @id_campania,
         @descripcion = N'Campaña Test ABM Mundial 2026 - Modificada',
         @id_anunciante = @id_anunc;
@@ -135,7 +135,7 @@ PRINT '--- CASO 4: Baja exitosa ---';
 DECLARE @id_campania_del INT = (SELECT TOP 1 id_campania FROM dbo.Campania WHERE descripcion LIKE N'%Test%ABM%');
 
 BEGIN TRY
-    EXEC dbo.SP_Campania_Baja @id_campania = @id_campania_del;
+    EXEC dbo.Campania_Baja @id_campania = @id_campania_del;
 
     PRINT 'OK - Campaña eliminada correctamente.';
     IF NOT EXISTS (SELECT 1 FROM dbo.Campania WHERE id_campania = @id_campania_del)
@@ -153,7 +153,7 @@ PRINT '';
 PRINT '--- CASO 5: Baja fallida - ID inexistente ---';
 
 BEGIN TRY
-    EXEC dbo.SP_Campania_Baja @id_campania = -999;
+    EXEC dbo.Campania_Baja @id_campania = -999;
     PRINT 'ERROR: Debería haber fallado.';
 END TRY
 BEGIN CATCH

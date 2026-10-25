@@ -13,9 +13,9 @@
     Incluye pruebas exitosas y validaciones de errores.
 
     PROCEDIMIENTOS A PROBAR:
-    - SP_Jugador_Alta
-    - SP_Jugador_Modificar
-    - SP_Jugador_Baja
+    - Jugador_Alta
+    - Jugador_Modificar
+    - Jugador_Baja
 */
 
 USE MUNDIALDEFUTBOL;
@@ -69,7 +69,7 @@ PRINT '--- CASO 1: Alta exitosa ---';
 DECLARE @id_sel INT = (SELECT id_seleccion FROM dbo.Seleccion WHERE pais = N'Selección Test ABM Jugador');
 
 BEGIN TRY
-    EXEC dbo.SP_Jugador_Alta
+    EXEC dbo.Jugador_Alta
         @fecha_nacimiento = '1998-05-10',
         @club_origen = N'Club Testing',
         @apellido = N'Messi',
@@ -95,7 +95,7 @@ PRINT '--- CASO 2: Alta fallida - Dorsal fuera de rango (99) ---';
 DECLARE @id_sel INT = (SELECT id_seleccion FROM dbo.Seleccion WHERE pais = N'Selección Test ABM Jugador');
 
 BEGIN TRY
-    EXEC dbo.SP_Jugador_Alta
+    EXEC dbo.Jugador_Alta
         @fecha_nacimiento = '2000-01-01',
         @club_origen = N'Club Testing',
         @apellido = N'Pérez',
@@ -118,7 +118,7 @@ PRINT '';
 PRINT '--- CASO 3: Alta fallida - Selección inexistente ---';
 
 BEGIN TRY
-    EXEC dbo.SP_Jugador_Alta
+    EXEC dbo.Jugador_Alta
         @fecha_nacimiento = '2000-01-01',
         @club_origen = N'Club Testing',
         @apellido = N'Gómez',
@@ -144,7 +144,7 @@ DECLARE @id_sel INT = (SELECT id_seleccion FROM dbo.Seleccion WHERE pais = N'Sel
 DECLARE @id_jugador INT = (SELECT TOP 1 id_jugador FROM dbo.Jugador WHERE id_seleccion = @id_sel);
 
 BEGIN TRY
-    EXEC dbo.SP_Jugador_Modificar
+    EXEC dbo.Jugador_Modificar
         @id_jugador = @id_jugador,
         @fecha_nacimiento = '1998-05-10',
         @club_origen = N'Inter Miami CF',
@@ -171,7 +171,7 @@ PRINT '--- CASO 5: Modificación fallida - Jugador inexistente ---';
 DECLARE @id_sel INT = (SELECT id_seleccion FROM dbo.Seleccion WHERE pais = N'Selección Test ABM Jugador');
 
 BEGIN TRY
-    EXEC dbo.SP_Jugador_Modificar
+    EXEC dbo.Jugador_Modificar
         @id_jugador = -999,
         @fecha_nacimiento = '1998-05-10',
         @club_origen = N'Club',
@@ -198,7 +198,7 @@ DECLARE @id_sel INT = (SELECT id_seleccion FROM dbo.Seleccion WHERE pais = N'Sel
 DECLARE @id_jugador_del INT = (SELECT TOP 1 id_jugador FROM dbo.Jugador WHERE id_seleccion = @id_sel);
 
 BEGIN TRY
-    EXEC dbo.SP_Jugador_Baja @id_jugador = @id_jugador_del;
+    EXEC dbo.Jugador_Baja @id_jugador = @id_jugador_del;
 
     PRINT 'OK - Jugador eliminado correctamente.';
     IF NOT EXISTS (SELECT 1 FROM dbo.Jugador WHERE id_jugador = @id_jugador_del)
@@ -216,7 +216,7 @@ PRINT '';
 PRINT '--- CASO 7: Baja fallida - ID inexistente ---';
 
 BEGIN TRY
-    EXEC dbo.SP_Jugador_Baja @id_jugador = -999;
+    EXEC dbo.Jugador_Baja @id_jugador = -999;
     PRINT 'ERROR: Debería haber fallado.';
 END TRY
 BEGIN CATCH

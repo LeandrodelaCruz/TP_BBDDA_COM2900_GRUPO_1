@@ -12,14 +12,14 @@
     Stored Procedures ABM para la tabla Personal_Tecnico
 
     PROCEDIMIENTOS INCLUIDOS:
-    - SP_Personal_Tecnico_Alta
-    - SP_Personal_Tecnico_Modificar
-    - SP_Personal_Tecnico_Baja
+    - Personal_Tecnico_Alta
+    - Personal_Tecnico_Modificar
+    - Personal_Tecnico_Baja
 
 */
 
 /* ==================== Personal_Tecnico: ALTA ==================== */
-CREATE OR ALTER PROCEDURE dbo.SP_Personal_Tecnico_Alta
+CREATE OR ALTER PROCEDURE dbo.Personal_Tecnico_Alta
     @nombre NVARCHAR(60),
     @apellido NVARCHAR(60),
     @rol NVARCHAR(50),
@@ -51,7 +51,7 @@ END;
 GO
 
 /* ==================== Personal_Tecnico: MODIFICACIÓN ==================== */
-CREATE OR ALTER PROCEDURE dbo.SP_Personal_Tecnico_Modificar
+CREATE OR ALTER PROCEDURE dbo.Personal_Tecnico_Modificar
     @id_personal INT,
     @nombre NVARCHAR(60),
     @apellido NVARCHAR(60),
@@ -85,7 +85,7 @@ END;
 GO
 
 /* ==================== Personal_Tecnico: BAJA ==================== */
-CREATE OR ALTER PROCEDURE dbo.SP_Personal_Tecnico_Baja
+CREATE OR ALTER PROCEDURE dbo.Personal_Tecnico_Baja
     @id_personal INT
 AS
 BEGIN

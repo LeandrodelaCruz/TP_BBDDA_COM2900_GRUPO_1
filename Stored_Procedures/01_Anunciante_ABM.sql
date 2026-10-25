@@ -16,13 +16,13 @@ SET NOCOUNT ON;
 GO
 
 
-CREATE OR ALTER PROCEDURE dbo.SP_Anunciante_Alta
+CREATE OR ALTER PROCEDURE dbo.Anunciante_Alta
     @nombre NVARCHAR(120)
 AS
 BEGIN
     SET NOCOUNT ON;
     DECLARE @errores NVARCHAR(2048);
-    EXEC dbo.sp_Validar_Anunciante 'ALTA', NULL, @nombre, @errores OUTPUT;
+    EXEC dbo.Validar_Anunciante 'ALTA', NULL, @nombre, @errores OUTPUT;
     IF @errores <> N'' THROW 50001, @errores, 1;
 
     INSERT INTO dbo.Anunciante(nombre)
@@ -32,14 +32,14 @@ BEGIN
 END;
 GO
 
-CREATE OR ALTER PROCEDURE dbo.SP_Anunciante_Modificar
+CREATE OR ALTER PROCEDURE dbo.Anunciante_Modificar
     @id_anunciante INT,
     @nombre NVARCHAR(120)
 AS
 BEGIN
     SET NOCOUNT ON;
     DECLARE @errores NVARCHAR(2048);
-    EXEC dbo.sp_Validar_Anunciante 'MODIFICAR', @id_anunciante, @nombre, @errores OUTPUT;
+    EXEC dbo.Validar_Anunciante 'MODIFICAR', @id_anunciante, @nombre, @errores OUTPUT;
     IF @errores <> N'' THROW 50002, @errores, 1;
 
     UPDATE dbo.Anunciante
@@ -50,33 +50,33 @@ BEGIN
 END;
 GO
 
-CREATE OR ALTER PROCEDURE dbo.SP_Anunciante_Baja
+CREATE OR ALTER PROCEDURE dbo.Anunciante_Baja
     @id_anunciante INT
 AS
 BEGIN
     SET NOCOUNT ON;
     DECLARE @errores NVARCHAR(2048);
-    EXEC dbo.sp_Validar_Anunciante 'BAJA', @id_anunciante, NULL, @errores OUTPUT;
+    EXEC dbo.Validar_Anunciante 'BAJA', @id_anunciante, NULL, @errores OUTPUT;
     IF @errores <> N'' THROW 50003, @errores, 1;
 
     DELETE FROM dbo.Anunciante WHERE id_anunciante = @id_anunciante;
 END;
 GO
 
-CREATE OR ALTER PROCEDURE dbo.SP_Anunciante_ConsultarPorId
+CREATE OR ALTER PROCEDURE dbo.Anunciante_ConsultarPorId
     @id_anunciante INT
 AS
 BEGIN
     SET NOCOUNT ON;
     DECLARE @errores NVARCHAR(2048);
-    EXEC dbo.sp_Validar_Anunciante 'CONSULTAR', @id_anunciante, NULL, @errores OUTPUT;
+    EXEC dbo.Validar_Anunciante 'CONSULTAR', @id_anunciante, NULL, @errores OUTPUT;
     IF @errores <> N'' THROW 50004, @errores, 1;
 
     SELECT * FROM dbo.Anunciante WHERE id_anunciante = @id_anunciante;
 END;
 GO
 
-CREATE OR ALTER PROCEDURE dbo.SP_Anunciante_Listar
+CREATE OR ALTER PROCEDURE dbo.Anunciante_Listar
 AS
 BEGIN
     SET NOCOUNT ON;

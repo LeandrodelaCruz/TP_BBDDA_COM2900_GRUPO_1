@@ -16,7 +16,7 @@ SET NOCOUNT ON;
 GO
 
 
-CREATE OR ALTER PROCEDURE dbo.SP_Validar_Arbitro
+CREATE OR ALTER PROCEDURE dbo.Validar_Arbitro
     @operacion         VARCHAR(12),
     @id_arbitro        INT = NULL,
     @nombre            NVARCHAR(60) = NULL,

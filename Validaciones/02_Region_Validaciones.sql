@@ -16,7 +16,7 @@ SET NOCOUNT ON;
 GO
 
 
-CREATE OR ALTER PROCEDURE dbo.SP_Validar_Region
+CREATE OR ALTER PROCEDURE dbo.Validar_Region
     @operacion          VARCHAR(12),
     @id_region          INT = NULL,
     @nombre             NVARCHAR(80) = NULL,

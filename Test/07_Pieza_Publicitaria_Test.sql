@@ -13,9 +13,9 @@
     Incluye pruebas exitosas y validaciones de errores.
 
     PROCEDIMIENTOS A PROBAR:
-    - SP_Pieza_Publicitaria_Alta
-    - SP_Pieza_Publicitaria_Modificar
-    - SP_Pieza_Publicitaria_Baja
+    - Pieza_Publicitaria_Alta
+    - Pieza_Publicitaria_Modificar
+    - Pieza_Publicitaria_Baja
 */
 
 USE MUNDIALDEFUTBOL;
@@ -77,7 +77,7 @@ PRINT '--- CASO 1: Alta exitosa ---';
 DECLARE @id_camp INT = (SELECT id_campania FROM dbo.Campania WHERE descripcion = N'Campaña Test ABM Pieza');
 
 BEGIN TRY
-    EXEC dbo.SP_Pieza_Publicitaria_Alta
+    EXEC dbo.Pieza_Publicitaria_Alta
         @id_campania = @id_camp,
         @nombre = N'Banner Test ABM 1',
         @contenido = N'Texto publicitario promocional',
@@ -98,7 +98,7 @@ PRINT '';
 PRINT '--- CASO 2: Alta fallida - Campaña inexistente ---';
 
 BEGIN TRY
-    EXEC dbo.SP_Pieza_Publicitaria_Alta
+    EXEC dbo.Pieza_Publicitaria_Alta
         @id_campania = -999,
         @nombre = N'Banner Invalido',
         @contenido = N'Contenido',
@@ -121,7 +121,7 @@ DECLARE @id_camp INT = (SELECT id_campania FROM dbo.Campania WHERE descripcion =
 DECLARE @id_pieza INT = (SELECT TOP 1 id_pieza FROM dbo.Pieza_Publicitaria WHERE nombre LIKE N'%Test%ABM%');
 
 BEGIN TRY
-    EXEC dbo.SP_Pieza_Publicitaria_Modificar
+    EXEC dbo.Pieza_Publicitaria_Modificar
         @id_pieza = @id_pieza,
         @id_campania = @id_camp,
         @nombre = N'Banner Test ABM 1 - Actualizado',
@@ -145,7 +145,7 @@ PRINT '--- CASO 4: Baja exitosa ---';
 DECLARE @id_pieza_del INT = (SELECT TOP 1 id_pieza FROM dbo.Pieza_Publicitaria WHERE nombre LIKE N'%Test%ABM%');
 
 BEGIN TRY
-    EXEC dbo.SP_Pieza_Publicitaria_Baja @id_pieza = @id_pieza_del;
+    EXEC dbo.Pieza_Publicitaria_Baja @id_pieza = @id_pieza_del;
 
     PRINT 'OK - Pieza publicitaria eliminada correctamente.';
     IF NOT EXISTS (SELECT 1 FROM dbo.Pieza_Publicitaria WHERE id_pieza = @id_pieza_del)
@@ -163,7 +163,7 @@ PRINT '';
 PRINT '--- CASO 5: Baja fallida - ID inexistente ---';
 
 BEGIN TRY
-    EXEC dbo.SP_Pieza_Publicitaria_Baja @id_pieza = -999;
+    EXEC dbo.Pieza_Publicitaria_Baja @id_pieza = -999;
     PRINT 'ERROR: Debería haber fallado.';
 END TRY
 BEGIN CATCH
