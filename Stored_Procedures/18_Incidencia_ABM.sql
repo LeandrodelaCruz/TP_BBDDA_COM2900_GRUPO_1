@@ -17,15 +17,15 @@
     - EXPULSION: Tarjeta roja a id_jugador, id_jugador_involucrado es agredido
 
     PROCEDIMIENTOS INCLUIDOS:
-    - SP_Incidencia_Alta (con validaciones)
-    - SP_Incidencia_Modificacion (solo motivo)
-    - SP_Incidencia_Baja
+    - Incidencia_Alta (con validaciones)
+    - Incidencia_Modificacion (solo motivo)
+    - Incidencia_Baja
     
     GET especializados:
-    - SP_Incidencia_GetGoles: Muestra goles con asistencias
-    - SP_Incidencia_GetAmonestaciones: Muestra amarillas con agredido
-    - SP_Incidencia_GetExpulsiones: Muestra rojas con agredido
-    - SP_Incidencia_GetByPartido:Muestra todas las incidencias de un partido
+    - Incidencia_GetGoles: Muestra goles con asistencias
+    - Incidencia_GetAmonestaciones: Muestra amarillas con agredido
+    - Incidencia_GetExpulsiones: Muestra rojas con agredido
+    - Incidencia_GetByPartido:Muestra todas las incidencias de un partido
 */
 
 USE MUNDIALDEFUTBOL;
@@ -35,7 +35,7 @@ GO
 -- CREATE - Insertar una nueva incidencia
 -- =========================================================
 
-CREATE OR ALTER PROCEDURE dbo.SP_Incidencia_Alta
+CREATE OR ALTER PROCEDURE dbo.Incidencia_Alta
     @id_partido INT,
     @id_jugador INT,
     @tipo VARCHAR(30),
@@ -152,7 +152,7 @@ GO
 -- READ - Obtener GOLES por partido con asistencias
 -- =========================================================
 
-CREATE OR ALTER PROCEDURE dbo.SP_Incidencia_GetGoles
+CREATE OR ALTER PROCEDURE dbo.Incidencia_GetGoles
     @id_partido INT
 AS
 BEGIN
@@ -187,7 +187,7 @@ GO
 -- READ - Obtener AMONESTACIONES (tarjetas amarillas)
 -- =========================================================
 
-CREATE OR ALTER PROCEDURE dbo.SP_Incidencia_GetAmonestaciones
+CREATE OR ALTER PROCEDURE dbo.Incidencia_GetAmonestaciones
     @id_partido INT
 AS
 BEGIN
@@ -220,7 +220,7 @@ GO
 -- =========================================================
 -- READ - Obtener EXPULSIONES (tarjetas rojas)
 -- =========================================================
-CREATE OR ALTER PROCEDURE dbo.SP_Incidencia_GetExpulsiones
+CREATE OR ALTER PROCEDURE dbo.Incidencia_GetExpulsiones
     @id_partido INT
 AS
 BEGIN
@@ -254,7 +254,7 @@ GO
 -- READ - Obtener todas las incidencias de un partido
 -- =========================================================
 
-CREATE OR ALTER PROCEDURE dbo.SP_Incidencia_GetByPartido
+CREATE OR ALTER PROCEDURE dbo.Incidencia_GetByPartido
     @id_partido INT
 AS
 BEGIN
@@ -286,7 +286,7 @@ GO
 -- UPDATE - Actualizar incidencia (solo motivo)
 -- =========================================================
 
-CREATE OR ALTER PROCEDURE dbo.SP_Incidencia_Modificacion
+CREATE OR ALTER PROCEDURE dbo.Incidencia_Modificacion
     @id_incidencia INT,
     @motivo VARCHAR(200) = NULL
 AS
@@ -325,7 +325,7 @@ GO
 -- DELETE - Eliminar incidencia
 -- =========================================================
 
-CREATE OR ALTER PROCEDURE dbo.SP_Incidencia_Baja
+CREATE OR ALTER PROCEDURE dbo.Incidencia_Baja
     @id_incidencia INT
 AS
 BEGIN

@@ -15,13 +15,13 @@
     ejecutarse individualmente o corriendo todo el archivo.
     
     PROCEDIMIENTOS A PROBAR:
-    - SP_Asignacion_Publicitaria_Alta
-    - SP_Asignacion_Publicitaria_GetById
-    - SP_Asignacion_Publicitaria_GetByPartido
-    - SP_Asignacion_Publicitaria_GetByAnunciante
-    - SP_Asignacion_Publicitaria_TotalesPorAnunciante
-    - SP_Asignacion_Publicitaria_Modificacion
-    - SP_Asignacion_Publicitaria_Baja
+    - Asignacion_Publicitaria_Alta
+    - Asignacion_Publicitaria_GetById
+    - Asignacion_Publicitaria_GetByPartido
+    - Asignacion_Publicitaria_GetByAnunciante
+    - Asignacion_Publicitaria_TotalesPorAnunciante
+    - Asignacion_Publicitaria_Modificacion
+    - Asignacion_Publicitaria_Baja
 */
 
 USE MUNDIALDEFUTBOL;
@@ -141,7 +141,7 @@ DECLARE @id_pieza1 INT = (SELECT id_pieza FROM dbo.Pieza_Publicitaria WHERE nomb
 DECLARE @id_asignacion1 INT;
 
 BEGIN TRY
-    EXEC dbo.SP_Asignacion_Publicitaria_Alta
+    EXEC dbo.Asignacion_Publicitaria_Alta
         @id_partido = @id_partido_test,
         @id_pieza = @id_pieza1,
         @numero_espacio = 1,
@@ -166,7 +166,7 @@ DECLARE @id_pieza2 INT = (SELECT id_pieza FROM dbo.Pieza_Publicitaria WHERE nomb
 DECLARE @id_asignacion2 INT;
 
 BEGIN TRY
-    EXEC dbo.SP_Asignacion_Publicitaria_Alta
+    EXEC dbo.Asignacion_Publicitaria_Alta
         @id_partido = @id_partido_test,
         @id_pieza = @id_pieza2,
         @numero_espacio = 2,
@@ -191,7 +191,7 @@ DECLARE @id_pieza3 INT = (SELECT id_pieza FROM dbo.Pieza_Publicitaria WHERE nomb
 DECLARE @id_asignacion3 INT;
 
 BEGIN TRY
-    EXEC dbo.SP_Asignacion_Publicitaria_Alta
+    EXEC dbo.Asignacion_Publicitaria_Alta
         @id_partido = @id_partido_test,
         @id_pieza = @id_pieza3,
         @numero_espacio = 3,
@@ -216,7 +216,7 @@ DECLARE @id_pieza1 INT = (SELECT id_pieza FROM dbo.Pieza_Publicitaria WHERE nomb
 DECLARE @id_asignacion_fail INT;
 
 BEGIN TRY
-    EXEC dbo.SP_Asignacion_Publicitaria_Alta
+    EXEC dbo.Asignacion_Publicitaria_Alta
         @id_partido = @id_partido_test,
         @id_pieza = @id_pieza1,
         @numero_espacio = 5,
@@ -241,7 +241,7 @@ DECLARE @id_pieza1 INT = (SELECT id_pieza FROM dbo.Pieza_Publicitaria WHERE nomb
 DECLARE @id_asignacion_fail2 INT;
 
 BEGIN TRY
-    EXEC dbo.SP_Asignacion_Publicitaria_Alta
+    EXEC dbo.Asignacion_Publicitaria_Alta
         @id_partido = @id_partido_test,
         @id_pieza = @id_pieza1,
         @numero_espacio = 4,
@@ -266,7 +266,7 @@ DECLARE @id_pieza2 INT = (SELECT id_pieza FROM dbo.Pieza_Publicitaria WHERE nomb
 DECLARE @id_asignacion_fail3 INT;
 
 BEGIN TRY
-    EXEC dbo.SP_Asignacion_Publicitaria_Alta
+    EXEC dbo.Asignacion_Publicitaria_Alta
         @id_partido = @id_partido_test,
         @id_pieza = @id_pieza2,
         @numero_espacio = 1,
@@ -290,7 +290,7 @@ DECLARE @id_pieza1 INT = (SELECT id_pieza FROM dbo.Pieza_Publicitaria WHERE nomb
 DECLARE @id_asignacion_fail4 INT;
 
 BEGIN TRY
-    EXEC dbo.SP_Asignacion_Publicitaria_Alta
+    EXEC dbo.Asignacion_Publicitaria_Alta
         @id_partido = 999999,
         @id_pieza = @id_pieza1,
         @numero_espacio = 4,
@@ -314,7 +314,7 @@ DECLARE @id_partido_test INT = (SELECT id_partido FROM dbo.Partido WHERE resulta
 DECLARE @id_asignacion_fail5 INT;
 
 BEGIN TRY
-    EXEC dbo.SP_Asignacion_Publicitaria_Alta
+    EXEC dbo.Asignacion_Publicitaria_Alta
         @id_partido = @id_partido_test,
         @id_pieza = 999999,
         @numero_espacio = 4,
@@ -343,7 +343,7 @@ DECLARE @id_asignacion_get INT = (
 
 IF @id_asignacion_get IS NOT NULL
 BEGIN
-    EXEC dbo.SP_Asignacion_Publicitaria_GetById @id_asignacion = @id_asignacion_get;
+    EXEC dbo.Asignacion_Publicitaria_GetById @id_asignacion = @id_asignacion_get;
 END
 ELSE
     PRINT 'No hay asignaciones para consultar';
@@ -359,7 +359,7 @@ DECLARE @id_partido_get INT = (SELECT id_partido FROM dbo.Partido WHERE resultad
 
 IF @id_partido_get IS NOT NULL
 BEGIN
-    EXEC dbo.SP_Asignacion_Publicitaria_GetByPartido @id_partido = @id_partido_get;
+    EXEC dbo.Asignacion_Publicitaria_GetByPartido @id_partido = @id_partido_get;
 END
 ELSE
     PRINT 'No hay partido de prueba para consultar';
@@ -375,7 +375,7 @@ DECLARE @id_anunciante_get INT = (SELECT id_anunciante FROM dbo.Anunciante WHERE
 
 IF @id_anunciante_get IS NOT NULL
 BEGIN
-    EXEC dbo.SP_Asignacion_Publicitaria_GetByAnunciante @id_anunciante = @id_anunciante_get;
+    EXEC dbo.Asignacion_Publicitaria_GetByAnunciante @id_anunciante = @id_anunciante_get;
 END
 ELSE
     PRINT 'No hay anunciante de prueba para consultar';
@@ -391,7 +391,7 @@ DECLARE @id_anunciante_total INT = (SELECT id_anunciante FROM dbo.Anunciante WHE
 
 IF @id_anunciante_total IS NOT NULL
 BEGIN
-    EXEC dbo.SP_Asignacion_Publicitaria_TotalesPorAnunciante @id_anunciante = @id_anunciante_total;
+    EXEC dbo.Asignacion_Publicitaria_TotalesPorAnunciante @id_anunciante = @id_anunciante_total;
 END
 ELSE
     PRINT 'No hay anunciante de prueba para totales';
@@ -414,14 +414,14 @@ IF @id_asignacion_update IS NOT NULL
 BEGIN
     BEGIN TRY
         PRINT 'Costo antes:';
-        EXEC dbo.SP_Asignacion_Publicitaria_GetById @id_asignacion = @id_asignacion_update;
+        EXEC dbo.Asignacion_Publicitaria_GetById @id_asignacion = @id_asignacion_update;
 
-        EXEC dbo.SP_Asignacion_Publicitaria_Modificacion
+        EXEC dbo.Asignacion_Publicitaria_Modificacion
             @id_asignacion = @id_asignacion_update,
             @costo_aplicado = 75000.00;
 
         PRINT 'Costo después:';
-        EXEC dbo.SP_Asignacion_Publicitaria_GetById @id_asignacion = @id_asignacion_update;
+        EXEC dbo.Asignacion_Publicitaria_GetById @id_asignacion = @id_asignacion_update;
     END TRY
     BEGIN CATCH
         PRINT 'ERROR: ' + ERROR_MESSAGE();
@@ -438,7 +438,7 @@ PRINT '';
 PRINT '--- CASO 14: UPDATE fallido - ID inexistente ---';
 
 BEGIN TRY
-    EXEC dbo.SP_Asignacion_Publicitaria_Modificacion
+    EXEC dbo.Asignacion_Publicitaria_Modificacion
         @id_asignacion = 999999,
         @costo_aplicado = 50000.00;
 
@@ -465,7 +465,7 @@ DECLARE @id_asignacion_update_neg INT = (
 IF @id_asignacion_update_neg IS NOT NULL
 BEGIN
     BEGIN TRY
-        EXEC dbo.SP_Asignacion_Publicitaria_Modificacion
+        EXEC dbo.Asignacion_Publicitaria_Modificacion
             @id_asignacion = @id_asignacion_update_neg,
             @costo_aplicado = -50000.00;
 
@@ -495,7 +495,7 @@ DECLARE @id_asignacion_delete INT = (
 IF @id_asignacion_delete IS NOT NULL
 BEGIN
     BEGIN TRY
-        EXEC dbo.SP_Asignacion_Publicitaria_Baja @id_asignacion = @id_asignacion_delete;
+        EXEC dbo.Asignacion_Publicitaria_Baja @id_asignacion = @id_asignacion_delete;
 
         PRINT 'OK - Asignación eliminada';
 
@@ -519,7 +519,7 @@ PRINT '';
 PRINT '--- CASO 17: DELETE fallido - ID inexistente ---';
 
 BEGIN TRY
-    EXEC dbo.SP_Asignacion_Publicitaria_Baja @id_asignacion = 999999;
+    EXEC dbo.Asignacion_Publicitaria_Baja @id_asignacion = 999999;
 
     PRINT 'ERROR: Debería haber fallado';
 END TRY

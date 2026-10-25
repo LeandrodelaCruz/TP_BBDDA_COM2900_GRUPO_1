@@ -31,7 +31,7 @@ GO
 -- CREATE - Insertar una nueva sustitución
 -- =========================================================
 
-CREATE OR ALTER PROCEDURE dbo.SP_Sustitucion_Alta
+CREATE OR ALTER PROCEDURE dbo.Sustitucion_Alta
     @id_partido INT,
     @id_jugador_sale INT,
     @id_jugador_entra INT,
@@ -231,7 +231,7 @@ GO
 -- =========================================================
 -- READ - Obtener sustitución por ID
 -- =========================================================
-CREATE OR ALTER PROCEDURE dbo.SP_Sustitucion_GetById
+CREATE OR ALTER PROCEDURE dbo.Sustitucion_GetById
     @id_sustitucion INT
 AS
 BEGIN
@@ -262,7 +262,7 @@ GO
 -- READ - Obtener sustituciones por partido
 -- =========================================================
 
-CREATE OR ALTER PROCEDURE dbo.SP_Sustitucion_GetByPartido
+CREATE OR ALTER PROCEDURE dbo.Sustitucion_GetByPartido
     @id_partido INT
 AS
 BEGIN
@@ -294,7 +294,7 @@ GO
 -- UPDATE - Actualizar sustitución
 -- =========================================================
 
-CREATE OR ALTER PROCEDURE dbo.SP_Sustitucion_Modificacion
+CREATE OR ALTER PROCEDURE dbo.Sustitucion_Modificacion
     @id_sustitucion INT,
     @motivo VARCHAR(100) = NULL
 AS
@@ -337,7 +337,7 @@ GO
 -- DELETE - Eliminar sustitución
 -- =========================================================
 
-CREATE OR ALTER PROCEDURE dbo.SP_Sustitucion_Baja
+CREATE OR ALTER PROCEDURE dbo.Sustitucion_Baja
     @id_sustitucion INT
 AS
 BEGIN
