@@ -1,0 +1,65 @@
+<Solution>
+  <Configurations>
+    <BuildType Name="Default" />
+    <Platform Name="Default" />
+  </Configurations>
+  <Folder Name="/Extras/">
+    <File Path="Extras/Limpiar_Datos_Prueba.sql" />
+    <File Path="Extras/Limpiar_Datos_Test_Lucas.sql" />
+    <File Path="Extras/Script Manejo DB.sql" />
+    <File Path="Extras/Script Tabla S3 Eliminado Rapido.sql" />
+    <File Path="Extras/Ver_Datos_Rapido.sql" />
+  </Folder>
+  <Folder Name="/Store Procedures/">
+    <File Path="Stored_Procedures/01_Anunciante_ABM.sql" />
+    <File Path="Stored_Procedures/02_Region_ABM.sql" />
+    <File Path="Stored_Procedures/03_Sede_ABM.sql" />
+    <File Path="Stored_Procedures/04_Seleccion_ABM.sql" />
+    <File Path="Stored_Procedures/05_Arbitro_ABM.sql" />
+    <File Path="Stored_Procedures/06_Campania_ABM.sql" />
+    <File Path="Stored_Procedures/07_Pieza_Publicitaria_ABM.sql" />
+    <File Path="Stored_Procedures/08_Pieza_Region_ABM.sql" />
+    <File Path="Stored_Procedures/09_Personal_Tecnico_ABM.sql" />
+    <File Path="Stored_Procedures/10_Jugador_ABM.sql" />
+    <File Path="Stored_Procedures/11_Formacion_ABM.sql" />
+    <File Path="Stored_Procedures/12_Formacion_Jugador_ABM.sql" />
+    <File Path="Stored_Procedures/13_Partido_ABM.sql" />
+    <File Path="Stored_Procedures/14_PartidoSeleccion_ABM.sql" />
+    <File Path="Stored_Procedures/15_Reemplazo_ABM.sql" />
+    <File Path="Stored_Procedures/16_Asignacion_Publicitaria_ABM.sql" />
+    <File Path="Stored_Procedures/17_Designacion_Arbitral_ABM.sql" />
+    <File Path="Stored_Procedures/18_Incidencia_ABM.sql" />
+    <File Path="Stored_Procedures/19_Sancion_Arbitral_ABM.sql" />
+    <File Path="Stored_Procedures/20_Sustitucion_ABM.sql" />
+  </Folder>
+  <Folder Name="/Table/">
+    <File Path="Table/00_Script_DB_Schemas_Creacion.sql" />
+    <File Path="Table/01_Script_Tablas_Creacion.sql" />
+  </Folder>
+  <Folder Name="/Test/">
+    <File Path="Test/01_Anunciante_Test.sql" />
+    <File Path="Test/02_Region_Test.sql" />
+    <File Path="Test/03_Sede_Test.sql" />
+    <File Path="Test/04_Seleccion_Test.sql" />
+    <File Path="Test/05_Arbitro_Test.sql" />
+    <File Path="Test/06_Campania_Test.sql" />
+    <File Path="Test/07_Pieza_Publicitaria_Test.sql" />
+    <File Path="Test/08_Pieza_Para_Region_Test.sql" />
+    <File Path="Test/09_Personal_Tecnico_Test.sql" />
+    <File Path="Test/10_Jugador_Test.sql" />
+    <File Path="Test/11_Test_Formacion_Jugador.sql" />
+    <File Path="Test/12_Test_Formacion.sql" />
+    <File Path="Test/13_Test_Partido.sql" />
+    <File Path="Test/14_Test_PartidoSeleccion.sql" />
+    <File Path="Test/15_Test_Reemplazo.sql" />
+    <File Path="Test/16_Asignacion_Publicitaria_Test.sql" />
+    <File Path="Test/17_Designacion_Arbitral_Test.sql" />
+    <File Path="Test/18_Incidencia_Test.sql" />
+    <File Path="Test/19_Sancion_Arbitral_Test.sql" />
+    <File Path="Test/20_Sustitucion_Test.sql" />
+  </Folder>
+  <Project Path="Solucion.ssmssqlproj" Type="4f2e2c19-372f-40d8-9fa7-9d2138c6997a">
+    <Platform Project="?" />
+    <Build Project="false" />
+  </Project>
+</Solution>
