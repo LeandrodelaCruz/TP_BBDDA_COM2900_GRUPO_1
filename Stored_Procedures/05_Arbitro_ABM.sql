@@ -16,7 +16,7 @@ SET NOCOUNT ON;
 GO
 
 
-CREATE OR ALTER PROCEDURE dbo.Arbitro_Alta
+CREATE OR ALTER PROCEDURE abm.Arbitro_Alta
     @nombre NVARCHAR(60),
     @apellido NVARCHAR(60),
     @fecha_nacimiento DATE,
@@ -86,7 +86,7 @@ BEGIN
 END;
 GO
 
-CREATE OR ALTER PROCEDURE dbo.Arbitro_Modificar
+CREATE OR ALTER PROCEDURE abm.Arbitro_Modificar
     @id_arbitro INT,
     @nombre NVARCHAR(60),
     @apellido NVARCHAR(60),
@@ -164,7 +164,7 @@ BEGIN
 END;
 GO
 
-CREATE OR ALTER PROCEDURE dbo.Arbitro_Baja
+CREATE OR ALTER PROCEDURE abm.Arbitro_Baja
     @id_arbitro INT
 AS
 BEGIN
@@ -184,7 +184,7 @@ BEGIN
 END;
 GO
 
-CREATE OR ALTER PROCEDURE dbo.Arbitro_ConsultarPorId
+CREATE OR ALTER PROCEDURE abm.Arbitro_ConsultarPorId
     @id_arbitro INT
 AS
 BEGIN
@@ -204,7 +204,7 @@ BEGIN
 END;
 GO
 
-CREATE OR ALTER PROCEDURE dbo.Arbitro_Listar
+CREATE OR ALTER PROCEDURE abm.Arbitro_Listar
 AS
 BEGIN
     SET NOCOUNT ON;

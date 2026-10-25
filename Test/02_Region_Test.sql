@@ -12,60 +12,65 @@
 USE MUNDIALDEFUTBOL;
 GO
 
-SET NOCOUNT ON;
-GO
-
-
-PRINT '===== TEST REGION =====';
-
-DECLARE @id_prev INT = (
-    SELECT TOP 1 id_region FROM dbo.Region
-    WHERE nombre IN (N'TEST_REGION_PRINCIPAL', N'TEST_REGION_MODIFICADA', N'TEST_REGION_BAJA')
-    ORDER BY id_region
-);
-WHILE @id_prev IS NOT NULL
+CREATE OR ALTER PROCEDURE test.Region_Test
+AS
 BEGIN
-    EXEC dbo.Region_Baja @id_prev;
-    SET @id_prev = (
+    SET NOCOUNT ON;
+
+    PRINT '===== TEST REGION =====';
+
+    DECLARE @id_prev INT = (
         SELECT TOP 1 id_region FROM dbo.Region
         WHERE nombre IN (N'TEST_REGION_PRINCIPAL', N'TEST_REGION_MODIFICADA', N'TEST_REGION_BAJA')
         ORDER BY id_region
     );
+    WHILE @id_prev IS NOT NULL
+    BEGIN
+        EXEC abm.Region_Baja @id_prev;
+        SET @id_prev = (
+            SELECT TOP 1 id_region FROM dbo.Region
+            WHERE nombre IN (N'TEST_REGION_PRINCIPAL', N'TEST_REGION_MODIFICADA', N'TEST_REGION_BAJA')
+            ORDER BY id_region
+        );
+    END;
+
+    -- 1) Alta exitosa
+    EXEC abm.Region_Alta N'TEST_REGION_PRINCIPAL', N'Español', 'UTC-03:00', '19:00', '23:00';
+    DECLARE @id INT = (SELECT id_region FROM dbo.Region WHERE nombre = N'TEST_REGION_PRINCIPAL');
+
+    -- 2) Consulta
+    EXEC abm.Region_ConsultarPorId @id;
+
+    -- 3) Modificación
+    EXEC abm.Region_Modificar @id, N'TEST_REGION_MODIFICADA', N'Español', 'UTC-03:00', '18:00', '22:00';
+
+    -- 4) Listado
+    EXEC abm.Region_Listar;
+
+    -- 5) Baja sobre un segundo registro
+    EXEC abm.Region_Alta N'TEST_REGION_BAJA', N'Inglés', 'UTC-05:00', '19:00', '23:00';
+    DECLARE @id_baja INT = (SELECT id_region FROM dbo.Region WHERE nombre = N'TEST_REGION_BAJA');
+    EXEC abm.Region_Baja @id_baja;
+
+    -- VALIDACIÓN: rango prime time inválido
+    BEGIN TRY
+        EXEC abm.Region_Alta N'TEST_REGION_ERROR', N'Español', 'UTC-03:00', '23:00', '19:00';
+    END TRY
+    BEGIN CATCH
+        SELECT 'OK - error esperado: prime time inválido' AS prueba, ERROR_MESSAGE() AS mensaje;
+    END CATCH;
+
+    -- VALIDACIÓN: región duplicada
+    BEGIN TRY
+        EXEC abm.Region_Alta N'TEST_REGION_MODIFICADA', N'Español', 'UTC-03:00', '19:00', '23:00';
+    END TRY
+    BEGIN CATCH
+        SELECT 'OK - error esperado: región duplicada' AS prueba, ERROR_MESSAGE() AS mensaje;
+    END CATCH;
+
+    SELECT * FROM dbo.Region WHERE nombre LIKE N'TEST_REGION%';
 END;
+GO
 
--- 1) Alta exitosa
-EXEC dbo.Region_Alta N'TEST_REGION_PRINCIPAL', N'Español', 'UTC-03:00', '19:00', '23:00';
-DECLARE @id INT = (SELECT id_region FROM dbo.Region WHERE nombre = N'TEST_REGION_PRINCIPAL');
-
--- 2) Consulta
-EXEC dbo.Region_ConsultarPorId @id;
-
--- 3) Modificación
-EXEC dbo.Region_Modificar @id, N'TEST_REGION_MODIFICADA', N'Español', 'UTC-03:00', '18:00', '22:00';
-
--- 4) Listado
-EXEC dbo.Region_Listar;
-
--- 5) Baja sobre un segundo registro
-EXEC dbo.Region_Alta N'TEST_REGION_BAJA', N'Inglés', 'UTC-05:00', '19:00', '23:00';
-DECLARE @id_baja INT = (SELECT id_region FROM dbo.Region WHERE nombre = N'TEST_REGION_BAJA');
-EXEC dbo.Region_Baja @id_baja;
-
--- VALIDACIÓN: rango prime time inválido
-BEGIN TRY
-    EXEC dbo.Region_Alta N'TEST_REGION_ERROR', N'Español', 'UTC-03:00', '23:00', '19:00';
-END TRY
-BEGIN CATCH
-    SELECT 'OK - error esperado: prime time inválido' AS prueba, ERROR_MESSAGE() AS mensaje;
-END CATCH;
-
--- VALIDACIÓN: región duplicada
-BEGIN TRY
-    EXEC dbo.Region_Alta N'TEST_REGION_MODIFICADA', N'Español', 'UTC-03:00', '19:00', '23:00';
-END TRY
-BEGIN CATCH
-    SELECT 'OK - error esperado: región duplicada' AS prueba, ERROR_MESSAGE() AS mensaje;
-END CATCH;
-
-SELECT * FROM dbo.Region WHERE nombre LIKE N'TEST_REGION%';
+EXEC test.Region_Test;
 GO

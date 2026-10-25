@@ -35,7 +35,7 @@ GO
 -- CREATE - Insertar una nueva incidencia
 -- =========================================================
 
-CREATE OR ALTER PROCEDURE dbo.Incidencia_Alta
+CREATE OR ALTER PROCEDURE abm.Incidencia_Alta
     @id_partido INT,
     @id_jugador INT,
     @tipo VARCHAR(30),
@@ -152,7 +152,7 @@ GO
 -- READ - Obtener GOLES por partido con asistencias
 -- =========================================================
 
-CREATE OR ALTER PROCEDURE dbo.Incidencia_GetGoles
+CREATE OR ALTER PROCEDURE abm.Incidencia_GetGoles
     @id_partido INT
 AS
 BEGIN
@@ -187,7 +187,7 @@ GO
 -- READ - Obtener AMONESTACIONES (tarjetas amarillas)
 -- =========================================================
 
-CREATE OR ALTER PROCEDURE dbo.Incidencia_GetAmonestaciones
+CREATE OR ALTER PROCEDURE abm.Incidencia_GetAmonestaciones
     @id_partido INT
 AS
 BEGIN
@@ -220,7 +220,7 @@ GO
 -- =========================================================
 -- READ - Obtener EXPULSIONES (tarjetas rojas)
 -- =========================================================
-CREATE OR ALTER PROCEDURE dbo.Incidencia_GetExpulsiones
+CREATE OR ALTER PROCEDURE abm.Incidencia_GetExpulsiones
     @id_partido INT
 AS
 BEGIN
@@ -254,7 +254,7 @@ GO
 -- READ - Obtener todas las incidencias de un partido
 -- =========================================================
 
-CREATE OR ALTER PROCEDURE dbo.Incidencia_GetByPartido
+CREATE OR ALTER PROCEDURE abm.Incidencia_GetByPartido
     @id_partido INT
 AS
 BEGIN
@@ -286,7 +286,7 @@ GO
 -- UPDATE - Actualizar incidencia (solo motivo)
 -- =========================================================
 
-CREATE OR ALTER PROCEDURE dbo.Incidencia_Modificacion
+CREATE OR ALTER PROCEDURE abm.Incidencia_Modificacion
     @id_incidencia INT,
     @motivo VARCHAR(200) = NULL
 AS
@@ -325,7 +325,7 @@ GO
 -- DELETE - Eliminar incidencia
 -- =========================================================
 
-CREATE OR ALTER PROCEDURE dbo.Incidencia_Baja
+CREATE OR ALTER PROCEDURE abm.Incidencia_Baja
     @id_incidencia INT
 AS
 BEGIN

@@ -16,7 +16,7 @@ SET NOCOUNT ON;
 GO
 
 
-CREATE OR ALTER PROCEDURE dbo.Seleccion_Alta
+CREATE OR ALTER PROCEDURE abm.Seleccion_Alta
     @pais NVARCHAR(80),
     @confederacion NVARCHAR(50),
     @grupo_asignado VARCHAR(5)
@@ -66,7 +66,7 @@ BEGIN
 END;
 GO
 
-CREATE OR ALTER PROCEDURE dbo.Seleccion_Modificar
+CREATE OR ALTER PROCEDURE abm.Seleccion_Modificar
     @id_seleccion INT,
     @pais NVARCHAR(80),
     @confederacion NVARCHAR(50),
@@ -124,7 +124,7 @@ BEGIN
 END;
 GO
 
-CREATE OR ALTER PROCEDURE dbo.Seleccion_Baja
+CREATE OR ALTER PROCEDURE abm.Seleccion_Baja
     @id_seleccion INT
 AS
 BEGIN
@@ -144,7 +144,7 @@ BEGIN
 END;
 GO
 
-CREATE OR ALTER PROCEDURE dbo.Seleccion_ConsultarPorId
+CREATE OR ALTER PROCEDURE abm.Seleccion_ConsultarPorId
     @id_seleccion INT
 AS
 BEGIN
@@ -164,7 +164,7 @@ BEGIN
 END;
 GO
 
-CREATE OR ALTER PROCEDURE dbo.Seleccion_Listar
+CREATE OR ALTER PROCEDURE abm.Seleccion_Listar
 AS
 BEGIN
     SET NOCOUNT ON;

@@ -16,7 +16,7 @@ SET NOCOUNT ON;
 GO
 
 
-CREATE OR ALTER PROCEDURE dbo.Region_Alta
+CREATE OR ALTER PROCEDURE abm.Region_Alta
     @nombre NVARCHAR(80),
     @idioma NVARCHAR(50) = NULL,
     @huso_horario VARCHAR(100),
@@ -80,7 +80,7 @@ BEGIN
 END;
 GO
 
-CREATE OR ALTER PROCEDURE dbo.Region_Modificar
+CREATE OR ALTER PROCEDURE abm.Region_Modificar
     @id_region INT,
     @nombre NVARCHAR(80),
     @idioma NVARCHAR(50) = NULL,
@@ -152,7 +152,7 @@ BEGIN
 END;
 GO
 
-CREATE OR ALTER PROCEDURE dbo.Region_Baja
+CREATE OR ALTER PROCEDURE abm.Region_Baja
     @id_region INT
 AS
 BEGIN
@@ -172,7 +172,7 @@ BEGIN
 END;
 GO
 
-CREATE OR ALTER PROCEDURE dbo.Region_ConsultarPorId
+CREATE OR ALTER PROCEDURE abm.Region_ConsultarPorId
     @id_region INT
 AS
 BEGIN
@@ -192,7 +192,7 @@ BEGIN
 END;
 GO
 
-CREATE OR ALTER PROCEDURE dbo.Region_Listar
+CREATE OR ALTER PROCEDURE abm.Region_Listar
 AS
 BEGIN
     SET NOCOUNT ON;

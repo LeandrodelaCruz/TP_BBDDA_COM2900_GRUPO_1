@@ -23,7 +23,7 @@ GO
    TABLA: dbo.Partido
    ========================================================= */
 
-CREATE OR ALTER PROCEDURE dbo.Partidos_Alta
+CREATE OR ALTER PROCEDURE abm.Partidos_Alta
     @id_sede           INT,
     @fecha             DATE,
     @horario_local     DATETIME2(0),
@@ -90,7 +90,7 @@ BEGIN
 END;
 GO
 
-CREATE OR ALTER PROCEDURE dbo.Partidos_Baja
+CREATE OR ALTER PROCEDURE abm.Partidos_Baja
     @id_partido INT
 AS
 BEGIN
@@ -136,7 +136,7 @@ BEGIN
 END;
 GO
 
-CREATE OR ALTER PROCEDURE dbo.Partidos_Modificacion
+CREATE OR ALTER PROCEDURE abm.Partidos_Modificacion
     @id_partido        INT,
     @id_sede           INT,
     @fecha             DATE,

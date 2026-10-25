@@ -36,7 +36,7 @@ GO
 -- CREATE - Insertar una nueva sanción arbitral
 -- =========================================================
 
-CREATE OR ALTER PROCEDURE dbo.Sancion_Arbitral_Alta
+CREATE OR ALTER PROCEDURE abm.Sancion_Arbitral_Alta
     @id_arbitro INT,
     @id_partido INT = NULL,
     @fecha DATE,
@@ -145,7 +145,7 @@ GO
 -- READ - Obtener sanción por ID
 -- =========================================================
 
-CREATE OR ALTER PROCEDURE dbo.Sancion_Arbitral_GetById
+CREATE OR ALTER PROCEDURE abm.Sancion_Arbitral_GetById
     @id_sancion INT
 AS
 BEGIN
@@ -173,7 +173,7 @@ GO
 -- READ - Obtener sanciones por árbitro
 -- =========================================================
 
-CREATE OR ALTER PROCEDURE dbo.Sancion_Arbitral_GetByArbitro
+CREATE OR ALTER PROCEDURE abm.Sancion_Arbitral_GetByArbitro
     @id_arbitro INT
 AS
 BEGIN
@@ -201,7 +201,7 @@ GO
 -- READ - Obtener sanciones por partido
 -- =========================================================
 
-CREATE OR ALTER PROCEDURE dbo.Sancion_Arbitral_GetByPartido
+CREATE OR ALTER PROCEDURE abm.Sancion_Arbitral_GetByPartido
     @id_partido INT
 AS
 BEGIN
@@ -230,7 +230,7 @@ GO
 -- UPDATE - Actualizar sanción arbitral
 -- =========================================================
 
-CREATE OR ALTER PROCEDURE dbo.Sancion_Arbitral_Modificacion
+CREATE OR ALTER PROCEDURE abm.Sancion_Arbitral_Modificacion
     @id_sancion INT,
     @motivo VARCHAR(300),
     @tipo_sancion VARCHAR(50)
@@ -278,7 +278,7 @@ GO
 -- DELETE - Eliminar sanción arbitral
 -- =========================================================
 
-CREATE OR ALTER PROCEDURE dbo.Sancion_Arbitral_Baja
+CREATE OR ALTER PROCEDURE abm.Sancion_Arbitral_Baja
     @id_sancion INT
 AS
 BEGIN

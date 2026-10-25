@@ -15,7 +15,7 @@ SET NOCOUNT ON;
 GO
 
 
-CREATE OR ALTER PROCEDURE dbo.Sede_Alta
+CREATE OR ALTER PROCEDURE abm.Sede_Alta
     @nombre_estadio NVARCHAR(120),
     @ciudad NVARCHAR(80),
     @pais NVARCHAR(80),
@@ -74,7 +74,7 @@ BEGIN
 END;
 GO
 
-CREATE OR ALTER PROCEDURE dbo.Sede_Modificar
+CREATE OR ALTER PROCEDURE abm.Sede_Modificar
     @id_sede INT,
     @nombre_estadio NVARCHAR(120),
     @ciudad NVARCHAR(80),
@@ -141,7 +141,7 @@ BEGIN
 END;
 GO
 
-CREATE OR ALTER PROCEDURE dbo.Sede_Baja
+CREATE OR ALTER PROCEDURE abm.Sede_Baja
     @id_sede INT
 AS
 BEGIN
@@ -161,7 +161,7 @@ BEGIN
 END;
 GO
 
-CREATE OR ALTER PROCEDURE dbo.Sede_ConsultarPorId
+CREATE OR ALTER PROCEDURE abm.Sede_ConsultarPorId
     @id_sede INT
 AS
 BEGIN
@@ -181,7 +181,7 @@ BEGIN
 END;
 GO
 
-CREATE OR ALTER PROCEDURE dbo.Sede_Listar
+CREATE OR ALTER PROCEDURE abm.Sede_Listar
 AS
 BEGIN
     SET NOCOUNT ON;

@@ -19,7 +19,7 @@
 */
 
 /* ==================== Personal_Tecnico: ALTA ==================== */
-CREATE OR ALTER PROCEDURE dbo.Personal_Tecnico_Alta
+CREATE OR ALTER PROCEDURE abm.Personal_Tecnico_Alta
     @nombre NVARCHAR(60),
     @apellido NVARCHAR(60),
     @rol NVARCHAR(50),
@@ -51,7 +51,7 @@ END;
 GO
 
 /* ==================== Personal_Tecnico: MODIFICACIÓN ==================== */
-CREATE OR ALTER PROCEDURE dbo.Personal_Tecnico_Modificar
+CREATE OR ALTER PROCEDURE abm.Personal_Tecnico_Modificar
     @id_personal INT,
     @nombre NVARCHAR(60),
     @apellido NVARCHAR(60),
@@ -85,7 +85,7 @@ END;
 GO
 
 /* ==================== Personal_Tecnico: BAJA ==================== */
-CREATE OR ALTER PROCEDURE dbo.Personal_Tecnico_Baja
+CREATE OR ALTER PROCEDURE abm.Personal_Tecnico_Baja
     @id_personal INT
 AS
 BEGIN

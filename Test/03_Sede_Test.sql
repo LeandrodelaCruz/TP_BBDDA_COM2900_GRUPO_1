@@ -12,60 +12,65 @@
 USE MUNDIALDEFUTBOL;
 GO
 
-SET NOCOUNT ON;
-GO
-
-
-PRINT '===== TEST SEDE =====';
-
-DECLARE @id_prev INT = (
-    SELECT TOP 1 id_sede FROM dbo.Sede
-    WHERE nombre_estadio IN (N'TEST_ESTADIO_PRINCIPAL', N'TEST_ESTADIO_MODIFICADO', N'TEST_ESTADIO_BAJA')
-    ORDER BY id_sede
-);
-WHILE @id_prev IS NOT NULL
+CREATE OR ALTER PROCEDURE test.Sede_Test
+AS
 BEGIN
-    EXEC dbo.Sede_Baja @id_prev;
-    SET @id_prev = (
+    SET NOCOUNT ON;
+
+    PRINT '===== TEST SEDE =====';
+
+    DECLARE @id_prev INT = (
         SELECT TOP 1 id_sede FROM dbo.Sede
         WHERE nombre_estadio IN (N'TEST_ESTADIO_PRINCIPAL', N'TEST_ESTADIO_MODIFICADO', N'TEST_ESTADIO_BAJA')
         ORDER BY id_sede
     );
+    WHILE @id_prev IS NOT NULL
+    BEGIN
+        EXEC abm.Sede_Baja @id_prev;
+        SET @id_prev = (
+            SELECT TOP 1 id_sede FROM dbo.Sede
+            WHERE nombre_estadio IN (N'TEST_ESTADIO_PRINCIPAL', N'TEST_ESTADIO_MODIFICADO', N'TEST_ESTADIO_BAJA')
+            ORDER BY id_sede
+        );
+    END;
+
+    -- 1) Alta exitosa
+    EXEC abm.Sede_Alta N'TEST_ESTADIO_PRINCIPAL', N'TEST_CIUDAD', N'TEST_PAIS', 50000, 'UTC-03:00';
+    DECLARE @id INT = (SELECT id_sede FROM dbo.Sede WHERE nombre_estadio = N'TEST_ESTADIO_PRINCIPAL');
+
+    -- 2) Consulta
+    EXEC abm.Sede_ConsultarPorId @id;
+
+    -- 3) Modificación
+    EXEC abm.Sede_Modificar @id, N'TEST_ESTADIO_MODIFICADO', N'TEST_CIUDAD', N'TEST_PAIS', 55000, 'UTC-03:00';
+
+    -- 4) Listado
+    EXEC abm.Sede_Listar;
+
+    -- 5) Baja sobre un segundo registro
+    EXEC abm.Sede_Alta N'TEST_ESTADIO_BAJA', N'TEST_CIUDAD_2', N'TEST_PAIS', 45000, 'UTC-03:00';
+    DECLARE @id_baja INT = (SELECT id_sede FROM dbo.Sede WHERE nombre_estadio = N'TEST_ESTADIO_BAJA');
+    EXEC abm.Sede_Baja @id_baja;
+
+    -- VALIDACIÓN: capacidad inválida
+    BEGIN TRY
+        EXEC abm.Sede_Alta N'TEST_ESTADIO_ERROR', N'TEST_CIUDAD', N'TEST_PAIS', 0, 'UTC-03:00';
+    END TRY
+    BEGIN CATCH
+        SELECT 'OK - error esperado: capacidad inválida' AS prueba, ERROR_MESSAGE() AS mensaje;
+    END CATCH;
+
+    -- VALIDACIÓN: país vacío
+    BEGIN TRY
+        EXEC abm.Sede_Alta N'TEST_ESTADIO_ERROR_2', N'TEST_CIUDAD', N'', 1000, 'UTC-03:00';
+    END TRY
+    BEGIN CATCH
+        SELECT 'OK - error esperado: país obligatorio' AS prueba, ERROR_MESSAGE() AS mensaje;
+    END CATCH;
+
+    SELECT * FROM dbo.Sede WHERE nombre_estadio LIKE N'TEST_ESTADIO%';
 END;
+GO
 
--- 1) Alta exitosa
-EXEC dbo.Sede_Alta N'TEST_ESTADIO_PRINCIPAL', N'TEST_CIUDAD', N'TEST_PAIS', 50000, 'UTC-03:00';
-DECLARE @id INT = (SELECT id_sede FROM dbo.Sede WHERE nombre_estadio = N'TEST_ESTADIO_PRINCIPAL');
-
--- 2) Consulta
-EXEC dbo.Sede_ConsultarPorId @id;
-
--- 3) Modificación
-EXEC dbo.Sede_Modificar @id, N'TEST_ESTADIO_MODIFICADO', N'TEST_CIUDAD', N'TEST_PAIS', 55000, 'UTC-03:00';
-
--- 4) Listado
-EXEC dbo.Sede_Listar;
-
--- 5) Baja sobre un segundo registro
-EXEC dbo.Sede_Alta N'TEST_ESTADIO_BAJA', N'TEST_CIUDAD_2', N'TEST_PAIS', 45000, 'UTC-03:00';
-DECLARE @id_baja INT = (SELECT id_sede FROM dbo.Sede WHERE nombre_estadio = N'TEST_ESTADIO_BAJA');
-EXEC dbo.Sede_Baja @id_baja;
-
--- VALIDACIÓN: capacidad inválida
-BEGIN TRY
-    EXEC dbo.Sede_Alta N'TEST_ESTADIO_ERROR', N'TEST_CIUDAD', N'TEST_PAIS', 0, 'UTC-03:00';
-END TRY
-BEGIN CATCH
-    SELECT 'OK - error esperado: capacidad inválida' AS prueba, ERROR_MESSAGE() AS mensaje;
-END CATCH;
-
--- VALIDACIÓN: país vacío
-BEGIN TRY
-    EXEC dbo.Sede_Alta N'TEST_ESTADIO_ERROR_2', N'TEST_CIUDAD', N'', 1000, 'UTC-03:00';
-END TRY
-BEGIN CATCH
-    SELECT 'OK - error esperado: país obligatorio' AS prueba, ERROR_MESSAGE() AS mensaje;
-END CATCH;
-
-SELECT * FROM dbo.Sede WHERE nombre_estadio LIKE N'TEST_ESTADIO%';
+EXEC test.Sede_Test;
 GO

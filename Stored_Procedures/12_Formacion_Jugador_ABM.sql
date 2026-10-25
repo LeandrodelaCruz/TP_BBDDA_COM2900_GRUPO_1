@@ -24,7 +24,7 @@ GO
    TABLA: dbo.Formacion_Jugador
    ========================================================= */
 
-CREATE OR ALTER PROCEDURE dbo.FormacionJugador_Alta
+CREATE OR ALTER PROCEDURE abm.FormacionJugador_Alta
     @id_formacion       INT,
     @id_jugador         INT,
     @posicion_en_cancha VARCHAR(40) = NULL,
@@ -114,7 +114,7 @@ BEGIN
 END;
 GO
 
-CREATE OR ALTER PROCEDURE dbo.FormacionJugador_Baja
+CREATE OR ALTER PROCEDURE abm.FormacionJugador_Baja
     @id_formacion INT,
     @id_jugador   INT
 AS
@@ -145,7 +145,7 @@ BEGIN
 END;
 GO
 
-CREATE OR ALTER PROCEDURE dbo.FormacionJugador_Modificacion
+CREATE OR ALTER PROCEDURE abm.FormacionJugador_Modificacion
     @id_formacion          INT,
     @id_jugador            INT,
     @posicion_en_cancha    VARCHAR(40) = NULL,

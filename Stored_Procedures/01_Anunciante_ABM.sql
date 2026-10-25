@@ -16,7 +16,7 @@ SET NOCOUNT ON;
 GO
 
 
-CREATE OR ALTER PROCEDURE dbo.Anunciante_Alta
+CREATE OR ALTER PROCEDURE abm.Anunciante_Alta
     @nombre NVARCHAR(120)
 AS
 BEGIN
@@ -46,7 +46,7 @@ BEGIN
 END;
 GO
 
-CREATE OR ALTER PROCEDURE dbo.Anunciante_Modificar
+CREATE OR ALTER PROCEDURE abm.Anunciante_Modificar
     @id_anunciante INT,
     @nombre NVARCHAR(120)
 AS
@@ -86,7 +86,7 @@ BEGIN
 END;
 GO
 
-CREATE OR ALTER PROCEDURE dbo.Anunciante_Baja
+CREATE OR ALTER PROCEDURE abm.Anunciante_Baja
     @id_anunciante INT
 AS
 BEGIN
@@ -106,7 +106,7 @@ BEGIN
 END;
 GO
 
-CREATE OR ALTER PROCEDURE dbo.Anunciante_ConsultarPorId
+CREATE OR ALTER PROCEDURE abm.Anunciante_ConsultarPorId
     @id_anunciante INT
 AS
 BEGIN
@@ -126,7 +126,7 @@ BEGIN
 END;
 GO
 
-CREATE OR ALTER PROCEDURE dbo.Anunciante_Listar
+CREATE OR ALTER PROCEDURE abm.Anunciante_Listar
 AS
 BEGIN
     SET NOCOUNT ON;

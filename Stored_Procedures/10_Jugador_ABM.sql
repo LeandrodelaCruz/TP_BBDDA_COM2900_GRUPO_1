@@ -20,7 +20,7 @@
 
 
 /* ==================== Jugador: ALTA ==================== */
-CREATE OR ALTER PROCEDURE dbo.Jugador_Alta
+CREATE OR ALTER PROCEDURE abm.Jugador_Alta
     @fecha_nacimiento DATE,
     @club_origen NVARCHAR(100),
     @apellido NVARCHAR(60),
@@ -67,7 +67,7 @@ END;
 GO
 
 /* ==================== Jugador: MODIFICACIÓN ==================== */
-CREATE OR ALTER PROCEDURE dbo.Jugador_Modificar
+CREATE OR ALTER PROCEDURE abm.Jugador_Modificar
     @id_jugador INT,
     @fecha_nacimiento DATE,
     @club_origen NVARCHAR(100),
@@ -114,7 +114,7 @@ END;
 GO
 
 /* ==================== Jugador: BAJA ==================== */
-CREATE OR ALTER PROCEDURE dbo.Jugador_Baja
+CREATE OR ALTER PROCEDURE abm.Jugador_Baja
     @id_jugador INT
 AS
 BEGIN
