@@ -42,3 +42,14 @@ BEGIN
     EXEC('CREATE SCHEMA test;');
 END
 GO
+
+--5. Crear el esquema 'importaciones' si no existe
+IF NOT EXISTS (
+    SELECT 1
+    FROM sys.schemas
+    WHERE name = N'importacion'
+)
+BEGIN
+    EXEC(N'CREATE SCHEMA importacion');
+END;
+GO
