@@ -25,6 +25,8 @@ GO
 
 CREATE OR ALTER PROCEDURE abm.Partidos_Alta
     @id_sede           INT,
+	@id_seleccion_1     INT,
+    @id_seleccion_2     INT,
     @fecha             DATE,
     @horario_local     DATETIME2(0),
     @horario_UTC       DATETIME2(0),
@@ -41,23 +43,35 @@ BEGIN
         ('GRUPOS'), ('DIECISEISAVOS'), ('OCTAVOS'), ('CUARTOS'),
         ('SEMIFINAL'), ('TERCER PUESTO'), ('FINAL');
 
-    -- Validaci�n 1: sede existente
+    -- Validación 1: sede existente
     IF NOT EXISTS (SELECT 1 FROM dbo.Sede WHERE id_sede = @id_sede)
         SET @errores += N'- No existe la sede indicada. ';
 
-    -- Validaci�n 2: fase v�lida
-    IF NOT EXISTS (SELECT 1 FROM @fasesValidas WHERE f = @fase)
-        SET @errores += N'- La fase indicada no es v�lida. ';
+	-- Validación 2: selección 1 existente
+    IF NOT EXISTS (SELECT 1 FROM dbo.Seleccion WHERE id_seleccion = @id_seleccion_1)
+        SET @errores += N'- No existe la selección 1 indicada. ';
 
-    -- Validaci�n 3: horario local y UTC no nulos
+    -- Validación 3: selección 2 existente
+    IF NOT EXISTS (SELECT 1 FROM dbo.Seleccion WHERE id_seleccion = @id_seleccion_2)
+        SET @errores += N'- No existe la selección 2 indicada. ';
+
+    -- Validación 4: selecciones distintas
+    IF @id_seleccion_1 = @id_seleccion_2
+        SET @errores += N'- Las dos selecciones del partido deben ser distintas. ';
+
+    -- Validación 5: fase valida
+    IF NOT EXISTS (SELECT 1 FROM @fasesValidas WHERE f = @fase)
+        SET @errores += N'- La fase indicada no es valida. ';
+
+    -- Validación 6: horario local y UTC no nulos
     IF @horario_local IS NULL OR @horario_UTC IS NULL
         SET @errores += N'- Los horarios local y UTC son obligatorios. ';
 
-    -- Validaci�n 4: asistencia no negativa
+    -- Validación 7: asistencia no negativa
     IF @asistencia_publico IS NOT NULL AND @asistencia_publico < 0
         SET @errores += N'- La asistencia no puede ser negativa. ';
 
-    -- Validaci�n 5: asistencia no supera capacidad de la sede
+    -- Validación 8: asistencia no supera capacidad de la sede
     IF @asistencia_publico IS NOT NULL
        AND EXISTS (
             SELECT 1 FROM dbo.Sede
@@ -66,7 +80,7 @@ BEGIN
        )
         SET @errores += N'- La asistencia supera la capacidad de la sede. ';
 
-    -- Validaci�n 6: fecha coherente con horario local
+    -- Validación 9: fecha coherente con horario local
     IF @horario_local IS NOT NULL AND CAST(@horario_local AS DATE) <> @fecha
         SET @errores += N'- La fecha no coincide con la del horario local. ';
 
@@ -77,9 +91,9 @@ BEGIN
     END
 
     BEGIN TRY
-        INSERT INTO dbo.Partido (id_sede, fecha, horario_local, horario_UTC,
+        INSERT INTO dbo.Partido (id_sede, id_seleccion_1, id_seleccion_2, fecha, horario_local, horario_UTC,
                                  fase, resultado_final, asistencia_publico)
-        VALUES (@id_sede, @fecha, @horario_local, @horario_UTC,
+        VALUES (@id_sede, @id_seleccion_1, @id_seleccion_2, @fecha, @horario_local, @horario_UTC,
                 @fase, @resultado_final, @asistencia_publico);
 
         SELECT SCOPE_IDENTITY() AS id_partido_generado;
@@ -101,7 +115,7 @@ BEGIN
     IF NOT EXISTS (SELECT 1 FROM dbo.Partido WHERE id_partido = @id_partido)
         SET @errores += N'- No existe el partido indicado. ';
 
-    -- Validaci�n de dependencias: no borrar si tiene datos asociados
+    -- Validación de dependencias
     IF EXISTS (SELECT 1 FROM dbo.Formacion WHERE id_partido = @id_partido)
         SET @errores += N'- No se puede eliminar: el partido tiene formaciones asociadas. ';
 
@@ -124,9 +138,8 @@ BEGIN
     END
 
     BEGIN TRY
-        -- Primero eliminamos la relaci�n N:N
-        DELETE FROM dbo.Partido_Seleccion WHERE id_partido = @id_partido;
-        DELETE FROM dbo.Partido WHERE id_partido = @id_partido;
+        -- Primero eliminamos la relación N:N
+		DELETE FROM dbo.Partido WHERE id_partido = @id_partido;
 
         SELECT @id_partido AS id_partido_eliminado;
     END TRY
@@ -139,6 +152,8 @@ GO
 CREATE OR ALTER PROCEDURE abm.Partidos_Modificacion
     @id_partido        INT,
     @id_sede           INT,
+	@id_seleccion_1     INT,
+    @id_seleccion_2     INT,
     @fecha             DATE,
     @horario_local     DATETIME2(0),
     @horario_UTC       DATETIME2(0),
@@ -161,8 +176,17 @@ BEGIN
     IF NOT EXISTS (SELECT 1 FROM dbo.Sede WHERE id_sede = @id_sede)
         SET @errores += N'- No existe la sede indicada. ';
 
+	IF NOT EXISTS (SELECT 1 FROM dbo.Seleccion WHERE id_seleccion = @id_seleccion_1)
+        SET @errores += N'- No existe la selección 1 indicada. ';
+
+    IF NOT EXISTS (SELECT 1 FROM dbo.Seleccion WHERE id_seleccion = @id_seleccion_2)
+        SET @errores += N'- No existe la selección 2 indicada. ';
+
+    IF @id_seleccion_1 = @id_seleccion_2
+        SET @errores += N'- Las dos selecciones del partido deben ser distintas. ';
+
     IF NOT EXISTS (SELECT 1 FROM @fasesValidas WHERE f = @fase)
-        SET @errores += N'- La fase indicada no es v�lida. ';
+        SET @errores += N'- La fase indicada no es válida. ';
 
     IF @horario_local IS NULL OR @horario_UTC IS NULL
         SET @errores += N'- Los horarios local y UTC son obligatorios. ';
@@ -189,6 +213,8 @@ BEGIN
     BEGIN TRY
         UPDATE dbo.Partido
         SET id_sede            = @id_sede,
+		    id_seleccion_1     = @id_seleccion_1,
+            id_seleccion_2     = @id_seleccion_2,
             fecha              = @fecha,
             horario_local      = @horario_local,
             horario_UTC        = @horario_UTC,

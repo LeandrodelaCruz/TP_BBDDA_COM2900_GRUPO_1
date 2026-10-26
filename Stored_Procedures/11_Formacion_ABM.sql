@@ -39,11 +39,6 @@ BEGIN
     IF NOT EXISTS (SELECT 1 FROM dbo.Seleccion WHERE id_seleccion = @id_seleccion)
         SET @errores += N'- No existe la selecci�n indicada. ';
 
-    -- Validaci�n: la selecci�n debe estar asociada al partido
-    IF NOT EXISTS (SELECT 1 FROM dbo.Partido_Seleccion
-                   WHERE id_partido = @id_partido AND id_seleccion = @id_seleccion)
-        SET @errores += N'- La selecci�n no participa en el partido indicado. ';
-
     -- Validaci�n: no repetir formaci�n para el mismo partido-selecci�n
     IF EXISTS (SELECT 1 FROM dbo.Formacion
                WHERE id_partido = @id_partido AND id_seleccion = @id_seleccion)
@@ -121,10 +116,6 @@ BEGIN
 
     IF NOT EXISTS (SELECT 1 FROM dbo.Seleccion WHERE id_seleccion = @id_seleccion)
         SET @errores += N'- No existe la selecci�n indicada. ';
-
-    IF NOT EXISTS (SELECT 1 FROM dbo.Partido_Seleccion
-                   WHERE id_partido = @id_partido AND id_seleccion = @id_seleccion)
-        SET @errores += N'- La selecci�n no participa en el partido indicado. ';
 
     -- No permitir cambiar a una combinaci�n ya usada por otra formaci�n
     IF EXISTS (SELECT 1 FROM dbo.Formacion
