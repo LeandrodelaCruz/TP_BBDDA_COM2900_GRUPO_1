@@ -19,6 +19,13 @@
 */
 
 
+USE MUNDIALDEFUTBOL;
+GO
+
+SET NOCOUNT ON;
+GO
+
+
 /* ==================== Pieza_Publicitaria: ALTA ==================== */
 CREATE OR ALTER PROCEDURE abm.Pieza_Publicitaria_Alta
     @id_campania INT,
