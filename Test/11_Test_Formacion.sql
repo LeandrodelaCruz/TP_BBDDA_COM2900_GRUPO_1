@@ -2,20 +2,19 @@
     Universidad: Universidad Nacional de la Matanza
     Materia: Bases de Datos Aplicada
     Integrantes: 
-				Rodr�guez, El�as Uriel 44143869
+				Rodríguez, Elías Uriel 44143869
 				Clara, Lucas Nicolas 46265738
 				Caro, Nicolas Dario 40766722
 				de la Cruz, Leandro Ariel 42022547
     Fecha: 06/10/2026
 
-    Descripci�n:
+    Descripción:
     Script de testing del Stored Procedure ABM de la tabla:
         - dbo.Formacion
 
     Cada bloque incluye el RESULTADO ESPERADO en comentarios.
     Se prueban tanto casos exitosos como casos con validaciones fallidas.
 
-    Ejecutar despu�s de SP Formacion ABM.sql
 */
 
 USE MUNDIALDEFUTBOL;
@@ -27,13 +26,13 @@ BEGIN
     SET NOCOUNT ON;
 
     /*
-       datos m�nimos para tests
+       datos mínimos para tests
     */
 
     -- Sede de prueba
     IF NOT EXISTS (SELECT 1 FROM dbo.Sede WHERE nombre_estadio = N'Estadio Testing')
         INSERT INTO dbo.Sede (nombre_estadio, ciudad, pais, capacidad, huso_horario)
-        VALUES (N'Estadio Testing', N'Ciudad Test', N'Pa�s Test', 50000, 'UTC-03:00');
+        VALUES (N'Estadio Testing', N'Ciudad Test', N'País Test', 50000, 'UTC-03:00');
 
     -- Selecciones de prueba
     IF NOT EXISTS (SELECT 1 FROM dbo.Seleccion WHERE pais = N'Testlandia')
@@ -48,7 +47,7 @@ BEGIN
     DECLARE @id_sel_test1    INT = (SELECT id_seleccion FROM dbo.Seleccion WHERE pais = N'Testlandia');
     DECLARE @id_sel_test2    INT = (SELECT id_seleccion FROM dbo.Seleccion WHERE pais = N'Pruebalandia');
 
-    -- Jugadores de prueba (2 por selecci�n)
+    -- Jugadores de prueba (2 por selección)
     IF NOT EXISTS (SELECT 1 FROM dbo.Jugador WHERE nombre = N'JugadorBaja1')
         INSERT INTO dbo.Jugador (id_seleccion, nombre, apellido, fecha_nacimiento, club_origen, posicion, dorsal)
         VALUES (@id_sel_test1, N'JugadorBaja1', N'Test', '1995-01-01', N'Club Test', N'Delantero', 10);
@@ -66,22 +65,12 @@ BEGIN
     DECLARE @id_jug_sel2 INT = (SELECT id_jugador FROM dbo.Jugador WHERE nombre = N'JugadorSel2');
 
     -- Partido de prueba
+    -- IMPORTANTE: ahora se informan id_seleccion_1 e id_seleccion_2 (NOT NULL)
     IF NOT EXISTS (SELECT 1 FROM dbo.Partido WHERE resultado_final = N'TEST-ABM')
-        INSERT INTO dbo.Partido (id_sede, fecha, horario_local, horario_UTC, fase, resultado_final, asistencia_publico)
-        VALUES (@id_sede_test, '2026-06-15', '2026-06-15 18:00:00', '2026-06-15 21:00:00', 'GRUPOS', N'TEST-ABM', 30000);
+        INSERT INTO dbo.Partido (id_sede, fecha, horario_local, horario_UTC, fase, resultado_final, asistencia_publico, id_seleccion_1, id_seleccion_2)
+        VALUES (@id_sede_test, '2026-06-15', '2026-06-15 18:00:00', '2026-06-15 21:00:00', 'GRUPOS', N'TEST-ABM', 30000, @id_sel_test1, @id_sel_test2);
 
     DECLARE @id_partido_test INT = (SELECT id_partido FROM dbo.Partido WHERE resultado_final = N'TEST-ABM');
-
-    -- Relaci�n partido-selecci�n de prueba
-    IF NOT EXISTS (SELECT 1 FROM dbo.Partido_Seleccion
-                   WHERE id_partido = @id_partido_test AND id_seleccion = @id_sel_test1)
-        INSERT INTO dbo.Partido_Seleccion (id_partido, id_seleccion)
-        VALUES (@id_partido_test, @id_sel_test1);
-
-    IF NOT EXISTS (SELECT 1 FROM dbo.Partido_Seleccion
-                   WHERE id_partido = @id_partido_test AND id_seleccion = @id_sel_test2)
-        INSERT INTO dbo.Partido_Seleccion (id_partido, id_seleccion)
-        VALUES (@id_partido_test, @id_sel_test2);
 
     PRINT '=== Datos de apoyo preparados ===';
 
@@ -98,16 +87,37 @@ BEGIN
     DECLARE @id_sel1_b4 INT = (SELECT id_seleccion FROM dbo.Seleccion WHERE pais = N'Testlandia');
 
     EXEC abm.Formacion_Alta
-        @id_partido_b4      = @id_partido_b4,
+        @id_partido      = @id_partido_b4,
         @id_seleccion    = @id_sel1_b4,
         @esquema_tactico = '4-3-3';
     PRINT 'OK - Alta Formacion ejecutada';
 
     /*
-    	CASO 2: Alta fallida - selecci�n no participa del partido
+    	CASO 2: Alta fallida - selección no participa del partido
     	RESULTADO ESPERADO: error
-    	"- La selecci�n no participa en el partido indicado."
+    	"- La selección no participa en el partido indicado."
+    	
+    	NOTA: antes se usaba N'TEST-PS', que nunca se insertaba. Se reutiliza
+    	el partido TEST-ABM pero con una selección que no participa.
+    	Para que el caso tenga sentido, se crea un tercer partido con otras
+    	selecciones y se intenta meter una selección ajena.
     */
+
+    -- Partido auxiliar con selecciones distintas (para el caso negativo)
+    IF NOT EXISTS (SELECT 1 FROM dbo.Seleccion WHERE pais = N'Ajenalandia')
+        INSERT INTO dbo.Seleccion (pais, confederacion, grupo_asignado)
+        VALUES (N'Ajenalandia', N'TEST', 'B');
+
+    IF NOT EXISTS (SELECT 1 FROM dbo.Seleccion WHERE pais = N'Otralandia')
+        INSERT INTO dbo.Seleccion (pais, confederacion, grupo_asignado)
+        VALUES (N'Otralandia', N'TEST', 'B');
+
+    DECLARE @id_sel_ajena  INT = (SELECT id_seleccion FROM dbo.Seleccion WHERE pais = N'Ajenalandia');
+    DECLARE @id_sel_otra   INT = (SELECT id_seleccion FROM dbo.Seleccion WHERE pais = N'Otralandia');
+
+    IF NOT EXISTS (SELECT 1 FROM dbo.Partido WHERE resultado_final = N'TEST-PS')
+        INSERT INTO dbo.Partido (id_sede, fecha, horario_local, horario_UTC, fase, resultado_final, asistencia_publico, id_seleccion_1, id_seleccion_2)
+        VALUES (@id_sede_test, '2026-06-16', '2026-06-16 18:00:00', '2026-06-16 21:00:00', 'GRUPOS', N'TEST-PS', 25000, @id_sel_ajena, @id_sel_otra);
 
     DECLARE @id_partido_b5 INT = (SELECT id_partido FROM dbo.Partido WHERE resultado_final = N'TEST-PS');
     DECLARE @id_sel1_b5 INT = (SELECT id_seleccion FROM dbo.Seleccion WHERE pais = N'Testlandia');
@@ -117,16 +127,16 @@ BEGIN
             @id_partido_b5      = @id_partido_b5,
             @id_seleccion    = @id_sel1_b5,
             @esquema_tactico = '4-4-2';
-        PRINT 'ERROR: no se lanz� la excepci�n esperada';
+        PRINT 'ERROR: no se lanzó la excepción esperada';
     END TRY
     BEGIN CATCH
         PRINT 'OK - Error esperado: ' + ERROR_MESSAGE();
     END CATCH
 
     /*
-    	CASO 3: Alta fallida - duplicado (mismo partido + selecci�n)
+    	CASO 3: Alta fallida - duplicado (mismo partido + selección)
     	RESULTADO ESPERADO: error
-    	"- Ya existe una formaci�n para ese partido y selecci�n."
+    	"- Ya existe una formación para ese partido y selección."
     */
 
     DECLARE @id_partido_b6 INT = (SELECT id_partido FROM dbo.Partido WHERE resultado_final = N'TEST-ABM');
@@ -137,15 +147,15 @@ BEGIN
             @id_partido_b6      = @id_partido_b6,
             @id_seleccion    = @id_sel1_b6,
             @esquema_tactico = '3-5-2';
-        PRINT 'ERROR: no se lanz� la excepci�n esperada';
+        PRINT 'ERROR: no se lanzó la excepción esperada';
     END TRY
     BEGIN CATCH
         PRINT 'OK - Error esperado: ' + ERROR_MESSAGE();
     END CATCH
 
     /*
-    	CASO 4: Modificaci�n exitosa
-    	RESULTADO ESPERADO: se actualiza el esquema t�ctico.
+    	CASO 4: Modificación exitosa
+    	RESULTADO ESPERADO: se actualiza el esquema táctico.
     */
 
     DECLARE @id_formacion INT = (SELECT TOP 1 id_formacion FROM dbo.Formacion
@@ -158,24 +168,21 @@ BEGIN
     BEGIN
         EXEC abm.Formacion_Modificacion
             @id_formacion    = @id_formacion,
-            @id_partido_b7      = @id_partido_b7,
+            @id_partido      = @id_partido_b7,
             @id_seleccion    = @id_sel1_b7,
             @esquema_tactico = '4-2-3-1';
-        PRINT 'OK - Modificaci�n de Formaci�n ejecutada';
+        PRINT 'OK - Modificación de Formación ejecutada';
     END
 
     /*
-    	CASO 5: Baja fallida - formaci�n con jugadores
+    	CASO 5: Baja fallida - formación con jugadores
     	RESULTADO ESPERADO: error
-    	"- No se puede eliminar: la formaci�n tiene jugadores asociados."
+    	"- No se puede eliminar: la formación tiene jugadores asociados."
     */
-
-    -- Se eliminio formaci�n anterior
-    -- Se crea una nueva
 
     -- 1. Obtener IDs
     DECLARE @id_partido_24 INT = (SELECT id_partido FROM dbo.Partido WHERE resultado_final = N'TEST-ABM');
-    DECLARE @id_sel_24     INT = (SELECT id_seleccion FROM dbo.Seleccion WHERE pais = N'Pruebalandia'); -- ID 37
+    DECLARE @id_sel_24     INT = (SELECT id_seleccion FROM dbo.Seleccion WHERE pais = N'Pruebalandia');
 
     -- 2. Insertar jugadores NUEVOS de Pruebalandia (si no existen)
     IF NOT EXISTS (SELECT 1 FROM dbo.Jugador WHERE nombre = N'JugadorPrueba1' AND id_seleccion = @id_sel_24)
@@ -190,7 +197,7 @@ BEGIN
     DECLARE @id_jug_prueba1 INT = (SELECT id_jugador FROM dbo.Jugador WHERE nombre = N'JugadorPrueba1' AND id_seleccion = @id_sel_24);
     DECLARE @id_jug_prueba2 INT = (SELECT id_jugador FROM dbo.Jugador WHERE nombre = N'JugadorPrueba2' AND id_seleccion = @id_sel_24);
 
-    -- 4. Crear formaci�n para Pruebalandia si no existe
+    -- 4. Crear formación para Pruebalandia si no existe
     IF NOT EXISTS (SELECT 1 FROM dbo.Formacion
                    WHERE id_partido = @id_partido_24 AND id_seleccion = @id_sel_24)
     BEGIN
@@ -202,7 +209,7 @@ BEGIN
                                     WHERE id_partido = @id_partido_24
                                       AND id_seleccion = @id_sel_24);
 
-    -- 5. Asociar NUEVOS jugadores a formaci�n
+    -- 5. Asociar NUEVOS jugadores a formación
     IF NOT EXISTS (SELECT 1 FROM dbo.Formacion_Jugador
                    WHERE id_formacion = @id_formacion_24 AND id_jugador = @id_jug_prueba1)
         INSERT INTO dbo.Formacion_Jugador (id_formacion, id_jugador, posicion_en_cancha, dorsal_en_cancha, es_titular)
@@ -216,7 +223,7 @@ BEGIN
     -- 6. Se prueba SP
     BEGIN TRY
         EXEC abm.Formacion_Baja @id_formacion = @id_formacion_24;
-        PRINT 'ERROR: no se lanz� la excepci�n esperada';
+        PRINT 'ERROR: no se lanzó la excepción esperada';
     END TRY
     BEGIN CATCH
         PRINT 'OK - Error esperado: ' + ERROR_MESSAGE();
@@ -226,7 +233,6 @@ BEGIN
     delete dbo.Formacion_Jugador
     delete dbo.Formacion
     delete dbo.Jugador
-    delete dbo.Partido_Seleccion
     delete dbo.Partido
     delete dbo.Sede
     delete dbo.Seleccion
@@ -237,7 +243,6 @@ BEGIN
     select top 20 * from [MUNDIALDEFUTBOL].[dbo].[Seleccion]
     select top 20 * from [MUNDIALDEFUTBOL].[dbo].[Jugador]
     select top 20 * from [MUNDIALDEFUTBOL].[dbo].[Partido]
-    select top 20 * from [MUNDIALDEFUTBOL].[dbo].[Partido_Seleccion]
     select top 20 * from [MUNDIALDEFUTBOL].[dbo].[Formacion]
     select top 20 * from [MUNDIALDEFUTBOL].[dbo].[Formacion_Jugador]
     select top 20 * from [MUNDIALDEFUTBOL].[dbo].[Reemplazo]

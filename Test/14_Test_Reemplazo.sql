@@ -67,21 +67,10 @@ BEGIN
 
     -- Partido de prueba
     IF NOT EXISTS (SELECT 1 FROM dbo.Partido WHERE resultado_final = N'TEST-ABM')
-        INSERT INTO dbo.Partido (id_sede, fecha, horario_local, horario_UTC, fase, resultado_final, asistencia_publico)
-        VALUES (@id_sede_test, '2026-06-15', '2026-06-15 18:00:00', '2026-06-15 21:00:00', 'GRUPOS', N'TEST-ABM', 30000);
+        INSERT INTO dbo.Partido (id_sede, fecha, horario_local, horario_UTC, fase, resultado_final, asistencia_publico, id_seleccion_1, id_seleccion_2)
+        VALUES (@id_sede_test, '2026-06-15', '2026-06-15 18:00:00', '2026-06-15 21:00:00', 'GRUPOS', N'TEST-ABM', 30000, @id_sel_test1, @id_sel_test2);
 
     DECLARE @id_partido_test INT = (SELECT id_partido FROM dbo.Partido WHERE resultado_final = N'TEST-ABM');
-
-    -- Relaci�n partido-selecci�n de prueba
-    IF NOT EXISTS (SELECT 1 FROM dbo.Partido_Seleccion
-                   WHERE id_partido = @id_partido_test AND id_seleccion = @id_sel_test1)
-        INSERT INTO dbo.Partido_Seleccion (id_partido, id_seleccion)
-        VALUES (@id_partido_test, @id_sel_test1);
-
-    IF NOT EXISTS (SELECT 1 FROM dbo.Partido_Seleccion
-                   WHERE id_partido = @id_partido_test AND id_seleccion = @id_sel_test2)
-        INSERT INTO dbo.Partido_Seleccion (id_partido, id_seleccion)
-        VALUES (@id_partido_test, @id_sel_test2);
 
     PRINT '=== Datos de apoyo preparados ===';
 
@@ -180,7 +169,7 @@ BEGIN
     IF @id_reemplazo_b8 IS NOT NULL
     BEGIN
         EXEC abm.Reemplazo_Modificacion
-            @id_reemplazo_b8    = @id_reemplazo_b8,
+            @id_reemplazo    = @id_reemplazo_b8,
             @id_jugador_baja = @id_jug_baja_b8,
             @id_jugador_alta = @id_jug_alta_b8,
             @fecha_cambio    = '2026-06-02',
@@ -201,7 +190,7 @@ BEGIN
 
     IF @id_reemplazo_b9 IS NOT NULL
     BEGIN
-        EXEC abm.Reemplazo_Baja @id_reemplazo_b9 = @id_reemplazo_b9;
+        EXEC abm.Reemplazo_Baja @id_reemplazo = @id_reemplazo_b9;
         PRINT 'OK - Baja de Reemplazo ejecutada';
     END
     ELSE
@@ -223,7 +212,6 @@ BEGIN
     -- Borramos lote de prueba
     delete dbo.Formacion
     delete dbo.Jugador
-    delete dbo.Partido_Seleccion
     delete dbo.Partido
     delete dbo.Sede
     delete dbo.Seleccion
@@ -234,7 +222,6 @@ BEGIN
     select top 20 * from [MUNDIALDEFUTBOL].[dbo].[Seleccion]
     select top 20 * from [MUNDIALDEFUTBOL].[dbo].[Jugador]
     select top 20 * from [MUNDIALDEFUTBOL].[dbo].[Partido]
-    select top 20 * from [MUNDIALDEFUTBOL].[dbo].[Partido_Seleccion]
     select top 20 * from [MUNDIALDEFUTBOL].[dbo].[Formacion]
     select top 20 * from [MUNDIALDEFUTBOL].[dbo].[Reemplazo]
 END;

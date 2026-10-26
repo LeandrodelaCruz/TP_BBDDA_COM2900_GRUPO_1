@@ -24,6 +24,152 @@ GO
    TABLA: dbo.Formacion_Jugador
    ========================================================= */
 
+CREATE OR ALTER FUNCTION abm.fn_JugadorSuspendidoParaPartido
+(
+    @id_jugador INT,
+    @id_partido INT
+)
+RETURNS BIT
+AS
+BEGIN
+    DECLARE @fecha_partido DATE;
+
+    SELECT @fecha_partido = fecha
+    FROM dbo.Partido
+    WHERE id_partido = @id_partido;
+
+    -- Si el partido no existe, no se puede evaluar.
+    IF @fecha_partido IS NULL
+        RETURN 0;
+
+    DECLARE @eventos TABLE
+    (
+        orden INT PRIMARY KEY,
+        fecha DATE NOT NULL,
+        tipo_evento VARCHAR(20) NOT NULL
+    );
+
+    /*
+       Construimos una secuencia de eventos anteriores
+       al partido que queremos evaluar.
+
+       TIPOS:
+       FORMACION: el jugador figura en una formación.
+       AMARILLA:  recibe una amarilla en un partido.
+       EXPULSION: recibe una expulsión.
+    */
+
+    ;WITH Eventos AS
+    (
+        -- Una amarilla por partido como máximo para la acumulación.
+        SELECT DISTINCT
+            p.fecha,
+            'AMARILLA' AS tipo_evento,
+            p.id_partido,
+            1 AS prioridad
+        FROM dbo.Incidencia i
+        INNER JOIN dbo.Partido p
+            ON p.id_partido = i.id_partido
+        WHERE i.id_jugador = @id_jugador
+          AND i.tipo = 'AMONESTACION'
+          AND p.fecha < @fecha_partido
+
+        UNION ALL
+
+        -- Las expulsiones generan una suspensión.
+        SELECT
+            p.fecha,
+            'EXPULSION',
+            p.id_partido,
+            2
+        FROM dbo.Incidencia i
+        INNER JOIN dbo.Partido p
+            ON p.id_partido = i.id_partido
+        WHERE i.id_jugador = @id_jugador
+          AND i.tipo = 'EXPULSION'
+          AND p.fecha < @fecha_partido
+
+        UNION ALL
+
+        -- Figurar en una formación permite cumplir una suspensión.
+        SELECT DISTINCT
+            p.fecha,
+            'FORMACION',
+            p.id_partido,
+            0
+        FROM dbo.Formacion_Jugador fj
+        INNER JOIN dbo.Formacion f
+            ON f.id_formacion = fj.id_formacion
+        INNER JOIN dbo.Partido p
+            ON p.id_partido = f.id_partido
+        WHERE fj.id_jugador = @id_jugador
+          AND p.fecha < @fecha_partido
+    ),
+    EventosOrdenados AS
+    (
+        SELECT
+            ROW_NUMBER() OVER (
+                ORDER BY fecha, prioridad, id_partido, tipo_evento
+            ) AS orden,
+            fecha,
+            tipo_evento
+        FROM Eventos
+    )
+    INSERT INTO @eventos (orden, fecha, tipo_evento)
+    SELECT orden, fecha, tipo_evento
+    FROM EventosOrdenados;
+
+    DECLARE @orden INT = 1;
+    DECLARE @total INT;
+
+    DECLARE @tipo_evento VARCHAR(20);
+
+    DECLARE @amarillas INT = 0;
+    DECLARE @suspendido BIT = 0;
+
+    SELECT @total = COUNT(*)
+    FROM @eventos;
+
+    WHILE @orden <= @total
+    BEGIN
+        SELECT @tipo_evento = tipo_evento
+        FROM @eventos
+        WHERE orden = @orden;
+
+        IF @tipo_evento = 'FORMACION'
+        BEGIN
+            -- La formación cumple la suspensión pendiente.
+            IF @suspendido = 1
+            BEGIN
+                SET @suspendido = 0;
+                SET @amarillas = 0;
+            END
+        END
+        ELSE IF @tipo_evento = 'EXPULSION'
+        BEGIN
+            -- La expulsión genera una suspensión.
+            SET @suspendido = 1;
+        END
+        ELSE IF @tipo_evento = 'AMARILLA'
+        BEGIN
+            -- Mientras exista una suspensión pendiente,
+            -- no acumulamos nuevas amarillas.
+            IF @suspendido = 0
+            BEGIN
+                SET @amarillas = @amarillas + 1;
+
+                IF @amarillas >= 2
+                    SET @suspendido = 1;
+            END
+        END;
+
+        SET @orden = @orden + 1;
+    END;
+
+    RETURN @suspendido;
+END;
+GO
+
 CREATE OR ALTER PROCEDURE abm.FormacionJugador_Alta
     @id_formacion       INT,
     @id_jugador         INT,
@@ -94,11 +240,22 @@ BEGIN
        )
         SET @errores += N'- El jugador est� expulsado en este partido y no puede integrar la formaci�n. ';
 
-    IF @errores <> N''
-    BEGIN
-        RAISERROR(@errores, 16, 1);
-        RETURN;
-    END
+	-- Validación: el jugador no debe tener una suspensión pendiente.
+	IF @id_partido_formacion IS NOT NULL
+	 AND abm.fn_JugadorSuspendidoParaPartido(
+			   @id_jugador,
+			   @id_partido_formacion
+		   ) = 1
+	BEGIN
+		SET @errores +=
+			N'- El jugador está suspendido para este partido y no puede integrar la formación. ';
+	END;
+
+		IF @errores <> N''
+		BEGIN
+			RAISERROR(@errores, 16, 1);
+			RETURN;
+		END
 
     BEGIN TRY
         INSERT INTO dbo.Formacion_Jugador
