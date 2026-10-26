@@ -18,6 +18,13 @@
 */
 
 
+USE MUNDIALDEFUTBOL;
+GO
+
+SET NOCOUNT ON;
+GO
+
+
 /* ==================== Pieza_Para_Region: ALTA ==================== */
 CREATE OR ALTER PROCEDURE abm.Pieza_Para_Region_Alta
     @id_pieza INT,

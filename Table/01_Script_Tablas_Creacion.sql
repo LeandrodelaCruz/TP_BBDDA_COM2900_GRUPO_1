@@ -314,36 +314,6 @@ BEGIN
 END;
 GO
 
-/*
-Se quita por:
-
-partido selección está demás, genera 2 filas en una tabla aparte y complica mas las consultas conjuntas,
-es mejor tener 2 campos id selección en la tabla partido. 
-
-/* Relaci�n N:N Partido - Selecci�n */
-
-IF OBJECT_ID('dbo.Partido_Seleccion', 'U') IS NULL
-BEGIN
-    CREATE TABLE dbo.Partido_Seleccion
-    (
-        id_partido INT NOT NULL,
-        id_seleccion INT NOT NULL,
-
-        CONSTRAINT PK_Partido_Seleccion
-            PRIMARY KEY (id_partido, id_seleccion),
-
-        CONSTRAINT FK_PartidoSeleccion_Partido
-            FOREIGN KEY (id_partido)
-            REFERENCES dbo.Partido(id_partido),
-
-        CONSTRAINT FK_PartidoSeleccion_Seleccion
-            FOREIGN KEY (id_seleccion)
-            REFERENCES dbo.Seleccion(id_seleccion)
-    );
-END;
-GO
-*/
-
 
 /* =========================================================
    5. FORMACIONES

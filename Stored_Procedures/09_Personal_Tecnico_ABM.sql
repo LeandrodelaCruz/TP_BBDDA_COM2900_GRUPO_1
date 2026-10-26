@@ -18,6 +18,14 @@
 
 */
 
+
+USE MUNDIALDEFUTBOL;
+GO
+
+SET NOCOUNT ON;
+GO
+
+
 /* ==================== Personal_Tecnico: ALTA ==================== */
 CREATE OR ALTER PROCEDURE abm.Personal_Tecnico_Alta
     @nombre NVARCHAR(60),

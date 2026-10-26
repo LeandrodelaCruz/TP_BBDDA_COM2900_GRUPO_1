@@ -18,6 +18,14 @@
 
 */
 
+
+USE MUNDIALDEFUTBOL;
+GO
+
+SET NOCOUNT ON;
+GO
+
+
 /* ==================== Campania: ALTA ==================== */
 CREATE OR ALTER PROCEDURE abm.Campania_Alta
     @descripcion NVARCHAR(250),
