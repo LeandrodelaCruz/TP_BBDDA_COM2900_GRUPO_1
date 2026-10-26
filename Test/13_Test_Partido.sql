@@ -2,20 +2,20 @@
     Universidad: Universidad Nacional de la Matanza
     Materia: Bases de Datos Aplicada
     Integrantes: 
-				Rodr�guez, El�as Uriel 44143869
+				Rodríguez, Elías Uriel 44143869
 				Clara, Lucas Nicolas 46265738
 				Caro, Nicolas Dario 40766722
 				de la Cruz, Leandro Ariel 42022547
     Fecha: 06/10/2026
 
-    Descripci�n:
+    Descripcion:
     Script de testing del Stored Procedure ABM de la tabla:
         - dbo.Partido
 
     Cada bloque incluye el RESULTADO ESPERADO en comentarios.
     Se prueban tanto casos exitosos como casos con validaciones fallidas.
 
-    Ejecutar despu�s de SP Partido ABM.sql
+    Ejecutar despues de SP Partido ABM.sql
 */
 
 USE MUNDIALDEFUTBOL;
@@ -27,7 +27,7 @@ BEGIN
     SET NOCOUNT ON;
 
     /*
-       datos m�nimos para tests
+       datos mínimos para tests
     */
 
     -- Sede de prueba
@@ -48,7 +48,7 @@ BEGIN
     DECLARE @id_sel_test1    INT = (SELECT id_seleccion FROM dbo.Seleccion WHERE pais = N'Testlandia');
     DECLARE @id_sel_test2    INT = (SELECT id_seleccion FROM dbo.Seleccion WHERE pais = N'Pruebalandia');
 
-    -- Jugadores de prueba (2 por selecci�n)
+    -- Jugadores de prueba 
     IF NOT EXISTS (SELECT 1 FROM dbo.Jugador WHERE nombre = N'JugadorBaja1')
         INSERT INTO dbo.Jugador (id_seleccion, nombre, apellido, fecha_nacimiento, club_origen, posicion, dorsal)
         VALUES (@id_sel_test1, N'JugadorBaja1', N'Test', '1995-01-01', N'Club Test', N'Delantero', 10);
@@ -67,24 +67,12 @@ BEGIN
 
     -- Partido de prueba
     IF NOT EXISTS (SELECT 1 FROM dbo.Partido WHERE resultado_final = N'TEST-ABM')
-        INSERT INTO dbo.Partido (id_sede, fecha, horario_local, horario_UTC, fase, resultado_final, asistencia_publico)
-        VALUES (@id_sede_test, '2026-06-15', '2026-06-15 18:00:00', '2026-06-15 21:00:00', 'GRUPOS', N'TEST-ABM', 30000);
+        INSERT INTO dbo.Partido (id_sede, id_seleccion_1, id_seleccion_2, fecha, horario_local, horario_UTC, fase, resultado_final, asistencia_publico)
+        VALUES (@id_sede_test, @id_sel_test1, @id_sel_test2, '2026-06-15', '2026-06-15 18:00:00', '2026-06-15 21:00:00', 'GRUPOS', N'TEST-ABM', 30000);
 
     DECLARE @id_partido_test INT = (SELECT id_partido FROM dbo.Partido WHERE resultado_final = N'TEST-ABM');
 
-    -- Relaci�n partido-selecci�n de prueba
-    IF NOT EXISTS (SELECT 1 FROM dbo.Partido_Seleccion
-                   WHERE id_partido = @id_partido_test AND id_seleccion = @id_sel_test1)
-        INSERT INTO dbo.Partido_Seleccion (id_partido, id_seleccion)
-        VALUES (@id_partido_test, @id_sel_test1);
-
-    IF NOT EXISTS (SELECT 1 FROM dbo.Partido_Seleccion
-                   WHERE id_partido = @id_partido_test AND id_seleccion = @id_sel_test2)
-        INSERT INTO dbo.Partido_Seleccion (id_partido, id_seleccion)
-        VALUES (@id_partido_test, @id_sel_test2);
-
-
-    -- Formaci�n de prueba
+    -- Formacion de prueba
     IF NOT EXISTS (SELECT 1 FROM dbo.Formacion
                    WHERE id_partido = @id_partido_test AND id_seleccion = @id_sel_test1)
         INSERT INTO dbo.Formacion (id_partido, id_seleccion, esquema_tactico)
@@ -103,8 +91,11 @@ BEGIN
 
     DECLARE @id_sede_b4 INT = (SELECT id_sede FROM dbo.Sede WHERE nombre_estadio = N'Estadio Testing');
 
+	BEGIN TRY
     EXEC abm.Partidos_Alta
-        @id_sede_b4            = @id_sede_b4,
+        @id_sede            = @id_sede_b4,
+        @id_seleccion_1     = @id_sel_test1,
+        @id_seleccion_2     = @id_sel_test2,
         @fecha              = '2026-06-20',
         @horario_local      = '2026-06-20 15:00:00',
         @horario_UTC        = '2026-06-20 18:00:00',
@@ -112,30 +103,36 @@ BEGIN
         @resultado_final    = NULL,
         @asistencia_publico = 45000;
     PRINT 'OK - Alta Partido ejecutada';
-
-    /*
-    	CASO 2: Alta fallida - fase inv�lida
-    	RESULTADO ESPERADO: error con mensaje
-    	"- La fase indicada no es v�lida."
-    */
-
-    DECLARE @id_sede_b5 INT = (SELECT id_sede FROM dbo.Sede WHERE nombre_estadio = N'Estadio Testing');
-
-    BEGIN TRY
-        EXEC abm.Partidos_Alta
-            @id_sede_b5       = @id_sede_b5,
-            @fecha         = '2026-06-21',
-            @horario_local = '2026-06-21 15:00:00',
-            @horario_UTC   = '2026-06-21 18:00:00',
-            @fase          = 'FASE_INVENTADA';
-        PRINT 'ERROR: no se lanz� la excepci�n esperada';
     END TRY
     BEGIN CATCH
         PRINT 'OK - Error esperado: ' + ERROR_MESSAGE();
     END CATCH
 
     /*
-    	CASO 3: Alta fallida - sede inexistente + asistencia > capacidad
+    	CASO 2: Alta fallida - fase invalida
+    	RESULTADO ESPERADO: error con mensaje
+    	"- La fase indicada no es valida."
+    */
+
+    DECLARE @id_sede_b5 INT = (SELECT id_sede FROM dbo.Sede WHERE nombre_estadio = N'Estadio Testing');
+
+    BEGIN TRY
+        EXEC abm.Partidos_Alta
+            @id_sede       = @id_sede_b5,
+			@id_seleccion_1     = @id_sel_test1,
+            @id_seleccion_2     = @id_sel_test2,
+            @fecha         = '2026-06-21',
+            @horario_local = '2026-06-21 15:00:00',
+            @horario_UTC   = '2026-06-21 18:00:00',
+            @fase          = 'FASE_INVENTADA';
+        PRINT 'ERROR: no se lanzo la excepcion esperada';
+    END TRY
+    BEGIN CATCH
+        PRINT 'OK - Error esperado: ' + ERROR_MESSAGE();
+    END CATCH
+
+    /*
+    	CASO 3: Alta fallida - sede inexistente
     	RESULTADO ESPERADO: mensaje agrupado con al menos:
     	"- No existe la sede indicada."
     */
@@ -143,11 +140,13 @@ BEGIN
     BEGIN TRY
         EXEC abm.Partidos_Alta
             @id_sede       = -99999,
+			@id_seleccion_1     = @id_sel_test1,
+            @id_seleccion_2     = @id_sel_test2,
             @fecha         = '2026-06-22',
             @horario_local = '2026-06-22 15:00:00',
             @horario_UTC   = '2026-06-22 18:00:00',
             @fase          = 'GRUPOS';
-        PRINT 'ERROR: no se lanz� la excepci�n esperada';
+        PRINT 'ERROR: no se lanzo la excepcion esperada';
     END TRY
     BEGIN CATCH
         PRINT 'OK - Error esperado: ' + ERROR_MESSAGE();
@@ -163,20 +162,43 @@ BEGIN
 
     BEGIN TRY
         EXEC abm.Partidos_Alta
-            @id_sede_b7            = @id_sede_b7,
+            @id_sede            = @id_sede_b7,
+			@id_seleccion_1     = @id_sel_test1,
+            @id_seleccion_2     = @id_sel_test2,
             @fecha              = '2026-06-23',
             @horario_local      = '2026-06-23 15:00:00',
             @horario_UTC        = '2026-06-23 18:00:00',
             @fase               = 'GRUPOS',
             @asistencia_publico = 999999;
-        PRINT 'ERROR: no se lanz� la excepci�n esperada';
+        PRINT 'ERROR: no se lanzo la excepcion esperada';
     END TRY
     BEGIN CATCH
         PRINT 'OK - Error esperado: ' + ERROR_MESSAGE();
     END CATCH
 
+	/* 
+    CASO 5: Alta fallida - selecciones iguales
+    RESULTADO ESPERADO: "- Las dos selecciones del partido deben ser distintas."
+    */
+
+    BEGIN TRY
+        EXEC abm.Partidos_Alta
+            @id_sede            = @id_sede_test,
+            @id_seleccion_1     = @id_sel_test1,
+            @id_seleccion_2     = @id_sel_test1,
+            @fecha              = '2026-06-24',
+            @horario_local      = '2026-06-24 15:00:00',
+            @horario_UTC        = '2026-06-24 18:00:00',
+            @fase               = 'GRUPOS';
+        PRINT 'ERROR: no se lanzó la excepción esperada';
+    END TRY
+    BEGIN CATCH
+        PRINT 'OK - Error esperado: ' + ERROR_MESSAGE();
+    END CATCH
+
+
     /*
-    	CASO 5: Modificaci�n exitosa
+    	CASO 6: Modificacion exitosa
     	RESULTADO ESPERADO: se actualiza el partido de prueba TEST-ABM.
     */
 
@@ -186,19 +208,21 @@ BEGIN
     IF @id_partido_b8 IS NOT NULL
     BEGIN
         EXEC abm.Partidos_Modificacion
-            @id_partido_b8         = @id_partido_b8,
-            @id_sede_b8            = @id_sede_b8,
+            @id_partido         = @id_partido_b8,
+            @id_sede            = @id_sede_b8,
+			@id_seleccion_1     = @id_sel_test1,
+			@id_seleccion_2     = @id_sel_test2,
             @fecha              = '2026-06-15',
             @horario_local      = '2026-06-15 19:00:00',
             @horario_UTC        = '2026-06-15 22:00:00',
             @fase               = 'GRUPOS',
             @resultado_final    = N'TEST-ABM',
             @asistencia_publico = 40000;
-        PRINT 'OK - Modificaci�n de Partido ejecutada';
+        PRINT 'OK - Modificacion de Partido ejecutada';
     END
-
+	SELECT * FROM dbo.partido
     /*
-    	CASO 6: Baja fallida - partido con dependencias (formaciones)
+    	CASO 7: Baja fallida - partido con dependencias (formaciones)
     	RESULTADO ESPERADO: error
     	"- No se puede eliminar: el partido tiene formaciones asociadas."
     */
@@ -206,21 +230,21 @@ BEGIN
     DECLARE @id_partido_b9 INT = (SELECT id_partido FROM dbo.Partido WHERE resultado_final = N'TEST-ABM');
 
     BEGIN TRY
-        EXEC abm.Partidos_Baja @id_partido_b9 = @id_partido_b9;
-        PRINT 'ERROR: no se lanz� la excepci�n esperada';
+        EXEC abm.Partidos_Baja @id_partido = @id_partido_b9;
+        PRINT 'ERROR: no se lanzo la excepcion esperada';
     END TRY
     BEGIN CATCH
         PRINT 'OK - Error esperado: ' + ERROR_MESSAGE();
     END CATCH
 
     /*
-    	CASO 7: Baja fallida - partido inexistente
+    	CASO 8: Baja fallida - partido inexistente
     	RESULTADO ESPERADO: error "- No existe el partido indicado."
     */
 
     BEGIN TRY
         EXEC abm.Partidos_Baja @id_partido = -99999;
-        PRINT 'ERROR: no se lanz� la excepci�n esperada';
+        PRINT 'ERROR: no se lanzo la excepcion esperada';
     END TRY
     BEGIN CATCH
         PRINT 'OK - Error esperado: ' + ERROR_MESSAGE();
@@ -229,7 +253,6 @@ BEGIN
     -- Borramos lote de prueba
     delete dbo.Formacion
     delete dbo.Jugador
-    delete dbo.Partido_Seleccion
     delete dbo.Partido
     delete dbo.Sede
     delete dbo.Seleccion
@@ -240,7 +263,6 @@ BEGIN
     select top 20 * from [MUNDIALDEFUTBOL].[dbo].[Seleccion]
     select top 20 * from [MUNDIALDEFUTBOL].[dbo].[Jugador]
     select top 20 * from [MUNDIALDEFUTBOL].[dbo].[Partido]
-    select top 20 * from [MUNDIALDEFUTBOL].[dbo].[Partido_Seleccion]
     select top 20 * from [MUNDIALDEFUTBOL].[dbo].[Formacion]
     select top 20 * from [MUNDIALDEFUTBOL].[dbo].[Reemplazo]
 END;
