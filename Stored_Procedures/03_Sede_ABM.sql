@@ -15,18 +15,50 @@ SET NOCOUNT ON;
 GO
 
 
-CREATE OR ALTER PROCEDURE dbo.SP_Sede_Alta
-    @nombre_estadio NVARCHAR(4000),
-    @ciudad NVARCHAR(4000),
-    @pais NVARCHAR(4000),
+CREATE OR ALTER PROCEDURE abm.Sede_Alta
+    @nombre_estadio NVARCHAR(120),
+    @ciudad NVARCHAR(80),
+    @pais NVARCHAR(80),
     @capacidad INT,
-    @huso_horario VARCHAR(4000)
+    @huso_horario VARCHAR(100)
 AS
 BEGIN
     SET NOCOUNT ON;
-    DECLARE @errores NVARCHAR(2048);
-    EXEC dbo.sp_Validar_Sede 'ALTA', NULL, @nombre_estadio, @ciudad, @pais, @capacidad,
-         @huso_horario, @errores OUTPUT;
+    DECLARE @errores NVARCHAR(2048) = N'';
+
+    IF @nombre_estadio IS NULL OR LTRIM(RTRIM(@nombre_estadio)) = N''
+        SET @errores += N'- El nombre del estadio es obligatorio. ';
+    IF @nombre_estadio IS NOT NULL AND LEN(@nombre_estadio) > 120
+        SET @errores += N'- El nombre del estadio no puede superar 120 caracteres. ';
+
+    IF @ciudad IS NULL OR LTRIM(RTRIM(@ciudad)) = N''
+        SET @errores += N'- La ciudad es obligatoria. ';
+    IF @ciudad IS NOT NULL AND LEN(@ciudad) > 80
+        SET @errores += N'- La ciudad no puede superar 80 caracteres. ';
+
+    IF @pais IS NULL OR LTRIM(RTRIM(@pais)) = N''
+        SET @errores += N'- El país es obligatorio. ';
+    IF @pais IS NOT NULL AND LEN(@pais) > 80
+        SET @errores += N'- El país no puede superar 80 caracteres. ';
+
+    IF @capacidad IS NULL OR @capacidad <= 0
+        SET @errores += N'- La capacidad debe ser mayor que cero. ';
+
+    IF @huso_horario IS NULL OR LTRIM(RTRIM(@huso_horario)) = ''
+        SET @errores += N'- El huso horario es obligatorio. ';
+    IF @huso_horario IS NOT NULL AND LEN(@huso_horario) > 100
+        SET @errores += N'- El huso horario no puede superar 100 caracteres. ';
+
+    IF @nombre_estadio IS NOT NULL AND @ciudad IS NOT NULL AND @pais IS NOT NULL
+       AND EXISTS (
+            SELECT 1
+            FROM dbo.Sede
+            WHERE UPPER(LTRIM(RTRIM(nombre_estadio))) = UPPER(LTRIM(RTRIM(@nombre_estadio)))
+              AND UPPER(LTRIM(RTRIM(ciudad))) = UPPER(LTRIM(RTRIM(@ciudad)))
+              AND UPPER(LTRIM(RTRIM(pais))) = UPPER(LTRIM(RTRIM(@pais)))
+       )
+        SET @errores += N'- Ya existe esa sede (mismo estadio, ciudad y país). ';
+
     IF @errores <> N'' THROW 50201, @errores, 1;
 
     INSERT INTO dbo.Sede(nombre_estadio, ciudad, pais, capacidad, huso_horario)
@@ -42,19 +74,59 @@ BEGIN
 END;
 GO
 
-CREATE OR ALTER PROCEDURE dbo.SP_Sede_Modificar
+CREATE OR ALTER PROCEDURE abm.Sede_Modificar
     @id_sede INT,
-    @nombre_estadio NVARCHAR(4000),
-    @ciudad NVARCHAR(4000),
-    @pais NVARCHAR(4000),
+    @nombre_estadio NVARCHAR(120),
+    @ciudad NVARCHAR(80),
+    @pais NVARCHAR(80),
     @capacidad INT,
-    @huso_horario VARCHAR(4000)
+    @huso_horario VARCHAR(100)
 AS
 BEGIN
     SET NOCOUNT ON;
-    DECLARE @errores NVARCHAR(2048);
-    EXEC dbo.SP_Validar_Sede 'MODIFICAR', @id_sede, @nombre_estadio, @ciudad, @pais, @capacidad,
-         @huso_horario, @errores OUTPUT;
+    DECLARE @errores NVARCHAR(2048) = N'';
+
+    IF @id_sede IS NULL OR @id_sede <= 0
+        SET @errores += N'- El id_sede debe ser mayor que cero. ';
+    ELSE IF NOT EXISTS (
+        SELECT 1 FROM dbo.Sede WHERE id_sede = @id_sede
+    )
+        SET @errores += N'- La sede indicada no existe. ';
+
+    IF @nombre_estadio IS NULL OR LTRIM(RTRIM(@nombre_estadio)) = N''
+        SET @errores += N'- El nombre del estadio es obligatorio. ';
+    IF @nombre_estadio IS NOT NULL AND LEN(@nombre_estadio) > 120
+        SET @errores += N'- El nombre del estadio no puede superar 120 caracteres. ';
+
+    IF @ciudad IS NULL OR LTRIM(RTRIM(@ciudad)) = N''
+        SET @errores += N'- La ciudad es obligatoria. ';
+    IF @ciudad IS NOT NULL AND LEN(@ciudad) > 80
+        SET @errores += N'- La ciudad no puede superar 80 caracteres. ';
+
+    IF @pais IS NULL OR LTRIM(RTRIM(@pais)) = N''
+        SET @errores += N'- El país es obligatorio. ';
+    IF @pais IS NOT NULL AND LEN(@pais) > 80
+        SET @errores += N'- El país no puede superar 80 caracteres. ';
+
+    IF @capacidad IS NULL OR @capacidad <= 0
+        SET @errores += N'- La capacidad debe ser mayor que cero. ';
+
+    IF @huso_horario IS NULL OR LTRIM(RTRIM(@huso_horario)) = ''
+        SET @errores += N'- El huso horario es obligatorio. ';
+    IF @huso_horario IS NOT NULL AND LEN(@huso_horario) > 100
+        SET @errores += N'- El huso horario no puede superar 100 caracteres. ';
+
+    IF @nombre_estadio IS NOT NULL AND @ciudad IS NOT NULL AND @pais IS NOT NULL
+       AND EXISTS (
+            SELECT 1
+            FROM dbo.Sede
+            WHERE UPPER(LTRIM(RTRIM(nombre_estadio))) = UPPER(LTRIM(RTRIM(@nombre_estadio)))
+              AND UPPER(LTRIM(RTRIM(ciudad))) = UPPER(LTRIM(RTRIM(@ciudad)))
+              AND UPPER(LTRIM(RTRIM(pais))) = UPPER(LTRIM(RTRIM(@pais)))
+              AND id_sede <> @id_sede
+       )
+        SET @errores += N'- Ya existe esa sede (mismo estadio, ciudad y país). ';
+
     IF @errores <> N'' THROW 50202, @errores, 1;
 
     UPDATE dbo.Sede
@@ -69,33 +141,47 @@ BEGIN
 END;
 GO
 
-CREATE OR ALTER PROCEDURE dbo.SP_Sede_Baja
+CREATE OR ALTER PROCEDURE abm.Sede_Baja
     @id_sede INT
 AS
 BEGIN
     SET NOCOUNT ON;
-    DECLARE @errores NVARCHAR(2048);
-    EXEC dbo.sp_Validar_Sede 'BAJA', @id_sede, NULL, NULL, NULL, NULL, NULL, @errores OUTPUT;
+    DECLARE @errores NVARCHAR(2048) = N'';
+
+    IF @id_sede IS NULL OR @id_sede <= 0
+        SET @errores += N'- El id_sede debe ser mayor que cero. ';
+    ELSE IF NOT EXISTS (
+        SELECT 1 FROM dbo.Sede WHERE id_sede = @id_sede
+    )
+        SET @errores += N'- La sede indicada no existe. ';
+
     IF @errores <> N'' THROW 50203, @errores, 1;
 
     DELETE FROM dbo.Sede WHERE id_sede = @id_sede;
 END;
 GO
 
-CREATE OR ALTER PROCEDURE dbo.SP_Sede_ConsultarPorId
+CREATE OR ALTER PROCEDURE abm.Sede_ConsultarPorId
     @id_sede INT
 AS
 BEGIN
     SET NOCOUNT ON;
-    DECLARE @errores NVARCHAR(2048);
-    EXEC dbo.sp_Validar_Sede 'CONSULTAR', @id_sede, NULL, NULL, NULL, NULL, NULL, @errores OUTPUT;
+    DECLARE @errores NVARCHAR(2048) = N'';
+
+    IF @id_sede IS NULL OR @id_sede <= 0
+        SET @errores += N'- El id_sede debe ser mayor que cero. ';
+    ELSE IF NOT EXISTS (
+        SELECT 1 FROM dbo.Sede WHERE id_sede = @id_sede
+    )
+        SET @errores += N'- La sede indicada no existe. ';
+
     IF @errores <> N'' THROW 50204, @errores, 1;
 
     SELECT * FROM dbo.Sede WHERE id_sede = @id_sede;
 END;
 GO
 
-CREATE OR ALTER PROCEDURE dbo.SP_Sede_Listar
+CREATE OR ALTER PROCEDURE abm.Sede_Listar
 AS
 BEGIN
     SET NOCOUNT ON;

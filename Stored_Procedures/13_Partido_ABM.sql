@@ -2,18 +2,18 @@
     Universidad: Universidad Nacional de la Matanza
     Materia: Bases de Datos Aplicada
     Integrantes: 
-				Rodríguez, Elías Uriel 44143869
+				Rodrï¿½guez, Elï¿½as Uriel 44143869
 				Clara, Lucas Nicolas 46265738
 				Caro, Nicolas Dario 40766722
 				de la Cruz, Leandro Ariel 42022547
     Fecha: 06/10/2026
 
-    Descripción:
-    Script de creación de Stored Procedures ABM (Alta, Baja, Modificación)
+    Descripciï¿½n:
+    Script de creaciï¿½n de Stored Procedures ABM (Alta, Baja, Modificaciï¿½n)
     para la tabla:
         - dbo.Partido
 
-    Cada SP realiza validaciones y agrupa los errores en un único mensaje.
+    Cada SP realiza validaciones y agrupa los errores en un ï¿½nico mensaje.
 */
 
 USE MUNDIALDEFUTBOL;
@@ -23,7 +23,7 @@ GO
    TABLA: dbo.Partido
    ========================================================= */
 
-CREATE OR ALTER PROCEDURE dbo.SP_Partidos_Alta
+CREATE OR ALTER PROCEDURE abm.Partidos_Alta
     @id_sede           INT,
     @fecha             DATE,
     @horario_local     DATETIME2(0),
@@ -41,23 +41,23 @@ BEGIN
         ('GRUPOS'), ('DIECISEISAVOS'), ('OCTAVOS'), ('CUARTOS'),
         ('SEMIFINAL'), ('TERCER PUESTO'), ('FINAL');
 
-    -- Validación 1: sede existente
+    -- Validaciï¿½n 1: sede existente
     IF NOT EXISTS (SELECT 1 FROM dbo.Sede WHERE id_sede = @id_sede)
         SET @errores += N'- No existe la sede indicada. ';
 
-    -- Validación 2: fase válida
+    -- Validaciï¿½n 2: fase vï¿½lida
     IF NOT EXISTS (SELECT 1 FROM @fasesValidas WHERE f = @fase)
-        SET @errores += N'- La fase indicada no es válida. ';
+        SET @errores += N'- La fase indicada no es vï¿½lida. ';
 
-    -- Validación 3: horario local y UTC no nulos
+    -- Validaciï¿½n 3: horario local y UTC no nulos
     IF @horario_local IS NULL OR @horario_UTC IS NULL
         SET @errores += N'- Los horarios local y UTC son obligatorios. ';
 
-    -- Validación 4: asistencia no negativa
+    -- Validaciï¿½n 4: asistencia no negativa
     IF @asistencia_publico IS NOT NULL AND @asistencia_publico < 0
         SET @errores += N'- La asistencia no puede ser negativa. ';
 
-    -- Validación 5: asistencia no supera capacidad de la sede
+    -- Validaciï¿½n 5: asistencia no supera capacidad de la sede
     IF @asistencia_publico IS NOT NULL
        AND EXISTS (
             SELECT 1 FROM dbo.Sede
@@ -66,7 +66,7 @@ BEGIN
        )
         SET @errores += N'- La asistencia supera la capacidad de la sede. ';
 
-    -- Validación 6: fecha coherente con horario local
+    -- Validaciï¿½n 6: fecha coherente con horario local
     IF @horario_local IS NOT NULL AND CAST(@horario_local AS DATE) <> @fecha
         SET @errores += N'- La fecha no coincide con la del horario local. ';
 
@@ -90,7 +90,7 @@ BEGIN
 END;
 GO
 
-CREATE OR ALTER PROCEDURE dbo.SP_Partidos_Baja
+CREATE OR ALTER PROCEDURE abm.Partidos_Baja
     @id_partido INT
 AS
 BEGIN
@@ -101,7 +101,7 @@ BEGIN
     IF NOT EXISTS (SELECT 1 FROM dbo.Partido WHERE id_partido = @id_partido)
         SET @errores += N'- No existe el partido indicado. ';
 
-    -- Validación de dependencias: no borrar si tiene datos asociados
+    -- Validaciï¿½n de dependencias: no borrar si tiene datos asociados
     IF EXISTS (SELECT 1 FROM dbo.Formacion WHERE id_partido = @id_partido)
         SET @errores += N'- No se puede eliminar: el partido tiene formaciones asociadas. ';
 
@@ -124,7 +124,7 @@ BEGIN
     END
 
     BEGIN TRY
-        -- Primero eliminamos la relación N:N
+        -- Primero eliminamos la relaciï¿½n N:N
         DELETE FROM dbo.Partido_Seleccion WHERE id_partido = @id_partido;
         DELETE FROM dbo.Partido WHERE id_partido = @id_partido;
 
@@ -136,7 +136,7 @@ BEGIN
 END;
 GO
 
-CREATE OR ALTER PROCEDURE dbo.SP_Partidos_Modificacion
+CREATE OR ALTER PROCEDURE abm.Partidos_Modificacion
     @id_partido        INT,
     @id_sede           INT,
     @fecha             DATE,
@@ -162,7 +162,7 @@ BEGIN
         SET @errores += N'- No existe la sede indicada. ';
 
     IF NOT EXISTS (SELECT 1 FROM @fasesValidas WHERE f = @fase)
-        SET @errores += N'- La fase indicada no es válida. ';
+        SET @errores += N'- La fase indicada no es vï¿½lida. ';
 
     IF @horario_local IS NULL OR @horario_UTC IS NULL
         SET @errores += N'- Los horarios local y UTC son obligatorios. ';

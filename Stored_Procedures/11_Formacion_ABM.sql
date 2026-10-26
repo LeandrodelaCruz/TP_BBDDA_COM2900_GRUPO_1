@@ -2,18 +2,18 @@
     Universidad: Universidad Nacional de la Matanza
     Materia: Bases de Datos Aplicada
     Integrantes: 
-				Rodríguez, Elías Uriel 44143869
+				Rodrï¿½guez, Elï¿½as Uriel 44143869
 				Clara, Lucas Nicolas 46265738
 				Caro, Nicolas Dario 40766722
 				de la Cruz, Leandro Ariel 42022547
     Fecha: 06/10/2026
 
-    Descripción:
-    Script de creación de Stored Procedures ABM (Alta, Baja, Modificación)
+    Descripciï¿½n:
+    Script de creaciï¿½n de Stored Procedures ABM (Alta, Baja, Modificaciï¿½n)
     para la tabla:
         - dbo.Formacion
 
-    Cada SP realiza validaciones y agrupa los errores en un único mensaje.
+    Cada SP realiza validaciones y agrupa los errores en un ï¿½nico mensaje.
 */
 
 USE MUNDIALDEFUTBOL;
@@ -23,7 +23,7 @@ GO
    TABLA: dbo.Formacion
 */
 
-CREATE OR ALTER PROCEDURE dbo.SP_Formacion_Alta
+CREATE OR ALTER PROCEDURE abm.Formacion_Alta
     @id_partido       INT,
     @id_seleccion     INT,
     @esquema_tactico  VARCHAR(10)
@@ -37,21 +37,21 @@ BEGIN
         SET @errores += N'- No existe el partido indicado. ';
 
     IF NOT EXISTS (SELECT 1 FROM dbo.Seleccion WHERE id_seleccion = @id_seleccion)
-        SET @errores += N'- No existe la selección indicada. ';
+        SET @errores += N'- No existe la selecciï¿½n indicada. ';
 
-    -- Validación: la selección debe estar asociada al partido
+    -- Validaciï¿½n: la selecciï¿½n debe estar asociada al partido
     IF NOT EXISTS (SELECT 1 FROM dbo.Partido_Seleccion
                    WHERE id_partido = @id_partido AND id_seleccion = @id_seleccion)
-        SET @errores += N'- La selección no participa en el partido indicado. ';
+        SET @errores += N'- La selecciï¿½n no participa en el partido indicado. ';
 
-    -- Validación: no repetir formación para el mismo partido-selección
+    -- Validaciï¿½n: no repetir formaciï¿½n para el mismo partido-selecciï¿½n
     IF EXISTS (SELECT 1 FROM dbo.Formacion
                WHERE id_partido = @id_partido AND id_seleccion = @id_seleccion)
-        SET @errores += N'- Ya existe una formación para ese partido y selección. ';
+        SET @errores += N'- Ya existe una formaciï¿½n para ese partido y selecciï¿½n. ';
 
-    -- Validación: esquema táctico obligatorio
+    -- Validaciï¿½n: esquema tï¿½ctico obligatorio
     IF LTRIM(RTRIM(ISNULL(@esquema_tactico, ''))) = ''
-        SET @errores += N'- El esquema táctico es obligatorio. ';
+        SET @errores += N'- El esquema tï¿½ctico es obligatorio. ';
 
     IF @errores <> N''
     BEGIN
@@ -71,7 +71,7 @@ BEGIN
 END;
 GO
 
-CREATE OR ALTER PROCEDURE dbo.SP_Formacion_Baja
+CREATE OR ALTER PROCEDURE abm.Formacion_Baja
     @id_formacion INT
 AS
 BEGIN
@@ -80,11 +80,11 @@ BEGIN
     DECLARE @errores NVARCHAR(MAX) = N'';
 
     IF NOT EXISTS (SELECT 1 FROM dbo.Formacion WHERE id_formacion = @id_formacion)
-        SET @errores += N'- No existe la formación indicada. ';
+        SET @errores += N'- No existe la formaciï¿½n indicada. ';
 
     -- No borrar si tiene jugadores asociados
     IF EXISTS (SELECT 1 FROM dbo.Formacion_Jugador WHERE id_formacion = @id_formacion)
-        SET @errores += N'- No se puede eliminar: la formación tiene jugadores asociados. ';
+        SET @errores += N'- No se puede eliminar: la formaciï¿½n tiene jugadores asociados. ';
 
     IF @errores <> N''
     BEGIN
@@ -102,7 +102,7 @@ BEGIN
 END;
 GO
 
-CREATE OR ALTER PROCEDURE dbo.SP_Formacion_Modificacion
+CREATE OR ALTER PROCEDURE abm.Formacion_Modificacion
     @id_formacion     INT,
     @id_partido       INT,
     @id_seleccion     INT,
@@ -114,27 +114,27 @@ BEGIN
     DECLARE @errores NVARCHAR(MAX) = N'';
 
     IF NOT EXISTS (SELECT 1 FROM dbo.Formacion WHERE id_formacion = @id_formacion)
-        SET @errores += N'- No existe la formación indicada. ';
+        SET @errores += N'- No existe la formaciï¿½n indicada. ';
 
     IF NOT EXISTS (SELECT 1 FROM dbo.Partido WHERE id_partido = @id_partido)
         SET @errores += N'- No existe el partido indicado. ';
 
     IF NOT EXISTS (SELECT 1 FROM dbo.Seleccion WHERE id_seleccion = @id_seleccion)
-        SET @errores += N'- No existe la selección indicada. ';
+        SET @errores += N'- No existe la selecciï¿½n indicada. ';
 
     IF NOT EXISTS (SELECT 1 FROM dbo.Partido_Seleccion
                    WHERE id_partido = @id_partido AND id_seleccion = @id_seleccion)
-        SET @errores += N'- La selección no participa en el partido indicado. ';
+        SET @errores += N'- La selecciï¿½n no participa en el partido indicado. ';
 
-    -- No permitir cambiar a una combinación ya usada por otra formación
+    -- No permitir cambiar a una combinaciï¿½n ya usada por otra formaciï¿½n
     IF EXISTS (SELECT 1 FROM dbo.Formacion
                WHERE id_partido = @id_partido
                  AND id_seleccion = @id_seleccion
                  AND id_formacion <> @id_formacion)
-        SET @errores += N'- Ya existe otra formación para ese partido y selección. ';
+        SET @errores += N'- Ya existe otra formaciï¿½n para ese partido y selecciï¿½n. ';
 
     IF LTRIM(RTRIM(ISNULL(@esquema_tactico, ''))) = ''
-        SET @errores += N'- El esquema táctico es obligatorio. ';
+        SET @errores += N'- El esquema tï¿½ctico es obligatorio. ';
 
     IF @errores <> N''
     BEGIN

@@ -18,11 +18,11 @@
     - Único (id_partido, numero_espacio)
     
     Procedimientos:
-    - SP_Asignacion_Publicitaria_Alta
-    - SP_Asignacion_Publicitaria_GetById
-    - SP_Asignacion_Publicitaria_GetByPartido
-    - SP_Asignacion_Publicitaria_Modificacion
-    - SP_Asignacion_Publicitaria_Baja
+    - Asignacion_Publicitaria_Alta
+    - Asignacion_Publicitaria_GetById
+    - Asignacion_Publicitaria_GetByPartido
+    - Asignacion_Publicitaria_Modificacion
+    - Asignacion_Publicitaria_Baja
 */
 
 USE MUNDIALDEFUTBOL;
@@ -32,7 +32,7 @@ GO
 -- CREATE - Insertar una nueva asignación publicitaria
 -- =========================================================
 
-CREATE OR ALTER PROCEDURE dbo.SP_Asignacion_Publicitaria_Alta
+CREATE OR ALTER PROCEDURE abm.Asignacion_Publicitaria_Alta
     @id_partido INT,
     @id_pieza INT,
     @numero_espacio TINYINT,
@@ -96,7 +96,7 @@ GO
 -- READ - Obtener asignación por ID
 -- =========================================================
 
-CREATE OR ALTER PROCEDURE dbo.SP_Asignacion_Publicitaria_GetById
+CREATE OR ALTER PROCEDURE abm.Asignacion_Publicitaria_GetById
     @id_asignacion INT
 AS
 BEGIN
@@ -128,7 +128,7 @@ GO
 -- READ - Obtener asignaciones por partido
 -- =========================================================
 
-CREATE OR ALTER PROCEDURE dbo.SP_Asignacion_Publicitaria_GetByPartido
+CREATE OR ALTER PROCEDURE abm.Asignacion_Publicitaria_GetByPartido
     @id_partido INT
 AS
 BEGIN
@@ -161,7 +161,7 @@ GO
 -- READ - Obtener historial de exhibiciones por anunciante (para facturación)
 -- =========================================================
 
-CREATE OR ALTER PROCEDURE dbo.SP_Asignacion_Publicitaria_GetByAnunciante
+CREATE OR ALTER PROCEDURE abm.Asignacion_Publicitaria_GetByAnunciante
     @id_anunciante INT
 AS
 BEGIN
@@ -189,7 +189,7 @@ GO
 -- READ - Obtener totales por anunciante para facturación
 -- =========================================================
 
-CREATE OR ALTER PROCEDURE dbo.SP_Asignacion_Publicitaria_TotalesPorAnunciante
+CREATE OR ALTER PROCEDURE abm.Asignacion_Publicitaria_TotalesPorAnunciante
     @id_anunciante INT = NULL
 AS
 BEGIN
@@ -217,7 +217,7 @@ GO
 -- UPDATE - Actualizar costo
 -- =========================================================
 
-CREATE OR ALTER PROCEDURE dbo.SP_Asignacion_Publicitaria_Modificacion
+CREATE OR ALTER PROCEDURE abm.Asignacion_Publicitaria_Modificacion
     @id_asignacion INT,
     @costo_aplicado DECIMAL(14,2)
 AS
@@ -255,7 +255,7 @@ GO
 -- DELETE - Eliminar asignación
 -- =========================================================
 
-CREATE OR ALTER PROCEDURE dbo.SP_Asignacion_Publicitaria_Baja
+CREATE OR ALTER PROCEDURE abm.Asignacion_Publicitaria_Baja
     @id_asignacion INT
 AS
 BEGIN
