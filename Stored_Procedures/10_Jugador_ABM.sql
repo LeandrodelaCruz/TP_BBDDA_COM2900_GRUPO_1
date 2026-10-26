@@ -19,6 +19,13 @@
 */
 
 
+USE MUNDIALDEFUTBOL;
+GO
+
+SET NOCOUNT ON;
+GO
+
+
 /* ==================== Jugador: ALTA ==================== */
 CREATE OR ALTER PROCEDURE abm.Jugador_Alta
     @fecha_nacimiento DATE,
