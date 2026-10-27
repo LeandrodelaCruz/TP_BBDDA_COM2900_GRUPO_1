@@ -1,0 +1,1249 @@
+seleccion,dorsal,posicion,jugador,fecha_nacimiento,club_origen
+Czechia,1,GK,Matěj Kovář,2000-05-17,PSV Eindhoven
+Czechia,2,DF,David Zima,2000-11-08,Slavia Prague
+Czechia,3,DF,Tomáš Holeš,1993-03-31,Slavia Prague
+Czechia,4,DF,Robin Hranáč,2000-01-29,TSG Hoffenheim
+Czechia,5,DF,Vladimír Coufal,1992-08-22,TSG Hoffenheim
+Czechia,6,DF,Štěpán Chaloupek,2003-03-08,Slavia Prague
+Czechia,7,DF,Ladislav Krejčí ( captain ),1999-04-20,Wolverhampton Wanderers
+Czechia,8,MF,Vladimír Darida,1990-08-08,Hradec Králové
+Czechia,9,FW,Adam Hložek,2002-07-25,TSG Hoffenheim
+Czechia,10,FW,Patrik Schick,1996-01-24,Bayer Leverkusen
+Czechia,11,FW,Jan Kuchta,1997-01-08,Sparta Prague
+Czechia,12,MF,Lukáš Červ,2001-04-10,Viktoria Plzeň
+Czechia,13,FW,Mojmír Chytil,1999-04-29,Slavia Prague
+Czechia,14,DF,David Jurásek,2000-08-07,Slavia Prague
+Czechia,15,FW,Pavel Šulc,2000-12-29,Lyon
+Czechia,16,GK,Jindřich Staněk,1996-04-27,Slavia Prague
+Czechia,17,MF,Lukáš Provod,1996-10-23,Slavia Prague
+Czechia,18,MF,Michal Sadílek,1999-05-31,Slavia Prague
+Czechia,19,FW,Tomáš Chorý,1995-01-26,Slavia Prague
+Czechia,20,DF,Jaroslav Zelený,1992-08-20,Sparta Prague
+Czechia,21,DF,David Douděra,1998-05-31,Slavia Prague
+Czechia,22,MF,Tomáš Souček,1995-02-27,West Ham United
+Czechia,23,GK,Lukáš Horníček,2002-07-13,Braga
+Czechia,24,MF,Alexandr Sojka,2003-04-02,Viktoria Plzeň
+Czechia,25,MF,Hugo Sochůrek,2008-06-07,Sparta Prague
+Czechia,26,FW,Denis Višinský,2003-03-21,Viktoria Plzeň
+Mexico,1,GK,Raúl Rangel,2000-02-25,Guadalajara
+Mexico,2,DF,Jorge Sánchez,1997-12-10,PAOK
+Mexico,3,DF,César Montes,1997-02-24,Lokomotiv Moscow
+Mexico,4,DF,Edson Álvarez ( captain ),1997-10-24,Fenerbahçe
+Mexico,5,DF,Johan Vásquez,1998-10-22,Genoa
+Mexico,6,MF,Érik Lira,2000-05-08,Cruz Azul
+Mexico,7,MF,Luis Romo,1995-06-05,Guadalajara
+Mexico,8,MF,Álvaro Fidalgo,1997-04-09,Real Betis
+Mexico,9,FW,Raúl Jiménez,1991-05-05,Fulham
+Mexico,10,FW,Alexis Vega,1997-11-25,Toluca
+Mexico,11,FW,Santiago Giménez,2001-04-18,AC Milan
+Mexico,12,GK,Carlos Acevedo,1996-04-19,Santos Laguna
+Mexico,13,GK,Guillermo Ochoa,1985-07-13,AEL Limassol
+Mexico,14,FW,Armando González,2003-04-20,Guadalajara
+Mexico,15,DF,Israel Reyes,2000-05-23,América
+Mexico,16,FW,Julián Quiñones,1997-03-24,Al-Qadsiah
+Mexico,17,MF,Orbelín Pineda,1996-03-24,AEK Athens
+Mexico,18,MF,Obed Vargas,2005-08-05,Atlético Madrid
+Mexico,19,MF,Gilberto Mora,2008-10-14,Tijuana
+Mexico,20,DF,Mateo Chávez,2004-05-12,AZ
+Mexico,21,FW,César Huerta,2000-12-03,Anderlecht
+Mexico,22,FW,Guillermo Martínez,1995-03-15,Pumas UNAM
+Mexico,23,DF,Jesús Gallardo,1994-08-15,Toluca
+Mexico,24,MF,Luis Chávez,1996-01-15,Dynamo Moscow
+Mexico,25,FW,Roberto Alvarado,1998-09-07,Guadalajara
+Mexico,26,MF,Brian Gutiérrez,2003-06-17,Guadalajara
+South Africa,1,GK,Ronwen Williams ( captain ),1992-01-21,Mamelodi Sundowns
+South Africa,2,DF,Thabang Matuludi,1999-01-14,Polokwane City
+South Africa,3,DF,Khulumani Ndamane,2004-02-05,Mamelodi Sundowns
+South Africa,4,MF,Teboho Mokoena,1997-01-24,Mamelodi Sundowns
+South Africa,5,MF,Thalente Mbatha,2000-03-06,Orlando Pirates
+South Africa,6,DF,Aubrey Modiba,1995-07-22,Mamelodi Sundowns
+South Africa,7,FW,Oswin Appollis,2001-08-25,Orlando Pirates
+South Africa,8,FW,Tshepang Moremi,2000-10-02,Orlando Pirates
+South Africa,9,FW,Lyle Foster,2000-09-03,Burnley
+South Africa,10,FW,Relebohile Mofokeng,2004-10-23,Orlando Pirates
+South Africa,11,MF,Themba Zwane,1989-08-03,Mamelodi Sundowns
+South Africa,12,FW,Thapelo Maseko,2003-11-11,AEL Limassol
+South Africa,13,MF,Sphephelo Sithole,1999-03-03,Tondela
+South Africa,14,DF,Mbekezeli Mbokazi,2005-09-19,Chicago Fire FC
+South Africa,15,FW,Iqraam Rayners,1995-12-19,Mamelodi Sundowns
+South Africa,16,GK,Sipho Chaine,1996-12-14,Orlando Pirates
+South Africa,17,FW,Evidence Makgopa,2000-06-05,Orlando Pirates
+South Africa,18,DF,Samukele Kabini,2004-03-15,Molde
+South Africa,19,DF,Nkosinathi Sibisi,1995-09-22,Orlando Pirates
+South Africa,20,DF,Khuliso Mudau,1995-04-26,Mamelodi Sundowns
+South Africa,21,DF,Ime Okon,2004-02-20,Hannover 96
+South Africa,22,GK,Ricardo Goss,1994-04-02,Siwelele
+South Africa,23,MF,Jayden Adams,2001-05-05,Mamelodi Sundowns
+South Africa,24,DF,Olwethu Makhanya,2004-04-30,Philadelphia Union
+South Africa,25,FW,Kamogelo Sebelebele,2002-07-21,Orlando Pirates
+South Africa,26,DF,Bradley Cross,2001-01-30,Kaizer Chiefs
+South Korea,1,GK,Kim Seung-gyu,1990-09-30,FC Tokyo
+South Korea,2,DF,Lee Han-beom,2002-06-17,Midtjylland
+South Korea,3,MF,Lee Gi-hyuk,2000-07-07,Gangwon FC
+South Korea,4,DF,Kim Min-jae,1996-11-15,Bayern Munich
+South Korea,5,DF,Kim Tae-hyeon,2000-09-17,Kashima Antlers
+South Korea,6,MF,Hwang In-beom,1996-09-20,Feyenoord
+South Korea,7,FW,Son Heung-min ( captain ),1992-07-08,Los Angeles FC
+South Korea,8,MF,Paik Seung-ho,1997-03-17,Birmingham City
+South Korea,9,FW,Cho Gue-sung,1998-01-25,Midtjylland
+South Korea,10,MF,Lee Jae-sung,1992-08-10,Mainz 05
+South Korea,11,MF,Hwang Hee-chan,1996-01-26,Wolverhampton Wanderers
+South Korea,12,GK,Song Bum-keun,1997-10-15,Jeonbuk Hyundai Motors
+South Korea,13,DF,Lee Tae-seok,2002-07-28,Austria Wien
+South Korea,14,DF,Cho Wi-je,2001-08-25,Jeonbuk Hyundai Motors
+South Korea,15,DF,Kim Moon-hwan,1995-08-01,Daejeon Hana Citizen
+South Korea,16,DF,Park Jin-seob,1995-10-23,Zhejiang
+South Korea,17,MF,Bae Jun-ho,2003-08-21,Stoke City
+South Korea,18,FW,Oh Hyeon-gyu,2001-04-12,Beşiktaş
+South Korea,19,MF,Lee Kang-in,2001-02-19,Paris Saint-Germain
+South Korea,20,MF,Yang Hyun-jun,2002-05-25,Celtic
+South Korea,21,GK,Jo Hyeon-woo,1991-09-25,Ulsan HD
+South Korea,22,DF,Seol Young-woo,1998-12-05,Red Star Belgrade
+South Korea,23,DF,Jens Castrop,2003-07-29,Borussia Mönchengladbach
+South Korea,24,MF,Kim Jin-gyu,1997-02-24,Jeonbuk Hyundai Motors
+South Korea,25,MF,Eom Ji-sung,2002-05-09,Swansea City
+South Korea,26,MF,Lee Dong-gyeong,1997-09-20,Ulsan HD
+Bosnia and Herzegovina,1,GK,Nikola Vasilj,1995-12-02,FC St. Pauli
+Bosnia and Herzegovina,2,DF,Nihad Mujakić,1998-04-15,Gaziantep
+Bosnia and Herzegovina,3,DF,Dennis Hadžikadunić,1998-07-09,Sampdoria
+Bosnia and Herzegovina,4,DF,Tarik Muharemović,2003-02-28,Sassuolo
+Bosnia and Herzegovina,5,DF,Sead Kolašinac,1993-06-20,Atalanta
+Bosnia and Herzegovina,6,MF,Benjamin Tahirović,2003-03-03,Brøndby
+Bosnia and Herzegovina,7,DF,Amar Dedić,2002-08-18,Benfica
+Bosnia and Herzegovina,8,MF,Armin Gigović,2002-04-06,Young Boys
+Bosnia and Herzegovina,9,FW,Samed Baždar,2004-01-31,Jagiellonia Białystok
+Bosnia and Herzegovina,10,FW,Ermedin Demirović,1998-03-25,VfB Stuttgart
+Bosnia and Herzegovina,11,FW,Edin Džeko ( captain ),1986-03-17,Schalke 04
+Bosnia and Herzegovina,12,GK,Mladen Jurkas,2007-10-07,Borac Banja Luka
+Bosnia and Herzegovina,13,MF,Ivan Bašić,2002-04-30,Astana
+Bosnia and Herzegovina,14,MF,Ivan Šunjić,1996-10-09,Pafos
+Bosnia and Herzegovina,15,MF,Amar Memić,2001-01-20,Viktoria Plzeň
+Bosnia and Herzegovina,16,MF,Amir Hadžiahmetović,1997-03-08,Hull City
+Bosnia and Herzegovina,17,MF,Dženis Burnić,1998-05-22,Karlsruher SC
+Bosnia and Herzegovina,18,DF,Nikola Katić,1996-10-10,Schalke 04
+Bosnia and Herzegovina,19,FW,Kerim Alajbegović,2007-09-21,Red Bull Salzburg
+Bosnia and Herzegovina,20,FW,Esmir Bajraktarević,2005-03-10,PSV Eindhoven
+Bosnia and Herzegovina,21,DF,Stjepan Radeljić,1997-09-05,Rijeka
+Bosnia and Herzegovina,22,GK,Martin Zlomislić,1998-08-16,Rijeka
+Bosnia and Herzegovina,23,FW,Haris Tabaković,1994-06-20,Borussia Mönchengladbach
+Bosnia and Herzegovina,24,DF,Arjan Malić,2005-08-28,Sturm Graz
+Bosnia and Herzegovina,25,FW,Jovo Lukić,1998-11-28,Universitatea Cluj
+Bosnia and Herzegovina,26,MF,Ermin Mahmić,2005-03-14,Slovan Liberec
+Canada,1,GK,Dayne St. Clair,1997-05-09,Inter Miami CF
+Canada,2,DF,Alistair Johnston,1998-10-08,Celtic
+Canada,3,DF,Alfie Jones,1997-10-07,Middlesbrough
+Canada,4,DF,Luc de Fougerolles,2005-10-12,Dender EH
+Canada,5,DF,Joel Waterman,1996-01-24,Chicago Fire FC
+Canada,6,MF,Mathieu Choinière,1999-02-07,Los Angeles FC
+Canada,7,MF,Stephen Eustáquio,1996-12-21,Los Angeles FC
+Canada,8,MF,Ismaël Koné,2002-06-16,Sassuolo
+Canada,9,FW,Cyle Larin,1995-04-17,Southampton
+Canada,10,FW,Jonathan David,2000-01-14,Juventus
+Canada,11,MF,Liam Millar,1999-09-27,Hull City
+Canada,12,FW,Tani Oluwaseyi,2000-05-15,Villarreal
+Canada,13,DF,Derek Cornelius,1997-11-25,Rangers
+Canada,14,MF,Jacob Shaffelburg,1999-11-26,Los Angeles FC
+Canada,15,DF,Moïse Bombito,2000-03-30,Nice
+Canada,16,GK,Maxime Crépeau,1994-05-11,Orlando City SC
+Canada,17,FW,Tajon Buchanan,1999-02-08,Villarreal
+Canada,18,GK,Owen Goodman,2003-11-27,Barnsley
+Canada,19,DF,Alphonso Davies ( captain ),2000-11-02,Bayern Munich
+Canada,20,FW,Ali Ahmed,2000-10-10,Norwich City
+Canada,21,MF,Jonathan Osorio,1992-06-12,Toronto FC
+Canada,22,DF,Richie Laryea,1995-01-07,Toronto FC
+Canada,23,DF,Niko Sigur,2003-09-09,Hajduk Split
+Canada,24,FW,Promise David,2001-07-03,Union Saint-Gilloise
+Canada,25,MF,Nathan Saliba,2004-02-07,Anderlecht
+Canada,26,FW,Jayden Nelson,2002-09-26,Austin FC
+Qatar,1,GK,Mahmud Abunada,2000-02-05,Al-Rayyan
+Qatar,2,DF,Pedro Miguel,1990-08-06,Al-Sadd
+Qatar,3,DF,Lucas Mendes,1990-07-03,Al-Wakrah
+Qatar,4,DF,Issa Laye,1997-12-22,Al-Arabi
+Qatar,5,DF,Jassem Gaber,2002-02-20,Al-Rayyan
+Qatar,6,MF,Abdulaziz Hatem,1990-01-01,Al-Rayyan
+Qatar,7,FW,Ahmed Alaaeldin,1993-01-31,Al-Rayyan
+Qatar,8,FW,Edmilson Junior,1994-08-19,Al-Duhail
+Qatar,9,FW,Mohammed Muntari,1993-12-20,Al-Gharafa
+Qatar,10,FW,Hassan Al-Haydos ( captain ),1990-12-11,Al-Sadd
+Qatar,11,FW,Akram Afif,1996-11-18,Al-Sadd
+Qatar,12,MF,Karim Boudiaf,1990-09-16,Al-Duhail
+Qatar,13,DF,Ayoub Al-Oui,2005-03-11,Al-Gharafa
+Qatar,14,DF,Homam Ahmed,1999-08-25,Cultural Leonesa
+Qatar,15,FW,Yusuf Abdurisag,1999-08-06,Al-Wakrah
+Qatar,16,DF,Boualem Khoukhi,1990-07-09,Al-Sadd
+Qatar,17,MF,Ahmed Al-Ganehi,2000-09-22,Al-Gharafa
+Qatar,18,DF,Sultan Al-Brake,1996-04-07,Al-Duhail
+Qatar,19,FW,Almoez Ali,1996-08-19,Al-Duhail
+Qatar,20,MF,Ahmed Fathy,1993-01-25,Al-Arabi
+Qatar,21,GK,Salah Zakaria,1999-04-24,Al-Duhail
+Qatar,22,GK,Meshaal Barsham,1998-02-14,Al-Sadd
+Qatar,23,MF,Assim Madibo,1996-10-22,Al-Wakrah
+Qatar,24,FW,Tahsin Jamshid,2006-06-16,Al-Duhail
+Qatar,25,DF,Al-Hashmi Al-Hussain,2003-08-15,Al-Arabi
+Qatar,26,FW,Mohamed Manai,2002-10-25,Al-Shamal
+Switzerland,1,GK,Gregor Kobel,1997-12-06,Borussia Dortmund
+Switzerland,2,DF,Miro Muheim,1998-03-24,Hamburger SV
+Switzerland,3,DF,Silvan Widmer,1993-03-05,Mainz 05
+Switzerland,4,DF,Nico Elvedi,1996-09-30,Borussia Mönchengladbach
+Switzerland,5,DF,Manuel Akanji,1995-07-19,Inter Milan
+Switzerland,6,MF,Denis Zakaria,1996-11-20,Monaco
+Switzerland,7,FW,Breel Embolo,1997-02-14,Rennes
+Switzerland,8,MF,Remo Freuler,1992-04-15,Bologna
+Switzerland,9,MF,Johan Manzambi,2005-10-14,SC Freiburg
+Switzerland,10,MF,Granit Xhaka ( captain ),1992-09-27,Sunderland
+Switzerland,11,FW,Dan Ndoye,2000-10-25,Nottingham Forest
+Switzerland,12,GK,Yvon Mvogo,1994-06-06,Lorient
+Switzerland,13,DF,Ricardo Rodriguez,1992-08-25,Real Betis
+Switzerland,14,MF,Ardon Jashari,2002-07-30,AC Milan
+Switzerland,15,MF,Djibril Sow,1997-02-06,Sevilla
+Switzerland,16,FW,Christian Fassnacht,1993-11-11,Young Boys
+Switzerland,17,FW,Rubén Vargas,1998-08-05,Sevilla
+Switzerland,18,DF,Eray Cömert,1998-02-04,Valencia
+Switzerland,19,FW,Noah Okafor,2000-05-24,Leeds United
+Switzerland,20,MF,Michel Aebischer,1997-01-06,Pisa
+Switzerland,21,GK,Marvin Keller,2002-07-03,Young Boys
+Switzerland,22,MF,Fabian Rieder,2002-02-16,FC Augsburg
+Switzerland,23,FW,Zeki Amdouni,2000-12-04,Burnley
+Switzerland,24,DF,Aurèle Amenda,2003-07-31,Eintracht Frankfurt
+Switzerland,25,DF,Luca Jaquez,2003-06-02,VfB Stuttgart
+Switzerland,26,FW,Cedric Itten,1996-12-27,Fortuna Düsseldorf
+Brazil,1,GK,Alisson,1992-10-02,Liverpool
+Brazil,2,MF,Éderson Silva,1999-07-07,Atalanta
+Brazil,3,DF,Gabriel Magalhães,1997-12-19,Arsenal
+Brazil,4,DF,Marquinhos ( captain ),1994-05-14,Paris Saint-Germain
+Brazil,5,MF,Casemiro,1992-02-23,Manchester United
+Brazil,6,DF,Alex Sandro,1991-01-26,Flamengo
+Brazil,7,FW,Vinícius Júnior,2000-07-12,Real Madrid
+Brazil,8,MF,Bruno Guimarães,1997-11-16,Newcastle United
+Brazil,9,FW,Matheus Cunha,1999-05-27,Manchester United
+Brazil,10,FW,Neymar,1992-02-05,Santos
+Brazil,11,FW,Raphinha,1996-12-14,Barcelona
+Brazil,12,GK,Weverton,1987-12-13,Grêmio
+Brazil,13,DF,Danilo Luiz,1991-07-15,Flamengo
+Brazil,14,DF,Bremer,1997-03-18,Juventus
+Brazil,15,DF,Léo Pereira,1996-01-31,Flamengo
+Brazil,16,DF,Douglas Santos,1994-03-22,Zenit Saint Petersburg
+Brazil,17,MF,Fabinho,1993-10-23,Al-Ittihad
+Brazil,18,MF,Danilo Santos,2001-04-29,Botafogo
+Brazil,19,FW,Endrick,2006-07-21,Lyon
+Brazil,20,MF,Lucas Paquetá,1997-08-27,Flamengo
+Brazil,21,FW,Luiz Henrique,2001-01-02,Zenit Saint Petersburg
+Brazil,22,FW,Gabriel Martinelli,2001-06-18,Arsenal
+Brazil,23,GK,Ederson Moraes,1993-08-17,Fenerbahçe
+Brazil,24,DF,Roger Ibañez,1998-11-23,Al-Ahli
+Brazil,25,FW,Igor Thiago,2001-06-26,Brentford
+Brazil,26,FW,Rayan,2006-08-03,Bournemouth
+Haiti,1,GK,Johny Placide ( captain ),1988-01-29,Bastia
+Haiti,2,DF,Carlens Arcus,1996-06-28,Angers
+Haiti,3,DF,Keeto Thermoncy,2006-03-29,Young Boys
+Haiti,4,DF,Ricardo Adé,1990-05-21,LDU Quito
+Haiti,5,DF,Hannes Delcroix,1999-02-28,Lugano
+Haiti,6,MF,Carl Sainté,2002-08-09,El Paso Locomotive FC
+Haiti,7,FW,Derrick Etienne Jr.,1996-11-25,Toronto FC
+Haiti,8,DF,Martin Expérience,1999-03-09,Nancy
+Haiti,9,FW,Duckens Nazon,1994-04-07,Esteghlal
+Haiti,10,MF,Jean-Ricner Bellegarde,1998-06-27,Wolverhampton Wanderers
+Haiti,11,FW,Louicius Deedson,2001-02-11,FC Dallas
+Haiti,12,GK,Alexandre Pierre,2001-02-25,Sochaux
+Haiti,13,DF,Duke Lacroix,1993-10-14,Colorado Springs Switchbacks FC
+Haiti,14,DF,Garven Metusala,1999-12-31,Colorado Springs Switchbacks FC
+Haiti,15,FW,Ruben Providence,2001-07-07,Almere City
+Haiti,16,FW,Lenny Joseph,2000-10-12,Ferencváros
+Haiti,17,MF,Danley Jean Jacques,2000-05-20,Philadelphia Union
+Haiti,18,FW,Wilson Isidor,2000-08-27,Sunderland
+Haiti,19,FW,Yassin Fortuné,1999-01-30,Vizela
+Haiti,20,FW,Frantzdy Pierrot,1995-03-29,Çaykur Rizespor
+Haiti,21,FW,Josué Casimir,2001-09-24,Auxerre
+Haiti,22,DF,Jean-Kévin Duverne,1997-07-12,Gent
+Haiti,23,GK,Josué Duverger,2000-04-27,Cosmos Koblenz
+Haiti,24,DF,Wilguens Paugain,2001-08-24,Zulte Waregem
+Haiti,25,MF,Dominique Simon,2000-07-29,Tatran Prešov
+Haiti,26,MF,Woodensky Pierre,2004-12-30,Violette
+Morocco,1,GK,Yassine Bounou,1991-04-05,Al-Hilal
+Morocco,2,DF,Achraf Hakimi ( captain ),1998-11-04,Paris Saint-Germain
+Morocco,3,DF,Noussair Mazraoui,1997-11-14,Manchester United
+Morocco,4,MF,Sofyan Amrabat,1996-08-21,Real Betis
+Morocco,5,DF,Marwane Saâdane,1992-01-17,Al-Fateh
+Morocco,6,MF,Ayyoub Bouaddi,2007-10-02,Lille
+Morocco,7,MF,Chemsdine Talbi,2005-05-09,Sunderland
+Morocco,8,MF,Azzedine Ounahi,2000-04-19,Girona
+Morocco,9,FW,Soufiane Rahimi,1996-06-02,Al Ain
+Morocco,10,FW,Brahim Díaz,1999-08-03,Real Madrid
+Morocco,11,MF,Ismael Saibari,2001-01-28,PSV Eindhoven
+Morocco,12,GK,Munir Mohamedi,1989-05-10,RS Berkane
+Morocco,13,DF,Zakaria El Ouahdi,2001-12-31,Genk
+Morocco,14,DF,Issa Diop,1997-01-09,Fulham
+Morocco,15,MF,Samir El Mourabet,2005-10-06,Strasbourg
+Morocco,16,MF,Gessime Yassine,2005-11-22,Strasbourg
+Morocco,17,FW,Amine Sbaï,2000-11-05,Angers
+Morocco,18,DF,Chadi Riad,2003-06-17,Crystal Palace
+Morocco,19,DF,Youssef Belammari,1998-09-20,Al Ahly
+Morocco,20,FW,Ayoub El Kaabi,1993-06-25,Olympiacos
+Morocco,21,FW,Ayoube Amaimouni,2004-11-30,Eintracht Frankfurt
+Morocco,22,GK,Ahmed Reda Tagnaouti,1996-04-05,AS FAR
+Morocco,23,MF,Bilal El Khannouss,2004-05-10,VfB Stuttgart
+Morocco,24,MF,Neil El Aynaoui,2001-07-02,Roma
+Morocco,25,DF,Redouane Halhal,2003-03-05,Mechelen
+Morocco,26,DF,Anass Salah-Eddine,2002-01-18,PSV Eindhoven
+Scotland,1,GK,Angus Gunn,1996-01-22,Nottingham Forest
+Scotland,2,DF,Aaron Hickey,2002-06-10,Brentford
+Scotland,3,DF,Andy Robertson ( captain ),1994-03-11,Liverpool
+Scotland,4,MF,Scott McTominay,1996-12-08,Napoli
+Scotland,5,DF,Grant Hanley,1991-11-20,Hibernian
+Scotland,6,DF,Kieran Tierney,1997-06-05,Celtic
+Scotland,7,MF,John McGinn,1994-10-18,Aston Villa
+Scotland,8,MF,Tyler Fletcher,2007-03-19,Manchester United
+Scotland,9,FW,Lyndon Dykes,1995-10-07,Charlton Athletic
+Scotland,10,FW,Ché Adams,1996-07-13,Torino
+Scotland,11,MF,Ryan Christie,1995-02-22,Bournemouth
+Scotland,12,GK,Liam Kelly,1996-01-23,Rangers
+Scotland,13,DF,Jack Hendry,1995-05-07,Al-Ettifaq
+Scotland,14,FW,Ross Stewart,1996-07-11,Southampton
+Scotland,15,DF,John Souttar,1996-09-25,Rangers
+Scotland,16,DF,Dominic Hyam,1995-12-20,Wrexham
+Scotland,17,FW,Ben Gannon-Doak,2005-11-11,Bournemouth
+Scotland,18,FW,George Hirst,1999-02-15,Ipswich Town
+Scotland,19,MF,Lewis Ferguson,1999-08-24,Bologna
+Scotland,20,FW,Lawrence Shankland,1995-08-10,Heart of Midlothian
+Scotland,21,GK,Craig Gordon,1982-12-31,Heart of Midlothian
+Scotland,22,DF,Nathan Patterson,2001-10-16,Everton
+Scotland,23,MF,Kenny McLean,1992-01-08,Norwich City
+Scotland,24,DF,Anthony Ralston,1998-11-16,Celtic
+Scotland,25,FW,Findlay Curtis,2006-06-09,Kilmarnock
+Scotland,26,DF,Scott McKenna,1996-11-12,Dinamo Zagreb
+Australia,1,GK,Mathew Ryan ( captain ),1992-04-08,Levante
+Australia,2,DF,Miloš Degenek,1994-04-28,APOEL
+Australia,3,DF,Alessandro Circati,2003-10-10,Parma
+Australia,4,DF,Jacob Italiano,2001-07-30,Grazer AK
+Australia,5,DF,Jordan Bos,2002-10-29,Feyenoord
+Australia,6,DF,Jason Geria,1993-05-10,Albirex Niigata
+Australia,7,FW,Mathew Leckie,1991-02-04,Melbourne City
+Australia,8,MF,Connor Metcalfe,1999-11-05,FC St. Pauli
+Australia,9,FW,Mohamed Touré,2004-03-26,Norwich City
+Australia,10,FW,Ajdin Hrustic,1996-07-05,Heracles Almelo
+Australia,11,FW,Awer Mabil,1995-09-15,Castellón
+Australia,12,GK,Paul Izzo,1995-01-06,Randers
+Australia,13,MF,Aiden O'Neill,1998-07-04,New York City FC
+Australia,14,MF,Cammy Devlin,1998-06-07,Heart of Midlothian
+Australia,15,DF,Kai Trewin,2001-05-18,New York City FC
+Australia,16,DF,Aziz Behich,1990-12-16,Melbourne City
+Australia,17,FW,Nestory Irankunda,2006-02-09,Watford
+Australia,18,GK,Patrick Beach,2003-08-06,Melbourne City
+Australia,19,DF,Harry Souttar,1998-10-22,Leicester City
+Australia,20,FW,Cristian Volpato,2003-11-15,Sassuolo
+Australia,21,DF,Cameron Burgess,1995-10-21,Swansea City
+Australia,22,MF,Jackson Irvine,1993-03-07,FC St. Pauli
+Australia,23,FW,Nishan Velupillay,2001-05-07,Melbourne Victory
+Australia,24,MF,Paul Okon-Engstler,2005-01-24,Sydney FC
+Australia,25,DF,Lucas Herrington,2007-09-05,Colorado Rapids
+Australia,26,FW,Tete Yengi,2000-11-28,Machida Zelvia
+Paraguay,1,GK,Gatito Fernández,1988-03-29,Cerro Porteño
+Paraguay,2,DF,Gustavo Velázquez,1991-04-17,Cerro Porteño
+Paraguay,3,DF,Omar Alderete,1996-12-26,Sunderland
+Paraguay,4,DF,Juan José Cáceres,2000-06-01,Dynamo Moscow
+Paraguay,5,DF,Fabián Balbuena,1991-08-23,Grêmio
+Paraguay,6,DF,Júnior Alonso,1993-02-09,Atlético Mineiro
+Paraguay,7,MF,Ramón Sosa,1999-08-31,Palmeiras
+Paraguay,8,MF,Diego Gómez,2003-03-27,Brighton & Hove Albion
+Paraguay,9,FW,Antonio Sanabria,1996-03-04,Cremonese
+Paraguay,10,MF,Miguel Almirón,1994-02-10,Atlanta United FC
+Paraguay,11,MF,Maurício,2001-06-22,Palmeiras
+Paraguay,12,GK,Orlando Gill,2000-06-11,San Lorenzo
+Paraguay,13,DF,José Canale,1996-07-20,Lanús
+Paraguay,14,MF,Andrés Cubas,1996-05-11,Vancouver Whitecaps FC
+Paraguay,15,DF,Gustavo Gómez ( captain ),1993-05-06,Palmeiras
+Paraguay,16,MF,Damián Bobadilla,2001-07-11,São Paulo
+Paraguay,17,FW,Kaku,1995-01-11,Al Ain
+Paraguay,18,FW,Álex Arce,1995-06-16,Independiente Rivadavia
+Paraguay,19,FW,Julio Enciso,2004-01-23,Strasbourg
+Paraguay,20,MF,Braian Ojeda,2000-06-27,Orlando City SC
+Paraguay,21,FW,Gabriel Ávalos,1991-07-09,Independiente
+Paraguay,22,GK,Gastón Olveira,1993-04-21,Olimpia
+Paraguay,23,MF,Matías Galarza,2002-02-11,Atlanta United FC
+Paraguay,24,MF,Gustavo Caballero,2001-09-21,Portsmouth
+Paraguay,25,FW,Isidro Pitta,1999-08-14,Red Bull Bragantino
+Paraguay,26,DF,Alexandro Maidana,2005-07-26,Talleres
+Türkiye,1,GK,Mert Günok,1989-03-01,Fenerbahçe
+Türkiye,2,DF,Zeki Çelik,1997-02-17,Roma
+Türkiye,3,DF,Merih Demiral,1998-03-05,Al-Ahli
+Türkiye,4,DF,Çağlar Söyüncü,1996-05-23,Fenerbahçe
+Türkiye,5,MF,Salih Özcan,1998-01-11,Borussia Dortmund
+Türkiye,6,MF,Orkun Kökçü,2000-12-29,Beşiktaş
+Türkiye,7,FW,Kerem Aktürkoğlu,1998-10-21,Fenerbahçe
+Türkiye,8,FW,Arda Güler,2005-02-25,Real Madrid
+Türkiye,9,FW,Deniz Gül,2004-07-02,Porto
+Türkiye,10,MF,Hakan Çalhanoğlu ( captain ),1994-02-08,Inter Milan
+Türkiye,11,FW,Kenan Yıldız,2005-05-04,Juventus
+Türkiye,12,GK,Altay Bayındır,1998-04-14,Manchester United
+Türkiye,13,DF,Eren Elmalı,2000-07-07,Galatasaray
+Türkiye,14,DF,Abdülkerim Bardakcı,1994-09-07,Galatasaray
+Türkiye,15,DF,Ozan Kabak,2000-03-25,TSG Hoffenheim
+Türkiye,16,MF,İsmail Yüksek,1999-01-26,Fenerbahçe
+Türkiye,17,FW,İrfan Can Kahveci,1995-07-15,Kasımpaşa
+Türkiye,18,DF,Mert Müldür,1999-04-03,Fenerbahçe
+Türkiye,19,FW,Yunus Akgün,2000-07-07,Galatasaray
+Türkiye,20,DF,Ferdi Kadıoğlu,1999-10-07,Brighton & Hove Albion
+Türkiye,21,FW,Barış Alper Yılmaz,2000-05-23,Galatasaray
+Türkiye,22,MF,Kaan Ayhan,1994-11-10,Galatasaray
+Türkiye,23,GK,Uğurcan Çakır,1996-04-05,Galatasaray
+Türkiye,24,FW,Oğuz Aydın,2000-10-27,Fenerbahçe
+Türkiye,25,DF,Samet Akaydin,1994-03-13,Çaykur Rizespor
+Türkiye,26,FW,Can Uzun,2005-11-11,Eintracht Frankfurt
+USA,1,GK,Matt Turner,1994-06-24,New England Revolution
+USA,2,DF,Sergiño Dest,2000-11-03,PSV Eindhoven
+USA,3,DF,Chris Richards,2000-03-28,Crystal Palace
+USA,4,MF,Tyler Adams,1999-02-14,Bournemouth
+USA,5,DF,Antonee Robinson,1997-08-08,Fulham
+USA,6,DF,Auston Trusty,1998-08-12,Celtic
+USA,7,MF,Giovanni Reyna,2002-11-13,Borussia Mönchengladbach
+USA,8,MF,Weston McKennie,1998-08-28,Juventus
+USA,9,FW,Ricardo Pepi,2003-01-09,PSV Eindhoven
+USA,10,FW,Christian Pulisic,1998-09-18,AC Milan
+USA,11,FW,Brenden Aaronson,2000-10-22,Leeds United
+USA,12,DF,Miles Robinson,1997-03-14,FC Cincinnati
+USA,13,DF,Tim Ream ( captain ),1987-10-05,Charlotte FC
+USA,14,MF,Sebastian Berhalter,2001-05-10,Vancouver Whitecaps FC
+USA,15,MF,Cristian Roldan,1995-06-03,Seattle Sounders FC
+USA,16,DF,Alex Freeman,2004-08-09,Villarreal
+USA,17,MF,Malik Tillman,2002-05-28,Bayer Leverkusen
+USA,18,DF,Max Arfsten,2001-04-19,Columbus Crew
+USA,19,FW,Haji Wright,1998-03-27,Coventry City
+USA,20,FW,Folarin Balogun,2001-07-03,Monaco
+USA,21,FW,Timothy Weah,2000-02-22,Marseille
+USA,22,DF,Mark McKenzie,1999-02-25,Toulouse
+USA,23,DF,Joe Scally,2002-12-31,Borussia Mönchengladbach
+USA,24,GK,Matt Freese,1998-09-02,New York City FC
+USA,25,GK,Chris Brady,2004-03-03,Chicago Fire FC
+USA,26,FW,Alejandro Zendejas,1998-02-07,América
+Curaçao,1,GK,Eloy Room,1989-02-06,Miami FC
+Curaçao,2,DF,Shurandy Sambo,2001-08-19,Sparta Rotterdam
+Curaçao,3,DF,Juriën Gaari,1993-12-23,Abha
+Curaçao,4,DF,Roshon van Eijma,1998-06-09,RKC Waalwijk
+Curaçao,5,DF,Sherel Floranus,1998-08-23,PEC Zwolle
+Curaçao,6,MF,Godfried Roemeratoe,1999-08-19,RKC Waalwijk
+Curaçao,7,MF,Juninho Bacuna,1997-08-07,Volendam
+Curaçao,8,MF,Livano Comenencia,2004-02-03,Zürich
+Curaçao,9,FW,Jürgen Locadia,1993-11-07,Miami FC
+Curaçao,10,MF,Leandro Bacuna ( captain ),1991-08-21,Iğdır
+Curaçao,11,FW,Jeremy Antonisse,2002-03-29,Kifisia
+Curaçao,12,FW,Sontje Hansen,2002-05-18,Middlesbrough
+Curaçao,13,FW,Tyrese Noslin,2002-09-11,Telstar
+Curaçao,14,FW,Kenji Gorré,1994-09-29,Maccabi Haifa
+Curaçao,15,MF,Ar'jany Martha,2003-09-04,Rotherham United
+Curaçao,16,FW,Jearl Margaritha,2000-04-10,Beveren
+Curaçao,17,FW,Brandley Kuwas,1992-09-19,Volendam
+Curaçao,18,DF,Armando Obispo,1999-03-05,PSV Eindhoven
+Curaçao,19,FW,Gervane Kastaneer,1996-06-09,Terengganu
+Curaçao,20,DF,Joshua Brenet,1994-03-20,Kayserispor
+Curaçao,21,MF,Tahith Chong,1999-12-04,Sheffield United
+Curaçao,22,MF,Kevin Felida,1999-11-11,Den Bosch
+Curaçao,23,DF,Riechedly Bazoer,1996-10-12,Konyaspor
+Curaçao,24,DF,Deveron Fonville,2003-05-16,NEC
+Curaçao,25,GK,Tyrick Bodak,2002-05-15,Telstar
+Curaçao,26,GK,Trevor Doornbusch,1999-07-06,VVV-Venlo
+Ecuador,1,GK,Hernán Galíndez,1987-03-30,Huracán
+Ecuador,2,DF,Félix Torres,1997-01-11,Internacional
+Ecuador,3,DF,Piero Hincapié,2002-01-09,Arsenal
+Ecuador,4,DF,Joel Ordóñez,2004-04-21,Club Brugge
+Ecuador,5,MF,Jordy Alcívar,1999-08-05,Independiente del Valle
+Ecuador,6,DF,Willian Pacho,2001-10-16,Paris Saint-Germain
+Ecuador,7,DF,Pervis Estupiñán,1998-01-21,AC Milan
+Ecuador,8,MF,Anthony Valencia,2003-07-21,Antwerp
+Ecuador,9,FW,John Yeboah,2000-06-23,Venezia
+Ecuador,10,MF,Kendry Páez,2007-05-04,River Plate
+Ecuador,11,FW,Kevin Rodríguez,2000-03-04,Union Saint-Gilloise
+Ecuador,12,GK,Moisés Ramírez,2000-09-09,Kifisia
+Ecuador,13,FW,Enner Valencia ( captain ),1989-11-04,Pachuca
+Ecuador,14,MF,Alan Minda,2003-05-14,Atlético Mineiro
+Ecuador,15,MF,Pedro Vite,2002-03-09,Pumas UNAM
+Ecuador,16,FW,Jordy Caicedo,1997-11-18,Huracán
+Ecuador,17,DF,Ángelo Preciado,1998-02-18,Atlético Mineiro
+Ecuador,18,MF,Denil Castillo,2004-03-24,Midtjylland
+Ecuador,19,FW,Gonzalo Plata,2000-11-01,Flamengo
+Ecuador,20,FW,Nilson Angulo,2003-06-19,Sunderland
+Ecuador,21,MF,Alan Franco,1998-08-21,Atlético Mineiro
+Ecuador,22,GK,Gonzalo Valle,1996-02-28,LDU Quito
+Ecuador,23,MF,Moisés Caicedo,2001-11-02,Chelsea
+Ecuador,24,FW,Jeremy Arévalo,2005-03-19,VfB Stuttgart
+Ecuador,25,DF,Jackson Porozo,2000-08-04,Tijuana
+Ecuador,26,DF,Yaimar Medina,2004-11-05,Genk
+Germany,1,GK,Manuel Neuer,1986-03-27,Bayern Munich
+Germany,2,DF,Antonio Rüdiger,1993-03-03,Real Madrid
+Germany,3,DF,Waldemar Anton,1996-07-20,Borussia Dortmund
+Germany,4,DF,Jonathan Tah,1996-02-11,Bayern Munich
+Germany,5,MF,Aleksandar Pavlović,2004-05-03,Bayern Munich
+Germany,6,DF,Joshua Kimmich ( captain ),1995-02-08,Bayern Munich
+Germany,7,FW,Kai Havertz,1999-06-11,Arsenal
+Germany,8,MF,Leon Goretzka,1995-02-06,Bayern Munich
+Germany,9,MF,Jamie Leweling,2001-02-26,VfB Stuttgart
+Germany,10,MF,Jamal Musiala,2003-02-26,Bayern Munich
+Germany,11,FW,Nick Woltemade,2002-02-14,Newcastle United
+Germany,12,GK,Oliver Baumann,1990-06-02,TSG Hoffenheim
+Germany,13,MF,Pascal Groß,1991-06-15,Brighton & Hove Albion
+Germany,14,FW,Maximilian Beier,2002-10-17,Borussia Dortmund
+Germany,15,DF,Nico Schlotterbeck,1999-12-01,Borussia Dortmund
+Germany,16,MF,Angelo Stiller,2001-04-04,VfB Stuttgart
+Germany,17,MF,Florian Wirtz,2003-05-03,Liverpool
+Germany,18,DF,Nathaniel Brown,2003-06-16,Eintracht Frankfurt
+Germany,19,MF,Leroy Sané,1996-01-11,Galatasaray
+Germany,20,MF,Nadiem Amiri,1996-10-27,Mainz 05
+Germany,21,GK,Alexander Nübel,1996-09-30,VfB Stuttgart
+Germany,22,DF,David Raum,1998-04-22,RB Leipzig
+Germany,23,MF,Felix Nmecha,2000-10-10,Borussia Dortmund
+Germany,24,DF,Malick Thiaw,2001-08-08,Newcastle United
+Germany,25,MF,Assan Ouédraogo,2006-05-09,RB Leipzig
+Germany,26,FW,Deniz Undav,1996-07-19,VfB Stuttgart
+Côte d'Ivoire,1,GK,Yahia Fofana,2000-08-21,Çaykur Rizespor
+Côte d'Ivoire,2,DF,Ousmane Diomande,2003-12-04,Sporting CP
+Côte d'Ivoire,3,DF,Ghislain Konan,1995-12-27,Gil Vicente
+Côte d'Ivoire,4,MF,Jean Michaël Seri,1991-07-19,Maribor
+Côte d'Ivoire,5,DF,Wilfried Singo,2000-12-25,Galatasaray
+Côte d'Ivoire,6,MF,Seko Fofana,1995-05-07,Porto
+Côte d'Ivoire,7,DF,Odilon Kossounou,2001-01-04,Atalanta
+Côte d'Ivoire,8,MF,Franck Kessié ( captain ),1996-12-19,Al-Ahli
+Côte d'Ivoire,9,FW,Ange-Yoan Bonny,2003-10-25,Inter Milan
+Côte d'Ivoire,10,FW,Simon Adingra,2002-01-01,Monaco
+Côte d'Ivoire,11,FW,Yan Diomande,2006-11-14,RB Leipzig
+Côte d'Ivoire,12,FW,Elye Wahi,2003-01-02,Nice
+Côte d'Ivoire,13,DF,Christopher Opéri,1997-04-29,İstanbul Başakşehir
+Côte d'Ivoire,14,FW,Oumar Diakité,2003-12-20,Cercle Brugge
+Côte d'Ivoire,15,FW,Amad Diallo,2002-07-11,Manchester United
+Côte d'Ivoire,16,GK,Mohamed Koné,2002-03-07,Charleroi
+Côte d'Ivoire,17,DF,Guéla Doué,2002-10-17,Strasbourg
+Côte d'Ivoire,18,MF,Ibrahim Sangaré,1997-12-02,Nottingham Forest
+Côte d'Ivoire,19,FW,Nicolas Pépé,1995-05-29,Villarreal
+Côte d'Ivoire,20,DF,Emmanuel Agbadou,1997-06-17,Beşiktaş
+Côte d'Ivoire,21,DF,Evan Ndicka,1999-08-20,Roma
+Côte d'Ivoire,22,FW,Evann Guessand,2001-07-01,Crystal Palace
+Côte d'Ivoire,23,GK,Alban Lafont,1999-01-23,Panathinaikos
+Côte d'Ivoire,24,FW,Bazoumana Touré,2006-03-02,TSG Hoffenheim
+Côte d'Ivoire,25,MF,Parfait Guiagon,2001-02-22,Charleroi
+Côte d'Ivoire,26,MF,Christ Inao Oulaï,2006-04-06,Trabzonspor
+Japan,1,GK,Zion Suzuki,2002-08-21,Parma
+Japan,2,DF,Yukinari Sugawara,2000-06-28,Werder Bremen
+Japan,3,DF,Shōgo Taniguchi,1991-07-15,Sint-Truiden
+Japan,4,DF,Kō Itakura ( captain ),1997-01-27,Ajax
+Japan,5,DF,Yūto Nagatomo,1986-09-12,FC Tokyo
+Japan,6,FW,Shūto Machino,1999-09-30,Borussia Mönchengladbach
+Japan,7,MF,Ao Tanaka,1998-09-10,Leeds United
+Japan,8,MF,Takefusa Kubo,2001-06-04,Real Sociedad
+Japan,9,FW,Keisuke Gotō,2005-06-03,Sint-Truiden
+Japan,10,MF,Ritsu Dōan,1998-06-16,Eintracht Frankfurt
+Japan,11,MF,Daizen Maeda,1997-10-20,Celtic
+Japan,12,GK,Keisuke Ōsako,1999-07-28,Sanfrecce Hiroshima
+Japan,13,MF,Keito Nakamura,2000-07-28,Reims
+Japan,14,MF,Junya Itō,1993-03-09,Genk
+Japan,15,MF,Daichi Kamada,1996-08-05,Crystal Palace
+Japan,16,DF,Tsuyoshi Watanabe,1997-02-05,Feyenoord
+Japan,17,MF,Yuito Suzuki,2001-10-25,SC Freiburg
+Japan,18,FW,Ayase Ueda,1998-08-28,Feyenoord
+Japan,19,FW,Kōki Ogawa,1997-08-08,NEC
+Japan,20,DF,Ayumu Seko,2000-06-07,Le Havre
+Japan,21,DF,Hiroki Itō,1999-05-12,Bayern Munich
+Japan,22,DF,Takehiro Tomiyasu,1998-11-05,Ajax
+Japan,23,GK,Tomoki Hayakawa,1999-03-03,Kashima Antlers
+Japan,24,MF,Kaishū Sano,2000-12-30,Mainz 05
+Japan,25,DF,Junnosuke Suzuki,2003-07-12,Copenhagen
+Japan,26,FW,Kento Shiogai,2005-03-26,VfL Wolfsburg
+Netherlands,1,GK,Bart Verbruggen,2002-08-18,Brighton & Hove Albion
+Netherlands,2,DF,Lutsharel Geertruida,2000-07-18,Sunderland
+Netherlands,3,MF,Marten de Roon,1991-03-29,Atalanta
+Netherlands,4,DF,Virgil van Dijk ( captain ),1991-07-08,Liverpool
+Netherlands,5,DF,Nathan Aké,1995-02-18,Manchester City
+Netherlands,6,DF,Jan Paul van Hecke,2000-06-08,Brighton & Hove Albion
+Netherlands,7,MF,Justin Kluivert,1999-05-05,Bournemouth
+Netherlands,8,MF,Ryan Gravenberch,2002-05-16,Liverpool
+Netherlands,9,FW,Wout Weghorst,1992-08-07,Ajax
+Netherlands,10,FW,Memphis Depay,1994-02-13,Corinthians
+Netherlands,11,FW,Cody Gakpo,1999-05-07,Liverpool
+Netherlands,12,DF,Mats Wieffer,1999-11-16,Brighton & Hove Albion
+Netherlands,13,GK,Robin Roefs,2003-01-17,Sunderland
+Netherlands,14,MF,Tijjani Reijnders,1998-07-29,Manchester City
+Netherlands,15,DF,Micky van de Ven,2001-04-19,Tottenham Hotspur
+Netherlands,16,MF,Guus Til,1997-12-22,PSV Eindhoven
+Netherlands,17,FW,Noa Lang,1999-06-17,Galatasaray
+Netherlands,18,FW,Donyell Malen,1999-01-19,Roma
+Netherlands,19,FW,Brian Brobbey,2002-02-01,Sunderland
+Netherlands,20,MF,Teun Koopmeiners,1998-02-28,Juventus
+Netherlands,21,MF,Frenkie de Jong,1997-05-12,Barcelona
+Netherlands,22,DF,Denzel Dumfries,1996-04-18,Inter Milan
+Netherlands,23,GK,Mark Flekken,1993-06-13,Bayer Leverkusen
+Netherlands,24,FW,Crysencio Summerville,2001-10-30,West Ham United
+Netherlands,25,DF,Jorrel Hato,2006-03-07,Chelsea
+Netherlands,26,MF,Quinten Timber,2001-06-17,Marseille
+Sweden,1,GK,Jacob Widell Zetterström,1998-07-11,Derby County
+Sweden,2,DF,Gustaf Lagerbielke,2000-04-10,Braga
+Sweden,3,DF,Victor Lindelöf ( captain ),1994-07-17,Aston Villa
+Sweden,4,DF,Isak Hien,1999-01-13,Atalanta
+Sweden,5,DF,Gabriel Gudmundsson,1999-04-29,Leeds United
+Sweden,6,DF,Herman Johansson,1997-10-16,FC Dallas
+Sweden,7,MF,Lucas Bergvall,2006-02-02,Tottenham Hotspur
+Sweden,8,DF,Daniel Svensson,2002-02-12,Borussia Dortmund
+Sweden,9,FW,Alexander Isak,1999-09-21,Liverpool
+Sweden,10,MF,Benjamin Nygren,2001-07-08,Celtic
+Sweden,11,FW,Anthony Elanga,2002-04-27,Newcastle United
+Sweden,12,GK,Viktor Johansson,1998-09-14,Stoke City
+Sweden,13,MF,Ken Sema,1993-09-30,Pafos
+Sweden,14,DF,Hjalmar Ekdal,1998-10-21,Burnley
+Sweden,15,DF,Carl Starfelt,1995-06-01,Celta Vigo
+Sweden,16,MF,Jesper Karlström,1995-06-21,Udinese
+Sweden,17,FW,Viktor Gyökeres,1998-06-04,Arsenal
+Sweden,18,MF,Yasin Ayari,2003-10-06,Brighton & Hove Albion
+Sweden,19,MF,Mattias Svanberg,1999-01-05,VfL Wolfsburg
+Sweden,20,DF,Eric Smith,1997-01-08,FC St. Pauli
+Sweden,21,DF,Alexander Bernhardsson,1998-09-08,Holstein Kiel
+Sweden,22,MF,Besfort Zeneli,2002-11-21,Union Saint-Gilloise
+Sweden,23,GK,Kristoffer Nordfeldt,1989-06-23,AIK
+Sweden,24,DF,Elliot Stroud,2002-06-22,Mjällby AIF
+Sweden,25,FW,Gustaf Nilsson,1997-05-23,Club Brugge
+Sweden,26,FW,Taha Ali,1998-07-01,Malmö FF
+Tunisia,1,GK,Mouhib Chamakh,2001-08-25,Club Africain
+Tunisia,2,DF,Ali Abdi,1993-12-20,Nice
+Tunisia,3,DF,Montassar Talbi,1998-05-26,Lorient
+Tunisia,4,DF,Omar Rekik,2001-12-20,Maribor
+Tunisia,5,DF,Adem Arous,2004-07-17,Kasımpaşa
+Tunisia,6,DF,Dylan Bronn,1995-06-19,Servette
+Tunisia,7,FW,Elias Achouri,1999-02-10,Copenhagen
+Tunisia,8,FW,Elias Saad,1999-12-27,Hannover 96
+Tunisia,9,FW,Hazem Mastouri,1997-06-18,Dynamo Makhachkala
+Tunisia,10,MF,Hannibal Mejbri,2003-01-21,Burnley
+Tunisia,11,MF,Ismaël Gharbi,2004-04-10,FC Augsburg
+Tunisia,12,DF,Mortadha Ben Ouanes,1994-07-02,Kasımpaşa
+Tunisia,13,MF,Rani Khedira,1994-01-27,Union Berlin
+Tunisia,14,MF,Khalil Ayari,2005-02-02,Paris Saint-Germain
+Tunisia,15,MF,Mohamed Belhadj Mahmoud,2000-04-24,Lugano
+Tunisia,16,GK,Aymen Dahmen,1997-01-28,CS Sfaxien
+Tunisia,17,MF,Ellyes Skhiri ( captain ),1995-05-10,Eintracht Frankfurt
+Tunisia,18,FW,Rayan Elloumi,2007-09-17,Vancouver Whitecaps FC
+Tunisia,19,FW,Firas Chaouat,1996-05-08,Club Africain
+Tunisia,20,DF,Yan Valery,1999-02-22,Young Boys
+Tunisia,21,DF,Mohamed Amine Ben Hamida,1995-12-15,Espérance de Tunis
+Tunisia,22,GK,Sabri Ben Hessen,1996-06-13,Étoile du Sahel
+Tunisia,23,DF,Moutaz Neffati,2004-09-04,IFK Norrköping
+Tunisia,24,DF,Raed Chikhaoui,2004-06-09,US Monastir
+Tunisia,25,MF,Anis Ben Slimane,2001-03-16,Norwich City
+Tunisia,26,MF,Sebastian Tounekti,2002-07-13,Celtic
+Belgium,1,GK,Thibaut Courtois,1992-05-11,Real Madrid
+Belgium,2,DF,Zeno Debast,2003-10-24,Sporting CP
+Belgium,3,DF,Arthur Theate,2000-05-25,Eintracht Frankfurt
+Belgium,4,DF,Brandon Mechele,1993-01-28,Club Brugge
+Belgium,5,DF,Maxim De Cuyper,2000-12-22,Brighton & Hove Albion
+Belgium,6,MF,Axel Witsel,1989-01-12,Girona
+Belgium,7,MF,Kevin De Bruyne,1991-06-28,Napoli
+Belgium,8,MF,Youri Tielemans ( captain ),1997-05-07,Aston Villa
+Belgium,9,FW,Romelu Lukaku,1993-05-13,Napoli
+Belgium,10,FW,Leandro Trossard,1994-12-04,Arsenal
+Belgium,11,FW,Jérémy Doku,2002-05-27,Manchester City
+Belgium,12,GK,Senne Lammens,2002-07-07,Manchester United
+Belgium,13,GK,Mike Penders,2005-07-31,Strasbourg
+Belgium,14,FW,Dodi Lukébakio,1997-09-24,Benfica
+Belgium,15,DF,Thomas Meunier,1991-09-12,Lille
+Belgium,16,DF,Koni De Winter,2002-06-12,AC Milan
+Belgium,17,FW,Charles De Ketelaere,2001-03-10,Atalanta
+Belgium,18,DF,Joaquin Seys,2005-03-28,Club Brugge
+Belgium,19,MF,Diego Moreira,2004-08-06,Strasbourg
+Belgium,20,MF,Hans Vanaken,1992-08-24,Club Brugge
+Belgium,21,DF,Timothy Castagne,1995-12-05,Fulham
+Belgium,22,MF,Alexis Saelemaekers,1999-06-27,AC Milan
+Belgium,23,MF,Nicolas Raskin,2001-02-23,Rangers
+Belgium,24,MF,Amadou Onana,2001-08-16,Aston Villa
+Belgium,25,DF,Nathan Ngoy,2003-06-10,Lille
+Belgium,26,FW,Matias Fernandez-Pardo,2005-02-03,Lille
+Egypt,1,GK,Mohamed El Shenawy,1988-12-18,Al Ahly
+Egypt,2,DF,Yasser Ibrahim,1993-02-10,Al Ahly
+Egypt,3,DF,Mohamed Hany,1996-02-02,Al Ahly
+Egypt,4,DF,Hossam Abdelmaguid,2001-04-30,Zamalek
+Egypt,5,DF,Ramy Rabia,1993-05-20,Al Ain
+Egypt,6,DF,Mohamed Abdelmonem,1999-02-01,Nice
+Egypt,7,FW,Trézéguet,1994-10-01,Al Ahly
+Egypt,8,MF,Emam Ashour,1998-02-20,Al Ahly
+Egypt,9,FW,Hamza Abdelkarim,2008-01-01,Barcelona B
+Egypt,10,FW,Mohamed Salah ( captain ),1992-06-15,Liverpool
+Egypt,11,MF,Mostafa Ziko,1997-04-27,Pyramids
+Egypt,12,FW,Haissem Hassan,2002-02-08,Oviedo
+Egypt,13,DF,Ahmed Fatouh,1998-03-22,Zamalek
+Egypt,14,MF,Hamdy Fathy,1994-09-29,Al-Wakrah
+Egypt,15,DF,Karim Hafez,1996-03-12,Pyramids
+Egypt,16,GK,El Mahdy Soliman,1987-06-08,Zamalek
+Egypt,17,MF,Mohanad Lasheen,1996-05-29,Pyramids
+Egypt,18,MF,Nabil Emad,1996-04-06,Al-Najma
+Egypt,19,MF,Marwan Attia,1998-08-01,Al Ahly
+Egypt,20,FW,Ibrahim Adel,2001-04-23,Nordsjælland
+Egypt,21,MF,Mahmoud Saber,2001-07-30,ZED
+Egypt,22,FW,Omar Marmoush,1999-02-07,Manchester City
+Egypt,23,GK,Mostafa Shobeir,2000-05-15,Al Ahly
+Egypt,24,DF,Tarek Alaa,2002-01-05,ZED
+Egypt,25,FW,Zizo,1996-01-10,Al Ahly
+Egypt,26,GK,Mohamed Alaa,1999-01-01,El Gouna
+IR Iran,1,GK,Alireza Beiranvand,1992-09-21,Tractor
+IR Iran,2,DF,Saleh Hardani,1998-12-26,Esteghlal
+IR Iran,3,DF,Ehsan Hajsafi ( captain ),1990-02-25,Sepahan
+IR Iran,4,DF,Shojae Khalilzadeh,1989-05-14,Tractor
+IR Iran,5,DF,Milad Mohammadi,1993-09-29,Persepolis
+IR Iran,6,MF,Saeid Ezatolahi,1996-10-01,Shabab Al Ahli
+IR Iran,7,MF,Alireza Jahanbakhsh,1993-08-11,Dender EH
+IR Iran,8,MF,Mohammad Mohebi,1998-12-20,Rostov
+IR Iran,9,FW,Mehdi Taremi,1992-07-18,Olympiacos
+IR Iran,10,FW,Mehdi Ghayedi,1998-12-05,Al Nasr
+IR Iran,11,FW,Ali Alipour,1995-11-11,Persepolis
+IR Iran,12,GK,Payam Niazmand,1995-04-06,Persepolis
+IR Iran,13,DF,Hossein Kanaanizadegan,1994-03-23,Persepolis
+IR Iran,14,MF,Saman Ghoddos,1993-09-06,Kalba
+IR Iran,15,MF,Rouzbeh Cheshmi,1993-07-24,Esteghlal
+IR Iran,16,MF,Mahdi Torabi,1994-09-10,Tractor
+IR Iran,17,DF,Arya Yousefi,2002-04-22,Sepahan
+IR Iran,18,FW,Amirhossein Hosseinzadeh,2000-10-30,Tractor
+IR Iran,19,DF,Ali Nemati,1996-02-08,Foolad
+IR Iran,20,FW,Shahriyar Moghanlou,1994-12-21,Kalba
+IR Iran,21,MF,Mohammad Ghorbani,2001-10-07,Al Wahda
+IR Iran,22,GK,Hossein Hosseini,1992-06-30,Sepahan
+IR Iran,23,DF,Ramin Rezaeian,1990-03-21,Foolad
+IR Iran,24,FW,Dennis Eckert,1997-01-09,Standard Liège
+IR Iran,25,DF,Danial Eiri,2003-10-26,Malavan
+IR Iran,26,MF,Amirmohammad Razzaghinia,2006-04-11,Esteghlal
+New Zealand,1,GK,Max Crocombe,1993-08-12,Millwall
+New Zealand,2,DF,Tim Payne,1994-01-10,Wellington Phoenix
+New Zealand,3,DF,Francis de Vries,1994-11-28,Auckland FC
+New Zealand,4,DF,Tyler Bindon,2005-01-27,Sheffield United
+New Zealand,5,DF,Michael Boxall,1988-08-18,Minnesota United FC
+New Zealand,6,MF,Joe Bell,1999-04-27,Viking
+New Zealand,7,FW,Logan Rogerson,1998-05-28,Auckland FC
+New Zealand,8,MF,Marko Stamenić,2002-02-19,Swansea City
+New Zealand,9,FW,Chris Wood ( captain ),1991-12-07,Nottingham Forest
+New Zealand,10,MF,Sarpreet Singh,1999-02-20,Wellington Phoenix
+New Zealand,11,MF,Elijah Just,2000-05-01,Motherwell
+New Zealand,12,GK,Alex Paulsen,2002-07-04,Lechia Gdańsk
+New Zealand,13,DF,Liberato Cacace,2000-09-27,Wrexham
+New Zealand,14,MF,Alex Rufer,1996-06-12,Wellington Phoenix
+New Zealand,15,DF,Nando Pijnaker,1999-02-25,Auckland FC
+New Zealand,16,DF,Finn Surman,2003-09-23,Portland Timbers
+New Zealand,17,FW,Kosta Barbarouses,1990-02-19,Western Sydney Wanderers
+New Zealand,18,FW,Ben Waine,2001-06-11,Port Vale
+New Zealand,19,MF,Ben Old,2002-08-13,Saint-Étienne
+New Zealand,20,MF,Callum McCowatt,1999-04-30,Silkeborg
+New Zealand,21,FW,Jesse Randall,2002-08-19,Auckland FC
+New Zealand,22,GK,Michael Woud,1999-01-16,Auckland FC
+New Zealand,23,MF,Ryan Thomas,1994-12-20,PEC Zwolle
+New Zealand,24,DF,Callan Elliot,1999-07-07,Auckland FC
+New Zealand,25,MF,Lachlan Bayliss,2002-07-24,Newcastle Jets
+New Zealand,26,DF,Tommy Smith,1990-03-31,Braintree Town
+Cabo Verde,1,GK,Vozinha,1986-06-03,Chaves
+Cabo Verde,2,DF,Stopira,1988-05-20,Torreense
+Cabo Verde,3,DF,Diney,1995-01-17,Al Bataeh
+Cabo Verde,4,DF,Pico,1992-06-17,Shamrock Rovers
+Cabo Verde,5,DF,Logan Costa,2001-04-01,Villarreal
+Cabo Verde,6,MF,Kevin Pina,1997-01-27,Krasnodar
+Cabo Verde,7,MF,Jovane Cabral,1998-06-14,Estrela Amadora
+Cabo Verde,8,MF,João Paulo,1998-05-26,FCSB
+Cabo Verde,9,FW,Gilson Benchimol,2001-12-29,Akron Tolyatti
+Cabo Verde,10,MF,Jamiro Monteiro,1993-11-23,PEC Zwolle
+Cabo Verde,11,MF,Garry Rodrigues,1990-11-27,Apollon Limassol
+Cabo Verde,12,GK,Márcio Rosa,1997-02-23,Montana
+Cabo Verde,13,DF,Sidny Lopes Cabral,2002-09-18,Benfica
+Cabo Verde,14,MF,Deroy Duarte,1999-07-04,Ludogorets Razgrad
+Cabo Verde,15,MF,Laros Duarte,1997-02-28,Puskás Akadémia
+Cabo Verde,16,MF,Yannick Semedo,1995-12-29,Farense
+Cabo Verde,17,MF,Willy Semedo,1994-04-27,Omonia
+Cabo Verde,18,MF,Telmo Arcanjo,2001-06-21,Vitória de Guimarães
+Cabo Verde,19,FW,Dailon Livramento,2001-05-04,Casa Pia
+Cabo Verde,20,FW,Ryan Mendes ( captain ),1990-01-08,Iğdır
+Cabo Verde,21,MF,Nuno da Costa,1991-02-10,İstanbul Başakşehir
+Cabo Verde,22,DF,Steven Moreira,1994-08-13,Columbus Crew
+Cabo Verde,23,GK,CJ dos Santos,2000-08-24,San Diego FC
+Cabo Verde,24,DF,Wagner Pina,2002-11-03,Trabzonspor
+Cabo Verde,25,DF,Kelvin Pires,2000-06-05,SJK
+Cabo Verde,26,MF,Hélio Varela,2002-05-03,Maccabi Tel Aviv
+Saudi Arabia,1,GK,Nawaf Al-Aqidi,2000-05-10,Al-Nassr
+Saudi Arabia,2,DF,Ali Majrashi,1999-10-02,Al-Ahli
+Saudi Arabia,3,DF,Ali Lajami,1996-04-24,Al-Hilal
+Saudi Arabia,4,DF,Abdulelah Al-Amri,1997-01-15,Al-Nassr
+Saudi Arabia,5,DF,Hassan Al-Tambakti,1999-02-09,Al-Hilal
+Saudi Arabia,6,MF,Nasser Al-Dawsari,1998-12-19,Al-Hilal
+Saudi Arabia,7,MF,Musab Al-Juwayr,2003-06-20,Al-Qadsiah
+Saudi Arabia,8,FW,Ayman Yahya,2001-05-14,Al-Nassr
+Saudi Arabia,9,FW,Firas Al-Buraikan,2000-05-14,Al-Ahli
+Saudi Arabia,10,FW,Salem Al-Dawsari ( captain ),1991-08-19,Al-Hilal
+Saudi Arabia,11,FW,Saleh Al-Shehri,1993-11-01,Al-Ittihad
+Saudi Arabia,12,DF,Saud Abdulhamid,1999-07-18,Lens
+Saudi Arabia,13,DF,Nawaf Boushal,1999-09-16,Al-Nassr
+Saudi Arabia,14,DF,Hassan Kadesh,1992-09-26,Al-Ittihad
+Saudi Arabia,15,MF,Abdullah Al-Khaibari,1996-08-16,Al-Nassr
+Saudi Arabia,16,MF,Ziyad Al-Johani,2001-11-11,Al-Ahli
+Saudi Arabia,17,FW,Khalid Al-Ghannam,2000-11-08,Al-Ettifaq
+Saudi Arabia,18,MF,Alaa Al-Hejji,1995-12-03,Neom
+Saudi Arabia,19,FW,Abdullah Al-Hamdan,1999-09-13,Al-Nassr
+Saudi Arabia,20,FW,Sultan Mandash,1994-10-17,Al-Hilal
+Saudi Arabia,21,GK,Mohammed Al-Owais,1991-10-10,Al-Ula
+Saudi Arabia,22,GK,Ahmed Al-Kassar,1991-05-08,Al-Qadsiah
+Saudi Arabia,23,MF,Mohamed Kanno,1994-09-22,Al-Hilal
+Saudi Arabia,24,DF,Moteb Al-Harbi,2000-02-20,Al-Hilal
+Saudi Arabia,25,DF,Jehad Thakri,2001-07-21,Al-Qadsiah
+Saudi Arabia,26,DF,Mohammed Abu Al-Shamat,2002-08-11,Al-Qadsiah
+Spain,1,GK,David Raya,1995-09-15,Arsenal
+Spain,2,DF,Marc Pubill,2003-06-20,Atlético Madrid
+Spain,3,DF,Álex Grimaldo,1995-09-20,Bayer Leverkusen
+Spain,4,DF,Eric García,2001-01-09,Barcelona
+Spain,5,DF,Marcos Llorente,1995-01-30,Atlético Madrid
+Spain,6,MF,Mikel Merino,1996-06-22,Arsenal
+Spain,7,FW,Ferran Torres,2000-02-29,Barcelona
+Spain,8,MF,Fabián Ruiz,1996-04-03,Paris Saint-Germain
+Spain,9,MF,Gavi,2004-08-05,Barcelona
+Spain,10,FW,Dani Olmo,1998-05-07,Barcelona
+Spain,11,FW,Yéremy Pino,2002-10-20,Crystal Palace
+Spain,12,DF,Pedro Porro,1999-09-13,Tottenham Hotspur
+Spain,13,GK,Joan Garcia,2001-05-04,Barcelona
+Spain,14,DF,Aymeric Laporte,1994-05-27,Athletic Bilbao
+Spain,15,MF,Álex Baena,2001-07-20,Atlético Madrid
+Spain,16,MF,Rodri ( Captain ),1996-06-22,Manchester City
+Spain,17,FW,Nico Williams,2002-07-12,Athletic Bilbao
+Spain,18,MF,Martín Zubimendi,1999-02-02,Arsenal
+Spain,19,FW,Lamine Yamal,2007-07-13,Barcelona
+Spain,20,MF,Pedri,2002-11-25,Barcelona
+Spain,21,FW,Mikel Oyarzabal,1997-04-21,Real Sociedad
+Spain,22,DF,Pau Cubarsí,2007-01-22,Barcelona
+Spain,23,GK,Unai Simón,1997-06-11,Athletic Bilbao
+Spain,24,DF,Marc Cucurella,1998-07-22,Chelsea
+Spain,25,FW,Víctor Muñoz,2003-07-13,Osasuna
+Spain,26,FW,Borja Iglesias,1993-01-17,Celta Vigo
+Uruguay,1,GK,Sergio Rochet,1993-03-23,Internacional
+Uruguay,2,DF,José María Giménez ( captain ),1995-01-20,Atlético Madrid
+Uruguay,3,DF,Sebastián Cáceres,1999-08-18,América
+Uruguay,4,DF,Ronald Araújo,1999-03-07,Barcelona
+Uruguay,5,MF,Manuel Ugarte,2001-04-11,Manchester United
+Uruguay,6,MF,Rodrigo Bentancur,1997-06-25,Tottenham Hotspur
+Uruguay,7,MF,Nicolás de la Cruz,1997-06-01,Flamengo
+Uruguay,8,MF,Federico Valverde,1998-07-22,Real Madrid
+Uruguay,9,FW,Darwin Núñez,1999-06-24,Al-Hilal
+Uruguay,10,MF,Giorgian de Arrascaeta,1994-06-01,Flamengo
+Uruguay,11,FW,Facundo Pellistri,2001-12-20,Panathinaikos
+Uruguay,12,GK,Santiago Mele,1997-09-06,Monterrey
+Uruguay,13,DF,Guillermo Varela,1993-03-24,Flamengo
+Uruguay,14,MF,Agustín Canobbio,1998-10-01,Fluminense
+Uruguay,15,MF,Emiliano Martínez,1999-08-17,Palmeiras
+Uruguay,16,DF,Mathías Olivera,1997-10-31,Napoli
+Uruguay,17,DF,Matías Viña,1997-11-09,River Plate
+Uruguay,18,FW,Brian Rodríguez,2000-05-20,América
+Uruguay,19,FW,Rodrigo Aguirre,1994-10-01,Tigres UANL
+Uruguay,20,MF,Maximiliano Araújo,2000-02-15,Sporting CP
+Uruguay,21,FW,Federico Viñas,1998-06-30,Oviedo
+Uruguay,22,MF,Joaquín Piquerez,1998-08-24,Palmeiras
+Uruguay,23,GK,Fernando Muslera,1986-06-16,Estudiantes
+Uruguay,24,DF,Santiago Bueno,1998-11-09,Wolverhampton Wanderers
+Uruguay,25,MF,Juan Manuel Sanabria,2000-03-29,Real Salt Lake
+Uruguay,26,MF,Rodrigo Zalazar,1999-08-12,Braga
+France,1,GK,Brice Samba,1994-04-25,Rennes
+France,2,DF,Malo Gusto,2003-05-19,Chelsea
+France,3,DF,Lucas Digne,1993-07-20,Aston Villa
+France,4,DF,Dayot Upamecano,1998-10-27,Bayern Munich
+France,5,DF,Jules Koundé,1998-11-12,Barcelona
+France,6,MF,Manu Koné,2001-05-17,Roma
+France,7,FW,Ousmane Dembélé,1997-05-15,Paris Saint-Germain
+France,8,MF,Aurélien Tchouaméni,2000-01-27,Real Madrid
+France,9,FW,Marcus Thuram,1997-08-06,Inter Milan
+France,10,FW,Kylian Mbappé ( captain ),1998-12-20,Real Madrid
+France,11,FW,Michael Olise,2001-12-12,Bayern Munich
+France,12,FW,Bradley Barcola,2002-09-02,Paris Saint-Germain
+France,13,MF,N'Golo Kanté,1991-03-29,Fenerbahçe
+France,14,MF,Adrien Rabiot,1995-04-03,AC Milan
+France,15,DF,Ibrahima Konaté,1999-05-25,Liverpool
+France,16,GK,Mike Maignan,1995-07-03,AC Milan
+France,17,DF,William Saliba,2001-03-24,Arsenal
+France,18,MF,Warren Zaïre-Emery,2006-03-08,Paris Saint-Germain
+France,19,DF,Théo Hernandez,1997-10-06,Al-Hilal
+France,20,FW,Désiré Doué,2005-06-03,Paris Saint-Germain
+France,21,DF,Lucas Hernandez,1996-02-14,Paris Saint-Germain
+France,22,FW,Jean-Philippe Mateta,1997-06-28,Crystal Palace
+France,23,GK,Robin Risser,2004-12-02,Lens
+France,24,MF,Rayan Cherki,2003-08-17,Manchester City
+France,25,MF,Maghnes Akliouche,2002-02-25,Monaco
+France,26,DF,Maxence Lacroix,2000-04-06,Crystal Palace
+Iraq,1,GK,Fahad Talib,1994-10-21,Al-Talaba
+Iraq,2,DF,Rebin Sulaka,1992-04-12,Port
+Iraq,3,DF,Hussein Ali,2002-03-01,Pogoń Szczecin
+Iraq,4,DF,Zaid Tahseen,2001-01-29,Pakhtakor
+Iraq,5,DF,Akam Hashim,1998-08-16,Al-Zawraa
+Iraq,6,DF,Manaf Younis,1996-11-16,Al-Shorta
+Iraq,7,MF,Youssef Amyn,2003-08-21,AEK Larnaca
+Iraq,8,MF,Ibrahim Bayesh,2000-05-01,Al Dhafra
+Iraq,9,FW,Ali Al-Hamadi,2002-03-01,Luton Town
+Iraq,10,FW,Mohanad Ali,2000-06-20,Dibba
+Iraq,11,FW,Ahmed Qasem,2003-07-12,Nashville SC
+Iraq,12,GK,Jalal Hassan ( captain ),1991-05-18,Al-Zawraa
+Iraq,13,FW,Ali Yousif,1996-01-19,Al-Talaba
+Iraq,14,MF,Zidane Iqbal,2003-04-27,Utrecht
+Iraq,15,DF,Ahmed Maknzi,2001-09-24,Al-Karma
+Iraq,16,MF,Amir Al-Ammari,1997-07-27,Cracovia
+Iraq,17,FW,Ali Jasim,2004-01-20,Al-Najma
+Iraq,18,FW,Aymen Hussein,1996-03-22,Al-Karma
+Iraq,19,MF,Kevin Yakob,2000-10-10,AGF
+Iraq,20,MF,Aimar Sher,2002-12-20,Sarpsborg 08
+Iraq,21,FW,Marko Farji,2004-03-16,Venezia
+Iraq,22,GK,Ahmed Basil,1996-08-19,Al-Shorta
+Iraq,23,DF,Merchas Doski,1999-12-07,Viktoria Plzeň
+Iraq,24,MF,Zaid Ismail,2002-01-03,Al-Talaba
+Iraq,25,DF,Mustafa Saadoon,2001-05-25,Al-Shorta
+Iraq,26,DF,Frans Putros,1993-07-14,Persib
+Norway,1,GK,Ørjan Nyland,1990-09-10,Sevilla
+Norway,2,MF,Morten Thorsby,1996-05-05,Cremonese
+Norway,3,DF,Kristoffer Ajer,1998-04-17,Brentford
+Norway,4,DF,Leo Østigård,1999-11-28,Genoa
+Norway,5,DF,David Møller Wolfe,2002-04-23,Wolverhampton Wanderers
+Norway,6,MF,Patrick Berg,1997-11-24,Bodø/Glimt
+Norway,7,FW,Alexander Sørloth,1995-12-05,Atlético Madrid
+Norway,8,MF,Sander Berge,1998-02-14,Fulham
+Norway,9,FW,Erling Haaland,2000-07-21,Manchester City
+Norway,10,MF,Martin Ødegaard ( captain ),1998-12-17,Arsenal
+Norway,11,FW,Jørgen Strand Larsen,2000-02-06,Crystal Palace
+Norway,12,GK,Sander Tangvik,2002-11-29,Hamburger SV
+Norway,13,GK,Egil Selvik,1997-07-30,Watford
+Norway,14,MF,Fredrik Aursnes,1995-12-10,Benfica
+Norway,15,DF,Fredrik André Bjørkan,1998-08-21,Bodø/Glimt
+Norway,16,DF,Marcus Holmgren Pedersen,2000-07-16,Torino
+Norway,17,DF,Torbjørn Heggem,1999-01-12,Bologna
+Norway,18,MF,Kristian Thorstvedt,1999-03-13,Sassuolo
+Norway,19,MF,Thelo Aasgaard,2002-05-02,Rangers
+Norway,20,MF,Antonio Nusa,2005-04-17,RB Leipzig
+Norway,21,MF,Andreas Schjelderup,2004-06-01,Benfica
+Norway,22,MF,Oscar Bobb,2003-07-12,Fulham
+Norway,23,MF,Jens Petter Hauge,1999-10-12,Bodø/Glimt
+Norway,24,DF,Sondre Langås,2001-02-02,Derby County
+Norway,25,DF,Henrik Falchener,2003-05-08,Viking
+Norway,26,DF,Julian Ryerson,1997-11-17,Borussia Dortmund
+Senegal,1,GK,Yehvann Diouf,1999-11-16,Nice
+Senegal,2,DF,Mamadou Sarr,2005-08-29,Chelsea
+Senegal,3,DF,Kalidou Koulibaly ( captain ),1991-06-20,Al-Hilal
+Senegal,4,DF,Abdoulaye Seck,1992-06-04,Maccabi Haifa
+Senegal,5,MF,Idrissa Gueye,1989-09-26,Everton
+Senegal,6,MF,Pathé Ciss,1994-03-16,Rayo Vallecano
+Senegal,7,FW,Assane Diao,2005-09-07,Como
+Senegal,8,MF,Lamine Camara,2004-01-01,Monaco
+Senegal,9,FW,Bamba Dieng,2000-03-23,Lorient
+Senegal,10,FW,Sadio Mané,1992-04-10,Al-Nassr
+Senegal,11,FW,Nicolas Jackson,2001-06-20,Bayern Munich
+Senegal,12,FW,Cherif Ndiaye,1996-01-23,Samsunspor
+Senegal,13,FW,Iliman Ndiaye,2000-03-06,Everton
+Senegal,14,DF,Ismail Jakobs,1999-08-17,Galatasaray
+Senegal,15,DF,Krépin Diatta,1999-02-25,Monaco
+Senegal,16,GK,Édouard Mendy,1992-03-01,Al-Ahli
+Senegal,17,MF,Pape Matar Sarr,2002-09-14,Tottenham Hotspur
+Senegal,18,FW,Ismaïla Sarr,1998-02-25,Crystal Palace
+Senegal,19,DF,Moussa Niakhaté,1996-03-08,Lyon
+Senegal,20,FW,Ibrahim Mbaye,2008-01-24,Paris Saint-Germain
+Senegal,21,MF,Habib Diarra,2004-01-03,Sunderland
+Senegal,22,MF,Bara Sapoko Ndiaye,2007-12-31,Bayern Munich
+Senegal,23,GK,Mory Diaw,1993-06-22,Le Havre
+Senegal,24,DF,Antoine Mendy,2004-05-27,Nice
+Senegal,25,DF,El Hadji Malick Diouf,2004-12-29,West Ham United
+Senegal,26,MF,Pape Gueye,1999-01-24,Villarreal
+Algeria,1,GK,Melvin Mastil,2000-02-19,Stade Nyonnais
+Algeria,2,DF,Aïssa Mandi,1991-10-22,Lille
+Algeria,3,DF,Achref Abada,1999-06-15,USM Alger
+Algeria,4,DF,Mohamed Amine Tougai,2000-01-22,Espérance de Tunis
+Algeria,5,DF,Zineddine Belaïd,1999-03-20,JS Kabylie
+Algeria,6,MF,Ramiz Zerrouki,1998-05-26,Twente
+Algeria,7,FW,Riyad Mahrez ( captain ),1991-02-21,Al-Ahli
+Algeria,8,MF,Houssem Aouar,1998-06-30,Al-Ittihad
+Algeria,9,FW,Amine Gouiri,2000-02-16,Marseille
+Algeria,10,MF,Farès Chaïbi,2002-11-28,Eintracht Frankfurt
+Algeria,11,FW,Anis Hadj Moussa,2002-02-11,Feyenoord
+Algeria,12,FW,Nadhir Benbouali,2000-04-17,Győri ETO
+Algeria,13,DF,Jaouen Hadjam,2003-03-26,Young Boys
+Algeria,14,MF,Hicham Boudaoui,1999-09-23,Nice
+Algeria,15,DF,Rayan Aït-Nouri,2001-06-06,Manchester City
+Algeria,16,GK,Oussama Benbot,1994-10-11,USM Alger
+Algeria,17,DF,Rafik Belghali,2002-06-07,Hellas Verona
+Algeria,18,FW,Mohamed Amoura,2000-05-09,VfL Wolfsburg
+Algeria,19,MF,Nabil Bentaleb,1994-11-24,Lille
+Algeria,20,FW,Adil Boulbina,2003-05-02,Al-Duhail
+Algeria,21,DF,Ramy Bensebaini,1995-04-16,Borussia Dortmund
+Algeria,22,MF,Ibrahim Maza,2005-11-24,Bayer Leverkusen
+Algeria,23,GK,Luca Zidane,1998-05-13,Granada
+Algeria,24,MF,Yacine Titraoui,2003-07-26,Charleroi
+Algeria,25,FW,Farès Ghedjemis,2002-09-06,Frosinone
+Algeria,26,DF,Samir Chergui,1999-02-06,Paris FC
+Argentina,1,GK,Juan Musso,1994-05-06,Atlético Madrid
+Argentina,2,DF,Marcos Senesi,1997-05-10,Bournemouth
+Argentina,3,DF,Nicolás Tagliafico,1992-08-31,Lyon
+Argentina,4,DF,Gonzalo Montiel,1997-01-01,River Plate
+Argentina,5,MF,Leandro Paredes,1994-06-29,Boca Juniors
+Argentina,6,DF,Lisandro Martínez,1998-01-18,Manchester United
+Argentina,7,MF,Rodrigo De Paul,1994-05-24,Inter Miami CF
+Argentina,8,MF,Valentín Barco,2004-07-23,Strasbourg
+Argentina,9,FW,Julián Alvarez,2000-01-31,Atlético Madrid
+Argentina,10,FW,Lionel Messi ( captain ),1987-06-24,Inter Miami CF
+Argentina,11,MF,Giovani Lo Celso,1996-04-09,Real Betis
+Argentina,12,GK,Gerónimo Rulli,1992-05-20,Marseille
+Argentina,13,DF,Cristian Romero,1998-04-27,Tottenham Hotspur
+Argentina,14,MF,Exequiel Palacios,1998-10-05,Bayer Leverkusen
+Argentina,15,MF,Nicolás González,1998-04-06,Atlético Madrid
+Argentina,16,FW,Thiago Almada,2001-04-26,Atlético Madrid
+Argentina,17,FW,Giuliano Simeone,2002-12-18,Atlético Madrid
+Argentina,18,FW,Nico Paz,2004-09-08,Como
+Argentina,19,DF,Nicolás Otamendi,1988-02-12,Benfica
+Argentina,20,MF,Alexis Mac Allister,1998-12-24,Liverpool
+Argentina,21,FW,José Manuel López,2000-12-06,Palmeiras
+Argentina,22,FW,Lautaro Martínez,1997-08-22,Inter Milan
+Argentina,23,GK,Emiliano Martínez,1992-09-02,Aston Villa
+Argentina,24,MF,Enzo Fernández,2001-01-17,Chelsea
+Argentina,25,DF,Facundo Medina,1999-05-28,Marseille
+Argentina,26,DF,Nahuel Molina,1998-04-06,Atlético Madrid
+Austria,1,GK,Alexander Schlager,1996-02-01,Red Bull Salzburg
+Austria,2,DF,David Affengruber,2001-03-19,Elche
+Austria,3,DF,Kevin Danso,1998-09-19,Tottenham Hotspur
+Austria,4,MF,Xaver Schlager,1997-09-28,RB Leipzig
+Austria,5,DF,Stefan Posch,1997-05-14,Mainz 05
+Austria,6,MF,Nicolas Seiwald,2001-05-04,RB Leipzig
+Austria,7,FW,Marko Arnautović,1989-04-19,Red Star Belgrade
+Austria,8,DF,David Alaba ( captain ),1992-06-24,Real Madrid
+Austria,9,MF,Marcel Sabitzer,1994-03-17,Borussia Dortmund
+Austria,10,MF,Florian Grillitsch,1995-08-07,Braga
+Austria,11,FW,Michael Gregoritsch,1994-04-18,FC Augsburg
+Austria,12,GK,Florian Wiegele,2001-03-21,Viktoria Plzeň
+Austria,13,GK,Patrick Pentz,1997-01-02,Brøndby
+Austria,14,FW,Saša Kalajdžić,1997-07-07,LASK
+Austria,15,DF,Philipp Lienhart,1996-07-11,SC Freiburg
+Austria,16,DF,Phillipp Mwene,1994-01-29,Mainz 05
+Austria,17,MF,Carney Chukwuemeka,2003-10-20,Borussia Dortmund
+Austria,18,MF,Romano Schmid,2000-01-27,Werder Bremen
+Austria,19,MF,Dejan Ljubičić,1997-10-08,Schalke 04
+Austria,20,MF,Konrad Laimer,1997-05-27,Bayern Munich
+Austria,21,FW,Patrick Wimmer,2001-05-30,VfL Wolfsburg
+Austria,22,MF,Alexander Prass,2001-05-26,TSG Hoffenheim
+Austria,23,DF,Marco Friedl,1998-03-16,Werder Bremen
+Austria,24,MF,Paul Wanner,2005-12-23,PSV Eindhoven
+Austria,25,DF,Michael Svoboda,1998-10-15,Venezia
+Austria,26,MF,Alessandro Schöpf,1994-02-07,Wolfsberger AC
+Jordan,1,GK,Yazeed Abulaila,1993-01-08,Al-Hussein
+Jordan,2,DF,Mohammad Abu Hashish,1995-05-09,Al-Karma
+Jordan,3,DF,Abdallah Nasib,1994-02-25,Al-Zawraa
+Jordan,4,DF,Husam Abu Dahab,2000-05-13,Al-Faisaly
+Jordan,5,DF,Yazan Al-Arab,1996-01-31,FC Seoul
+Jordan,6,MF,Amer Jamous,2002-07-03,Al-Zawraa
+Jordan,7,FW,Mohammad Abu Zrayq,1997-12-30,Raja Casablanca
+Jordan,8,MF,Noor Al-Rawabdeh,1997-02-24,Selangor
+Jordan,9,FW,Ali Olwan,2000-03-26,Al-Sailiya
+Jordan,10,FW,Musa Al-Taamari,1997-06-10,Rennes
+Jordan,11,FW,Odeh Al-Fakhouri,2005-11-22,Pyramids
+Jordan,12,GK,Nour Bani Attiah,1993-01-25,Al-Faisaly
+Jordan,13,FW,Mahmoud Al-Mardi,1993-10-06,Al-Hussein
+Jordan,14,MF,Rajaei Ayed,1993-07-25,Al-Hussein
+Jordan,15,MF,Ibrahim Sadeh,2000-04-27,Al-Karma
+Jordan,16,DF,Mo Abualnadi,2001-02-08,Selangor
+Jordan,17,DF,Salim Obaid,1992-01-17,Al-Hussein
+Jordan,18,MF,Mohammad Abu Ghoush,2005-07-13,Al-Hussein
+Jordan,19,DF,Saed Al-Rosan,1997-02-01,Al-Hussein
+Jordan,20,MF,Mohannad Abu Taha,2003-02-02,Al-Quwa Al-Jawiya
+Jordan,21,MF,Nizar Al-Rashdan,1999-03-23,Qatar SC
+Jordan,22,GK,Abdallah Al-Fakhouri,2000-01-22,Al-Wehdat
+Jordan,23,DF,Ihsan Haddad ( captain ),1994-02-05,Al-Hussein
+Jordan,24,FW,Ali Azaizeh,2004-04-13,Al-Shabab
+Jordan,25,MF,Mohammad Al-Dawoud,1992-04-12,Al-Wehdat
+Jordan,26,DF,Anas Badawi,1997-09-13,Al-Faisaly
+Colombia,1,GK,David Ospina,1988-08-31,Atlético Nacional
+Colombia,2,DF,Daniel Muñoz,1996-05-26,Crystal Palace
+Colombia,3,DF,Jhon Lucumí,1998-06-26,Bologna
+Colombia,4,DF,Santiago Arias,1992-01-13,Independiente
+Colombia,5,MF,Kevin Castaño,2000-09-29,River Plate
+Colombia,6,MF,Richard Ríos,2000-06-02,Benfica
+Colombia,7,FW,Luis Díaz,1997-01-13,Bayern Munich
+Colombia,8,MF,Jorge Carrascal,1998-05-25,Flamengo
+Colombia,9,FW,Jhon Córdoba,1993-05-11,Krasnodar
+Colombia,10,MF,James Rodríguez ( captain ),1991-07-12,Minnesota United FC
+Colombia,11,MF,Jhon Arias,1997-09-21,Palmeiras
+Colombia,12,GK,Camilo Vargas,1989-03-09,Atlas
+Colombia,13,DF,Yerry Mina,1994-09-23,Cagliari
+Colombia,14,DF,Gustavo Puerta,2003-07-23,Racing Santander
+Colombia,15,MF,Juan Portilla,1998-09-12,Athletico Paranaense
+Colombia,16,MF,Jefferson Lerma,1994-10-25,Crystal Palace
+Colombia,17,DF,Johan Mojica,1992-08-21,Mallorca
+Colombia,18,DF,Willer Ditta,1998-01-23,Cruz Azul
+Colombia,19,FW,Cucho Hernández,1999-04-20,Real Betis
+Colombia,20,MF,Juan Fernando Quintero,1993-01-18,River Plate
+Colombia,21,FW,Jaminton Campaz,2000-05-24,Rosario Central
+Colombia,22,DF,Deiver Machado,1993-09-02,Nantes
+Colombia,23,DF,Davinson Sánchez,1996-06-12,Galatasaray
+Colombia,24,GK,Álvaro Montero,1995-03-29,Vélez Sarsfield
+Colombia,25,FW,Luis Suárez,1997-12-02,Sporting CP
+Colombia,26,FW,Andrés Gómez,2002-09-12,Vasco da Gama
+Congo DR,1,GK,Lionel Mpasi,1994-08-01,Le Havre
+Congo DR,2,DF,Aaron Wan-Bissaka,1997-11-26,West Ham United
+Congo DR,3,DF,Steve Kapuadi,1998-04-30,Widzew Łódź
+Congo DR,4,DF,Axel Tuanzebe,1997-11-14,Burnley
+Congo DR,5,DF,Dylan Batubinsika,1996-02-15,AEL
+Congo DR,6,MF,Ngal'ayel Mukau,2004-11-03,Lille
+Congo DR,7,MF,Nathanaël Mbuku,2002-03-16,Montpellier
+Congo DR,8,MF,Samuel Moutoussamy,1996-08-12,Atromitos
+Congo DR,9,FW,Brian Cipenga,1998-03-11,Castellón
+Congo DR,10,MF,Théo Bongonda,1995-11-20,Spartak Moscow
+Congo DR,11,FW,Gaël Kakuta,1991-06-21,AEL
+Congo DR,12,DF,Joris Kayembe,1994-08-08,Genk
+Congo DR,13,FW,Meschak Elia,1997-08-06,Alanyaspor
+Congo DR,14,MF,Noah Sadiki,2004-12-17,Sunderland
+Congo DR,15,MF,Aaron Tshibola,1995-01-02,Kilmarnock
+Congo DR,16,GK,Timothy Fayulu,1999-07-24,Noah
+Congo DR,17,FW,Cédric Bakambu,1991-04-11,Real Betis
+Congo DR,18,MF,Charles Pickel,1997-05-15,Espanyol
+Congo DR,19,FW,Fiston Mayele,1994-06-24,Pyramids
+Congo DR,20,FW,Yoane Wissa,1996-09-03,Newcastle United
+Congo DR,21,GK,Matthieu Epolo,2005-01-15,Standard Liège
+Congo DR,22,DF,Chancel Mbemba ( captain ),1994-08-08,Lille
+Congo DR,23,FW,Simon Banza,1996-08-13,Al Jazira
+Congo DR,24,DF,Gédéon Kalulu,1997-08-29,Aris Limassol
+Congo DR,25,MF,Edo Kayembe,1998-06-03,Watford
+Congo DR,26,DF,Arthur Masuaku,1993-11-07,Lens
+Portugal,1,GK,Diogo Costa,1999-09-19,Porto
+Portugal,2,DF,Nélson Semedo,1993-11-16,Fenerbahçe
+Portugal,3,DF,Rúben Dias,1997-05-14,Manchester City
+Portugal,4,DF,Tomás Araújo,2002-05-16,Benfica
+Portugal,5,DF,Diogo Dalot,1999-03-18,Manchester United
+Portugal,6,MF,Matheus Nunes,1998-08-27,Manchester City
+Portugal,7,FW,Cristiano Ronaldo ( captain ),1985-02-05,Al-Nassr
+Portugal,8,MF,Bruno Fernandes,1994-09-08,Manchester United
+Portugal,9,FW,Gonçalo Ramos,2001-06-20,Paris Saint-Germain
+Portugal,10,MF,Bernardo Silva,1994-08-10,Manchester City
+Portugal,11,FW,João Félix,1999-11-10,Al-Nassr
+Portugal,12,GK,José Sá,1993-01-17,Wolverhampton Wanderers
+Portugal,13,DF,Renato Veiga,2003-07-29,Villarreal
+Portugal,14,DF,Gonçalo Inácio,2001-08-25,Sporting CP
+Portugal,15,MF,João Neves,2004-09-27,Paris Saint-Germain
+Portugal,16,FW,Francisco Trincão,1999-12-29,Sporting CP
+Portugal,17,FW,Rafael Leão,1999-06-10,AC Milan
+Portugal,18,FW,Pedro Neto,2000-03-09,Chelsea
+Portugal,19,FW,Gonçalo Guedes,1996-11-29,Real Sociedad
+Portugal,20,DF,João Cancelo,1994-05-27,Barcelona
+Portugal,21,MF,Rúben Neves,1997-03-13,Al-Hilal
+Portugal,22,GK,Rui Silva,1994-02-07,Sporting CP
+Portugal,23,MF,Vitinha,2000-02-13,Paris Saint-Germain
+Portugal,24,DF,Samú Costa,2000-11-27,Mallorca
+Portugal,25,DF,Nuno Mendes,2002-06-19,Paris Saint-Germain
+Portugal,26,FW,Francisco Conceição,2002-12-14,Juventus
+Uzbekistan,1,GK,Utkir Yusupov,1991-01-04,Navbahor Namangan
+Uzbekistan,2,DF,Abdukodir Khusanov,2004-02-29,Manchester City
+Uzbekistan,3,DF,Khojiakbar Alijonov,1997-04-19,Pakhtakor
+Uzbekistan,4,DF,Farrukh Sayfiev,1991-01-17,Neftchi Fergana
+Uzbekistan,5,DF,Rustam Ashurmatov,1996-07-07,Esteghlal
+Uzbekistan,6,MF,Akmal Mozgovoy,1999-04-02,Pakhtakor
+Uzbekistan,7,MF,Otabek Shukurov,1996-06-22,Baniyas
+Uzbekistan,8,MF,Jamshid Iskanderov,1993-10-16,Neftchi Fergana
+Uzbekistan,9,MF,Odiljon Hamrobekov,1996-02-13,Tractor
+Uzbekistan,10,MF,Ruslanbek Jiyanov,2001-06-05,Navbahor Namangan
+Uzbekistan,11,MF,Oston Urunov,2000-12-19,Persepolis
+Uzbekistan,12,GK,Abduvohid Nematov,2001-03-20,Nasaf
+Uzbekistan,13,DF,Sherzod Nasrullaev,1998-07-23,Nasaf
+Uzbekistan,14,FW,Eldor Shomurodov ( captain ),1995-06-29,İstanbul Başakşehir
+Uzbekistan,15,DF,Umar Eshmurodov,1992-11-30,Nasaf
+Uzbekistan,16,GK,Botirali Ergashev,1995-06-23,Neftchi Fergana
+Uzbekistan,17,MF,Dostonbek Khamdamov,1996-07-24,Pakhtakor
+Uzbekistan,18,DF,Abdulla Abdullaev,1997-09-01,Dibba
+Uzbekistan,19,MF,Azizjon Ganiev,1998-02-22,Al Bataeh
+Uzbekistan,20,FW,Azizbek Amonov,1997-10-30,Dinamo Samarqand
+Uzbekistan,21,FW,Igor Sergeev,1993-04-30,Persepolis
+Uzbekistan,22,MF,Abbosbek Fayzullaev,2003-10-03,İstanbul Başakşehir
+Uzbekistan,23,MF,Sherzod Esanov,2003-02-01,Bukhara
+Uzbekistan,24,DF,Bekhruz Karimov,2007-08-07,Surkhon Termiz
+Uzbekistan,25,DF,Avazbek Ulmasaliev,2000-03-27,AGMK
+Uzbekistan,26,DF,Jakhongir Urozov,2004-01-18,Dinamo Samarqand
+Croatia,1,GK,Dominik Livaković,1995-01-09,Dinamo Zagreb
+Croatia,2,DF,Josip Stanišić,2000-04-02,Bayern Munich
+Croatia,3,DF,Marin Pongračić,1997-09-11,Fiorentina
+Croatia,4,DF,Joško Gvardiol,2002-01-23,Manchester City
+Croatia,5,DF,Duje Ćaleta-Car,1996-09-17,Real Sociedad
+Croatia,6,DF,Josip Šutalo,2000-02-28,Ajax
+Croatia,7,MF,Nikola Moro,1998-03-12,Bologna
+Croatia,8,MF,Mateo Kovačić,1994-05-06,Manchester City
+Croatia,9,FW,Andrej Kramarić,1991-06-19,TSG Hoffenheim
+Croatia,10,MF,Luka Modrić ( captain ),1985-09-09,AC Milan
+Croatia,11,FW,Ante Budimir,1991-07-22,Osasuna
+Croatia,12,GK,Ivor Pandur,2000-03-25,Hull City
+Croatia,13,MF,Nikola Vlašić,1997-10-04,Torino
+Croatia,14,FW,Ivan Perišić,1989-02-02,PSV Eindhoven
+Croatia,15,MF,Mario Pašalić,1995-02-09,Atalanta
+Croatia,16,MF,Martin Baturina,2003-02-16,Como
+Croatia,17,MF,Petar Sučić,2003-10-25,Inter Milan
+Croatia,18,DF,Kristijan Jakić,1997-05-14,FC Augsburg
+Croatia,19,MF,Toni Fruk,2001-03-09,Rijeka
+Croatia,20,FW,Igor Matanović,2003-03-31,SC Freiburg
+Croatia,21,MF,Luka Sučić,2002-09-08,Real Sociedad
+Croatia,22,DF,Luka Vušković,2007-02-24,Hamburger SV
+Croatia,23,GK,Dominik Kotarski,2000-02-10,Copenhagen
+Croatia,24,FW,Marco Pašalić,2000-09-14,Orlando City SC
+Croatia,25,DF,Martin Erlić,1998-01-24,Midtjylland
+Croatia,26,FW,Petar Musa,1998-03-04,FC Dallas
+England,1,GK,Jordan Pickford,1994-03-07,Everton
+England,2,DF,Ezri Konsa,1997-10-23,Aston Villa
+England,3,DF,Nico O'Reilly,2005-03-21,Manchester City
+England,4,MF,Declan Rice,1999-01-14,Arsenal
+England,5,DF,John Stones,1994-05-28,Manchester City
+England,6,DF,Marc Guéhi,2000-07-13,Manchester City
+England,7,FW,Bukayo Saka,2001-09-05,Arsenal
+England,8,MF,Elliot Anderson,2002-11-06,Nottingham Forest
+England,9,FW,Harry Kane ( captain ),1993-07-28,Bayern Munich
+England,10,MF,Jude Bellingham,2003-06-29,Real Madrid
+England,11,FW,Marcus Rashford,1997-10-31,Barcelona
+England,12,DF,Trevoh Chalobah,1999-07-05,Chelsea
+England,13,GK,Dean Henderson,1997-03-12,Crystal Palace
+England,14,MF,Jordan Henderson,1990-06-17,Brentford
+England,15,DF,Dan Burn,1992-05-09,Newcastle United
+England,16,MF,Kobbie Mainoo,2005-04-19,Manchester United
+England,17,MF,Morgan Rogers,2002-07-26,Aston Villa
+England,18,FW,Anthony Gordon,2001-02-24,Newcastle United
+England,19,FW,Ollie Watkins,1995-12-30,Aston Villa
+England,20,FW,Noni Madueke,2002-03-10,Arsenal
+England,21,MF,Eberechi Eze,1998-06-29,Arsenal
+England,22,FW,Ivan Toney,1996-03-16,Al-Ahli
+England,23,GK,James Trafford,2002-10-10,Manchester City
+England,24,DF,Reece James,1999-12-08,Chelsea
+England,25,DF,Djed Spence,2000-08-09,Tottenham Hotspur
+England,26,DF,Jarell Quansah,2003-01-29,Bayer Leverkusen
+Ghana,1,GK,Lawrence Ati-Zigi,1996-11-29,St. Gallen
+Ghana,2,DF,Alidu Seidu,2000-06-04,Rennes
+Ghana,3,MF,Caleb Yirenkyi,2006-01-15,Nordsjælland
+Ghana,4,DF,Jonas Adjetey,2003-12-13,VfL Wolfsburg
+Ghana,5,MF,Thomas Partey,1993-06-13,Villarreal
+Ghana,6,DF,Abdul Mumin,1998-06-06,Rayo Vallecano
+Ghana,7,FW,Abdul Fatawu,2004-03-08,Leicester City
+Ghana,8,MF,Kwasi Sibo,1998-06-24,Oviedo
+Ghana,9,FW,Jordan Ayew ( captain ),1991-09-11,Leicester City
+Ghana,10,FW,Brandon Thomas-Asante,1998-12-29,Coventry City
+Ghana,11,MF,Antoine Semenyo,2000-01-07,Manchester City
+Ghana,12,GK,Joseph Anang,2000-06-08,St Patrick's Athletic
+Ghana,13,FW,Christopher Bonsu Baah,2004-12-14,Al-Qadsiah
+Ghana,14,DF,Gideon Mensah,1998-07-18,Auxerre
+Ghana,15,MF,Elisha Owusu,1997-11-07,Auxerre
+Ghana,16,GK,Benjamin Asare,1992-07-13,Hearts of Oak
+Ghana,17,DF,Abdul Rahman Baba,1994-07-02,PAOK
+Ghana,18,DF,Jerome Opoku,1998-10-14,İstanbul Başakşehir
+Ghana,19,FW,Iñaki Williams,1994-06-15,Athletic Bilbao
+Ghana,20,MF,Augustine Boakye,2000-11-03,Saint-Étienne
+Ghana,21,DF,Kojo Peprah Oppong,2004-06-04,Nice
+Ghana,22,FW,Kamaldeen Sulemana,2002-02-15,Atalanta
+Ghana,23,DF,Derrick Luckassen,1995-07-03,Pafos
+Ghana,24,FW,Ernest Nuamah,2003-11-01,Lyon
+Ghana,25,FW,Prince Kwabena Adu,2003-09-23,Viktoria Plzeň
+Ghana,26,DF,Marvin Senaya,2001-01-28,Auxerre
+Panama,1,GK,Luis Mejía,1991-03-16,Nacional
+Panama,2,DF,César Blackman,1998-04-02,Slovan Bratislava
+Panama,3,DF,José Córdoba,2001-06-03,Norwich City
+Panama,4,DF,Fidel Escobar,1995-01-09,Saprissa
+Panama,5,DF,Edgardo Fariña,2001-10-19,Pari Nizhny Novgorod
+Panama,6,MF,Cristian Martínez,1997-02-06,Ironi Kiryat Shmona
+Panama,7,MF,José Luis Rodríguez,1998-06-19,Juárez
+Panama,8,MF,Adalberto Carrasquilla,1998-11-28,Pumas UNAM
+Panama,9,FW,Tomás Rodríguez,1999-03-09,Saprissa
+Panama,10,MF,Ismael Díaz,1997-05-12,León
+Panama,11,MF,Yoel Bárcenas,1993-10-23,Mazatlán
+Panama,12,GK,César Samudio,1994-02-23,Marathón
+Panama,13,DF,Jiovany Ramos,1997-01-26,Puerto Cabello
+Panama,14,DF,Carlos Harvey,2000-02-03,Minnesota United FC
+Panama,15,DF,Eric Davis,1991-03-31,Plaza Amador
+Panama,16,DF,Andrés Andrade,1998-10-16,LASK
+Panama,17,FW,José Fajardo,1993-08-18,Universidad Católica
+Panama,18,FW,Cecilio Waterman,1991-04-13,Universidad de Concepción
+Panama,19,MF,Alberto Quintero,1987-12-18,Plaza Amador
+Panama,20,MF,Aníbal Godoy ( captain ),1990-02-10,San Diego FC
+Panama,21,MF,César Yanis,1996-01-28,Cobresal
+Panama,22,GK,Orlando Mosquera,1994-12-25,Al-Fayha
+Panama,23,DF,Michael Amir Murillo,1996-02-11,Beşiktaş
+Panama,24,FW,Azarias Londoño,2001-06-21,Universidad Católica
+Panama,25,DF,Roderick Miller,1992-04-03,Turan Tovuz
+Panama,26,DF,Jorge Gutiérrez,1998-09-01,Deportivo La Guaira
