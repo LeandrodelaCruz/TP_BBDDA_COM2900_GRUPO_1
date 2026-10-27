@@ -27,18 +27,18 @@ GO
 DECLARE @archivo NVARCHAR(1000) =
     N'/var/opt/mssql/import/teams.csv';
 
-PRINT N'===== PRIMERA IMPORTACIÓN =====';
+PRINT N'===== PRIMERA IMPORTACION =====';
 EXEC importacion.SP_Importar_Seleccion_CSV
     @archivo = @archivo;
 
-PRINT N'===== DATOS DESPUÉS DE LA PRIMERA IMPORTACIÓN =====';
+PRINT N'===== DATOS DESPUES DE LA PRIMERA IMPORTACION =====';
 EXEC abm.Seleccion_Listar;
 
-PRINT N'===== SEGUNDA IMPORTACIÓN - PRUEBA DE UPSERT =====';
+PRINT N'===== SEGUNDA IMPORTACION - PRUEBA DE UPSERT =====';
 EXEC importacion.SP_Importar_Seleccion_CSV
     @archivo = @archivo;
 
-PRINT N'===== VERIFICACIÓN DE DUPLICADOS =====';
+PRINT N'===== VERIFICACION DE DUPLICADOS =====';
 SELECT
     pais,
     COUNT(*) AS cantidad
