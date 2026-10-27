@@ -2,18 +2,18 @@
     Universidad: Universidad Nacional de la Matanza
     Materia: Bases de Datos Aplicada
     Integrantes: 
-				Rodr�guez, El�as Uriel 44143869
+				Rodriguez, Elias Uriel 44143869
 				Clara, Lucas Nicolas 46265738
 				Caro, Nicolas Dario 40766722
 				de la Cruz, Leandro Ariel 42022547
     Fecha: 06/10/2026
 
-    Descripci�n:
-    Script de creaci�n de Stored Procedures ABM (Alta, Baja, Modificaci�n)
+    Descripcion:
+    Script de creacion de Stored Procedures ABM (Alta, Baja, Modificacion)
     para la tabla:
         - dbo.Reemplazo
 
-    Cada SP realiza validaciones y agrupa los errores en un �nico mensaje.
+    Cada SP realiza validaciones y agrupa los errores en un unico mensaje.
 */
 
 USE MUNDIALDEFUTBOL;
@@ -34,19 +34,19 @@ BEGIN
 
     DECLARE @errores NVARCHAR(MAX) = N'';
 
-    -- Validaci�n 1: jugadores distintos
+    -- Validacion 1: jugadores distintos
     IF @id_jugador_baja = @id_jugador_alta
         SET @errores += N'- El jugador de baja y el de alta no pueden ser el mismo. ';
 
-    -- Validaci�n 2: existencia del jugador de baja
+    -- Validacion 2: existencia del jugador de baja
     IF NOT EXISTS (SELECT 1 FROM dbo.Jugador WHERE id_jugador = @id_jugador_baja)
         SET @errores += N'- No existe el jugador de baja indicado. ';
 
-    -- Validaci�n 3: existencia del jugador de alta
+    -- Validacion 3: existencia del jugador de alta
     IF NOT EXISTS (SELECT 1 FROM dbo.Jugador WHERE id_jugador = @id_jugador_alta)
         SET @errores += N'- No existe el jugador de alta indicado. ';
 
-    -- Validaci�n 4: mismo pa�s (selecci�n) para ambos jugadores
+    -- Validacion 4: mismo pais (seleccion) para ambos jugadores
     IF EXISTS (
         SELECT 1
         FROM dbo.Jugador jb
@@ -54,13 +54,13 @@ BEGIN
         WHERE jb.id_jugador = @id_jugador_baja
           AND jb.id_seleccion <> ja.id_seleccion
     )
-        SET @errores += N'- Ambos jugadores deben pertenecer a la misma selecci�n. ';
+        SET @errores += N'- Ambos jugadores deben pertenecer a la misma seleccion. ';
 
-    -- Validaci�n 5: fecha no futura
+    -- Validacion 5: fecha no futura
     IF @fecha_cambio > CAST(GETDATE() AS DATE)
         SET @errores += N'- La fecha del cambio no puede ser futura. ';
 
-    -- Validaci�n 6: motivo no vac�o
+    -- Validacion 6: motivo no vacio
     IF LTRIM(RTRIM(ISNULL(@motivo, ''))) = ''
         SET @errores += N'- El motivo es obligatorio. ';
 
@@ -140,7 +140,7 @@ BEGIN
         WHERE jb.id_jugador = @id_jugador_baja
           AND jb.id_seleccion <> ja.id_seleccion
     )
-        SET @errores += N'- Ambos jugadores deben pertenecer a la misma selecci�n. ';
+        SET @errores += N'- Ambos jugadores deben pertenecer a la misma seleccion. ';
 
     IF @fecha_cambio > CAST(GETDATE() AS DATE)
         SET @errores += N'- La fecha del cambio no puede ser futura. ';

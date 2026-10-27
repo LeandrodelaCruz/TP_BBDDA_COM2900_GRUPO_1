@@ -124,7 +124,7 @@ BEGIN
 
     BEGIN TRY
         EXEC abm.Formacion_Alta
-            @id_partido_b5      = @id_partido_b5,
+            @id_partido      = @id_partido_b5,
             @id_seleccion    = @id_sel1_b5,
             @esquema_tactico = '4-4-2';
         PRINT 'ERROR: no se lanzó la excepción esperada';
@@ -144,7 +144,7 @@ BEGIN
 
     BEGIN TRY
         EXEC abm.Formacion_Alta
-            @id_partido_b6      = @id_partido_b6,
+            @id_partido      = @id_partido_b6,
             @id_seleccion    = @id_sel1_b6,
             @esquema_tactico = '3-5-2';
         PRINT 'ERROR: no se lanzó la excepción esperada';

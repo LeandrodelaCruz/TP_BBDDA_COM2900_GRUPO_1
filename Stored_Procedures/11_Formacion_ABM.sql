@@ -2,18 +2,18 @@
     Universidad: Universidad Nacional de la Matanza
     Materia: Bases de Datos Aplicada
     Integrantes: 
-				Rodr�guez, El�as Uriel 44143869
+				Rodriguez, Elias Uriel 44143869
 				Clara, Lucas Nicolas 46265738
 				Caro, Nicolas Dario 40766722
 				de la Cruz, Leandro Ariel 42022547
     Fecha: 06/10/2026
 
-    Descripci�n:
-    Script de creaci�n de Stored Procedures ABM (Alta, Baja, Modificaci�n)
+    Descripcion:
+    Script de creacion de Stored Procedures ABM (Alta, Baja, Modificacion)
     para la tabla:
         - dbo.Formacion
 
-    Cada SP realiza validaciones y agrupa los errores en un �nico mensaje.
+    Cada SP realiza validaciones y agrupa los errores en un unico mensaje.
 */
 
 USE MUNDIALDEFUTBOL;
@@ -37,16 +37,22 @@ BEGIN
         SET @errores += N'- No existe el partido indicado. ';
 
     IF NOT EXISTS (SELECT 1 FROM dbo.Seleccion WHERE id_seleccion = @id_seleccion)
-        SET @errores += N'- No existe la selecci�n indicada. ';
+        SET @errores += N'- No existe la seleccion indicada. ';
 
-    -- Validaci�n: no repetir formaci�n para el mismo partido-selecci�n
+    -- Validacion: no repetir formacion para el mismo partido-seleccion
     IF EXISTS (SELECT 1 FROM dbo.Formacion
                WHERE id_partido = @id_partido AND id_seleccion = @id_seleccion)
-        SET @errores += N'- Ya existe una formaci�n para ese partido y selecci�n. ';
+        SET @errores += N'- Ya existe una formacion para ese partido y seleccion. ';
 
-    -- Validaci�n: esquema t�ctico obligatorio
+    -- Validación: la selección debe participar del partido
+    IF NOT EXISTS (SELECT 1 FROM dbo.Partido
+                   WHERE id_partido = @id_partido
+                     AND (@id_seleccion = id_seleccion_1 OR @id_seleccion = id_seleccion_2))
+        SET @errores += N'- La selección no participa en el partido indicado. ';
+
+    -- Validacion: esquema tactico obligatorio
     IF LTRIM(RTRIM(ISNULL(@esquema_tactico, ''))) = ''
-        SET @errores += N'- El esquema t�ctico es obligatorio. ';
+        SET @errores += N'- El esquema tactico es obligatorio. ';
 
     IF @errores <> N''
     BEGIN
@@ -75,11 +81,11 @@ BEGIN
     DECLARE @errores NVARCHAR(MAX) = N'';
 
     IF NOT EXISTS (SELECT 1 FROM dbo.Formacion WHERE id_formacion = @id_formacion)
-        SET @errores += N'- No existe la formaci�n indicada. ';
+        SET @errores += N'- No existe la formacion indicada. ';
 
     -- No borrar si tiene jugadores asociados
     IF EXISTS (SELECT 1 FROM dbo.Formacion_Jugador WHERE id_formacion = @id_formacion)
-        SET @errores += N'- No se puede eliminar: la formaci�n tiene jugadores asociados. ';
+        SET @errores += N'- No se puede eliminar: la formacion tiene jugadores asociados. ';
 
     IF @errores <> N''
     BEGIN
@@ -109,23 +115,23 @@ BEGIN
     DECLARE @errores NVARCHAR(MAX) = N'';
 
     IF NOT EXISTS (SELECT 1 FROM dbo.Formacion WHERE id_formacion = @id_formacion)
-        SET @errores += N'- No existe la formaci�n indicada. ';
+        SET @errores += N'- No existe la formacion indicada. ';
 
     IF NOT EXISTS (SELECT 1 FROM dbo.Partido WHERE id_partido = @id_partido)
         SET @errores += N'- No existe el partido indicado. ';
 
     IF NOT EXISTS (SELECT 1 FROM dbo.Seleccion WHERE id_seleccion = @id_seleccion)
-        SET @errores += N'- No existe la selecci�n indicada. ';
+        SET @errores += N'- No existe la seleccion indicada. ';
 
-    -- No permitir cambiar a una combinaci�n ya usada por otra formaci�n
+    -- No permitir cambiar a una combinacion ya usada por otra formacion
     IF EXISTS (SELECT 1 FROM dbo.Formacion
                WHERE id_partido = @id_partido
                  AND id_seleccion = @id_seleccion
                  AND id_formacion <> @id_formacion)
-        SET @errores += N'- Ya existe otra formaci�n para ese partido y selecci�n. ';
+        SET @errores += N'- Ya existe otra formacion para ese partido y seleccion. ';
 
     IF LTRIM(RTRIM(ISNULL(@esquema_tactico, ''))) = ''
-        SET @errores += N'- El esquema t�ctico es obligatorio. ';
+        SET @errores += N'- El esquema tactico es obligatorio. ';
 
     IF @errores <> N''
     BEGIN
