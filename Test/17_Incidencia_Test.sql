@@ -1,15 +1,14 @@
 /*
     Universidad: Universidad Nacional de La Matanza - UNLaM
     Materia: Bases de Datos Aplicada - 2C-2026
-    Comisión: Com: 01-2900
+    Comision: Com: 01-2900
     Grupo 01: 
-    - Caro, Nicolás Darío
+    - Caro, Nicolas Dario
     - Clara, Lucas
     - De La Cruz, Leandro Ariel
-    - Rodríguez Elías Uriel
+    - Rodriguez Elias Uriel
 
-
-    Descripción:
+    Descripcion:
     Script de testing COMPLETO para todos los procedimientos de Incidencia
     Incluye pruebas exitosas y pruebas de validaciones fallidas
     
@@ -62,27 +61,27 @@ BEGIN
     PRINT '=== Limpieza completada ===';
 
     /* =========================================================
-       PREPARACIÓN: datos mínimos de apoyo
+       PREPARACIoN: datos minimos de apoyo
        ========================================================= */
 
     PRINT '=== Preparando datos de prueba ===';
 
     -- Sede de prueba
     INSERT INTO dbo.Sede (nombre_estadio, ciudad, pais, capacidad, huso_horario)
-    VALUES (N'Estadio Testing Incidencia', N'Ciudad Test', N'País Test', 50000, 'UTC-03:00');
+    VALUES (N'Estadio Testing Incidencia', N'Ciudad Test', N'Pais Test', 50000, 'UTC-03:00');
 
     -- Selecciones de prueba
     INSERT INTO dbo.Seleccion (pais, confederacion, grupo_asignado)
-    VALUES (N'Selección Test Incidencia 1', N'TEST', 'A');
+    VALUES (N'Seleccion Test Incidencia 1', N'TEST', 'A');
 
     INSERT INTO dbo.Seleccion (pais, confederacion, grupo_asignado)
-    VALUES (N'Selección Test Incidencia 2', N'TEST', 'A');
+    VALUES (N'Seleccion Test Incidencia 2', N'TEST', 'A');
 
     DECLARE @id_sede_test INT = (SELECT id_sede FROM dbo.Sede WHERE nombre_estadio = N'Estadio Testing Incidencia');
-    DECLARE @id_sel_test1 INT = (SELECT id_seleccion FROM dbo.Seleccion WHERE pais = N'Selección Test Incidencia 1');
-    DECLARE @id_sel_test2 INT = (SELECT id_seleccion FROM dbo.Seleccion WHERE pais = N'Selección Test Incidencia 2');
+    DECLARE @id_sel_test1 INT = (SELECT id_seleccion FROM dbo.Seleccion WHERE pais = N'Seleccion Test Incidencia 1');
+    DECLARE @id_sel_test2 INT = (SELECT id_seleccion FROM dbo.Seleccion WHERE pais = N'Seleccion Test Incidencia 2');
 
-    -- Jugadores de Selección 1
+    -- Jugadores de Seleccion 1
     INSERT INTO dbo.Jugador (id_seleccion, nombre, apellido, fecha_nacimiento, club_origen, posicion, dorsal)
     VALUES (@id_sel_test1, N'Goleador1Test', N'Test', '1990-01-01', N'Club Test', N'Delantero', 9);
 
@@ -92,7 +91,7 @@ BEGIN
     INSERT INTO dbo.Jugador (id_seleccion, nombre, apellido, fecha_nacimiento, club_origen, posicion, dorsal)
     VALUES (@id_sel_test1, N'Mediocampista1Test', N'Test', '1992-01-01', N'Club Test', N'Mediocampista', 7);
 
-    -- Jugadores de Selección 2
+    -- Jugadores de Seleccion 2
     INSERT INTO dbo.Jugador (id_seleccion, nombre, apellido, fecha_nacimiento, club_origen, posicion, dorsal)
     VALUES (@id_sel_test2, N'Goleador2Test', N'Test', '1993-01-01', N'Club Test', N'Delantero', 10);
 
@@ -108,7 +107,7 @@ BEGIN
 
     DECLARE @id_partido_test_b5 INT = (SELECT id_partido FROM dbo.Partido WHERE resultado_final = N'TEST-INCIDENCIA');
 
-    -- Formación Selección 1
+    -- Formacion Seleccion 1
     DECLARE @id_formacion_sel1 INT;
     INSERT INTO dbo.Formacion (id_partido, id_seleccion, esquema_tactico)
     VALUES (@id_partido_test_b5, @id_sel_test1, '4-3-3');
@@ -123,7 +122,7 @@ BEGIN
     INSERT INTO dbo.Formacion_Jugador (id_formacion, id_jugador, posicion_en_cancha, dorsal_en_cancha, es_titular)
     SELECT @id_formacion_sel1, id_jugador, 'Mediocampista', 7, 1 FROM dbo.Jugador WHERE nombre = N'Mediocampista1Test';
 
-    -- Formación Selección 2
+    -- Formacion Seleccion 2
     DECLARE @id_formacion_sel2 INT;
     INSERT INTO dbo.Formacion (id_partido, id_seleccion, esquema_tactico)
     VALUES (@id_partido_test_b5, @id_sel_test2, '4-4-2');
@@ -149,10 +148,10 @@ BEGIN
     PRINT '=============================================';
 
     -- ---------------------------------------------------------
-    -- CASO 1: Inserción exitosa - GOL
+    -- CASO 1: Insercion exitosa - GOL
     -- ---------------------------------------------------------
     PRINT '';
-    PRINT '--- CASO 1: Inserción exitosa - GOL ---';
+    PRINT '--- CASO 1: Insercion exitosa - GOL ---';
 
     DECLARE @id_partido_test_b7 INT = (SELECT id_partido FROM dbo.Partido WHERE resultado_final = N'TEST-INCIDENCIA');
     DECLARE @id_goleador INT = (SELECT id_jugador FROM dbo.Jugador WHERE nombre = N'Goleador1Test');
@@ -165,7 +164,7 @@ BEGIN
             @tipo = 'GOL',
             @periodo = 'PRIMER TIEMPO',
             @minuto = 25,
-            @motivo = 'Gol de cabeza en el área',
+            @motivo = 'Gol de cabeza en el area',
             @id_jugador_involucrado = NULL,
             @id_incidencia = @id_incidencia_gol OUTPUT;
 
@@ -176,10 +175,10 @@ BEGIN
     END CATCH
 
     -- ---------------------------------------------------------
-    -- CASO 2: Inserción exitosa - AMONESTACION
+    -- CASO 2: Insercion exitosa - AMONESTACION
     -- ---------------------------------------------------------
     PRINT '';
-    PRINT '--- CASO 2: Inserción exitosa - AMONESTACION ---';
+    PRINT '--- CASO 2: Insercion exitosa - AMONESTACION ---';
 
     DECLARE @id_partido_test_b8 INT = (SELECT id_partido FROM dbo.Partido WHERE resultado_final = N'TEST-INCIDENCIA');
     DECLARE @id_defensa1 INT = (SELECT id_jugador FROM dbo.Jugador WHERE nombre = N'Defensa1Test');
@@ -204,10 +203,10 @@ BEGIN
     END CATCH
 
     -- ---------------------------------------------------------
-    -- CASO 3: Inserción exitosa - EXPULSION
+    -- CASO 3: Insercion exitosa - EXPULSION
     -- ---------------------------------------------------------
     PRINT '';
-    PRINT '--- CASO 3: Inserción exitosa - EXPULSION ---';
+    PRINT '--- CASO 3: Insercion exitosa - EXPULSION ---';
 
     DECLARE @id_partido_test_b9 INT = (SELECT id_partido FROM dbo.Partido WHERE resultado_final = N'TEST-INCIDENCIA');
     DECLARE @id_mediocampista2 INT = (SELECT id_jugador FROM dbo.Jugador WHERE nombre = N'Mediocampista2Test');
@@ -221,7 +220,7 @@ BEGIN
             @tipo = 'EXPULSION',
             @periodo = 'SEGUNDO TIEMPO',
             @minuto = 70,
-            @motivo = 'Agresión directa al rival',
+            @motivo = 'Agresion directa al rival',
             @id_jugador_involucrado = @id_goleador1,
             @id_incidencia = @id_incidencia_roja OUTPUT;
 
@@ -232,10 +231,10 @@ BEGIN
     END CATCH
 
     -- ---------------------------------------------------------
-    -- CASO 4: Validación fallida - Tipo inválido
+    -- CASO 4: Validacion fallida - Tipo invalido
     -- ---------------------------------------------------------
     PRINT '';
-    PRINT '--- CASO 4: Validación fallida - Tipo inválido ---';
+    PRINT '--- CASO 4: Validacion fallida - Tipo invalido ---';
 
     DECLARE @id_partido_test_b10 INT = (SELECT id_partido FROM dbo.Partido WHERE resultado_final = N'TEST-INCIDENCIA');
     DECLARE @id_jugador_b10 INT = (SELECT TOP 1 id_jugador FROM dbo.Jugador WHERE nombre LIKE N'%Test%');
@@ -250,17 +249,17 @@ BEGIN
             @minuto = 15,
             @id_incidencia = @id_incidencia_test_b10 OUTPUT;
 
-        PRINT 'ERROR: Debería haber fallado';
+        PRINT 'ERROR: Deberia haber fallado';
     END TRY
     BEGIN CATCH
-        PRINT 'OK - Validación correcta: ' + ERROR_MESSAGE();
+        PRINT 'OK - Validacion correcta: ' + ERROR_MESSAGE();
     END CATCH
 
     -- ---------------------------------------------------------
-    -- CASO 5: Validación fallida - AMONESTACION sin agredido
+    -- CASO 5: Validacion fallida - AMONESTACION sin agredido
     -- ---------------------------------------------------------
     PRINT '';
-    PRINT '--- CASO 5: Validación fallida - AMONESTACION sin agredido ---';
+    PRINT '--- CASO 5: Validacion fallida - AMONESTACION sin agredido ---';
 
     DECLARE @id_partido_test_b11 INT = (SELECT id_partido FROM dbo.Partido WHERE resultado_final = N'TEST-INCIDENCIA');
     DECLARE @id_jugador_b11 INT = (SELECT TOP 1 id_jugador FROM dbo.Jugador WHERE nombre LIKE N'%Test%');
@@ -276,10 +275,10 @@ BEGIN
             @id_jugador_involucrado = NULL,
             @id_incidencia = @id_incidencia_test_b11 OUTPUT;
 
-        PRINT 'ERROR: Debería haber fallado';
+        PRINT 'ERROR: Deberia haber fallado';
     END TRY
     BEGIN CATCH
-        PRINT 'OK - Validación correcta: ' + ERROR_MESSAGE();
+        PRINT 'OK - Validacion correcta: ' + ERROR_MESSAGE();
     END CATCH
 
     -- ---------------------------------------------------------
@@ -333,7 +332,7 @@ BEGIN
         BEGIN TRY
             EXEC abm.Incidencia_Modificacion
                 @id_incidencia = @id_incidencia_update,
-                @motivo = 'Motivo actualizado - análisis de video';
+                @motivo = 'Motivo actualizado - analisis de video';
 
             PRINT 'OK - Incidencia actualizada';
 

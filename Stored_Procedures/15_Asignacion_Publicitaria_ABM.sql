@@ -1,21 +1,21 @@
 /*
     Universidad: Universidad Nacional de La Matanza - UNLaM
     Materia: Bases de Datos Aplicada - 2C-2026
-    Comisión: Com: 01-2900
+    Comision: Com: 01-2900
     Grupo 01: 
-    - Caro, Nicolás Darío
+    - Caro, Nicolas Dario
     - Clara, Lucas
     - De La Cruz, Leandro Ariel
-    - Rodríguez Elías Uriel
+    - Rodriguez Elias Uriel
 
-    Descripción:
+    Descripcion:
     Stored Procedures ABM para la tabla Asignacion_Publicitaria
     
-    Todas las validaciones están en constraints:
+    Todas las validaciones estan en constraints:
     - FK de partido y pieza
     - Costo >= 0
-    - Número de espacio entre 1 y 4
-    - Único (id_partido, numero_espacio)
+    - Numero de espacio entre 1 y 4
+    - unico (id_partido, numero_espacio)
     
     Procedimientos:
     - Asignacion_Publicitaria_Alta
@@ -29,7 +29,7 @@ USE MUNDIALDEFUTBOL;
 GO
 
 -- =========================================================
--- CREATE - Insertar una nueva asignación publicitaria
+-- CREATE - Insertar una nueva asignacion publicitaria
 -- =========================================================
 
 CREATE OR ALTER PROCEDURE abm.Asignacion_Publicitaria_Alta
@@ -46,7 +46,7 @@ BEGIN
         BEGIN TRANSACTION;
         
         -- =========================================================
-        -- INSERCIÓN - Constraints validan todo
+        -- INSERCIoN - Constraints validan todo
         -- =========================================================
         INSERT INTO dbo.Asignacion_Publicitaria (
             id_partido,
@@ -63,7 +63,7 @@ BEGIN
         SET @id_asignacion = SCOPE_IDENTITY();
         
         COMMIT TRANSACTION;
-        PRINT 'Asignación publicitaria registrada exitosamente. ID: ' + CAST(@id_asignacion AS VARCHAR(10));
+        PRINT 'Asignacion publicitaria registrada exitosamente. ID: ' + CAST(@id_asignacion AS VARCHAR(10));
         
     END TRY
     BEGIN CATCH
@@ -81,7 +81,7 @@ BEGIN
         SET @error_message = ERROR_MESSAGE();
         
         RAISERROR(
-            'Error al registrar asignación publicitaria: %s (Código de error: %d)',
+            'Error al registrar asignacion publicitaria: %s (Codigo de error: %d)',
             @error_severity,
             @error_state,
             @error_message,
@@ -93,7 +93,7 @@ END;
 GO
 
 -- =========================================================
--- READ - Obtener asignación por ID
+-- READ - Obtener asignacion por ID
 -- =========================================================
 
 CREATE OR ALTER PROCEDURE abm.Asignacion_Publicitaria_GetById
@@ -158,7 +158,7 @@ END;
 GO
 
 -- =========================================================
--- READ - Obtener historial de exhibiciones por anunciante (para facturación)
+-- READ - Obtener historial de exhibiciones por anunciante (para facturacion)
 -- =========================================================
 
 CREATE OR ALTER PROCEDURE abm.Asignacion_Publicitaria_GetByAnunciante
@@ -186,7 +186,7 @@ END;
 GO
 
 -- =========================================================
--- READ - Obtener totales por anunciante para facturación
+-- READ - Obtener totales por anunciante para facturacion
 -- =========================================================
 
 CREATE OR ALTER PROCEDURE abm.Asignacion_Publicitaria_TotalesPorAnunciante
@@ -227,10 +227,10 @@ BEGIN
     BEGIN TRY
         BEGIN TRANSACTION;
         
-        -- Validar que la asignación existe
+        -- Validar que la asignacion existe
         IF NOT EXISTS (SELECT 1 FROM dbo.Asignacion_Publicitaria WHERE id_asignacion = @id_asignacion)
         BEGIN
-            RAISERROR('La asignación especificada no existe.', 16, 1);
+            RAISERROR('La asignacion especificada no existe.', 16, 1);
         END
         
         UPDATE dbo.Asignacion_Publicitaria
@@ -238,7 +238,7 @@ BEGIN
         WHERE id_asignacion = @id_asignacion;
         
         COMMIT TRANSACTION;
-        PRINT 'Asignación actualizada exitosamente.';
+        PRINT 'Asignacion actualizada exitosamente.';
         
     END TRY
     BEGIN CATCH
@@ -252,7 +252,7 @@ END;
 GO
 
 -- =========================================================
--- DELETE - Eliminar asignación
+-- DELETE - Eliminar asignacion
 -- =========================================================
 
 CREATE OR ALTER PROCEDURE abm.Asignacion_Publicitaria_Baja
@@ -266,13 +266,13 @@ BEGIN
         
         IF NOT EXISTS (SELECT 1 FROM dbo.Asignacion_Publicitaria WHERE id_asignacion = @id_asignacion)
         BEGIN
-            RAISERROR('La asignación especificada no existe.', 16, 1);
+            RAISERROR('La asignacion especificada no existe.', 16, 1);
         END
         
         DELETE FROM dbo.Asignacion_Publicitaria WHERE id_asignacion = @id_asignacion;
         
         COMMIT TRANSACTION;
-        PRINT 'Asignación eliminada exitosamente.';
+        PRINT 'Asignacion eliminada exitosamente.';
         
     END TRY
     BEGIN CATCH
