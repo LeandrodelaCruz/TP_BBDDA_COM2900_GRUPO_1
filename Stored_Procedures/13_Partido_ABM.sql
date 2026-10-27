@@ -2,18 +2,18 @@
     Universidad: Universidad Nacional de la Matanza
     Materia: Bases de Datos Aplicada
     Integrantes: 
-				Rodr�guez, El�as Uriel 44143869
+				Rodriguez, Elias Uriel 44143869
 				Clara, Lucas Nicolas 46265738
 				Caro, Nicolas Dario 40766722
 				de la Cruz, Leandro Ariel 42022547
     Fecha: 06/10/2026
 
-    Descripci�n:
-    Script de creaci�n de Stored Procedures ABM (Alta, Baja, Modificaci�n)
+    Descripcion:
+    Script de creacion de Stored Procedures ABM (Alta, Baja, Modificacion)
     para la tabla:
         - dbo.Partido
 
-    Cada SP realiza validaciones y agrupa los errores en un �nico mensaje.
+    Cada SP realiza validaciones y agrupa los errores en un unico mensaje.
 */
 
 USE MUNDIALDEFUTBOL;
