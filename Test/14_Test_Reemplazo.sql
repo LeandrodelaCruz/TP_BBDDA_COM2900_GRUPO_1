@@ -2,20 +2,20 @@
     Universidad: Universidad Nacional de la Matanza
     Materia: Bases de Datos Aplicada
     Integrantes: 
-				Rodr�guez, El�as Uriel 44143869
+				Rodriguez, Elias Uriel 44143869
 				Clara, Lucas Nicolas 46265738
 				Caro, Nicolas Dario 40766722
 				de la Cruz, Leandro Ariel 42022547
     Fecha: 06/10/2026
 
-    Descripci�n:
+    Descripcion:
     Script de testing del Stored Procedure ABM de la tabla:
         - dbo.Reemplazo
 
     Cada bloque incluye el RESULTADO ESPERADO en comentarios.
     Se prueban tanto casos exitosos como casos con validaciones fallidas.
 
-    Ejecutar despu�s de SP Reemplazo ABM.sql
+    Ejecutar despues de SP Reemplazo ABM.sql
 */
 
 USE MUNDIALDEFUTBOL;
@@ -27,13 +27,13 @@ BEGIN
     SET NOCOUNT ON;
 
     /*
-       datos m�nimos para tests
+       datos minimos para tests
     */
 
     -- Sede de prueba
     IF NOT EXISTS (SELECT 1 FROM dbo.Sede WHERE nombre_estadio = N'Estadio Testing')
         INSERT INTO dbo.Sede (nombre_estadio, ciudad, pais, capacidad, huso_horario)
-        VALUES (N'Estadio Testing', N'Ciudad Test', N'Pa�s Test', 50000, 'UTC-03:00');
+        VALUES (N'Estadio Testing', N'Ciudad Test', N'Pais Test', 50000, 'UTC-03:00');
 
     -- Selecciones de prueba
     IF NOT EXISTS (SELECT 1 FROM dbo.Seleccion WHERE pais = N'Testlandia')
@@ -48,7 +48,7 @@ BEGIN
     DECLARE @id_sel_test1    INT = (SELECT id_seleccion FROM dbo.Seleccion WHERE pais = N'Testlandia');
     DECLARE @id_sel_test2    INT = (SELECT id_seleccion FROM dbo.Seleccion WHERE pais = N'Pruebalandia');
 
-    -- Jugadores de prueba (2 por selecci�n)
+    -- Jugadores de prueba (2 por seleccion)
     IF NOT EXISTS (SELECT 1 FROM dbo.Jugador WHERE nombre = N'JugadorBaja1')
         INSERT INTO dbo.Jugador (id_seleccion, nombre, apellido, fecha_nacimiento, club_origen, posicion, dorsal)
         VALUES (@id_sel_test1, N'JugadorBaja1', N'Test', '1995-01-01', N'Club Test', N'Delantero', 10);
@@ -91,7 +91,7 @@ BEGIN
         @id_jugador_baja = @id_jug_baja_b4,
         @id_jugador_alta = @id_jug_alta_b4,
         @fecha_cambio    = '2026-06-01',
-        @motivo          = 'Lesi�n muscular';
+        @motivo          = 'Lesion muscular';
     PRINT 'OK - Alta Reemplazo ejecutada';
 
     /*
@@ -108,16 +108,16 @@ BEGIN
             @id_jugador_alta = @id_jug_baja_b5,
             @fecha_cambio    = '2026-06-01',
             @motivo          = 'Prueba';
-        PRINT 'ERROR: no se lanz� la excepci�n esperada';
+        PRINT 'ERROR: no se lanzo la excepcion esperada';
     END TRY
     BEGIN CATCH
         PRINT 'OK - Error esperado: ' + ERROR_MESSAGE();
     END CATCH
 
     /*
-    	CASO 3: Alta fallida - jugadores de distinta selecci�n
+    	CASO 3: Alta fallida - jugadores de distinta seleccion
     	 RESULTADO ESPERADO: error con mensaje
-    	"- Ambos jugadores deben pertenecer a la misma selecci�n."
+    	"- Ambos jugadores deben pertenecer a la misma seleccion."
     */
 
     DECLARE @id_jug_baja_b6 INT = (SELECT id_jugador FROM dbo.Jugador WHERE nombre = N'JugadorBaja1');
@@ -129,7 +129,7 @@ BEGIN
             @id_jugador_alta = @id_jug_sel2_b6,
             @fecha_cambio    = '2026-06-01',
             @motivo          = 'Prueba';
-        PRINT 'ERROR: no se lanz� la excepci�n esperada';
+        PRINT 'ERROR: no se lanzo la excepcion esperada';
     END TRY
     BEGIN CATCH
         PRINT 'OK - Error esperado: ' + ERROR_MESSAGE();
@@ -150,19 +150,19 @@ BEGIN
             @id_jugador_alta = @id_jug_alta_b7,
             @fecha_cambio    = '2099-01-01',
             @motivo          = 'Prueba';
-        PRINT 'ERROR: no se lanz� la excepci�n esperada';
+        PRINT 'ERROR: no se lanzo la excepcion esperada';
     END TRY
     BEGIN CATCH
         PRINT 'OK - Error esperado: ' + ERROR_MESSAGE();
     END CATCH
 
     /*
-    	CASO 5: Modificaci�n exitosa
+    	CASO 5: Modificacion exitosa
     	RESULTADO ESPERADO: se actualiza el reemplazo creado en el caso 1.
     */
 
     DECLARE @id_reemplazo_b8 INT = (SELECT MIN(id_reemplazo) FROM dbo.Reemplazo
-                                 WHERE motivo = 'Lesi�n muscular');
+                                 WHERE motivo = 'Lesion muscular');
     DECLARE @id_jug_baja_b8 INT = (SELECT id_jugador FROM dbo.Jugador WHERE nombre = N'JugadorBaja1');
     DECLARE @id_jug_alta_b8 INT = (SELECT id_jugador FROM dbo.Jugador WHERE nombre = N'JugadorAlta1');
 
@@ -173,9 +173,9 @@ BEGIN
             @id_jugador_baja = @id_jug_baja_b8,
             @id_jugador_alta = @id_jug_alta_b8,
             @fecha_cambio    = '2026-06-02',
-            @motivo          = 'Lesi�n muscular - actualizado';
+            @motivo          = 'Lesion muscular - actualizado';
 
-        PRINT 'OK - Modificaci�n de Reemplazo ejecutada';
+        PRINT 'OK - Modificacion de Reemplazo ejecutada';
     END
     ELSE
         PRINT 'No hay reemplazo de prueba para modificar';
@@ -186,7 +186,7 @@ BEGIN
     */
 
     DECLARE @id_reemplazo_b9 INT = (SELECT MIN(id_reemplazo) FROM dbo.Reemplazo
-                                 WHERE motivo = 'Lesi�n muscular - actualizado');
+                                 WHERE motivo = 'Lesion muscular - actualizado');
 
     IF @id_reemplazo_b9 IS NOT NULL
     BEGIN
@@ -203,7 +203,7 @@ BEGIN
     */
     BEGIN TRY
         EXEC abm.Reemplazo_Baja @id_reemplazo = -99999;
-        PRINT 'ERROR: no se lanz� la excepci�n esperada';
+        PRINT 'ERROR: no se lanzo la excepcion esperada';
     END TRY
     BEGIN CATCH
         PRINT 'OK - Error esperado: ' + ERROR_MESSAGE();

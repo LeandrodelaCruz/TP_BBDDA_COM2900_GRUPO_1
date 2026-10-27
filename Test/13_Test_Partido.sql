@@ -33,7 +33,7 @@ BEGIN
     -- Sede de prueba
     IF NOT EXISTS (SELECT 1 FROM dbo.Sede WHERE nombre_estadio = N'Estadio Testing')
         INSERT INTO dbo.Sede (nombre_estadio, ciudad, pais, capacidad, huso_horario)
-        VALUES (N'Estadio Testing', N'Ciudad Test', N'Pa�s Test', 50000, 'UTC-03:00');
+        VALUES (N'Estadio Testing', N'Ciudad Test', N'Pais Test', 50000, 'UTC-03:00');
 
     -- Selecciones de prueba
     IF NOT EXISTS (SELECT 1 FROM dbo.Seleccion WHERE pais = N'Testlandia')
