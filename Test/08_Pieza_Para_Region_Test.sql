@@ -54,11 +54,11 @@ BEGIN
 
     PRINT '=== Preparando datos de prueba ===';
 
-    INSERT INTO dbo.Region (nombre, descripcion)
-    VALUES (N'Región Test ABM', N'Descripción Región Test');
-
-    INSERT INTO dbo.Anunciante (nombre, cuit, email, telefono)
-    VALUES (N'Anunciante Test ABM Region', N'30333333338', N'region@test.com', N'1144556677');
+    INSERT INTO dbo.Region (nombre, idioma, huso_horario, hora_prime_inicio, hora_prime_fin)
+    VALUES (N'TEST_REGION_PRINCIPAL', N'Español', 'UTC-03:00', '19:00', '23:00');
+    
+    INSERT INTO dbo.Anunciante (nombre)
+    VALUES (N'Anunciante Test ABM Region');
 
     DECLARE @id_anunc INT = (SELECT id_anunciante FROM dbo.Anunciante WHERE nombre = N'Anunciante Test ABM Region');
 
