@@ -229,23 +229,56 @@ BEGIN
         PRINT 'OK - Error esperado: ' + ERROR_MESSAGE();
     END CATCH
 
-    -- Borramos lote de prueba
+    -- Borramos todo lo creado   
+
     delete dbo.Formacion_Jugador
-    delete dbo.Formacion
     delete dbo.Jugador
+    delete dbo.Formacion
     delete dbo.Partido
+    delete dbo.Anunciante
+    delete dbo.Region
     delete dbo.Sede
     delete dbo.Seleccion
+    delete dbo.Arbitro
+    delete dbo.Campania
+    delete dbo.Pieza_Publicitaria
+    delete dbo.Pieza_Para_Region
+    delete dbo.Personal_Tecnico 
     delete dbo.Reemplazo
+    delete dbo.Sustitucion
+    delete dbo.Designacion_Arbitral
+    delete dbo.Sancion_Arbitral
+    delete dbo.Asignacion_Publicitaria
+    delete dbo.Incidencia
 
     -- Confirmamos borrado de lote de prueba
-    select top 20 * from [MUNDIALDEFUTBOL].[dbo].[Sede]
+
     select top 20 * from [MUNDIALDEFUTBOL].[dbo].[Seleccion]
     select top 20 * from [MUNDIALDEFUTBOL].[dbo].[Jugador]
     select top 20 * from [MUNDIALDEFUTBOL].[dbo].[Partido]
     select top 20 * from [MUNDIALDEFUTBOL].[dbo].[Formacion]
     select top 20 * from [MUNDIALDEFUTBOL].[dbo].[Formacion_Jugador]
     select top 20 * from [MUNDIALDEFUTBOL].[dbo].[Reemplazo]
+    select top 20 * from [MUNDIALDEFUTBOL].[dbo].[Anunciante]
+    select top 20 * from [MUNDIALDEFUTBOL].[dbo].[Region]
+    select top 20 * from [MUNDIALDEFUTBOL].[dbo].[Sede]
+    select top 20 * from [MUNDIALDEFUTBOL].[dbo].[Seleccion]
+    select top 20 * from [MUNDIALDEFUTBOL].[dbo].[Arbitro]
+    select top 20 * from [MUNDIALDEFUTBOL].[dbo].[Campania]
+    select top 20 * from [MUNDIALDEFUTBOL].[dbo].[Pieza_Publicitaria]
+    select top 20 * from [MUNDIALDEFUTBOL].[dbo].[Pieza_Para_Region]
+    select top 20 * from [MUNDIALDEFUTBOL].[dbo].[Personal_Tecnico]
+    select top 20 * from [MUNDIALDEFUTBOL].[dbo].[Jugador]
+    select top 20 * from [MUNDIALDEFUTBOL].[dbo].[Reemplazo]
+    select top 20 * from [MUNDIALDEFUTBOL].[dbo].[Partido]
+    select top 20 * from [MUNDIALDEFUTBOL].[dbo].[Formacion]
+    select top 20 * from [MUNDIALDEFUTBOL].[dbo].[Formacion_Jugador]
+    select top 20 * from [MUNDIALDEFUTBOL].[dbo].[Sustitucion]
+    select top 20 * from [MUNDIALDEFUTBOL].[dbo].[Designacion_Arbitral]
+    select top 20 * from [MUNDIALDEFUTBOL].[dbo].[Sancion_Arbitral]
+    select top 20 * from [MUNDIALDEFUTBOL].[dbo].[Asignacion_Publicitaria]
+    select top 20 * from [MUNDIALDEFUTBOL].[dbo].[Incidencia]
+
 END;
 GO
 
