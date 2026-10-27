@@ -55,13 +55,7 @@ BEGIN
         SELECT id_arbitro FROM dbo.Arbitro WHERE apellido = N'Test Sancion'
     );
 
-    -- 3. Eliminar selecciones asociadas al partido de prueba
-    DELETE FROM dbo.Partido_Seleccion
-    WHERE id_partido IN (
-        SELECT id_partido FROM dbo.Partido WHERE resultado_final = N'TEST-SANCION-ARB'
-    );
-
-    -- 4. Eliminar el partido de prueba
+    -- 3. Eliminar el partido de prueba
     DELETE FROM dbo.Partido
     WHERE resultado_final = N'TEST-SANCION-ARB';
 
@@ -69,9 +63,13 @@ BEGIN
     DELETE FROM dbo.Arbitro
     WHERE apellido = N'Test Sancion';
 
-    -- 6. Finalmente, eliminar la sede de prueba
+    -- 6. Eliminar la sede de prueba
     DELETE FROM dbo.Sede
     WHERE nombre_estadio = N'Estadio Testing Sancion';
+
+    -- 7. Finalmente, eliminar las selecciones de prueba
+    DELETE FROM dbo.Seleccion
+    WHERE pais LIKE N'Selección Test Sanción%';
 
     PRINT '=== Limpieza completada ===';
 
@@ -87,9 +85,19 @@ BEGIN
 
     DECLARE @id_sede_test INT = (SELECT TOP 1 id_sede FROM dbo.Sede WHERE nombre_estadio = N'Estadio Testing Sancion' ORDER BY id_sede DESC);
 
+    -- Selecciones de prueba
+    INSERT INTO dbo.Seleccion (pais, confederacion, grupo_asignado)
+    VALUES (N'Selección Test Sanción 1', N'TEST', 'A');
+
+    INSERT INTO dbo.Seleccion (pais, confederacion, grupo_asignado)
+    VALUES (N'Selección Test Sanción 2', N'TEST', 'A');
+
+    DECLARE @id_sel1_test INT = (SELECT TOP 1 id_seleccion FROM dbo.Seleccion WHERE pais = N'Selección Test Sanción 1' ORDER BY id_seleccion DESC);
+    DECLARE @id_sel2_test INT = (SELECT TOP 1 id_seleccion FROM dbo.Seleccion WHERE pais = N'Selección Test Sanción 2' ORDER BY id_seleccion DESC);
+
     -- Partido de prueba
-    INSERT INTO dbo.Partido (id_sede, fecha, horario_local, horario_UTC, fase, resultado_final, asistencia_publico)
-    VALUES (@id_sede_test, '2026-06-10', '2026-06-10 18:00:00', '2026-06-10 21:00:00', 'GRUPOS', N'TEST-SANCION-ARB', 30000);
+    INSERT INTO dbo.Partido (id_sede, fecha, horario_local, horario_UTC, fase, resultado_final, asistencia_publico, id_seleccion_1, id_seleccion_2)
+    VALUES (@id_sede_test, '2026-06-10', '2026-06-10 18:00:00', '2026-06-10 21:00:00', 'GRUPOS', N'TEST-SANCION-ARB', 30000, @id_sel1_test, @id_sel2_test);
 
     DECLARE @id_partido_test_b7 INT = (SELECT TOP 1 id_partido FROM dbo.Partido WHERE resultado_final = N'TEST-SANCION-ARB' ORDER BY id_partido DESC);
 

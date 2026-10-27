@@ -45,11 +45,6 @@ BEGIN
     );
 
     -- Eliminar partidos de prueba
-    DELETE FROM dbo.Partido_Seleccion
-    WHERE id_partido IN (
-        SELECT id_partido FROM dbo.Partido WHERE resultado_final = N'TEST-ASIGNACION-PUB'
-    );
-
     DELETE FROM dbo.Partido
     WHERE resultado_final = N'TEST-ASIGNACION-PUB';
 
@@ -74,6 +69,10 @@ BEGIN
     DELETE FROM dbo.Sede
     WHERE nombre_estadio LIKE N'%Testing%Asignacion%';
 
+    -- Eliminar selecciones de prueba
+    DELETE FROM dbo.Seleccion
+    WHERE pais LIKE N'Selección Test Asignación%';
+
     PRINT '=== Limpieza completada ===';
 
     /* =========================================================
@@ -88,9 +87,19 @@ BEGIN
 
     DECLARE @id_sede_test INT = (SELECT id_sede FROM dbo.Sede WHERE nombre_estadio = N'Estadio Testing Asignacion');
 
+    -- Selecciones de prueba
+    INSERT INTO dbo.Seleccion (pais, confederacion, grupo_asignado)
+    VALUES (N'Selección Test Asignación 1', N'TEST', 'A');
+
+    INSERT INTO dbo.Seleccion (pais, confederacion, grupo_asignado)
+    VALUES (N'Selección Test Asignación 2', N'TEST', 'A');
+
+    DECLARE @id_sel1_test INT = (SELECT id_seleccion FROM dbo.Seleccion WHERE pais = N'Selección Test Asignación 1');
+    DECLARE @id_sel2_test INT = (SELECT id_seleccion FROM dbo.Seleccion WHERE pais = N'Selección Test Asignación 2');
+
     -- Partido de prueba
-    INSERT INTO dbo.Partido (id_sede, fecha, horario_local, horario_UTC, fase, resultado_final, asistencia_publico)
-    VALUES (@id_sede_test, '2026-06-20', '2026-06-20 18:00:00', '2026-06-20 21:00:00', 'GRUPOS', N'TEST-ASIGNACION-PUB', 30000);
+    INSERT INTO dbo.Partido (id_sede, fecha, horario_local, horario_UTC, fase, resultado_final, asistencia_publico, id_seleccion_1, id_seleccion_2)
+    VALUES (@id_sede_test, '2026-06-20', '2026-06-20 18:00:00', '2026-06-20 21:00:00', 'GRUPOS', N'TEST-ASIGNACION-PUB', 30000, @id_sel1_test, @id_sel2_test);
 
     -- Anunciante de prueba
     INSERT INTO dbo.Anunciante (nombre)

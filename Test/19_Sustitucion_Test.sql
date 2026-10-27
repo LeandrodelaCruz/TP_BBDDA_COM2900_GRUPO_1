@@ -37,8 +37,7 @@ BEGIN
        1. Sustituciones
        2. Formacion_Jugador
        3. Formacion
-       4. Partido_Seleccion
-       5. Sustitucion (por si acaso)
+       4. Sustitucion (por si acaso)
        6. Partido
        7. Jugador (de selecciones test)
        8. Seleccion
@@ -60,10 +59,6 @@ BEGIN
 
     -- Eliminar formaciones
     DELETE FROM dbo.Formacion 
-    WHERE id_partido IN (SELECT id_partido FROM dbo.Partido WHERE resultado_final = N'TEST-SUSTITUCION');
-
-    -- Eliminar relaciones partido-selección
-    DELETE FROM dbo.Partido_Seleccion 
     WHERE id_partido IN (SELECT id_partido FROM dbo.Partido WHERE resultado_final = N'TEST-SUSTITUCION');
 
     -- Eliminar partidos
@@ -146,17 +141,10 @@ BEGIN
 
     -- Partido de prueba
     IF NOT EXISTS (SELECT 1 FROM dbo.Partido WHERE resultado_final = N'TEST-SUSTITUCION')
-        INSERT INTO dbo.Partido (id_sede, fecha, horario_local, horario_UTC, fase, resultado_final, asistencia_publico)
-        VALUES (@id_sede_test, '2026-06-15', '2026-06-15 18:00:00', '2026-06-15 21:00:00', 'GRUPOS', N'TEST-SUSTITUCION', 30000);
+        INSERT INTO dbo.Partido (id_sede, fecha, horario_local, horario_UTC, fase, resultado_final, asistencia_publico, id_seleccion_1, id_seleccion_2)
+        VALUES (@id_sede_test, '2026-06-15', '2026-06-15 18:00:00', '2026-06-15 21:00:00', 'GRUPOS', N'TEST-SUSTITUCION', 30000, @id_sel_test1_b6, @id_sel_test2);
 
     DECLARE @id_partido_test_b6 INT = (SELECT id_partido FROM dbo.Partido WHERE resultado_final = N'TEST-SUSTITUCION');
-
-    -- Relación partido-selección
-    IF NOT EXISTS (SELECT 1 FROM dbo.Partido_Seleccion WHERE id_partido = @id_partido_test_b6 AND id_seleccion = @id_sel_test1_b6)
-        INSERT INTO dbo.Partido_Seleccion (id_partido, id_seleccion) VALUES (@id_partido_test_b6, @id_sel_test1_b6);
-
-    IF NOT EXISTS (SELECT 1 FROM dbo.Partido_Seleccion WHERE id_partido = @id_partido_test_b6 AND id_seleccion = @id_sel_test2)
-        INSERT INTO dbo.Partido_Seleccion (id_partido, id_seleccion) VALUES (@id_partido_test_b6, @id_sel_test2);
 
     -- Formación Selección 1 (con titulares y suplentes)
     DECLARE @id_formacion_sel1 INT;
