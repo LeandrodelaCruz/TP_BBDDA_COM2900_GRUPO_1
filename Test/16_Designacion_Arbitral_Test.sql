@@ -47,10 +47,6 @@ BEGIN
     DELETE FROM dbo.Arbitro 
     WHERE nombre LIKE N'%ArbitroTest%';
 
-    -- Eliminar relaciones Partido_Seleccion
-    DELETE FROM dbo.Partido_Seleccion 
-    WHERE id_partido IN (SELECT id_partido FROM dbo.Partido WHERE resultado_final = N'TEST-ARBITRAL');
-
     -- Eliminar partido de prueba
     DELETE FROM dbo.Partido WHERE resultado_final = N'TEST-ARBITRAL';
 
@@ -88,17 +84,10 @@ BEGIN
 
     -- Partido de prueba
     IF NOT EXISTS (SELECT 1 FROM dbo.Partido WHERE resultado_final = N'TEST-ARBITRAL')
-        INSERT INTO dbo.Partido (id_sede, fecha, horario_local, horario_UTC, fase, resultado_final, asistencia_publico)
-        VALUES (@id_sede_test, '2026-06-20', '2026-06-20 18:00:00', '2026-06-20 21:00:00', 'GRUPOS', N'TEST-ARBITRAL', 40000);
+        INSERT INTO dbo.Partido (id_sede, fecha, horario_local, horario_UTC, fase, resultado_final, asistencia_publico, id_seleccion_1, id_seleccion_2)
+        VALUES (@id_sede_test, '2026-06-20', '2026-06-20 18:00:00', '2026-06-20 21:00:00', 'GRUPOS', N'TEST-ARBITRAL', 40000, @id_sel_test1, @id_sel_test2);
 
     DECLARE @id_partido_test_b6 INT = (SELECT id_partido FROM dbo.Partido WHERE resultado_final = N'TEST-ARBITRAL');
-
-    -- Relación partido-selección
-    IF NOT EXISTS (SELECT 1 FROM dbo.Partido_Seleccion WHERE id_partido = @id_partido_test_b6 AND id_seleccion = @id_sel_test1)
-        INSERT INTO dbo.Partido_Seleccion (id_partido, id_seleccion) VALUES (@id_partido_test_b6, @id_sel_test1);
-
-    IF NOT EXISTS (SELECT 1 FROM dbo.Partido_Seleccion WHERE id_partido = @id_partido_test_b6 AND id_seleccion = @id_sel_test2)
-        INSERT INTO dbo.Partido_Seleccion (id_partido, id_seleccion) VALUES (@id_partido_test_b6, @id_sel_test2);
 
     -- Árbitros de prueba (usando datos reales de estructura)
     IF NOT EXISTS (SELECT 1 FROM dbo.Arbitro WHERE nombre = N'ArbitroTestEXTRANJERO')

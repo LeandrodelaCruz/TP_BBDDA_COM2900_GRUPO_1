@@ -47,9 +47,6 @@ BEGIN
     DELETE FROM dbo.Formacion 
     WHERE id_partido IN (SELECT id_partido FROM dbo.Partido WHERE resultado_final = N'TEST-INCIDENCIA');
 
-    DELETE FROM dbo.Partido_Seleccion 
-    WHERE id_partido IN (SELECT id_partido FROM dbo.Partido WHERE resultado_final = N'TEST-INCIDENCIA');
-
     DELETE FROM dbo.Partido 
     WHERE resultado_final = N'TEST-INCIDENCIA';
 
@@ -106,14 +103,10 @@ BEGIN
     VALUES (@id_sel_test2, N'Mediocampista2Test', N'Test', '1995-01-01', N'Club Test', N'Mediocampista', 8);
 
     -- Partido de prueba
-    INSERT INTO dbo.Partido (id_sede, fecha, horario_local, horario_UTC, fase, resultado_final, asistencia_publico)
-    VALUES (@id_sede_test, '2026-06-15', '2026-06-15 18:00:00', '2026-06-15 21:00:00', 'GRUPOS', N'TEST-INCIDENCIA', 30000);
+    INSERT INTO dbo.Partido (id_sede, fecha, horario_local, horario_UTC, fase, resultado_final, asistencia_publico, id_seleccion_1, id_seleccion_2)
+    VALUES (@id_sede_test, '2026-06-15', '2026-06-15 18:00:00', '2026-06-15 21:00:00', 'GRUPOS', N'TEST-INCIDENCIA', 30000, @id_sel_test1, @id_sel_test2);
 
     DECLARE @id_partido_test_b5 INT = (SELECT id_partido FROM dbo.Partido WHERE resultado_final = N'TEST-INCIDENCIA');
-
-    -- Relación partido-selección
-    INSERT INTO dbo.Partido_Seleccion (id_partido, id_seleccion) VALUES (@id_partido_test_b5, @id_sel_test1);
-    INSERT INTO dbo.Partido_Seleccion (id_partido, id_seleccion) VALUES (@id_partido_test_b5, @id_sel_test2);
 
     -- Formación Selección 1
     DECLARE @id_formacion_sel1 INT;
