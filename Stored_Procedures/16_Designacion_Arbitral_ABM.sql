@@ -57,11 +57,13 @@ BEGIN
         -- Obtener países de las selecciones que juegan el partido
         -- =========================================================
 
-        SELECT @pais_seleccion1 = MIN(s.pais), @pais_seleccion2 = MAX(s.pais)
-        FROM dbo.Seleccion s
-        INNER JOIN dbo.Partido_Seleccion ps
-        ON s.id_seleccion = ps.id_seleccion
-        WHERE ps.id_partido = @id_partido;
+        SELECT 
+            @pais_seleccion1 = s1.pais,
+            @pais_seleccion2 = s2.pais
+        FROM dbo.Partido p
+        INNER JOIN dbo.Seleccion s1 ON p.id_seleccion_1 = s1.id_seleccion
+        INNER JOIN dbo.Seleccion s2 ON p.id_seleccion_2 = s2.id_seleccion
+        WHERE p.id_partido = @id_partido;
         
         -- =========================================================
         -- VALIDACIÓN DE NEGOCIO: Árbitro no puede ser del mismo país
@@ -129,40 +131,20 @@ AS
 BEGIN
     SET NOCOUNT ON;
     
-    -- SELECT 
-    --     da.id_partido,
-    --     da.id_arbitro,
-    --     a.nombre + ' ' + a.apellido AS nombre_arbitro,
-    --     a.pais AS pais_arbitro,
-    --     da.rol_arbitro,
-    --     p.fecha,
-    --     s1.pais AS seleccion_1,
-    --     s2.pais AS seleccion_2
-    -- FROM dbo.Designacion_Arbitral da
-    -- INNER JOIN dbo.Arbitro a ON da.id_arbitro = a.id_arbitro
-    -- INNER JOIN dbo.Partido p ON da.id_partido = p.id_partido
-    -- LEFT JOIN dbo.Partido_Seleccion ps ON da.id_partido = ps.id_partido
-    -- LEFT JOIN dbo.Seleccion s1 ON ps.id_seleccion = s1.id_seleccion
-    -- LEFT JOIN dbo.Seleccion s2 ON ps.id_seleccion = s2.id_seleccion
-    -- WHERE da.id_partido = @id_partido
-    -- ORDER BY da.rol_arbitro;
-
         SELECT 
-        da.id_partido,
-        da.id_arbitro,
-        a.nombre + ' ' + a.apellido AS nombre_arbitro,
-        a.pais AS pais_arbitro,
-        da.rol_arbitro,
-        p.fecha,
-            (SELECT TOP 1 pais FROM dbo.Seleccion 
-            WHERE id_seleccion IN (SELECT id_seleccion FROM dbo.Partido_Seleccion WHERE id_partido = da.id_partido)
-            ORDER BY id_seleccion) AS seleccion_1,
-            (SELECT TOP 1 pais FROM dbo.Seleccion 
-            WHERE id_seleccion IN (SELECT id_seleccion FROM dbo.Partido_Seleccion WHERE id_partido = da.id_partido)
-            ORDER BY id_seleccion DESC) AS seleccion_2
+            da.id_partido,
+            da.id_arbitro,
+            a.nombre + ' ' + a.apellido AS nombre_arbitro,
+            a.pais AS pais_arbitro,
+            da.rol_arbitro,
+            p.fecha,
+            s1.pais AS seleccion_1,
+            s2.pais AS seleccion_2
         FROM dbo.Designacion_Arbitral da
         INNER JOIN dbo.Arbitro a ON da.id_arbitro = a.id_arbitro
         INNER JOIN dbo.Partido p ON da.id_partido = p.id_partido
+        INNER JOIN dbo.Seleccion s1 ON p.id_seleccion_1 = s1.id_seleccion
+        INNER JOIN dbo.Seleccion s2 ON p.id_seleccion_2 = s2.id_seleccion
         WHERE da.id_partido = @id_partido
         ORDER BY da.rol_arbitro;
 END;
@@ -190,9 +172,8 @@ BEGIN
     FROM dbo.Designacion_Arbitral da
     INNER JOIN dbo.Arbitro a ON da.id_arbitro = a.id_arbitro
     INNER JOIN dbo.Partido p ON da.id_partido = p.id_partido
-    LEFT JOIN dbo.Partido_Seleccion ps ON da.id_partido = ps.id_partido
-    LEFT JOIN dbo.Seleccion s1 ON ps.id_seleccion = s1.id_seleccion
-    LEFT JOIN dbo.Seleccion s2 ON ps.id_seleccion = s2.id_seleccion
+    INNER JOIN dbo.Seleccion s1 ON p.id_seleccion_1 = s1.id_seleccion
+    INNER JOIN dbo.Seleccion s2 ON p.id_seleccion_2 = s2.id_seleccion
     WHERE da.id_arbitro = @id_arbitro
     ORDER BY p.fecha DESC;
 END;
