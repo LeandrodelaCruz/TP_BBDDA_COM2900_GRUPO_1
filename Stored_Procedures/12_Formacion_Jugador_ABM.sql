@@ -50,18 +50,16 @@ BEGIN
     );
 
     /*
-       Construimos una secuencia de eventos anteriores
-       al partido que queremos evaluar.
+        Construimos los eventos anteriores al partido.
 
-       TIPOS:
-       FORMACION: el jugador figura en una formación.
-       AMARILLA:  recibe una amarilla en un partido.
-       EXPULSION: recibe una expulsión.
+        FORMACION: el jugador figura en una formación.
+        AMARILLA:  recibe una amonestación.
+        EXPULSION: recibe una expulsión.
     */
 
     ;WITH Eventos AS
     (
-        -- Una amarilla por partido como máximo para la acumulación.
+        -- Una amarilla por partido como máximo.
         SELECT DISTINCT
             p.fecha,
             'AMARILLA' AS tipo_evento,
@@ -91,7 +89,7 @@ BEGIN
 
         UNION ALL
 
-        -- Figurar en una formación permite cumplir una suspensión.
+        -- Una formación permite cumplir la suspensión.
         SELECT DISTINCT
             p.fecha,
             'FORMACION',
@@ -108,65 +106,116 @@ BEGIN
     EventosOrdenados AS
     (
         SELECT
-            ROW_NUMBER() OVER (
+            ROW_NUMBER() OVER
+            (
                 ORDER BY fecha, prioridad, id_partido, tipo_evento
             ) AS orden,
             fecha,
             tipo_evento
         FROM Eventos
     )
-    INSERT INTO @eventos (orden, fecha, tipo_evento)
-    SELECT orden, fecha, tipo_evento
+    INSERT INTO @eventos
+    (
+        orden,
+        fecha,
+        tipo_evento
+    )
+    SELECT
+        orden,
+        fecha,
+        tipo_evento
     FROM EventosOrdenados;
 
-    DECLARE @orden INT = 1;
-    DECLARE @total INT;
-
-    DECLARE @tipo_evento VARCHAR(20);
-
-    DECLARE @amarillas INT = 0;
     DECLARE @suspendido BIT = 0;
 
-    SELECT @total = COUNT(*)
-    FROM @eventos;
+    ;WITH Procesamiento AS
+    (
+        -- Procesar el primer evento.
+        SELECT
+            e.orden,
+            e.tipo_evento,
 
-    WHILE @orden <= @total
-    BEGIN
-        SELECT @tipo_evento = tipo_evento
-        FROM @eventos
-        WHERE orden = @orden;
+            CAST(
+                CASE
+                    WHEN e.tipo_evento = 'AMARILLA' THEN 1
+                    ELSE 0
+                END
+                AS INT
+            ) AS amarillas,
 
-        IF @tipo_evento = 'FORMACION'
-        BEGIN
-            -- La formación cumple la suspensión pendiente.
-            IF @suspendido = 1
-            BEGIN
-                SET @suspendido = 0;
-                SET @amarillas = 0;
-            END
-        END
-        ELSE IF @tipo_evento = 'EXPULSION'
-        BEGIN
-            -- La expulsión genera una suspensión.
-            SET @suspendido = 1;
-        END
-        ELSE IF @tipo_evento = 'AMARILLA'
-        BEGIN
-            -- Mientras exista una suspensión pendiente,
-            -- no acumulamos nuevas amarillas.
-            IF @suspendido = 0
-            BEGIN
-                SET @amarillas = @amarillas + 1;
+            CAST(
+                CASE
+                    WHEN e.tipo_evento = 'EXPULSION' THEN 1
+                    ELSE 0
+                END
+                AS BIT
+            ) AS suspendido
 
-                IF @amarillas >= 2
-                    SET @suspendido = 1;
-            END
-        END;
+        FROM @eventos e
+        WHERE e.orden = 1
 
-        SET @orden = @orden + 1;
-    END;
+        UNION ALL
 
-    RETURN @suspendido;
+        -- Procesar cada evento posterior.
+        SELECT
+            e.orden,
+            e.tipo_evento,
+
+            CAST(
+                CASE
+                    -- Cumple la suspensión.
+                    WHEN e.tipo_evento = 'FORMACION'
+                         AND p.suspendido = 1
+                        THEN 0
+
+                    -- No acumula amarillas mientras está suspendido.
+                    WHEN e.tipo_evento = 'AMARILLA'
+                         AND p.suspendido = 1
+                        THEN p.amarillas
+
+                    -- Acumula una nueva amarilla.
+                    WHEN e.tipo_evento = 'AMARILLA'
+                        THEN p.amarillas + 1
+
+                    ELSE p.amarillas
+                END
+                AS INT
+            ) AS amarillas,
+
+            CAST(
+                CASE
+                    -- Una formación cumple la suspensión pendiente.
+                    WHEN e.tipo_evento = 'FORMACION'
+                        THEN 0
+
+                    -- Una expulsión genera una suspensión.
+                    WHEN e.tipo_evento = 'EXPULSION'
+                        THEN 1
+
+                    -- Si continúa suspendido, mantiene el estado.
+                    WHEN p.suspendido = 1
+                        THEN 1
+
+                    -- La segunda amarilla genera una suspensión.
+                    WHEN e.tipo_evento = 'AMARILLA'
+                         AND p.amarillas + 1 >= 2
+                        THEN 1
+
+                    ELSE 0
+                END
+                AS BIT
+            ) AS suspendido
+
+        FROM Procesamiento p
+        INNER JOIN @eventos e
+            ON e.orden = p.orden + 1
+    )
+    SELECT TOP (1)
+        @suspendido = suspendido
+    FROM Procesamiento
+    ORDER BY orden DESC;
+
+    RETURN ISNULL(@suspendido, 0);
 END;
 GO
 
