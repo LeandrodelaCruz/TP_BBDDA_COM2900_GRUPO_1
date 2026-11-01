@@ -30,18 +30,17 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
-    -------------------------------------------------------------------------
-    -- 1. Validar el parámetro de entrada.
-    -------------------------------------------------------------------------
+    -- 1. Validar el parametro de entrada.
+
     IF @archivo IS NULL OR LTRIM(RTRIM(@archivo)) = N''
-        THROW 51001, N'Debe indicar la ruta del archivo CSV a importar.', 1;
+        THROW 51001, N'Debe indicar la ruta del archivo CSV a importar.', 1; -- Aca verificamos que sea valido el archivo de entrada
 
     -------------------------------------------------------------------------
     -- 2. Staging: recibe el archivo tal como viene.
-    --    Se usan tamaños amplios para poder detectar errores de longitud
+    --    Se usan tam amplios para poder detectar errores de longitud
     --    antes de invocar los ABM de la Entrega 5.
-    -------------------------------------------------------------------------
-    CREATE TABLE #Seleccion_Staging
+
+    CREATE TABLE #Seleccion_Staging -- Esta tabla temporal absorbe toda la informacion
     (
         team_id                      NVARCHAR(50)  NULL,
         team_name                    NVARCHAR(200) NULL,
@@ -53,33 +52,32 @@ BEGIN
         manager_name                 NVARCHAR(200) NULL
     );
 
-    -------------------------------------------------------------------------
     -- 3. Tabla temporal para informar errores sin detener toda la carga.
-    -------------------------------------------------------------------------
-    CREATE TABLE #Errores_Importacion
-    (
+
+    CREATE TABLE #Errores_Importacion --Esta tabla funciona como una bitacora. Si alguna fila puntutal tiene problemas, se almacena aca
+    (                                                               -- y no interrumpe la carga.
         team_id       NVARCHAR(50)   NULL,
         team_name     NVARCHAR(200)  NULL,
         numero_error  INT            NOT NULL,
         mensaje_error NVARCHAR(2048) NOT NULL
     );
 
-    -------------------------------------------------------------------------
+
     -- 4. Cargar el CSV.
     --
     --    BULK INSERT exige que la ruta sea un literal dentro de la sentencia.
     --    Por eso este bloque puntual requiere SQL dinámico para poder cumplir
     --    con la consigna de recibir el archivo como parámetro.
-    -------------------------------------------------------------------------
+ -- El BULK INSERT es mucho mas rapido que un INSERT normal
     DECLARE @sql NVARCHAR(MAX);
 
-    SET @sql = N'
-        BULK INSERT #Seleccion_Staging
+    SET @sql = N' 
+        BULK INSERT #Seleccion_Staging 
         FROM ''' + REPLACE(@archivo, N'''', N'''''') + N'''
         WITH
         (
             FORMAT = ''CSV'',
-            FIRSTROW = 2,
+            FIRSTROW = 2, 
             FIELDQUOTE = ''"'',
             TABLOCK
         );';
@@ -94,9 +92,8 @@ BEGIN
         THROW 51002, @mensajeCarga, 1;
     END CATCH;
 
-    -------------------------------------------------------------------------
     -- 5. Variables de procesamiento y contadores.
-    -------------------------------------------------------------------------
+
     DECLARE
         @team_id          NVARCHAR(50),
         @pais             NVARCHAR(200),
@@ -108,10 +105,9 @@ BEGIN
         @actualizados     INT = 0,
         @cantidad_errores INT = 0;
 
-    -------------------------------------------------------------------------
+
     -- Estas tablas variables capturan los SELECT que devuelven los ABM.
-    -- Así la importación no genera un resultset distinto por cada selección.
-    -------------------------------------------------------------------------
+
     DECLARE @ResultadoAlta TABLE
     (
         id_seleccion_creada INT
@@ -125,10 +121,9 @@ BEGIN
         grupo_asignado VARCHAR(5)
     );
 
-    -------------------------------------------------------------------------
     -- 6. Se procesa fila por fila porque la consigna exige reutilizar los
     --    Stored Procedures ABM de la Entrega 5 para cada registro.
-    -------------------------------------------------------------------------
+
     DECLARE cur_selecciones CURSOR LOCAL FAST_FORWARD FOR
         SELECT
             team_id,
@@ -147,11 +142,11 @@ BEGIN
         SET @procesados += 1;
 
         BEGIN TRY
-            -----------------------------------------------------------------
+
             -- 6.1 Validaciones previas necesarias para evitar que SQL Server
             --     trunque parámetros antes de llegar al ABM.
             --     Las reglas de negocio siguen siendo responsabilidad del ABM.
-            -----------------------------------------------------------------
+
             IF @pais IS NULL OR LTRIM(RTRIM(@pais)) = N''
                 THROW 51101, N'El país de la selección está vacío.', 1;
 
@@ -170,19 +165,17 @@ BEGIN
             IF LEN(@grupo_asignado) > 5
                 THROW 51106, N'El grupo asignado supera los 5 caracteres permitidos.', 1;
 
-            -----------------------------------------------------------------
+
             -- 6.2 Buscar por la clave natural elegida para el UPSERT: país.
-            -----------------------------------------------------------------
+
             SET @id_seleccion = NULL;
 
             SELECT @id_seleccion = id_seleccion
             FROM dbo.Seleccion
             WHERE UPPER(LTRIM(RTRIM(pais))) = UPPER(LTRIM(RTRIM(@pais)));
 
-            -----------------------------------------------------------------
             -- 6.3 UPSERT reutilizando exclusivamente los ABM de Entrega 5.
-            -----------------------------------------------------------------
-            IF @id_seleccion IS NULL
+            IF @id_seleccion IS NULL -- Si no encontro el pais, va insertando
             BEGIN
                 DELETE FROM @ResultadoAlta;
 
@@ -240,9 +233,7 @@ BEGIN
     CLOSE cur_selecciones;
     DEALLOCATE cur_selecciones;
 
-    -------------------------------------------------------------------------
     -- 7. Resumen final de la importación.
-    -------------------------------------------------------------------------
     SELECT
         @archivo          AS archivo,
         @procesados       AS registros_procesados,
@@ -250,9 +241,7 @@ BEGIN
         @actualizados     AS registros_actualizados,
         @cantidad_errores AS registros_con_error;
 
-    -------------------------------------------------------------------------
     -- 8. Detalle de errores. Si no hubo errores, devuelve cero filas.
-    -------------------------------------------------------------------------
     SELECT
         team_id,
         team_name,
