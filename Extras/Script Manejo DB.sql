@@ -9,31 +9,71 @@
     Fecha: 06/10/2026
 	*/
 
-
 -- Primero, cambiar a otra base de datos
 USE master;
 GO
 
--- Luego forzar el drop terminando conexiones activas
-ALTER DATABASE MUNDIALDEFUTBOL SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
-ALTER DATABASE MUNDIALDEFUTBOL SET MULTI_USER;
-ALTER DATABASE MUNDIALDEFUTBOL SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
-ALTER DATABASE MUNDIALDEFUTBOL SET MULTI_USER;
+-- Por si la sesión quedó con una transacción abierta
+IF @@TRANCOUNT > 0
+    ROLLBACK TRANSACTION;
 GO
 
---Verificar el estado de la base de datos
-SELECT name, state_desc, user_access_desc 
-FROM sys.databases 
-WHERE name = 'MUNDIALDEFUTBOL';
-WHERE name = 'MUNDIALDEFUTBOL';
-
--- Finalmente eliminar
-DROP DATABASE MUNDIALDEFUTBOL;
-DROP DATABASE MUNDIALDEFUTBOL;
+SET IMPLICIT_TRANSACTIONS OFF;
 GO
 
--- Para crear de nuevo 
+PRINT '=============================================';
+PRINT 'RECREANDO BASE MUNDIALDEFUTBOL';
+PRINT '=============================================';
+GO
+
+
+IF DB_ID(N'MUNDIALDEFUTBOL') IS NOT NULL
+BEGIN
+    PRINT 'La base existe. Cerrando conexiones...';
+
+    ALTER DATABASE MUNDIALDEFUTBOL
+        SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+
+    PRINT 'Eliminando base...';
+
+    DROP DATABASE MUNDIALDEFUTBOL;
+END;
+GO
+
+
+PRINT 'Creando base MUNDIALDEFUTBOL...';
+
 CREATE DATABASE MUNDIALDEFUTBOL;
-CREATE DATABASE MUNDIALDEFUTBOL;
 GO
 
+
+USE MUNDIALDEFUTBOL;
+GO
+
+
+PRINT '=============================================';
+PRINT 'BASE CREADA CORRECTAMENTE';
+PRINT '=============================================';
+GO
+
+
+-- Verificación
+SELECT
+    name,
+    state_desc,
+    user_access_desc
+FROM sys.databases
+WHERE name = N'MUNDIALDEFUTBOL';
+GO
+
+
+-- Debe estar completamente vacía
+SELECT
+    COUNT(*) AS cantidad_tablas
+FROM INFORMATION_SCHEMA.TABLES
+WHERE TABLE_TYPE = 'BASE TABLE';
+
+SELECT
+    COUNT(*) AS cantidad_stored_procedures
+FROM sys.procedures;
+GO

@@ -212,7 +212,8 @@ BEGIN
 END;
 GO
 
-
+use mundialdefutbol;
+go
 IF OBJECT_ID('dbo.Jugador', 'U') IS NULL
 BEGIN
     CREATE TABLE dbo.Jugador
