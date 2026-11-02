@@ -1,4 +1,6 @@
 # Visual Studio
 .vs/
 .vscode/
-
+Doc/*md
+.venv/
+__pycache__/
