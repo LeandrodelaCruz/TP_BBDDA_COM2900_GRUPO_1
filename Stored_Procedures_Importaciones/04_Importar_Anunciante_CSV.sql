@@ -7,7 +7,7 @@ GO
     Grupo: 1
 
     Procedimiento:
-        importacion.SP_Importar_Anunciante_CSV
+        importacion.Importar_Anunciante_CSV
 
     Objetivo:
         Importar anunciantes desde el CSV generado mediante
@@ -38,7 +38,7 @@ GO
 -- PROCEDIMIENTO
 ------------------------------------------------------------
 
-CREATE OR ALTER PROCEDURE importacion.SP_Importar_Anunciante_CSV
+CREATE OR ALTER PROCEDURE importacion.Importar_Anunciante_CSV
     @archivo NVARCHAR(1000)
 AS
 BEGIN

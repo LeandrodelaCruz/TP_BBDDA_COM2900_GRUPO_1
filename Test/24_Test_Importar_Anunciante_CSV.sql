@@ -7,7 +7,7 @@ GO
     Grupo: 1
 
     Test:
-        test.SP_Test_Importar_Anunciante_CSV
+        test.Test_Importar_Anunciante_CSV
 
     Objetivo:
         Verificar el funcionamiento del proceso de importación
@@ -38,7 +38,7 @@ GO
 -- CREAR TEST
 ------------------------------------------------------------
 
-CREATE OR ALTER PROCEDURE test.SP_Test_Importar_Anunciante_CSV
+CREATE OR ALTER PROCEDURE test.Test_Importar_Anunciante_CSV
     @archivo NVARCHAR(1000)
 AS
 BEGIN
@@ -88,7 +88,7 @@ BEGIN
         PRINT '';
         PRINT 'TEST 1 - Ejecutando primera importacion...';
 
-        EXEC importacion.SP_Importar_Anunciante_CSV
+        EXEC importacion.Importar_Anunciante_CSV
             @archivo = @archivo;
 
 
@@ -175,7 +175,7 @@ BEGIN
         PRINT 'TEST 3 - Ejecutando nuevamente el mismo archivo...';
 
 
-        EXEC importacion.SP_Importar_Anunciante_CSV
+        EXEC importacion.Importar_Anunciante_CSV
             @archivo = @archivo;
 
 
@@ -317,7 +317,7 @@ GO
 -- EJECUTAR TEST
 ------------------------------------------------------------
 
-EXEC test.SP_Test_Importar_Anunciante_CSV
+EXEC test.Test_Importar_Anunciante_CSV
     @archivo =
     N'/var/opt/mssql/import/publicidad_mundial_scraping.csv';
 GO

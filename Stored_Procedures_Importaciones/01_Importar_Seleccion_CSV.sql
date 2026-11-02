@@ -25,7 +25,7 @@
 USE MUNDIALDEFUTBOL;
 GO
 
-CREATE OR ALTER PROCEDURE importacion.SP_Importar_Seleccion_CSV
+CREATE OR ALTER PROCEDURE importacion.Importar_Seleccion_CSV
     @archivo NVARCHAR(1000)
 AS
 BEGIN

@@ -3,7 +3,7 @@ GO
 
 /*============================================================
     Test:
-        test.SP_Test_Importar_Pieza_Publicitaria_CSV
+        test.Test_Importar_Pieza_Publicitaria_CSV
 
     Objetivo:
         Verificar el proceso de importacion de piezas
@@ -26,7 +26,7 @@ END;
 GO
 
 
-CREATE OR ALTER PROCEDURE test.SP_Test_Importar_Pieza_Publicitaria_CSV
+CREATE OR ALTER PROCEDURE test.Test_Importar_Pieza_Publicitaria_CSV
     @archivo NVARCHAR(1000)
 AS
 BEGIN
@@ -158,7 +158,7 @@ BEGIN
         PRINT 'TEST 2 - Ejecutando importacion de piezas...';
 
 
-        EXEC importacion.SP_Importar_Pieza_Publicitaria_CSV
+        EXEC importacion.Importar_Pieza_Publicitaria_CSV
             @archivo = @archivo;
 
 
@@ -447,7 +447,7 @@ BEGIN
         PRINT 'TEST 7 - Ejecutando nuevamente el archivo...';
 
 
-        EXEC importacion.SP_Importar_Pieza_Publicitaria_CSV
+        EXEC importacion.Importar_Pieza_Publicitaria_CSV
             @archivo = @archivo;
 
 
@@ -597,7 +597,7 @@ GO
 -- EJECUTAR TEST
 ------------------------------------------------------------
 
-EXEC test.SP_Test_Importar_Pieza_Publicitaria_CSV
+EXEC test.Test_Importar_Pieza_Publicitaria_CSV
     @archivo =
     N'/var/opt/mssql/import/publicidad_mundial_scraping.csv';
 GO

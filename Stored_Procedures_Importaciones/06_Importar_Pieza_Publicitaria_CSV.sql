@@ -7,7 +7,7 @@ GO
     Grupo: 1
 
     Procedimiento:
-        importacion.SP_Importar_Pieza_Publicitaria_CSV
+        importacion.Importar_Pieza_Publicitaria_CSV
 
     Objetivo:
         Importar piezas publicitarias desde el CSV generado
@@ -37,7 +37,7 @@ END;
 GO
 
 
-CREATE OR ALTER PROCEDURE importacion.SP_Importar_Pieza_Publicitaria_CSV
+CREATE OR ALTER PROCEDURE importacion.Importar_Pieza_Publicitaria_CSV
     @archivo NVARCHAR(1000)
 AS
 BEGIN

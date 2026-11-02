@@ -13,18 +13,18 @@
 USE MUNDIALDEFUTBOL;
 GO
 
-CREATE OR ALTER PROCEDURE test.SP_Importar_Jugador_PDF_CSV_Test
+CREATE OR ALTER PROCEDURE test.Importar_Jugador_PDF_CSV_Test
     @archivo NVARCHAR(1000)
 AS
 BEGIN
     SET NOCOUNT ON;
 
     PRINT '===== PRIMERA IMPORTACION DE JUGADORES (PDF FIFA) =====';
-    EXEC importacion.SP_Importar_Jugador_PDF_CSV
+    EXEC importacion.Importar_Jugador_PDF_CSV
         @archivo = @archivo;
 
     PRINT '===== SEGUNDA IMPORTACION - PRUEBA DE UPSERT =====';
-    EXEC importacion.SP_Importar_Jugador_PDF_CSV
+    EXEC importacion.Importar_Jugador_PDF_CSV
         @archivo = @archivo;
 
     PRINT '===== CANTIDAD TOTAL DE JUGADORES CARGADOS =====';
@@ -63,7 +63,7 @@ GO
 /* Ruta esperada si SQL Server corre en el contenedor Docker "sqlserver":
    /var/opt/mssql/import/jugadores_fifa_pdf.csv
 */
-EXEC test.SP_Importar_Jugador_PDF_CSV_Test
+EXEC test.Importar_Jugador_PDF_CSV_Test
     @archivo = N'/var/opt/mssql/import/jugadores_fifa_pdf.csv';
 GO
 
