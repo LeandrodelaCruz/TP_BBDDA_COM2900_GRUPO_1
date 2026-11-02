@@ -7,6 +7,8 @@
     El PDF se extrae mediante el script Python provisto y genera:
         jugadores_fifa_pdf.csv
 
+    Actualización 02/11/2026: lectura UTF-8 con RAW y longitudes acotadas.
+
     Este SP:
     - recibe la ruta del CSV como parámetro;
     - carga el archivo a una tabla temporal de staging;
@@ -44,22 +46,25 @@ BEGIN
 
     CREATE TABLE #Jugador_Staging
     (
-        seleccion NVARCHAR(150) NULL,
-        codigo_fifa NVARCHAR(10) NULL,
-        dorsal NVARCHAR(20) NULL,
-        posicion_codigo NVARCHAR(20) NULL,
-        nombre NVARCHAR(150) NULL,
-        apellido NVARCHAR(150) NULL,
-        fecha_nacimiento NVARCHAR(30) NULL,
-        club_origen NVARCHAR(250) NULL
+        -- El CSV es UTF-8. RAW conserva sus bytes y esta staging los interpreta
+        -- antes de convertir a NVARCHAR. No depende de la collation de tempdb.
+        -- VARCHAR mide bytes; las variables receptoras tienen igual n o mayor.
+        seleccion VARCHAR(400) COLLATE Latin1_General_100_CI_AS_SC_UTF8 NULL,
+        codigo_fifa VARCHAR(10) COLLATE Latin1_General_100_CI_AS_SC_UTF8 NULL,
+        dorsal VARCHAR(20) COLLATE Latin1_General_100_CI_AS_SC_UTF8 NULL,
+        posicion_codigo VARCHAR(20) COLLATE Latin1_General_100_CI_AS_SC_UTF8 NULL,
+        nombre VARCHAR(600) COLLATE Latin1_General_100_CI_AS_SC_UTF8 NULL,
+        apellido VARCHAR(600) COLLATE Latin1_General_100_CI_AS_SC_UTF8 NULL,
+        fecha_nacimiento VARCHAR(40) COLLATE Latin1_General_100_CI_AS_SC_UTF8 NULL,
+        club_origen VARCHAR(1000) COLLATE Latin1_General_100_CI_AS_SC_UTF8 NULL
     );
 
     CREATE TABLE #Errores
     (
         numero_fila INT NOT NULL,
-        seleccion NVARCHAR(150) NULL,
-        nombre NVARCHAR(150) NULL,
-        apellido NVARCHAR(150) NULL,
+        seleccion NVARCHAR(400) NULL,
+        nombre NVARCHAR(600) NULL,
+        apellido NVARCHAR(600) NULL,
         mensaje NVARCHAR(2048) NOT NULL
     );
 
@@ -74,7 +79,9 @@ BEGIN
         (
             FORMAT = ''CSV'',
             FIRSTROW = 2,
-            FIELDQUOTE = ''"''
+            FIELDQUOTE = ''"'',
+            CODEPAGE = ''RAW'',
+            DATAFILETYPE = ''char''
         );';
 
     BEGIN TRY
@@ -88,23 +95,23 @@ BEGIN
 
     DECLARE
         @numero_fila INT = 0,
-        @seleccion_raw NVARCHAR(150),
+        @seleccion_raw NVARCHAR(400),
         @codigo_fifa NVARCHAR(10),
         @dorsal_raw NVARCHAR(20),
         @posicion_raw NVARCHAR(20),
-        @nombre_raw NVARCHAR(150),
-        @apellido_raw NVARCHAR(150),
-        @fecha_raw NVARCHAR(30),
-        @club_raw NVARCHAR(250),
+        @nombre_raw NVARCHAR(600),
+        @apellido_raw NVARCHAR(600),
+        @fecha_raw NVARCHAR(40),
+        @club_raw NVARCHAR(1000),
 
         @id_seleccion INT,
         @id_jugador INT,
         @dorsal TINYINT,
         @fecha_nacimiento DATE,
         @posicion VARCHAR(40),
-        @nombre NVARCHAR(60),
-        @apellido NVARCHAR(60),
-        @club_origen NVARCHAR(100),
+        @nombre NVARCHAR(600),
+        @apellido NVARCHAR(600),
+        @club_origen NVARCHAR(1000),
 
         @insertados INT = 0,
         @actualizados INT = 0,
@@ -146,7 +153,8 @@ BEGIN
 
             SET @nombre = LTRIM(RTRIM(@nombre_raw));
             SET @apellido = LTRIM(RTRIM(@apellido_raw));
-            SET @club_origen = LTRIM(RTRIM(@club_raw));
+            -- Limpiar el CR final de filas CRLF que Linux puede dejar en el último campo.
+            SET @club_origen = LTRIM(RTRIM(REPLACE(@club_raw, NCHAR(13), N'')));
 
             SET @posicion = CASE UPPER(LTRIM(RTRIM(@posicion_raw)))
                 WHEN 'PO' THEN 'Portero'
@@ -170,19 +178,19 @@ BEGIN
             IF NULLIF(@nombre, N'') IS NULL
                 THROW 51313, N'El nombre está vacío.', 1;
 
-            IF LEN(@nombre) > 60
+            IF DATALENGTH(@nombre) > 120
                 THROW 51314, N'El nombre supera los 60 caracteres permitidos por dbo.Jugador.', 1;
 
             IF NULLIF(@apellido, N'') IS NULL
                 THROW 51315, N'El apellido está vacío.', 1;
 
-            IF LEN(@apellido) > 60
+            IF DATALENGTH(@apellido) > 120
                 THROW 51316, N'El apellido supera los 60 caracteres permitidos por dbo.Jugador.', 1;
 
             IF NULLIF(@club_origen, N'') IS NULL
                 THROW 51317, N'El club de origen está vacío.', 1;
 
-            IF LEN(@club_origen) > 100
+            IF DATALENGTH(@club_origen) > 200
                 THROW 51318, N'El club de origen supera los 100 caracteres permitidos.', 1;
 
             IF @posicion IS NULL

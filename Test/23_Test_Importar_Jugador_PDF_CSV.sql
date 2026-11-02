@@ -23,9 +23,31 @@ BEGIN
     EXEC importacion.Importar_Jugador_PDF_CSV
         @archivo = @archivo;
 
+    SELECT id_jugador, id_seleccion, nombre, apellido, fecha_nacimiento,
+           club_origen, posicion, dorsal
+    INTO #Jugador_Primera_Importacion
+    FROM dbo.Jugador;
+
     PRINT '===== SEGUNDA IMPORTACION - PRUEBA DE UPSERT =====';
     EXEC importacion.Importar_Jugador_PDF_CSV
         @archivo = @archivo;
+
+    IF EXISTS (
+        SELECT * FROM #Jugador_Primera_Importacion
+        EXCEPT SELECT id_jugador, id_seleccion, nombre, apellido, fecha_nacimiento,
+                      club_origen, posicion, dorsal FROM dbo.Jugador
+    ) OR EXISTS (
+        SELECT id_jugador, id_seleccion, nombre, apellido, fecha_nacimiento,
+               club_origen, posicion, dorsal FROM dbo.Jugador
+        EXCEPT SELECT * FROM #Jugador_Primera_Importacion
+    )
+        THROW 52300, N'Repetir el CSV alteró IDs, nombres o cantidad de jugadores.', 1;
+
+    IF EXISTS (
+        SELECT id_seleccion, nombre, apellido, fecha_nacimiento FROM dbo.Jugador
+        GROUP BY id_seleccion, nombre, apellido, fecha_nacimiento HAVING COUNT(*) > 1
+    )
+        THROW 52301, N'La importación dejó jugadores duplicados.', 1;
 
     PRINT '===== CANTIDAD TOTAL DE JUGADORES CARGADOS =====';
     SELECT COUNT(*) AS cantidad_jugadores
@@ -64,7 +86,7 @@ GO
    /var/opt/mssql/import/jugadores_fifa_pdf.csv
 */
 EXEC test.Importar_Jugador_PDF_CSV_Test
-    @archivo = N'/var/opt/mssql/import/jugadores_fifa_pdf.csv';
+    @archivo = N'/home/proyecto/jugadores_fifa_pdf.csv';
 GO
 
 select * from dbo.jugador;
