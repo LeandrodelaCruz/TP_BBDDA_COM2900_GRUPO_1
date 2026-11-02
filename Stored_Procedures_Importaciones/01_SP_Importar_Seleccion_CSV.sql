@@ -40,27 +40,29 @@ BEGIN
     -- 2. Staging: recibe el archivo tal como viene.
     --    Se usan tam amplios para poder detectar errores de longitud
     --    antes de invocar los ABM de la Entrega 5.
+    --    VARCHAR UTF-8 mide bytes; las variables NVARCHAR admiten al menos
+    --    esa cantidad de unidades Unicode para evitar recortes en el FETCH.
 
     CREATE TABLE #Seleccion_Staging -- Esta tabla temporal absorbe toda la informacion
     (
         -- RAW conserva los bytes. La staging UTF-8 los interpreta antes de
         -- convertir a NVARCHAR, también en SQL Server 2022 sobre Linux.
-        team_id                     VARCHAR(MAX) COLLATE Latin1_General_100_CI_AS_SC_UTF8 NULL,
-        team_name                   VARCHAR(MAX) COLLATE Latin1_General_100_CI_AS_SC_UTF8 NULL,
-        fifa_code                   VARCHAR(MAX) COLLATE Latin1_General_100_CI_AS_SC_UTF8 NULL,
-        group_letter                VARCHAR(MAX) COLLATE Latin1_General_100_CI_AS_SC_UTF8 NULL,
-        confederation               VARCHAR(MAX) COLLATE Latin1_General_100_CI_AS_SC_UTF8 NULL,
-        fifa_ranking_pre_tournament VARCHAR(MAX) COLLATE Latin1_General_100_CI_AS_SC_UTF8 NULL,
-        elo_rating                  VARCHAR(MAX) COLLATE Latin1_General_100_CI_AS_SC_UTF8 NULL,
-        manager_name                VARCHAR(MAX) COLLATE Latin1_General_100_CI_AS_SC_UTF8 NULL
+        team_id                     VARCHAR(50) COLLATE Latin1_General_100_CI_AS_SC_UTF8 NULL,
+        team_name                   VARCHAR(400) COLLATE Latin1_General_100_CI_AS_SC_UTF8 NULL,
+        fifa_code                   VARCHAR(20) COLLATE Latin1_General_100_CI_AS_SC_UTF8 NULL,
+        group_letter                VARCHAR(40) COLLATE Latin1_General_100_CI_AS_SC_UTF8 NULL,
+        confederation               VARCHAR(200) COLLATE Latin1_General_100_CI_AS_SC_UTF8 NULL,
+        fifa_ranking_pre_tournament VARCHAR(50) COLLATE Latin1_General_100_CI_AS_SC_UTF8 NULL,
+        elo_rating                  VARCHAR(50) COLLATE Latin1_General_100_CI_AS_SC_UTF8 NULL,
+        manager_name                VARCHAR(1000) COLLATE Latin1_General_100_CI_AS_SC_UTF8 NULL
     );
 
     -- 3. Tabla temporal para informar errores sin detener toda la carga.
 
     CREATE TABLE #Errores_Importacion --Esta tabla funciona como una bitacora. Si alguna fila puntutal tiene problemas, se almacena aca
     (                                                               -- y no interrumpe la carga.
-        team_id       NVARCHAR(MAX)  NULL,
-        team_name     NVARCHAR(MAX)  NULL,
+        team_id       NVARCHAR(50)   NULL,
+        team_name     NVARCHAR(400)  NULL,
         numero_error  INT            NOT NULL,
         mensaje_error NVARCHAR(2048) NOT NULL
     );
@@ -100,10 +102,10 @@ BEGIN
     -- 5. Variables de procesamiento y contadores.
 
     DECLARE
-        @team_id          NVARCHAR(MAX),
-        @pais             NVARCHAR(MAX),
-        @confederacion    NVARCHAR(MAX),
-        @grupo_asignado   NVARCHAR(MAX),
+        @team_id          NVARCHAR(50),
+        @pais             NVARCHAR(400),
+        @confederacion    NVARCHAR(200),
+        @grupo_asignado   NVARCHAR(40),
         @id_seleccion     INT,
         @procesados       INT = 0,
         @insertados       INT = 0,

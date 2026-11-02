@@ -29,7 +29,7 @@ GO
 
 /* ==================== Personal_Tecnico: ALTA ==================== */
 CREATE OR ALTER PROCEDURE abm.Personal_Tecnico_Alta
-    @nombre_completo NVARCHAR(MAX),
+    @nombre_completo NVARCHAR(1000),
     @rol NVARCHAR(50),
     @id_seleccion INT
 AS
@@ -59,7 +59,7 @@ GO
 /* ==================== Personal_Tecnico: MODIFICACIÓN ==================== */
 CREATE OR ALTER PROCEDURE abm.Personal_Tecnico_Modificar
     @id_personal INT,
-    @nombre_completo NVARCHAR(MAX),
+    @nombre_completo NVARCHAR(1000),
     @rol NVARCHAR(50),
     @id_seleccion INT
 AS

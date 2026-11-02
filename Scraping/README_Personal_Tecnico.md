@@ -76,6 +76,14 @@ Esto se verifico en SQL Server 2022 sobre Linux sin cambiar la intercalacion
 de la base. Los errores de datos se informan por registro; un archivo ilegible
 o con estructura CSV invalida puede impedir la carga inicial a staging.
 
+Los limites de entrada son acotados: seleccion 400, nombre completo 1000,
+rol 200 y fecha 100. En staging son bytes (`VARCHAR` UTF-8); las variables y
+el reporte de errores usan `NVARCHAR` con igual longitud para no recortar los
+valores admitidos por staging antes de validarlos. La tabla definitiva conserva
+sus limites (nombre completo 120 y seleccion 80). Un campo que supere incluso
+la capacidad de staging queda fuera del formato de entrada admitido.
+`NVARCHAR(MAX)` se reserva para construir la sentencia SQL dinamica.
+
 La prueba esta en `Test/24_Test_Importar_Personal_Tecnico_CSV.sql`; recibe el
 CSV real y, opcionalmente, `Test/Datos_Importacion/personal_tecnico_casos.csv`.
 Sus escrituras se revierten al terminar. No ejecutar pruebas con un CSV cuya

@@ -36,20 +36,22 @@ BEGIN
 
     -- El CSV es UTF-8. La intercalación de esta staging permite leerlo en
     -- SQL Server 2019+ sin cambiar la base. RAW conserva los bytes del CSV.
-    -- El cursor convierte luego a NVARCHAR. Validar antes de limitar tamaños.
+    -- Límites de entrada amplios para validar contra el modelo definitivo.
+    -- VARCHAR UTF-8 mide bytes; el cursor convierte a NVARCHAR con igual n
+    -- para que ningún valor admitido por staging se recorte antes de validar.
     CREATE TABLE #Personal_Staging
     (
-        seleccion VARCHAR(MAX) COLLATE Latin1_General_100_CI_AS_SC_UTF8 NULL,
-        nombre_completo VARCHAR(MAX) COLLATE Latin1_General_100_CI_AS_SC_UTF8 NULL,
-        rol VARCHAR(MAX) COLLATE Latin1_General_100_CI_AS_SC_UTF8 NULL,
-        fecha_extraccion_utc VARCHAR(MAX) COLLATE Latin1_General_100_CI_AS_SC_UTF8 NULL
+        seleccion VARCHAR(400) COLLATE Latin1_General_100_CI_AS_SC_UTF8 NULL,
+        nombre_completo VARCHAR(1000) COLLATE Latin1_General_100_CI_AS_SC_UTF8 NULL,
+        rol VARCHAR(200) COLLATE Latin1_General_100_CI_AS_SC_UTF8 NULL,
+        fecha_extraccion_utc VARCHAR(100) COLLATE Latin1_General_100_CI_AS_SC_UTF8 NULL
     );
     CREATE TABLE #Errores
     (
         registro_procesado INT NOT NULL,
-        seleccion NVARCHAR(MAX) NULL,
-        nombre_completo NVARCHAR(MAX) NULL,
-        rol NVARCHAR(MAX) NULL,
+        seleccion NVARCHAR(400) NULL,
+        nombre_completo NVARCHAR(1000) NULL,
+        rol NVARCHAR(200) NULL,
         numero_error INT NOT NULL,
         mensaje NVARCHAR(2048) NOT NULL
     );
@@ -68,8 +70,8 @@ BEGIN
         THROW 51405, @error_lectura, 1;
     END CATCH;
 
-    DECLARE @seleccion NVARCHAR(MAX), @nombre NVARCHAR(MAX), @rol NVARCHAR(MAX),
-            @fecha NVARCHAR(MAX), @id_seleccion INT, @id_personal INT,
+    DECLARE @seleccion NVARCHAR(400), @nombre NVARCHAR(1000), @rol NVARCHAR(200),
+            @fecha NVARCHAR(100), @id_seleccion INT, @id_personal INT,
             @coincidencias INT, @procesados INT = 0, @insertados INT = 0,
             @actualizados INT = 0, @errores INT = 0;
 
