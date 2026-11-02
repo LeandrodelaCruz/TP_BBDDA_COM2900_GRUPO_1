@@ -199,8 +199,8 @@ BEGIN
     (
         id_personal INT IDENTITY(1,1) NOT NULL,
         id_seleccion INT NOT NULL,
-        nombre NVARCHAR(60) NOT NULL,
-        apellido NVARCHAR(60) NOT NULL,
+        nombre_completo NVARCHAR(120) NOT NULL,
+        --apellido NVARCHAR(60) NOT NULL,
         rol VARCHAR(50) NOT NULL,
 
         CONSTRAINT PK_Personal_Tecnico 

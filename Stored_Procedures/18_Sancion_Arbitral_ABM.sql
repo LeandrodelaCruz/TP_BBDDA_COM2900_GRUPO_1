@@ -1,24 +1,23 @@
 /*
     Universidad: Universidad Nacional de La Matanza - UNLaM
     Materia: Bases de Datos Aplicada - 2C-2026
-    Comisión: Com: 01-2900
+    Comision: Com: 01-2900
     Grupo 01: 
-    - Caro, Nicolás Darío
+    - Caro, Nicolas Dario
     - Clara, Lucas
     - De La Cruz, Leandro Ariel
-    - Rodríguez Elías Uriel
-
-    Descripción:
+    - Rodriguez Elias Uriel
+    Descripcion:
     Stored Procedures ABM para la tabla Sancion_Arbitral
     
     Validaciones:
-    - El árbitro debe tener una designación arbitral para el partido indicado
+    - El arbitro debe tener una designacion arbitral para el partido indicado
       (si se proporciona id_partido).
-    - La fecha de la sanción debe coincidir con la fecha del partido (si se
+    - La fecha de la sancion debe coincidir con la fecha del partido (si se
       proporciona id_partido).
-    - Los tipos de sanción permitidos son: SUSPENSIÓN, MULTA, ADVERTENCIA y
+    - Los tipos de sancion permitidos son: SUSPENSIoN, MULTA, ADVERTENCIA y
       RETIRO DE LICENCIA.
-    - La fecha de la sanción no puede ser futura.
+    - La fecha de la sancion no puede ser futura.
 
     PROCEDIMIENTOS INCLUIDOS:
     - Sancion_Arbitral_Alta (con validaciones)
@@ -33,7 +32,7 @@ USE MUNDIALDEFUTBOL;
 GO
 
 -- =========================================================
--- CREATE - Insertar una nueva sanción arbitral
+-- CREATE - Insertar una nueva sancion arbitral
 -- =========================================================
 
 CREATE OR ALTER PROCEDURE abm.Sancion_Arbitral_Alta
@@ -58,14 +57,14 @@ BEGIN
         BEGIN
             DECLARE @fecha_partido DATE;
 
-            -- Validar que el árbitro tenga designación para el partido
+            -- Validar que el arbitro tenga designacion para el partido
             IF NOT EXISTS (
                 SELECT 1 
                 FROM dbo.Designacion_Arbitral 
                 WHERE id_arbitro = @id_arbitro AND id_partido = @id_partido
             )
             BEGIN
-                SET @errores = @errores + 'El árbitro no tiene una designación arbitral para el partido especificado. ';
+                SET @errores = @errores + 'El arbitro no tiene una designacion arbitral para el partido especificado. ';
             END
             
             SELECT @fecha_partido = fecha
@@ -78,22 +77,22 @@ BEGIN
             END
             ELSE
             BEGIN
-                -- Validar que la fecha de la sanción coincida con la del partido
+                -- Validar que la fecha de la sancion coincida con la del partido
                 IF @fecha <> @fecha_partido
                 BEGIN
-                    SET @errores = @errores + 'La fecha de la sanción debe coincidir con la fecha del partido. ';
+                    SET @errores = @errores + 'La fecha de la sancion debe coincidir con la fecha del partido. ';
                 END
             END         
         END
         
-        -- Si hay errores, lanzar excepción
+        -- Si hay errores, lanzar excepcion
         IF @errores <> ''
         BEGIN
             RAISERROR(@errores, 16, 1);
         END
         
         -- =========================================================
-        -- INSERCIÓN
+        -- INSERCIoN
         -- =========================================================
         INSERT INTO dbo.Sancion_Arbitral (
             id_arbitro,
@@ -112,7 +111,7 @@ BEGIN
         SET @id_sancion = SCOPE_IDENTITY();
         
         COMMIT TRANSACTION;
-        PRINT 'Sanción arbitral registrada exitosamente. ID: ' + CAST(@id_sancion AS VARCHAR(10));
+        PRINT 'Sancion arbitral registrada exitosamente. ID: ' + CAST(@id_sancion AS VARCHAR(10));
         
     END TRY
     BEGIN CATCH
@@ -130,7 +129,7 @@ BEGIN
         SET @error_message = ERROR_MESSAGE();
         
         RAISERROR(
-            'Error al registrar sanción arbitral: %s (Código de error: %d)',
+            'Error al registrar sancion arbitral: %s (Codigo de error: %d)',
             @error_severity,
             @error_state,
             @error_message,
@@ -142,7 +141,7 @@ END;
 GO
 
 -- =========================================================
--- READ - Obtener sanción por ID
+-- READ - Obtener sancion por ID
 -- =========================================================
 
 CREATE OR ALTER PROCEDURE abm.Sancion_Arbitral_GetById
@@ -170,7 +169,7 @@ END;
 GO
 
 -- =========================================================
--- READ - Obtener sanciones por árbitro
+-- READ - Obtener sanciones por arbitro
 -- =========================================================
 
 CREATE OR ALTER PROCEDURE abm.Sancion_Arbitral_GetByArbitro
@@ -227,7 +226,7 @@ END;
 GO
 
 -- =========================================================
--- UPDATE - Actualizar sanción arbitral
+-- UPDATE - Actualizar sancion arbitral
 -- =========================================================
 
 CREATE OR ALTER PROCEDURE abm.Sancion_Arbitral_Modificacion
@@ -243,10 +242,10 @@ BEGIN
     BEGIN TRY
         BEGIN TRANSACTION;
         
-        -- Validar que la sanción existe
+        -- Validar que la sancion existe
         IF NOT EXISTS (SELECT 1 FROM dbo.Sancion_Arbitral WHERE id_sancion = @id_sancion)
         BEGIN
-            RAISERROR('La sanción arbitral especificada no existe.', 16, 1);
+            RAISERROR('La sancion arbitral especificada no existe.', 16, 1);
         END
         
         IF @errores <> ''
@@ -254,14 +253,14 @@ BEGIN
             RAISERROR(@errores, 16, 1);
         END
         
-        -- Actualizar sanción
+        -- Actualizar sancion
         UPDATE dbo.Sancion_Arbitral
         SET motivo = @motivo,
             tipo_sancion = @tipo_sancion
         WHERE id_sancion = @id_sancion;
         
         COMMIT TRANSACTION;
-        PRINT 'Sanción arbitral actualizada exitosamente.';
+        PRINT 'Sancion arbitral actualizada exitosamente.';
         
     END TRY
     BEGIN CATCH
@@ -275,7 +274,7 @@ END;
 GO
 
 -- =========================================================
--- DELETE - Eliminar sanción arbitral
+-- DELETE - Eliminar sancion arbitral
 -- =========================================================
 
 CREATE OR ALTER PROCEDURE abm.Sancion_Arbitral_Baja
@@ -289,13 +288,13 @@ BEGIN
         
         IF NOT EXISTS (SELECT 1 FROM dbo.Sancion_Arbitral WHERE id_sancion = @id_sancion)
         BEGIN
-            RAISERROR('La sanción arbitral especificada no existe.', 16, 1);
+            RAISERROR('La sancion arbitral especificada no existe.', 16, 1);
         END
         
         DELETE FROM dbo.Sancion_Arbitral WHERE id_sancion = @id_sancion;
         
         COMMIT TRANSACTION;
-        PRINT 'Sanción arbitral eliminada exitosamente.';
+        PRINT 'Sancion arbitral eliminada exitosamente.';
         
     END TRY
     BEGIN CATCH

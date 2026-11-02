@@ -1,14 +1,14 @@
 /*
     Universidad: Universidad Nacional de La Matanza - UNLaM
     Materia: Bases de Datos Aplicada - 2C-2026
-    Comisión: Com: 01-2900
+    Comision: Com: 01-2900
     Grupo 01: 
-    - Caro, Nicolás Darío
+    - Caro, Nicolas Dario
     - Clara, Lucas
     - De La Cruz, Leandro Ariel
-    - Rodríguez Elías Uriel
+    - Rodriguez Elias Uriel
 
-    Descripción:
+    Descripcion:
     Stored Procedures ABM para la tabla Incidencia
     
     Tipos de incidencias:
@@ -70,33 +70,33 @@ BEGIN
         END
         
         -- =========================================================
-        -- VALIDACIÓN DE NEGOCIO: Lógica según tipo de incidencia
+        -- VALIDACIoN DE NEGOCIO: Logica segun tipo de incidencia
         -- =========================================================
         
-        -- GOL: involucrado debe ser MISMA selección (asistencia)
+        -- GOL: involucrado debe ser MISMA seleccion (asistencia)
         IF @tipo = 'GOL' AND @id_jugador_involucrado IS NOT NULL
         BEGIN
             IF @id_seleccion_jugador <> @id_seleccion_involucrado
-                SET @errores = @errores + 'GOL: el asistente debe ser de la misma selección. ';
+                SET @errores = @errores + 'GOL: el asistente debe ser de la misma seleccion. ';
         END
         
-        -- AMONESTACION y EXPULSION: involucrado debe ser DIFERENTE selección (agredido)
+        -- AMONESTACION y EXPULSION: involucrado debe ser DIFERENTE seleccion (agredido)
         IF @tipo IN ('AMONESTACION', 'EXPULSION')
         BEGIN
             IF @id_jugador_involucrado IS NULL
                 SET @errores = @errores + 'Para ' + @tipo + ' debe especificar el jugador agredido. ';
             ELSE IF @id_seleccion_jugador = @id_seleccion_involucrado
-                SET @errores = @errores + @tipo + ': el jugador agredido debe ser de la selección opuesta. ';
+                SET @errores = @errores + @tipo + ': el jugador agredido debe ser de la seleccion opuesta. ';
         END
         
-        -- Si hay errores, lanzar excepción
+        -- Si hay errores, lanzar excepcion
         IF @errores <> ''
         BEGIN
             RAISERROR(@errores, 16, 1);
         END
         
         -- =========================================================
-        -- INSERCIÓN
+        -- INSERCIoN
         -- =========================================================
         INSERT INTO dbo.Incidencia (
             id_partido,
@@ -137,7 +137,7 @@ BEGIN
         SET @error_message = ERROR_MESSAGE();
         
         RAISERROR(
-            'Error al registrar incidencia: %s (Código de error: %d)',
+            'Error al registrar incidencia: %s (Codigo de error: %d)',
             @error_severity,
             @error_state,
             @error_message,

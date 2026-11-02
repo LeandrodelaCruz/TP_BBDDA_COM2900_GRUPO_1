@@ -36,6 +36,13 @@
     <File Path="Table/00_Script_DB_Schemas_Creacion.sql" />
     <File Path="Table/01_Script_Tablas_Creacion.sql" />
   </Folder>
+  <Folder Name="/Importaciones/">
+    <File Path="Stored_Procedures_Importaciones/01_SP_Importar_Seleccion_CSV.sql" />
+    <File Path="Stored_Procedures_Importaciones/04_SP_Importar_Personal_Tecnico_CSV.sql" />
+  </Folder>
+  <Folder Name="/Test/Datos_Importacion/">
+    <File Path="Test/Datos_Importacion/personal_tecnico_casos.csv" />
+  </Folder>
   <Folder Name="/Test/">
     <File Path="Test/01_Anunciante_Test.sql" />
     <File Path="Test/02_Region_Test.sql" />
@@ -46,6 +53,7 @@
     <File Path="Test/07_Pieza_Publicitaria_Test.sql" />
     <File Path="Test/08_Pieza_Para_Region_Test.sql" />
     <File Path="Test/09_Personal_Tecnico_Test.sql" />
+    <File Path="Test/24_Test_Importar_Personal_Tecnico_CSV.sql" />
     <File Path="Test/10_Jugador_Test.sql" />
     <File Path="Test/11_Test_Formacion_Jugador.sql" />
     <File Path="Test/12_Test_Formacion.sql" />

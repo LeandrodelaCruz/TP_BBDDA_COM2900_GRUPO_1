@@ -48,8 +48,8 @@ BEGIN
 
     PRINT '=== Preparando datos de prueba ===';
 
-    INSERT INTO dbo.Anunciante (nombre, cuit, email, telefono)
-    VALUES (N'Anunciante Test ABM', N'30111111118', N'test@anunciante.com', N'1122334455');
+    INSERT INTO dbo.Anunciante (nombre)
+    VALUES (N'Anunciante Test ABM');
 
     PRINT '=== Datos de apoyo preparados ===';
 

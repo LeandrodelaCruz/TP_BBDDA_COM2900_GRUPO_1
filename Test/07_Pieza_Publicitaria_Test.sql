@@ -49,8 +49,8 @@ BEGIN
 
     PRINT '=== Preparando datos de prueba ===';
 
-    INSERT INTO dbo.Anunciante (nombre, cuit, email, telefono)
-    VALUES (N'Anunciante Test ABM Pieza', N'30222222228', N'pieza@test.com', N'1133445566');
+    INSERT INTO dbo.Anunciante (nombre)
+    VALUES (N'Anunciante Test ABM Pieza');
 
     DECLARE @id_anunc INT = (SELECT id_anunciante FROM dbo.Anunciante WHERE nombre = N'Anunciante Test ABM Pieza');
 

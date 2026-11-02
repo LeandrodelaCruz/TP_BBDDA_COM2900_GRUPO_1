@@ -1,15 +1,15 @@
 /*
     Universidad: Universidad Nacional de La Matanza - UNLaM
     Materia: Bases de Datos Aplicada - 2C-2026
-    Comisión: Com: 01-2900
+    Comision: Com: 01-2900
     Grupo 01: 
-    - Caro, Nicolás Darío
+    - Caro, Nicolas Dario
     - Clara, Lucas
     - De La Cruz, Leandro Ariel
-    - Rodríguez Elías Uriel
+    - Rodriguez Elias Uriel
 
-    Descripción:
-    Script de testing COMPLETO para todos los procedimientos de Sustitución
+    Descripcion:
+    Script de testing COMPLETO para todos los procedimientos de Sustitucion
     Incluye pruebas exitosas y pruebas de validaciones fallidas
     
     PROCEDIMIENTOS A PROBAR:
@@ -37,8 +37,7 @@ BEGIN
        1. Sustituciones
        2. Formacion_Jugador
        3. Formacion
-       4. Partido_Seleccion
-       5. Sustitucion (por si acaso)
+       4. Sustitucion (por si acaso)
        6. Partido
        7. Jugador (de selecciones test)
        8. Seleccion
@@ -62,10 +61,6 @@ BEGIN
     DELETE FROM dbo.Formacion 
     WHERE id_partido IN (SELECT id_partido FROM dbo.Partido WHERE resultado_final = N'TEST-SUSTITUCION');
 
-    -- Eliminar relaciones partido-selección
-    DELETE FROM dbo.Partido_Seleccion 
-    WHERE id_partido IN (SELECT id_partido FROM dbo.Partido WHERE resultado_final = N'TEST-SUSTITUCION');
-
     -- Eliminar partidos
     DELETE FROM dbo.Partido 
     WHERE resultado_final = N'TEST-SUSTITUCION';
@@ -74,49 +69,49 @@ BEGIN
     DELETE FROM dbo.Jugador 
     WHERE id_seleccion IN (
         SELECT id_seleccion FROM dbo.Seleccion 
-        WHERE pais IN (N'Selección Test 1', N'Selección Test 2')
+        WHERE pais IN (N'Seleccion Test 1', N'Seleccion Test 2')
     );
 
     -- Eliminar selecciones
     DELETE FROM dbo.Seleccion 
-    WHERE pais IN (N'Selección Test 1', N'Selección Test 2');
+    WHERE pais IN (N'Seleccion Test 1', N'Seleccion Test 2');
 
     -- Eliminar sede
     DELETE FROM dbo.Sede 
-    WHERE nombre_estadio = N'Estadio Testing Sustitución';
+    WHERE nombre_estadio = N'Estadio Testing Sustitucion';
 
     PRINT '=== Limpieza completada ===';
 
     /* =========================================================
-       PREPARACIÓN: datos mínimos de apoyo
+       PREPARACIoN: datos minimos de apoyo
        =========================================================
        Resultado esperado: se insertan (si no existen) una sede,
-       dos selecciones, jugadores titulares y suplentes por selección,
-       un partido, la relación partido-selección y las formaciones.
+       dos selecciones, jugadores titulares y suplentes por seleccion,
+       un partido, la relacion partido-seleccion y las formaciones.
        Todo con IDs conocidos para poder referenciarlos en las pruebas.
        ========================================================= */
 
     PRINT '=== Preparando datos de prueba ===';
 
     -- Sede de prueba
-    IF NOT EXISTS (SELECT 1 FROM dbo.Sede WHERE nombre_estadio = N'Estadio Testing Sustitución')
+    IF NOT EXISTS (SELECT 1 FROM dbo.Sede WHERE nombre_estadio = N'Estadio Testing Sustitucion')
         INSERT INTO dbo.Sede (nombre_estadio, ciudad, pais, capacidad, huso_horario)
-        VALUES (N'Estadio Testing Sustitución', N'Ciudad Test', N'País Test', 50000, 'UTC-03:00');
+        VALUES (N'Estadio Testing Sustitucion', N'Ciudad Test', N'Pais Test', 50000, 'UTC-03:00');
 
     -- Selecciones de prueba
-    IF NOT EXISTS (SELECT 1 FROM dbo.Seleccion WHERE pais = N'Selección Test 1')
+    IF NOT EXISTS (SELECT 1 FROM dbo.Seleccion WHERE pais = N'Seleccion Test 1')
         INSERT INTO dbo.Seleccion (pais, confederacion, grupo_asignado)
-        VALUES (N'Selección Test 1', N'TEST', 'A');
+        VALUES (N'Seleccion Test 1', N'TEST', 'A');
 
-    IF NOT EXISTS (SELECT 1 FROM dbo.Seleccion WHERE pais = N'Selección Test 2')
+    IF NOT EXISTS (SELECT 1 FROM dbo.Seleccion WHERE pais = N'Seleccion Test 2')
         INSERT INTO dbo.Seleccion (pais, confederacion, grupo_asignado)
-        VALUES (N'Selección Test 2', N'TEST', 'A');
+        VALUES (N'Seleccion Test 2', N'TEST', 'A');
 
-    DECLARE @id_sede_test    INT = (SELECT id_sede FROM dbo.Sede WHERE nombre_estadio = N'Estadio Testing Sustitución');
-    DECLARE @id_sel_test1_b6    INT = (SELECT id_seleccion FROM dbo.Seleccion WHERE pais = N'Selección Test 1');
-    DECLARE @id_sel_test2    INT = (SELECT id_seleccion FROM dbo.Seleccion WHERE pais = N'Selección Test 2');
+    DECLARE @id_sede_test    INT = (SELECT id_sede FROM dbo.Sede WHERE nombre_estadio = N'Estadio Testing Sustitucion');
+    DECLARE @id_sel_test1_b6    INT = (SELECT id_seleccion FROM dbo.Seleccion WHERE pais = N'Seleccion Test 1');
+    DECLARE @id_sel_test2    INT = (SELECT id_seleccion FROM dbo.Seleccion WHERE pais = N'Seleccion Test 2');
 
-    -- Jugadores TITULARES de Selección 1
+    -- Jugadores TITULARES de Seleccion 1
     IF NOT EXISTS (SELECT 1 FROM dbo.Jugador WHERE nombre = N'Titular1Sel1')
         INSERT INTO dbo.Jugador (id_seleccion, nombre, apellido, fecha_nacimiento, club_origen, posicion, dorsal)
         VALUES (@id_sel_test1_b6, N'Titular1Sel1', N'Test', '1990-01-01', N'Club Test', N'Delantero', 9);
@@ -125,7 +120,7 @@ BEGIN
         INSERT INTO dbo.Jugador (id_seleccion, nombre, apellido, fecha_nacimiento, club_origen, posicion, dorsal)
         VALUES (@id_sel_test1_b6, N'Titular2Sel1', N'Test', '1991-01-01', N'Club Test', N'Mediocampista', 8);
 
-    -- Jugadores SUPLENTES de Selección 1
+    -- Jugadores SUPLENTES de Seleccion 1
     IF NOT EXISTS (SELECT 1 FROM dbo.Jugador WHERE nombre = N'Suplente1Sel1')
         INSERT INTO dbo.Jugador (id_seleccion, nombre, apellido, fecha_nacimiento, club_origen, posicion, dorsal)
         VALUES (@id_sel_test1_b6, N'Suplente1Sel1', N'Test', '1995-01-01', N'Club Test', N'Delantero', 18);
@@ -134,31 +129,24 @@ BEGIN
         INSERT INTO dbo.Jugador (id_seleccion, nombre, apellido, fecha_nacimiento, club_origen, posicion, dorsal)
         VALUES (@id_sel_test1_b6, N'Suplente2Sel1', N'Test', '1996-01-01', N'Club Test', N'Defensa', 20);
 
-    -- Jugadores TITULARES de Selección 2
+    -- Jugadores TITULARES de Seleccion 2
     IF NOT EXISTS (SELECT 1 FROM dbo.Jugador WHERE nombre = N'Titular1Sel2')
         INSERT INTO dbo.Jugador (id_seleccion, nombre, apellido, fecha_nacimiento, club_origen, posicion, dorsal)
         VALUES (@id_sel_test2, N'Titular1Sel2', N'Test', '1992-01-01', N'Club Test', N'Portero', 1);
 
-    -- Jugadores SUPLENTES de Selección 2
+    -- Jugadores SUPLENTES de Seleccion 2
     IF NOT EXISTS (SELECT 1 FROM dbo.Jugador WHERE nombre = N'Suplente1Sel2')
         INSERT INTO dbo.Jugador (id_seleccion, nombre, apellido, fecha_nacimiento, club_origen, posicion, dorsal)
         VALUES (@id_sel_test2, N'Suplente1Sel2', N'Test', '1997-01-01', N'Club Test', N'Portero', 25);
 
     -- Partido de prueba
     IF NOT EXISTS (SELECT 1 FROM dbo.Partido WHERE resultado_final = N'TEST-SUSTITUCION')
-        INSERT INTO dbo.Partido (id_sede, fecha, horario_local, horario_UTC, fase, resultado_final, asistencia_publico)
-        VALUES (@id_sede_test, '2026-06-15', '2026-06-15 18:00:00', '2026-06-15 21:00:00', 'GRUPOS', N'TEST-SUSTITUCION', 30000);
+        INSERT INTO dbo.Partido (id_sede, fecha, horario_local, horario_UTC, fase, resultado_final, asistencia_publico, id_seleccion_1, id_seleccion_2)
+        VALUES (@id_sede_test, '2026-06-15', '2026-06-15 18:00:00', '2026-06-15 21:00:00', 'GRUPOS', N'TEST-SUSTITUCION', 30000, @id_sel_test1_b6, @id_sel_test2);
 
     DECLARE @id_partido_test_b6 INT = (SELECT id_partido FROM dbo.Partido WHERE resultado_final = N'TEST-SUSTITUCION');
 
-    -- Relación partido-selección
-    IF NOT EXISTS (SELECT 1 FROM dbo.Partido_Seleccion WHERE id_partido = @id_partido_test_b6 AND id_seleccion = @id_sel_test1_b6)
-        INSERT INTO dbo.Partido_Seleccion (id_partido, id_seleccion) VALUES (@id_partido_test_b6, @id_sel_test1_b6);
-
-    IF NOT EXISTS (SELECT 1 FROM dbo.Partido_Seleccion WHERE id_partido = @id_partido_test_b6 AND id_seleccion = @id_sel_test2)
-        INSERT INTO dbo.Partido_Seleccion (id_partido, id_seleccion) VALUES (@id_partido_test_b6, @id_sel_test2);
-
-    -- Formación Selección 1 (con titulares y suplentes)
+    -- Formacion Seleccion 1 (con titulares y suplentes)
     DECLARE @id_formacion_sel1 INT;
     IF NOT EXISTS (SELECT 1 FROM dbo.Formacion WHERE id_partido = @id_partido_test_b6 AND id_seleccion = @id_sel_test1_b6)
     BEGIN
@@ -166,14 +154,14 @@ BEGIN
         VALUES (@id_partido_test_b6, @id_sel_test1_b6, '4-3-3');
         SET @id_formacion_sel1 = SCOPE_IDENTITY();
 
-        -- Titulares de Selección 1
+        -- Titulares de Seleccion 1
         INSERT INTO dbo.Formacion_Jugador (id_formacion, id_jugador, posicion_en_cancha, dorsal_en_cancha, es_titular)
         SELECT @id_formacion_sel1, id_jugador, 'Delantero', 9, 1 FROM dbo.Jugador WHERE nombre = N'Titular1Sel1';
 
         INSERT INTO dbo.Formacion_Jugador (id_formacion, id_jugador, posicion_en_cancha, dorsal_en_cancha, es_titular)
         SELECT @id_formacion_sel1, id_jugador, 'Mediocampista', 8, 1 FROM dbo.Jugador WHERE nombre = N'Titular2Sel1';
 
-        -- Suplentes de Selección 1
+        -- Suplentes de Seleccion 1
         INSERT INTO dbo.Formacion_Jugador (id_formacion, id_jugador, posicion_en_cancha, dorsal_en_cancha, es_titular)
         SELECT @id_formacion_sel1, id_jugador, 'Delantero', 18, 0 FROM dbo.Jugador WHERE nombre = N'Suplente1Sel1';
 
@@ -185,7 +173,7 @@ BEGIN
         SET @id_formacion_sel1 = (SELECT id_formacion FROM dbo.Formacion WHERE id_partido = @id_partido_test_b6 AND id_seleccion = @id_sel_test1_b6);
     END
 
-    -- Formación Selección 2 (con titulares y suplentes)
+    -- Formacion Seleccion 2 (con titulares y suplentes)
     DECLARE @id_formacion_sel2 INT;
     IF NOT EXISTS (SELECT 1 FROM dbo.Formacion WHERE id_partido = @id_partido_test_b6 AND id_seleccion = @id_sel_test2)
     BEGIN
@@ -193,11 +181,11 @@ BEGIN
         VALUES (@id_partido_test_b6, @id_sel_test2, '4-4-2');
         SET @id_formacion_sel2 = SCOPE_IDENTITY();
 
-        -- Titulares de Selección 2
+        -- Titulares de Seleccion 2
         INSERT INTO dbo.Formacion_Jugador (id_formacion, id_jugador, posicion_en_cancha, dorsal_en_cancha, es_titular)
         SELECT @id_formacion_sel2, id_jugador, 'Portero', 1, 1 FROM dbo.Jugador WHERE nombre = N'Titular1Sel2';
 
-        -- Suplentes de Selección 2
+        -- Suplentes de Seleccion 2
         INSERT INTO dbo.Formacion_Jugador (id_formacion, id_jugador, posicion_en_cancha, dorsal_en_cancha, es_titular)
         SELECT @id_formacion_sel2, id_jugador, 'Portero', 25, 0 FROM dbo.Jugador WHERE nombre = N'Suplente1Sel2';
     END
@@ -217,12 +205,12 @@ BEGIN
     PRINT '=============================================';
 
     -- ---------------------------------------------------------
-    -- CASO 1: Inserción exitosa - Sustitución válida
-    -- RESULTADO ESPERADO: se inserta la sustitución y se devuelve
+    -- CASO 1: Insercion exitosa - Sustitucion valida
+    -- RESULTADO ESPERADO: se inserta la sustitucion y se devuelve
     -- el id_sustitucion_generado. Sin errores.
     -- ---------------------------------------------------------
     PRINT '';
-    PRINT '--- CASO 1: Inserción exitosa ---';
+    PRINT '--- CASO 1: Insercion exitosa ---';
 
     DECLARE @id_partido_test_b8 INT = (SELECT id_partido FROM dbo.Partido WHERE resultado_final = N'TEST-SUSTITUCION');
     DECLARE @id_titular1_b8 INT = (SELECT id_jugador FROM dbo.Jugador WHERE nombre = N'Titular1Sel1');
@@ -237,22 +225,22 @@ BEGIN
             @minuto = 45,
             @periodo = 'PRIMER TIEMPO',
             @numero_ventana = 1,
-            @motivo = 'Cambio táctico',
+            @motivo = 'Cambio tactico',
             @id_sustitucion = @id_sustitucion_generado_b8 OUTPUT;
 
-        PRINT 'OK - Sustitución insertada con ID: ' + CAST(@id_sustitucion_generado_b8 AS VARCHAR(10));
+        PRINT 'OK - Sustitucion insertada con ID: ' + CAST(@id_sustitucion_generado_b8 AS VARCHAR(10));
     END TRY
     BEGIN CATCH
         PRINT 'ERROR: ' + ERROR_MESSAGE();
     END CATCH
 
     -- ---------------------------------------------------------
-    -- CASO 2: Inserción fallida - Jugador que entra es TITULAR
+    -- CASO 2: Insercion fallida - Jugador que entra es TITULAR
     -- RESULTADO ESPERADO: error con mensaje
     -- "El jugador que entra debe ser un SUPLENTE."
     -- ---------------------------------------------------------
     PRINT '';
-    PRINT '--- CASO 2: Validación fallida - Jugador entra es TITULAR ---';
+    PRINT '--- CASO 2: Validacion fallida - Jugador entra es TITULAR ---';
 
     DECLARE @id_partido_test_b9 INT = (SELECT id_partido FROM dbo.Partido WHERE resultado_final = N'TEST-SUSTITUCION');
     DECLARE @id_titular1_b9 INT = (SELECT id_jugador FROM dbo.Jugador WHERE nombre = N'Titular1Sel1');
@@ -269,18 +257,18 @@ BEGIN
             @motivo = 'Test',
             @id_sustitucion = @id_sustitucion_generado_b9 OUTPUT;
 
-        PRINT 'ERROR: no se lanzó la excepción esperada';
+        PRINT 'ERROR: no se lanzo la excepcion esperada';
     END TRY
     BEGIN CATCH
         PRINT 'OK - Error esperado: ' + ERROR_MESSAGE();
     END CATCH
 
     -- ---------------------------------------------------------
-    -- CASO 3: Inserción fallida - Número de ventana inválido
-    -- RESULTADO ESPERADO: error con mensaje sobre número de ventana
+    -- CASO 3: Insercion fallida - Numero de ventana invalido
+    -- RESULTADO ESPERADO: error con mensaje sobre numero de ventana
     -- ---------------------------------------------------------
     PRINT '';
-    PRINT '--- CASO 3: Validación fallida - Número ventana inválido ---';
+    PRINT '--- CASO 3: Validacion fallida - Numero ventana invalido ---';
 
     DECLARE @id_partido_test_b10 INT = (SELECT id_partido FROM dbo.Partido WHERE resultado_final = N'TEST-SUSTITUCION');
     DECLARE @id_titular1_b10 INT = (SELECT id_jugador FROM dbo.Jugador WHERE nombre = N'Titular1Sel1');
@@ -294,22 +282,22 @@ BEGIN
             @id_jugador_entra = @id_suplente2_b10,
             @minuto = 75,
             @periodo = 'SEGUNDO TIEMPO',
-            @numero_ventana = 5,  -- Inválido (máximo 3 en reglamentario)
+            @numero_ventana = 5,  -- Invalido (maximo 3 en reglamentario)
             @motivo = 'Test',
             @id_sustitucion = @id_sustitucion_generado_b10 OUTPUT;
 
-        PRINT 'ERROR: no se lanzó la excepción esperada';
+        PRINT 'ERROR: no se lanzo la excepcion esperada';
     END TRY
     BEGIN CATCH
         PRINT 'OK - Error esperado: ' + ERROR_MESSAGE();
     END CATCH
 
     -- ---------------------------------------------------------
-    -- CASO 4: Inserción exitosa - Llenar cuota de sustituciones (4ta sustitución)
-    -- RESULTADO ESPERADO: se inserta la 4ta sustitución exitosamente
+    -- CASO 4: Insercion exitosa - Llenar cuota de sustituciones (4ta sustitucion)
+    -- RESULTADO ESPERADO: se inserta la 4ta sustitucion exitosamente
     -- ---------------------------------------------------------
     PRINT '';
-    PRINT '--- CASO 4: Inserción exitosa - 4ta sustitución en reglamentario ---';
+    PRINT '--- CASO 4: Insercion exitosa - 4ta sustitucion en reglamentario ---';
 
     DECLARE @id_partido_test_b11 INT = (SELECT id_partido FROM dbo.Partido WHERE resultado_final = N'TEST-SUSTITUCION');
     DECLARE @id_suplente1_b11 INT = (SELECT id_jugador FROM dbo.Jugador WHERE nombre = N'Suplente1Sel1');
@@ -324,31 +312,31 @@ BEGIN
             @minuto = 80,
             @periodo = 'SEGUNDO TIEMPO',
             @numero_ventana = 3,
-            @motivo = 'Segunda sustitución',
+            @motivo = 'Segunda sustitucion',
             @id_sustitucion = @id_sustitucion_generado_b11 OUTPUT;
 
-        PRINT 'OK - Sustitución 4 insertada con ID: ' + CAST(@id_sustitucion_generado_b11 AS VARCHAR(10));
+        PRINT 'OK - Sustitucion 4 insertada con ID: ' + CAST(@id_sustitucion_generado_b11 AS VARCHAR(10));
     END TRY
     BEGIN CATCH
         PRINT 'ERROR: ' + ERROR_MESSAGE();
     END CATCH
 
     -- ---------------------------------------------------------
-    -- CASO 5: Inserción exitosa - 5ta sustitución (última permitida en reglamentario)
-    -- RESULTADO ESPERADO: se inserta la 5ta sustitución exitosamente
+    -- CASO 5: Insercion exitosa - 5ta sustitucion (ultima permitida en reglamentario)
+    -- RESULTADO ESPERADO: se inserta la 5ta sustitucion exitosamente
     -- ---------------------------------------------------------
     PRINT '';
-    PRINT '--- CASO 5: Inserción exitosa - 5ta sustitución (ÚLTIMA en reglamentario) ---';
+    PRINT '--- CASO 5: Insercion exitosa - 5ta sustitucion (uLTIMA en reglamentario) ---';
 
-    -- Necesitamos más jugadores suplentes para esta prueba
-    -- Agregamos 2 suplentes más por si no existen
+    -- Necesitamos mas jugadores suplentes para esta prueba
+    -- Agregamos 2 suplentes mas por si no existen
     IF NOT EXISTS (SELECT 1 FROM dbo.Jugador WHERE nombre = N'Suplente3Sel1')
     BEGIN
-        DECLARE @id_sel_test1_b12 INT = (SELECT id_seleccion FROM dbo.Seleccion WHERE pais = N'Selección Test 1');
+        DECLARE @id_sel_test1_b12 INT = (SELECT id_seleccion FROM dbo.Seleccion WHERE pais = N'Seleccion Test 1');
         INSERT INTO dbo.Jugador (id_seleccion, nombre, apellido, fecha_nacimiento, club_origen, posicion, dorsal)
         VALUES (@id_sel_test1_b12, N'Suplente3Sel1', N'Test', '1998-01-01', N'Club Test', N'Defensa', 21);
 
-        -- Agregar a la formación
+        -- Agregar a la formacion
         DECLARE @id_formacion_sel1_v2 INT = (SELECT id_formacion FROM dbo.Formacion 
                                               WHERE id_seleccion = @id_sel_test1_b12 
                                               AND id_partido = (SELECT id_partido FROM dbo.Partido WHERE resultado_final = N'TEST-SUSTITUCION'));
@@ -369,25 +357,25 @@ BEGIN
             @minuto = 85,
             @periodo = 'SEGUNDO TIEMPO',
             @numero_ventana = 3,
-            @motivo = 'Tercera sustitución',
+            @motivo = 'Tercera sustitucion',
             @id_sustitucion = @id_sustitucion_generado2 OUTPUT;
 
-        PRINT 'OK - Sustitución 5 insertada con ID: ' + CAST(@id_sustitucion_generado2 AS VARCHAR(10));
+        PRINT 'OK - Sustitucion 5 insertada con ID: ' + CAST(@id_sustitucion_generado2 AS VARCHAR(10));
     END TRY
     BEGIN CATCH
         PRINT 'ERROR: ' + ERROR_MESSAGE();
     END CATCH
 
     -- ---------------------------------------------------------
-    -- CASO 6: Inserción fallida - 6ta sustitución en REGLAMENTARIO (DEBE FALLAR)
-    -- RESULTADO ESPERADO: error - límite de sustituciones alcanzado
+    -- CASO 6: Insercion fallida - 6ta sustitucion en REGLAMENTARIO (DEBE FALLAR)
+    -- RESULTADO ESPERADO: error - limite de sustituciones alcanzado
     -- ---------------------------------------------------------
     PRINT '';
-    PRINT '--- CASO 6: Validación fallida - 6ta sustitución en reglamentario (RECHAZADA) ---';
+    PRINT '--- CASO 6: Validacion fallida - 6ta sustitucion en reglamentario (RECHAZADA) ---';
 
     IF NOT EXISTS (SELECT 1 FROM dbo.Jugador WHERE nombre = N'Suplente4Sel1')
     BEGIN
-        DECLARE @id_sel_test1_v3 INT = (SELECT id_seleccion FROM dbo.Seleccion WHERE pais = N'Selección Test 1');
+        DECLARE @id_sel_test1_v3 INT = (SELECT id_seleccion FROM dbo.Seleccion WHERE pais = N'Seleccion Test 1');
         INSERT INTO dbo.Jugador (id_seleccion, nombre, apellido, fecha_nacimiento, club_origen, posicion, dorsal)
         VALUES (@id_sel_test1_v3, N'Suplente4Sel1', N'Test', '1999-01-01', N'Club Test', N'Mediocampista', 22);
 
@@ -411,21 +399,21 @@ BEGIN
             @minuto = 90,
             @periodo = 'SEGUNDO TIEMPO',
             @numero_ventana = 3,
-            @motivo = 'Intento 6ta sustitución',
+            @motivo = 'Intento 6ta sustitucion',
             @id_sustitucion = @id_sustitucion_generado3 OUTPUT;
 
-        PRINT 'ERROR: no se lanzó la excepción esperada (debería rechazar 6ta sustitución)';
+        PRINT 'ERROR: no se lanzo la excepcion esperada (deberia rechazar 6ta sustitucion)';
     END TRY
     BEGIN CATCH
         PRINT 'OK - Error esperado: ' + ERROR_MESSAGE();
     END CATCH
 
     -- ---------------------------------------------------------
-    -- CASO 7: Inserción exitosa - 6ta sustitución en SUPLEMENTARIO (PERMITIDA)
+    -- CASO 7: Insercion exitosa - 6ta sustitucion en SUPLEMENTARIO (PERMITIDA)
     -- RESULTADO ESPERADO: se inserta exitosamente porque es suplementario
     -- ---------------------------------------------------------
     PRINT '';
-    PRINT '--- CASO 7: Inserción exitosa - 6ta sustitución en SUPLEMENTARIO (PERMITIDA) ---';
+    PRINT '--- CASO 7: Insercion exitosa - 6ta sustitucion en SUPLEMENTARIO (PERMITIDA) ---';
 
     DECLARE @id_partido_test4 INT = (SELECT id_partido FROM dbo.Partido WHERE resultado_final = N'TEST-SUSTITUCION');
     DECLARE @id_suplente4_v2 INT = (SELECT id_jugador FROM dbo.Jugador WHERE nombre = N'Suplente4Sel1');
@@ -440,18 +428,18 @@ BEGIN
             @minuto = 105,
             @periodo = 'PRIMER SUPLEMENTARIO',
             @numero_ventana = 4,
-            @motivo = '6ta sustitución en suplementario',
+            @motivo = '6ta sustitucion en suplementario',
             @id_sustitucion = @id_sustitucion_generado4 OUTPUT;
 
-        PRINT 'OK - Sustitución 6 en suplementario insertada con ID: ' + CAST(@id_sustitucion_generado4 AS VARCHAR(10));
+        PRINT 'OK - Sustitucion 6 en suplementario insertada con ID: ' + CAST(@id_sustitucion_generado4 AS VARCHAR(10));
     END TRY
     BEGIN CATCH
         PRINT 'ERROR: ' + ERROR_MESSAGE();
     END CATCH
 
     -- ---------------------------------------------------------
-    -- CASO 8: GET - Obtener sustitución por ID
-    -- RESULTADO ESPERADO: muestra la sustitución creada en CASO 1
+    -- CASO 8: GET - Obtener sustitucion por ID
+    -- RESULTADO ESPERADO: muestra la sustitucion creada en CASO 1
     -- ---------------------------------------------------------
     PRINT '';
     PRINT '--- CASO 9: GET por ID ---';
@@ -461,7 +449,7 @@ BEGIN
 
     IF @id_sustitucion_creado_b15 IS NOT NULL
     BEGIN
-        PRINT 'Datos de la sustitución ' + CAST(@id_sustitucion_creado_b15 AS VARCHAR(10)) + ':';
+        PRINT 'Datos de la sustitucion ' + CAST(@id_sustitucion_creado_b15 AS VARCHAR(10)) + ':';
         EXEC abm.Sustitucion_GetById @id_sustitucion = @id_sustitucion_creado_b15;
     END
     ELSE
@@ -479,7 +467,7 @@ BEGIN
     EXEC abm.Sustitucion_GetByPartido @id_partido = @id_partido_test_b16;
 
     -- ---------------------------------------------------------
-    -- CASO 6: UPDATE - Actualizar motivo de sustitución
+    -- CASO 6: UPDATE - Actualizar motivo de sustitucion
     -- RESULTADO ESPERADO: se actualiza solo el motivo
     -- ---------------------------------------------------------
     PRINT '';
@@ -494,7 +482,7 @@ BEGIN
             @id_sustitucion = @id_sustitucion_creado_b17,
             @motivo = 'Cambio actualizado - jugador lesionado';
 
-        PRINT 'Sustitución actualizada:';
+        PRINT 'Sustitucion actualizada:';
         EXEC abm.Sustitucion_GetById @id_sustitucion = @id_sustitucion_creado_b17;
     END
 
@@ -510,18 +498,18 @@ BEGIN
             @id_sustitucion = 999999,
             @motivo = 'Test';
 
-        PRINT 'ERROR: no se lanzó la excepción esperada';
+        PRINT 'ERROR: no se lanzo la excepcion esperada';
     END TRY
     BEGIN CATCH
         PRINT 'OK - Error esperado: ' + ERROR_MESSAGE();
     END CATCH
 
     -- ---------------------------------------------------------
-    -- CASO 8: DELETE - Eliminar sustitución
-    -- RESULTADO ESPERADO: se elimina la sustitución
+    -- CASO 8: DELETE - Eliminar sustitucion
+    -- RESULTADO ESPERADO: se elimina la sustitucion
     -- ---------------------------------------------------------
     PRINT '';
-    PRINT '--- CASO 13: DELETE - Eliminar sustitución ---';
+    PRINT '--- CASO 13: DELETE - Eliminar sustitucion ---';
 
     DECLARE @id_sustitucion_creado_b19 INT = (SELECT MIN(id_sustitucion) FROM dbo.Sustitucion 
                                            WHERE id_partido = (SELECT id_partido FROM dbo.Partido WHERE resultado_final = N'TEST-SUSTITUCION'));
@@ -532,9 +520,9 @@ BEGIN
 
         -- Verificar que fue eliminada
         IF NOT EXISTS (SELECT 1 FROM dbo.Sustitucion WHERE id_sustitucion = @id_sustitucion_creado_b19)
-            PRINT 'OK - Sustitución eliminada correctamente';
+            PRINT 'OK - Sustitucion eliminada correctamente';
         ELSE
-            PRINT 'ERROR: la sustitución no fue eliminada';
+            PRINT 'ERROR: la sustitucion no fue eliminada';
     END
 
     PRINT '';
