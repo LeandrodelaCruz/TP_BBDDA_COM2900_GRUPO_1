@@ -22,18 +22,18 @@
 USE MUNDIALDEFUTBOL;
 GO
 
-CREATE OR ALTER PROCEDURE test.SP_Importar_Partido_JSON_Test
+CREATE OR ALTER PROCEDURE test.Importar_Partido_JSON_Test
     @archivo NVARCHAR(1000)
 AS
 BEGIN
     SET NOCOUNT ON;
 
     PRINT '===== PRIMERA IMPORTACION DE PARTIDOS =====';
-    EXEC importacion.SP_Importar_Partido_JSON
+    EXEC importacion.Importar_Partido_JSON
         @archivo = @archivo;
 
     PRINT '===== SEGUNDA IMPORTACION - PRUEBA DE UPSERT =====';
-    EXEC importacion.SP_Importar_Partido_JSON
+    EXEC importacion.Importar_Partido_JSON
         @archivo = @archivo;
 
     PRINT '===== PARTIDOS CARGADOS (RESUMEN POR FASE) =====';
@@ -82,6 +82,6 @@ GO
     Si corrés el motor en Windows local, reemplazá por la ruta real, por ej.:
     N'C:\Import\partidos_mundial_2026.json'
 */
-EXEC test.SP_Importar_Partido_JSON_Test
+EXEC test.Importar_Partido_JSON_Test
     @archivo = N'C:\TP_BBDDA_COM2900_GRUPO_1-main\Archivos_Importacion\partidos_mundial_2026.json';
 GO
