@@ -69,7 +69,8 @@ BEGIN
         (
             FORMAT = ''CSV'',
             FIRSTROW = 2,
-            FIELDQUOTE = ''"''
+            FIELDQUOTE = ''"'',
+            ROWTERMINATOR = ''0x0a''
         );';
 
     BEGIN TRY

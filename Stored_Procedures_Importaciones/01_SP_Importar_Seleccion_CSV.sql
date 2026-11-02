@@ -4,6 +4,7 @@
     Trabajo Práctico: Entrega 6
     Integrantes: Rodríguez, Elías Uriel - Clara, Lucas Nicolas - Caro, Nicolas Dario - de la Cruz, Leandro Ariel
     Fecha: 26/10/2026
+    Actualización: 01/11/2026 - lectura UTF-8 del archivo de entrada.
 
     Descripción:
     Importa selecciones desde el archivo teams.csv.
@@ -42,22 +43,24 @@ BEGIN
 
     CREATE TABLE #Seleccion_Staging -- Esta tabla temporal absorbe toda la informacion
     (
-        team_id                      NVARCHAR(50)  NULL,
-        team_name                    NVARCHAR(200) NULL,
-        fifa_code                    NVARCHAR(50)  NULL,
-        group_letter                 NVARCHAR(50)  NULL,
-        confederation                NVARCHAR(100) NULL,
-        fifa_ranking_pre_tournament  NVARCHAR(50)  NULL,
-        elo_rating                   NVARCHAR(50)  NULL,
-        manager_name                 NVARCHAR(200) NULL
+        -- RAW conserva los bytes. La staging UTF-8 los interpreta antes de
+        -- convertir a NVARCHAR, también en SQL Server 2022 sobre Linux.
+        team_id                     VARCHAR(MAX) COLLATE Latin1_General_100_CI_AS_SC_UTF8 NULL,
+        team_name                   VARCHAR(MAX) COLLATE Latin1_General_100_CI_AS_SC_UTF8 NULL,
+        fifa_code                   VARCHAR(MAX) COLLATE Latin1_General_100_CI_AS_SC_UTF8 NULL,
+        group_letter                VARCHAR(MAX) COLLATE Latin1_General_100_CI_AS_SC_UTF8 NULL,
+        confederation               VARCHAR(MAX) COLLATE Latin1_General_100_CI_AS_SC_UTF8 NULL,
+        fifa_ranking_pre_tournament VARCHAR(MAX) COLLATE Latin1_General_100_CI_AS_SC_UTF8 NULL,
+        elo_rating                  VARCHAR(MAX) COLLATE Latin1_General_100_CI_AS_SC_UTF8 NULL,
+        manager_name                VARCHAR(MAX) COLLATE Latin1_General_100_CI_AS_SC_UTF8 NULL
     );
 
     -- 3. Tabla temporal para informar errores sin detener toda la carga.
 
     CREATE TABLE #Errores_Importacion --Esta tabla funciona como una bitacora. Si alguna fila puntutal tiene problemas, se almacena aca
     (                                                               -- y no interrumpe la carga.
-        team_id       NVARCHAR(50)   NULL,
-        team_name     NVARCHAR(200)  NULL,
+        team_id       NVARCHAR(MAX)  NULL,
+        team_name     NVARCHAR(MAX)  NULL,
         numero_error  INT            NOT NULL,
         mensaje_error NVARCHAR(2048) NOT NULL
     );
@@ -79,6 +82,8 @@ BEGIN
             FORMAT = ''CSV'',
             FIRSTROW = 2, 
             FIELDQUOTE = ''"'',
+            CODEPAGE = ''RAW'',
+            DATAFILETYPE = ''char'',
             TABLOCK
         );';
 
@@ -95,10 +100,10 @@ BEGIN
     -- 5. Variables de procesamiento y contadores.
 
     DECLARE
-        @team_id          NVARCHAR(50),
-        @pais             NVARCHAR(200),
-        @confederacion    NVARCHAR(100),
-        @grupo_asignado   NVARCHAR(50),
+        @team_id          NVARCHAR(MAX),
+        @pais             NVARCHAR(MAX),
+        @confederacion    NVARCHAR(MAX),
+        @grupo_asignado   NVARCHAR(MAX),
         @id_seleccion     INT,
         @procesados       INT = 0,
         @insertados       INT = 0,
@@ -168,11 +173,13 @@ BEGIN
 
             -- 6.2 Buscar por la clave natural elegida para el UPSERT: país.
 
+            SET @pais = LTRIM(RTRIM(@pais));
+
             SET @id_seleccion = NULL;
 
             SELECT @id_seleccion = id_seleccion
             FROM dbo.Seleccion
-            WHERE UPPER(LTRIM(RTRIM(pais))) = UPPER(LTRIM(RTRIM(@pais)));
+            WHERE UPPER(LTRIM(RTRIM(pais))) = UPPER(@pais);
 
             -- 6.3 UPSERT reutilizando exclusivamente los ABM de Entrega 5.
             IF @id_seleccion IS NULL -- Si no encontro el pais, va insertando

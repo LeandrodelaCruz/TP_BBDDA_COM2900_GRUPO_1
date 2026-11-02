@@ -69,8 +69,7 @@ BEGIN
 
     BEGIN TRY
         EXEC abm.Personal_Tecnico_Alta
-            @nombre = N'Lionel',
-            @apellido = N'Scaloni',
+            @nombre_completo = N'Lionel Scaloni',
             @rol = N'Director Técnico',
             @id_seleccion = @id_sel_b6;
 
@@ -82,7 +81,7 @@ BEGIN
     END CATCH;
 
     -- ---------------------------------------------------------
-    -- CASO 2: Alta fallida - Nombre/Apellido obligatorio
+    -- CASO 2: Alta fallida - Nombre completo obligatorio
     -- ---------------------------------------------------------
     PRINT '';
     PRINT '--- CASO 2: Alta fallida - Nombre vacío ---';
@@ -91,8 +90,7 @@ BEGIN
 
     BEGIN TRY
         EXEC abm.Personal_Tecnico_Alta
-            @nombre = N'   ',
-            @apellido = N'Aimar',
+            @nombre_completo = N'   ',
             @rol = N'Ayudante Campo',
             @id_seleccion = @id_sel_b7;
 
@@ -114,8 +112,7 @@ BEGIN
     BEGIN TRY
         EXEC abm.Personal_Tecnico_Modificar
             @id_personal = @id_personal,
-            @nombre = N'Lionel Sebastián',
-            @apellido = N'Scaloni',
+            @nombre_completo = N'Lionel Sebastián Scaloni',
             @rol = N'Director Técnico Principal',
             @id_seleccion = @id_sel_b8;
 
