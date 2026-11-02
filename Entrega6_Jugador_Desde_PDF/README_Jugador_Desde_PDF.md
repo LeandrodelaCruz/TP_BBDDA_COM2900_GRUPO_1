@@ -73,7 +73,7 @@ El SP de importación verifica estos requisitos y muestra un error claro si falt
 ## 5. Crear el importador
 Ejecutar:
 
-`Stored_Procedures_Importaciones/03_SP_Importar_Jugador_PDF_CSV.sql`
+`Stored_Procedures_Importaciones/03_Importar_Jugador_PDF_CSV.sql`
 
 ## 6. Ejecutar el test
 Ejecutar:

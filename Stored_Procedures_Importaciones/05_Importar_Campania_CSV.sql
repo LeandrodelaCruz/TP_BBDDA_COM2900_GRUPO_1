@@ -7,7 +7,7 @@ GO
     Grupo: 1
 
     Procedimiento:
-        importacion.SP_Importar_Campania_CSV
+        importacion.Importar_Campania_CSV
 
     Objetivo:
         Importar campañas desde el CSV generado mediante
@@ -33,7 +33,7 @@ END;
 GO
 
 
-CREATE OR ALTER PROCEDURE importacion.SP_Importar_Campania_CSV
+CREATE OR ALTER PROCEDURE importacion.Importar_Campania_CSV
     @archivo NVARCHAR(1000)
 AS
 BEGIN

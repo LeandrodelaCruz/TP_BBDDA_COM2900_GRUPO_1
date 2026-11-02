@@ -23,7 +23,7 @@
 USE MUNDIALDEFUTBOL;
 GO
 
-CREATE OR ALTER PROCEDURE importacion.SP_Importar_Jugador_PDF_CSV
+CREATE OR ALTER PROCEDURE importacion.Importar_Jugador_PDF_CSV
     @archivo NVARCHAR(1000)
 AS
 BEGIN
