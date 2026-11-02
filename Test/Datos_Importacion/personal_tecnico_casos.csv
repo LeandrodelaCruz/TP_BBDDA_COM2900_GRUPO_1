@@ -1,0 +1,8 @@
+seleccion,nombre_completo,rol,fecha_extraccion_utc
+USA,__TEST_PERSONAL_Cambio,Entrenador Interino,2026-11-01T21:00:00+00:00
+USA,,Entrenador,2026-11-01T21:00:00+00:00
+Seleccion inexistente,__TEST_PERSONAL_SinSeleccion,Entrenador,2026-11-01T21:00:00+00:00
+USA,__TEST_PERSONAL_Fecha,Entrenador,fecha-invalida
+USA,__TEST_PERSONAL_Rol,Entrenador de porteros,2026-11-01T21:00:00+00:00
+USA,__TEST_PERSONAL_NombreDemasiadoLargo_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,Entrenador,2026-11-01T21:00:00+00:00
+USA,__TEST_PERSONAL_Xavi,Entrenador Asistente,2026-11-01T21:00:00+00:00

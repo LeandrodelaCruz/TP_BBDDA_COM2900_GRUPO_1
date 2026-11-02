@@ -60,5 +60,5 @@ GO
     /var/opt/mssql/import/venues.csv
 */
 EXEC test.SP_Importar_Sede_CSV_Test
-    @archivo = N'/var/opt/mssql/import/venues.csv';
+    @archivo = N'/home/proyecto/venues.csv';
 GO
