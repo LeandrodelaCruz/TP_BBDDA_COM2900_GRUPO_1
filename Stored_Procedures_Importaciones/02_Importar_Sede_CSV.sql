@@ -35,7 +35,7 @@ BEGIN
     /*
         STAGING: recibe el CSV tal como viene.
         Se utilizan columnas amplias de texto para que una fila con un dato incorrecto
-        pueda ser informada como error sin impedir el procesamiento de las demás.
+        pueda ser informada como error sin impedir el procesamiento de las demas.
     */
     CREATE TABLE #Sede_Staging
     (
@@ -58,7 +58,7 @@ BEGIN
     );
 
     /*
-        Único punto de SQL dinámico: parametrización de la ruta usada por BULK INSERT.
+        Para el BULK INSERT metemos SQL dinamico.
     */
     DECLARE @sql NVARCHAR(MAX);
 

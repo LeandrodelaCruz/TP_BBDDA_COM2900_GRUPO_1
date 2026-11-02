@@ -27,6 +27,7 @@ BEGIN
     (
         id_anunciante INT IDENTITY(1,1) NOT NULL,
         nombre NVARCHAR(120) NOT NULL,
+        pais nvarchar(80) not null,
 
         CONSTRAINT PK_Anunciante
             PRIMARY KEY (id_anunciante),
