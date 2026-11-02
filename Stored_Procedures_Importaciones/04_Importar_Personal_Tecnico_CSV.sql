@@ -14,7 +14,7 @@
 USE MUNDIALDEFUTBOL;
 GO
 
-CREATE OR ALTER PROCEDURE importacion.SP_Importar_Personal_Tecnico_CSV
+CREATE OR ALTER PROCEDURE importacion.Importar_Personal_Tecnico_CSV
     @archivo NVARCHAR(1000)
 AS
 BEGIN

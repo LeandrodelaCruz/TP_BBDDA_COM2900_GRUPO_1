@@ -37,8 +37,8 @@
     <File Path="Table/01_Script_Tablas_Creacion.sql" />
   </Folder>
   <Folder Name="/Importaciones/">
-    <File Path="Stored_Procedures_Importaciones/01_SP_Importar_Seleccion_CSV.sql" />
-    <File Path="Stored_Procedures_Importaciones/04_SP_Importar_Personal_Tecnico_CSV.sql" />
+    <File Path="Stored_Procedures_Importaciones/01_Importar_Seleccion_CSV.sql" />
+    <File Path="Stored_Procedures_Importaciones/04_Importar_Personal_Tecnico_CSV.sql" />
   </Folder>
   <Folder Name="/Test/Datos_Importacion/">
     <File Path="Test/Datos_Importacion/personal_tecnico_casos.csv" />

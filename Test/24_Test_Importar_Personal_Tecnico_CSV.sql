@@ -15,7 +15,7 @@
 */
 USE MUNDIALDEFUTBOL;
 GO
-CREATE OR ALTER PROCEDURE test.SP_Importar_Personal_Tecnico_CSV_Test
+CREATE OR ALTER PROCEDURE test.Importar_Personal_Tecnico_CSV_Test
     @archivo NVARCHAR(1000),
     @archivo_casos NVARCHAR(1000) = NULL
 AS
@@ -26,12 +26,12 @@ BEGIN
     BEGIN TRY
         BEGIN TRANSACTION;
         PRINT N'Primera importación: revisar resumen y errores (esperados: 0).';
-        EXEC importacion.SP_Importar_Personal_Tecnico_CSV @archivo = @archivo;
+        EXEC importacion.ortar_Personal_Tecnico_CSV @archivo = @archivo;
         SELECT id_personal, id_seleccion, nombre_completo, rol
         INTO #Primera FROM dbo.Personal_Tecnico;
 
         PRINT N'Segunda importación: mismas personas, sin nuevas altas.';
-        EXEC importacion.SP_Importar_Personal_Tecnico_CSV @archivo = @archivo;
+        EXEC importacion.Importar_Personal_Tecnico_CSV @archivo = @archivo;
         IF EXISTS (
             SELECT id_personal, id_seleccion, nombre_completo, rol FROM #Primera
             EXCEPT SELECT id_personal, id_seleccion, nombre_completo, rol FROM dbo.Personal_Tecnico
@@ -63,7 +63,7 @@ BEGIN
                 @rol = N'Entrenador Asistente', @id_seleccion = @id_usa;
             DECLARE @id_cambio INT = (SELECT id_personal FROM dbo.Personal_Tecnico
                 WHERE nombre_completo = N'__TEST_PERSONAL_Cambio' AND id_seleccion = @id_usa);
-            EXEC importacion.SP_Importar_Personal_Tecnico_CSV @archivo = @archivo_casos;
+            EXEC importacion.Importar_Personal_Tecnico_CSV @archivo = @archivo_casos;
             IF (SELECT COUNT(*) FROM dbo.Personal_Tecnico WHERE nombre_completo LIKE N'__TEST_PERSONAL[_]%') <> 2
                 THROW 52406, N'La carga parcial no conservó exactamente las dos personas válidas.', 1;
             IF NOT EXISTS (SELECT 1 FROM dbo.Personal_Tecnico WHERE id_personal = @id_cambio AND nombre_completo = N'__TEST_PERSONAL_Cambio' AND rol = 'Entrenador')
@@ -84,10 +84,10 @@ BEGIN
 END;
 GO
 -- Ejemplo (ejecutar por separado):
-EXEC test.SP_Importar_Personal_Tecnico_CSV_Test
+EXEC test.Importar_Personal_Tecnico_CSV_Test
     @archivo = N'/home/proyecto/personal_tecnico.csv';
 /* Prueba con errores parciales: copiar primero el CSV de ejemplo a /home/proyecto.
-EXEC test.SP_Importar_Personal_Tecnico_CSV_Test
+EXEC test.Importar_Personal_Tecnico_CSV_Test
     @archivo = N'/home/proyecto/personal_tecnico.csv',
     @archivo_casos = N'/home/proyecto/personal_tecnico_casos.csv';
 -- Esperado para el archivo de casos: 1 alta, 1 actualización y 5 errores.
