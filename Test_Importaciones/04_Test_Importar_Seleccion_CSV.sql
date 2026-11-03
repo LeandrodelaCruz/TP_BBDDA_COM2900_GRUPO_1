@@ -25,7 +25,7 @@ USE MUNDIALDEFUTBOL;
 GO
 
 DECLARE @archivo NVARCHAR(1000) =
-    N'/home/proyecto/teams.csv';
+    N'/var/opt/mssql/import/teams.csv';
 
 PRINT N'===== PRIMERA IMPORTACION =====';
 EXEC importacion.Importar_Seleccion_CSV

@@ -7,25 +7,24 @@ GO
     Grupo: 1
 
     Procedimiento:
-        importacion.Importar_Anunciante_CSV
+        importacion.Importar_Campania_CSV
 
     Objetivo:
-        Importar anunciantes desde el CSV generado mediante
+        Importar campañas desde el CSV generado mediante
         scraping de System1.
 
-        Del archivo completo se utilizan solamente:
+        Del CSV completo utiliza:
             - anunciante
-            - pais
+            - campania
+
+        La tabla Anunciante debe encontrarse cargada
+        previamente.
 
         Se implementa UPSERT reutilizando los SP ABM.
 
         Un error en una fila no impide procesar las demás.
 ============================================================*/
 
-
-------------------------------------------------------------
--- CREAR ESQUEMA SI NO EXISTE
-------------------------------------------------------------
 
 IF SCHEMA_ID(N'importacion') IS NULL
 BEGIN
@@ -34,11 +33,7 @@ END;
 GO
 
 
-------------------------------------------------------------
--- PROCEDIMIENTO
-------------------------------------------------------------
-
-CREATE OR ALTER PROCEDURE importacion.Importar_Anunciante_CSV
+CREATE OR ALTER PROCEDURE importacion.Importar_Campania_CSV
     @archivo NVARCHAR(1000)
 AS
 BEGIN
@@ -52,16 +47,14 @@ BEGIN
     IF @archivo IS NULL
        OR LTRIM(RTRIM(@archivo)) = N''
     BEGIN
-        THROW 51001,
+        THROW 51101,
               'Debe indicar el archivo CSV a importar.',
               1;
     END;
 
 
     --------------------------------------------------------
-    -- 2. TABLA STAGING
-    --
-    -- Debe respetar las 7 columnas del CSV.
+    -- 2. STAGING
     --------------------------------------------------------
 
     CREATE TABLE #Publicidad_Staging
@@ -77,13 +70,7 @@ BEGIN
 
 
     --------------------------------------------------------
-    -- 3. BULK INSERT
-    --
-    -- Se utiliza SQL dinamico solamente porque BULK INSERT
-    -- no permite parametrizar directamente la ruta.
-    --
-    -- El CSV fue generado en UTF-16, por eso se utiliza
-    -- DATAFILETYPE = widechar.
+    -- 3. CARGAR CSV
     --------------------------------------------------------
 
     DECLARE @sql NVARCHAR(MAX);
@@ -116,46 +103,43 @@ BEGIN
             N'No se pudo leer el archivo CSV. '
             + ERROR_MESSAGE();
 
-        THROW 51002, @error_bulk, 1;
+        THROW 51102, @error_bulk, 1;
 
     END CATCH;
 
 
     --------------------------------------------------------
     -- 4. DATOS A PROCESAR
-    --
-    -- Para esta importacion solamente interesan:
-    -- anunciante y pais.
     --------------------------------------------------------
 
-    CREATE TABLE #Anunciante_Procesar
+    CREATE TABLE #Campania_Procesar
     (
         numero_fila INT IDENTITY(1,1) NOT NULL,
-        nombre      NVARCHAR(200) NULL,
-        pais        NVARCHAR(100) NULL
+        anunciante  NVARCHAR(200) NULL,
+        descripcion NVARCHAR(500) NULL
     );
 
 
-    INSERT INTO #Anunciante_Procesar
+    INSERT INTO #Campania_Procesar
     (
-        nombre,
-        pais
+        anunciante,
+        descripcion
     )
     SELECT DISTINCT
         LTRIM(RTRIM(anunciante)),
-        LTRIM(RTRIM(pais))
+        LTRIM(RTRIM(campania))
     FROM #Publicidad_Staging;
 
 
     --------------------------------------------------------
-    -- 5. TABLA DE ERRORES
+    -- 5. ERRORES
     --------------------------------------------------------
 
     CREATE TABLE #Errores
     (
         numero_fila INT,
         anunciante  NVARCHAR(200),
-        pais        NVARCHAR(100),
+        campania    NVARCHAR(500),
         mensaje     NVARCHAR(2048)
     );
 
@@ -177,35 +161,34 @@ BEGIN
 
     DECLARE
         @numero_fila   INT,
-        @nombre        NVARCHAR(200),
-        @pais_origen   NVARCHAR(100),
-        @pais          NVARCHAR(80),
+        @anunciante    NVARCHAR(200),
+        @descripcion   NVARCHAR(500),
         @id_anunciante INT,
-        @nuevo_id      INT;
+        @id_campania   INT;
 
 
     --------------------------------------------------------
     -- 8. CURSOR
     --------------------------------------------------------
 
-    DECLARE cursor_anunciantes CURSOR LOCAL FAST_FORWARD
+    DECLARE cursor_campanias CURSOR LOCAL FAST_FORWARD
     FOR
         SELECT
             numero_fila,
-            nombre,
-            pais
-        FROM #Anunciante_Procesar
+            anunciante,
+            descripcion
+        FROM #Campania_Procesar
         ORDER BY numero_fila;
 
 
-    OPEN cursor_anunciantes;
+    OPEN cursor_campanias;
 
 
-    FETCH NEXT FROM cursor_anunciantes
+    FETCH NEXT FROM cursor_campanias
     INTO
         @numero_fila,
-        @nombre,
-        @pais_origen;
+        @anunciante,
+        @descripcion;
 
 
     WHILE @@FETCH_STATUS = 0
@@ -213,115 +196,48 @@ BEGIN
 
         SET @procesados += 1;
 
-        -- Muy importante para el UPSERT.
         SET @id_anunciante = NULL;
-        SET @nuevo_id = NULL;
-        SET @pais = NULL;
+        SET @id_campania = NULL;
 
 
         BEGIN TRY
 
             ------------------------------------------------
-            -- 9. NORMALIZAR DATOS
+            -- 9. NORMALIZAR
             ------------------------------------------------
 
-            SET @nombre =
-                LTRIM(RTRIM(@nombre));
+            SET @anunciante =
+                LTRIM(RTRIM(@anunciante));
 
-            SET @pais_origen =
-                LTRIM(RTRIM(@pais_origen));
+            SET @descripcion =
+                LTRIM(RTRIM(@descripcion));
 
 
             ------------------------------------------------
             -- 10. VALIDACIONES
             ------------------------------------------------
 
-            IF @nombre IS NULL
-               OR @nombre = N''
+            IF @anunciante IS NULL
+               OR @anunciante = N''
             BEGIN
-                THROW 51010,
-                      'El nombre del anunciante esta vacio.',
+                THROW 51110,
+                      'El anunciante de la campaña esta vacio.',
                       1;
             END;
 
 
-            IF LEN(@nombre) > 120
+            IF @descripcion IS NULL
+               OR @descripcion = N''
             BEGIN
-                THROW 51011,
-                      'El nombre del anunciante supera los 120 caracteres.',
-                      1;
-            END;
-
-
-            IF @pais_origen IS NULL
-               OR @pais_origen = N''
-            BEGIN
-                THROW 51012,
-                      'El pais del anunciante esta vacio.',
+                THROW 51111,
+                      'La descripcion de la campaña esta vacia.',
                       1;
             END;
 
 
             ------------------------------------------------
-            -- 11. NORMALIZAR PAIS
-            --
-            -- System1 utiliza nombres de paises en ingles.
-            -- La transformacion se realiza en T-SQL.
+            -- 11. BUSCAR ANUNCIANTE
             ------------------------------------------------
-
-            SET @pais =
-                CASE UPPER(@pais_origen)
-
-                    WHEN 'ARGENTINA'
-                        THEN N'Argentina'
-
-                    WHEN 'BRAZIL'
-                        THEN N'Brasil'
-
-                    WHEN 'FRANCE'
-                        THEN N'Francia'
-
-                    WHEN 'US'
-                        THEN N'Estados Unidos'
-
-                    WHEN 'UNITED STATES'
-                        THEN N'Estados Unidos'
-
-                    WHEN 'GERMANY'
-                        THEN N'Alemania'
-
-                    WHEN 'SPAIN'
-                        THEN N'España'
-
-                    WHEN 'UK'
-                        THEN N'Reino Unido'
-
-                    WHEN 'UNITED KINGDOM'
-                        THEN N'Reino Unido'
-
-                    WHEN 'MEXICO'
-                        THEN N'México'
-
-                    ELSE
-                        @pais_origen
-
-                END;
-
-
-            IF LEN(@pais) > 80
-            BEGIN
-                THROW 51013,
-                      'El pais supera los 80 caracteres.',
-                      1;
-            END;
-
-
-            ------------------------------------------------
-            -- 12. BUSCAR ANUNCIANTE
-            ------------------------------------------------
-
-            SET @id_anunciante = NULL;
-
 
             SELECT
                 @id_anunciante = id_anunciante
@@ -329,20 +245,43 @@ BEGIN
             WHERE
                 UPPER(LTRIM(RTRIM(nombre)))
                 =
-                UPPER(LTRIM(RTRIM(@nombre)));
+                UPPER(LTRIM(RTRIM(@anunciante)));
 
+
+            IF @id_anunciante IS NULL
+            BEGIN
+                THROW 51112,
+                      'El anunciante asociado a la campaña no existe.',
+                      1;
+            END;
+
+
+            ------------------------------------------------
+            -- 12. BUSCAR CAMPAniaA
+            --
+            -- Clave logica:
+            -- anunciante + descripcion
+            ------------------------------------------------
+
+            SELECT
+                @id_campania = id_campania
+            FROM dbo.Campania
+            WHERE
+                id_anunciante = @id_anunciante
+                AND UPPER(LTRIM(RTRIM(descripcion)))
+                    =
+                    UPPER(LTRIM(RTRIM(@descripcion)));
 
             ------------------------------------------------
             -- 13. UPSERT
             ------------------------------------------------
-
-            IF @id_anunciante IS NULL
+            -- si el id de la campania es null, entonces crea uno nuevo
+            IF @id_campania IS NULL
             BEGIN
 
-                EXEC abm.Anunciante_Alta
-                    @nombre = @nombre,
-                    @pais = @pais,
-                    @id_anunciante = @nuevo_id OUTPUT;
+                EXEC abm.Campania_Alta
+                    @descripcion = @descripcion,
+                    @id_anunciante = @id_anunciante;
 
 
                 SET @insertados += 1;
@@ -351,10 +290,10 @@ BEGIN
             ELSE
             BEGIN
 
-                EXEC abm.Anunciante_Modificar
-                    @id_anunciante = @id_anunciante,
-                    @nombre = @nombre,
-                    @pais = @pais;
+                EXEC abm.Campania_Modificar
+                    @id_campania = @id_campania,
+                    @descripcion = @descripcion,
+                    @id_anunciante = @id_anunciante;
 
 
                 SET @actualizados += 1;
@@ -372,14 +311,14 @@ BEGIN
             (
                 numero_fila,
                 anunciante,
-                pais,
+                campania,
                 mensaje
             )
             VALUES
             (
                 @numero_fila,
-                @nombre,
-                @pais_origen,
+                @anunciante,
+                @descripcion,
                 ERROR_MESSAGE()
             );
 
@@ -390,11 +329,11 @@ BEGIN
         -- SIGUIENTE FILA
         ----------------------------------------------------
 
-        FETCH NEXT FROM cursor_anunciantes
+        FETCH NEXT FROM cursor_campanias
         INTO
             @numero_fila,
-            @nombre,
-            @pais_origen;
+            @anunciante,
+            @descripcion;
 
     END;
 
@@ -402,10 +341,8 @@ BEGIN
     --------------------------------------------------------
     -- 14. CERRAR CURSOR
     --------------------------------------------------------
-
-    CLOSE cursor_anunciantes;
-    DEALLOCATE cursor_anunciantes;
-
+    CLOSE cursor_campanias;
+    DEALLOCATE cursor_campanias; --libera el cursor de la memoria
 
     --------------------------------------------------------
     -- 15. RESUMEN
@@ -417,7 +354,6 @@ BEGIN
         @actualizados AS actualizados,
         @errores      AS errores;
 
-
     --------------------------------------------------------
     -- 16. ERRORES PARCIALES
     --------------------------------------------------------
@@ -425,7 +361,7 @@ BEGIN
     SELECT
         numero_fila,
         anunciante,
-        pais,
+        campania,
         mensaje
     FROM #Errores
     ORDER BY numero_fila;
