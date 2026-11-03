@@ -10,14 +10,17 @@
     <File Path="Extras/Script Tabla S3 Eliminado Rapido.sql" />
     <File Path="Extras/Ver_Datos_Rapido.sql" />
   </Folder>
-  <Folder Name="/Importaciones/">
-    <File Path="Stored_Procedures_Importaciones/01_SP_Importar_Seleccion_CSV.sql" />
-    <File Path="Stored_Procedures_Importaciones/02_SP_Importar_Sede_CSV.sql" />
-    <File Path="Stored_Procedures_Importaciones/03_SP_Importar_Jugador_Scraping_CSV.sql" />
-    <File Path="Stored_Procedures_Importaciones/05B_SP_Importar_Arbitro_PDF_CSV_SetBased.sql" />
-    <File Path="Stored_Procedures_Importaciones/05_SP_Importar_Arbitro_PDF_CSV.sql" />
+  <Folder Name="/Stored_Procedures_Importaciones/">
+    <File Path="Stored_Procedures_Importaciones/01_Importar_Seleccion_CSV.sql" />
+    <File Path="Stored_Procedures_Importaciones/02_Importar_Sede_CSV.sql" />
+    <File Path="Stored_Procedures_Importaciones/03_Importar_Jugador_PDF_CSV.sql" />
+    <File Path="Stored_Procedures_Importaciones/04_Importar_Anunciante_CSV.sql" />
+    <File Path="Stored_Procedures_Importaciones/04_Importar_Personal_Tecnico_CSV.sql" />
+    <File Path="Stored_Procedures_Importaciones/05_Importar_Campania_CSV.sql" />
+    <File Path="Stored_Procedures_Importaciones/06_Importar_Pieza_Publicitaria_CSV.sql" />
+    <File Path="Stored_Procedures_Importaciones/13_Importar_Partido_JSON.sql" />
   </Folder>
-  <Folder Name="/Store Procedures/">
+  <Folder Name="/Store_Procedures/">
     <File Path="Stored_Procedures/01.1_Anunciante_ABM.sql" />
     <File Path="Stored_Procedures/02_Region_ABM.sql" />
     <File Path="Stored_Procedures/03_Sede_ABM.sql" />
@@ -47,6 +50,8 @@
     <File Path="Test/22_Test_Importar_Sede_CSV.sql" />
     <File Path="Test/23_Test_Importar_Jugador_PDF_CSV.sql" />
     <File Path="Test/25_Test_Importar_Arbitro_PDF_CSV.sql" />
+  <Folder Name="/Test/Datos_Importacion/">
+    <File Path="Test/Datos_Importacion/personal_tecnico_casos.csv" />
   </Folder>
   <Folder Name="/Test/">
     <File Path="Test/01.2_Anunciante_Test.sql" />
@@ -58,9 +63,20 @@
     <File Path="Test/07_Pieza_Publicitaria_Test.sql" />
     <File Path="Test/08_Pieza_Para_Region_Test.sql" />
     <File Path="Test/09_Personal_Tecnico_Test.sql" />
+    <File Path="Test/14_Test_Reemplazo.sql" />
+    <File Path="Test/15_Asignacion_Publicitaria_Test.sql" />
+    <File Path="Test/16_Designacion_Arbitral_Test.sql" />
+    <File Path="Test/17_Incidencia_Test.sql" />
+    <File Path="Test/18_Sancion_Arbitral_Test.sql" />
+    <File Path="Test/19_Sustitucion_Test.sql" />
+    <File Path="Test/21_Test_Importar_Seleccion_CSV.sql" />
+    <File Path="Test/22_Test_Importar_Sede_CSV.sql" />
+    <File Path="Test/23_Test_Importar_Jugador_PDF_CSV.sql" />
+    <File Path="Test/24_Test_Importar_Anunciante_CSV.sql" />
+    <File Path="Test/24_Test_Importar_Personal_Tecnico_CSV.sql" />
     <File Path="Test/10_Jugador_Test.sql" />
-    <File Path="Test/11_Test_Formacion_Jugador.sql" />
-    <File Path="Test/12_Test_Formacion.sql" />
+    <File Path="Test/11_Test_Formacion.sql" />
+    <File Path="Test/12_Test_Formacion_Jugador.sql" />
     <File Path="Test/13_Test_Partido.sql" />
     <File Path="Test/14_Test_Reemplazo.sql" />
     <File Path="Test/15_Asignacion_Publicitaria_Test.sql" />
@@ -68,6 +84,9 @@
     <File Path="Test/17_Incidencia_Test.sql" />
     <File Path="Test/18_Sancion_Arbitral_Test.sql" />
     <File Path="Test/19_Sustitucion_Test.sql" />
+    <File Path="Test/25_Test_Importar_Campania_CSV.sql" />
+    <File Path="Test/26_Test_Importar_Pieza_Publicitaria_CSV.sql" />
+    <File Path="Test/33_Test_Importar_Partido_JSON.sql" />
   </Folder>
   <Project Path="Solucion.ssmssqlproj" Type="4f2e2c19-372f-40d8-9fa7-9d2138c6997a">
     <Platform Project="?" />

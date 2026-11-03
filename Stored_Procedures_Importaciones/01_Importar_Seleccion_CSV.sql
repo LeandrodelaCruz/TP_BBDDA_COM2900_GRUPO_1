@@ -4,6 +4,7 @@
     Trabajo Práctico: Entrega 6
     Integrantes: Rodríguez, Elías Uriel - Clara, Lucas Nicolas - Caro, Nicolas Dario - de la Cruz, Leandro Ariel
     Fecha: 26/10/2026
+    Actualización: 01/11/2026 - lectura UTF-8 del archivo de entrada.
 
     Descripción:
     Importa selecciones desde el archivo teams.csv.
@@ -24,7 +25,7 @@
 USE MUNDIALDEFUTBOL;
 GO
 
-CREATE OR ALTER PROCEDURE importacion.SP_Importar_Seleccion_CSV
+CREATE OR ALTER PROCEDURE importacion.Importar_Seleccion_CSV
     @archivo NVARCHAR(1000)
 AS
 BEGIN
@@ -39,17 +40,21 @@ BEGIN
     -- 2. Staging: recibe el archivo tal como viene.
     --    Se usan tam amplios para poder detectar errores de longitud
     --    antes de invocar los ABM de la Entrega 5.
+    --    VARCHAR UTF-8 mide bytes; las variables NVARCHAR admiten al menos
+    --    esa cantidad de unidades Unicode para evitar recortes en el FETCH.
 
     CREATE TABLE #Seleccion_Staging -- Esta tabla temporal absorbe toda la informacion
     (
-        team_id                      NVARCHAR(50)  NULL,
-        team_name                    NVARCHAR(200) NULL,
-        fifa_code                    NVARCHAR(50)  NULL,
-        group_letter                 NVARCHAR(50)  NULL,
-        confederation                NVARCHAR(100) NULL,
-        fifa_ranking_pre_tournament  NVARCHAR(50)  NULL,
-        elo_rating                   NVARCHAR(50)  NULL,
-        manager_name                 NVARCHAR(200) NULL
+        -- RAW conserva los bytes. La staging UTF-8 los interpreta antes de
+        -- convertir a NVARCHAR, también en SQL Server 2022 sobre Linux.
+        team_id                     VARCHAR(50) COLLATE Latin1_General_100_CI_AS_SC_UTF8 NULL,
+        team_name                   VARCHAR(400) COLLATE Latin1_General_100_CI_AS_SC_UTF8 NULL,
+        fifa_code                   VARCHAR(20) COLLATE Latin1_General_100_CI_AS_SC_UTF8 NULL,
+        group_letter                VARCHAR(40) COLLATE Latin1_General_100_CI_AS_SC_UTF8 NULL,
+        confederation               VARCHAR(200) COLLATE Latin1_General_100_CI_AS_SC_UTF8 NULL,
+        fifa_ranking_pre_tournament VARCHAR(50) COLLATE Latin1_General_100_CI_AS_SC_UTF8 NULL,
+        elo_rating                  VARCHAR(50) COLLATE Latin1_General_100_CI_AS_SC_UTF8 NULL,
+        manager_name                VARCHAR(1000) COLLATE Latin1_General_100_CI_AS_SC_UTF8 NULL
     );
 
     -- 3. Tabla temporal para informar errores sin detener toda la carga.
@@ -57,7 +62,7 @@ BEGIN
     CREATE TABLE #Errores_Importacion --Esta tabla funciona como una bitacora. Si alguna fila puntutal tiene problemas, se almacena aca
     (                                                               -- y no interrumpe la carga.
         team_id       NVARCHAR(50)   NULL,
-        team_name     NVARCHAR(200)  NULL,
+        team_name     NVARCHAR(400)  NULL,
         numero_error  INT            NOT NULL,
         mensaje_error NVARCHAR(2048) NOT NULL
     );
@@ -79,6 +84,8 @@ BEGIN
             FORMAT = ''CSV'',
             FIRSTROW = 2, 
             FIELDQUOTE = ''"'',
+            CODEPAGE = ''RAW'',
+            DATAFILETYPE = ''char'',
             TABLOCK
         );';
 
@@ -96,9 +103,9 @@ BEGIN
 
     DECLARE
         @team_id          NVARCHAR(50),
-        @pais             NVARCHAR(200),
-        @confederacion    NVARCHAR(100),
-        @grupo_asignado   NVARCHAR(50),
+        @pais             NVARCHAR(400),
+        @confederacion    NVARCHAR(200),
+        @grupo_asignado   NVARCHAR(40),
         @id_seleccion     INT,
         @procesados       INT = 0,
         @insertados       INT = 0,
@@ -168,11 +175,13 @@ BEGIN
 
             -- 6.2 Buscar por la clave natural elegida para el UPSERT: país.
 
+            SET @pais = LTRIM(RTRIM(@pais));
+
             SET @id_seleccion = NULL;
 
             SELECT @id_seleccion = id_seleccion
             FROM dbo.Seleccion
-            WHERE UPPER(LTRIM(RTRIM(pais))) = UPPER(LTRIM(RTRIM(@pais)));
+            WHERE UPPER(LTRIM(RTRIM(pais))) = UPPER(@pais);
 
             -- 6.3 UPSERT reutilizando exclusivamente los ABM de Entrega 5.
             IF @id_seleccion IS NULL -- Si no encontro el pais, va insertando

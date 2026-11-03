@@ -20,7 +20,7 @@
 USE MUNDIALDEFUTBOL;
 GO
 
-CREATE OR ALTER PROCEDURE importacion.SP_Importar_Sede_CSV
+CREATE OR ALTER PROCEDURE importacion.Importar_Sede_CSV
     @archivo NVARCHAR(1000)
 AS
 BEGIN
@@ -35,7 +35,7 @@ BEGIN
     /*
         STAGING: recibe el CSV tal como viene.
         Se utilizan columnas amplias de texto para que una fila con un dato incorrecto
-        pueda ser informada como error sin impedir el procesamiento de las demás.
+        pueda ser informada como error sin impedir el procesamiento de las demas.
     */
     CREATE TABLE #Sede_Staging
     (
@@ -58,7 +58,7 @@ BEGIN
     );
 
     /*
-        Único punto de SQL dinámico: parametrización de la ruta usada por BULK INSERT.
+        Para el BULK INSERT metemos SQL dinamico.
     */
     DECLARE @sql NVARCHAR(MAX);
 
@@ -69,7 +69,8 @@ BEGIN
         (
             FORMAT = ''CSV'',
             FIRSTROW = 2,
-            FIELDQUOTE = ''"''
+            FIELDQUOTE = ''"'',
+            ROWTERMINATOR = ''0x0a''
         );';
 
     BEGIN TRY

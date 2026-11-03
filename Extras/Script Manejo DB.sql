@@ -21,11 +21,9 @@ GO
 SET IMPLICIT_TRANSACTIONS OFF;
 GO
 
-PRINT '=============================================';
 PRINT 'RECREANDO BASE MUNDIALDEFUTBOL';
-PRINT '=============================================';
-GO
 
+GO
 
 IF DB_ID(N'MUNDIALDEFUTBOL') IS NOT NULL
 BEGIN
@@ -40,7 +38,6 @@ BEGIN
 END;
 GO
 
-
 PRINT 'Creando base MUNDIALDEFUTBOL...';
 
 CREATE DATABASE MUNDIALDEFUTBOL;
@@ -50,14 +47,11 @@ GO
 USE MUNDIALDEFUTBOL;
 GO
 
-
-PRINT '=============================================';
 PRINT 'BASE CREADA CORRECTAMENTE';
-PRINT '=============================================';
+
 GO
 
-
--- Verificación
+-- verificamo
 SELECT
     name,
     state_desc,
@@ -66,8 +60,7 @@ FROM sys.databases
 WHERE name = N'MUNDIALDEFUTBOL';
 GO
 
-
--- Debe estar completamente vacía
+-- Aca nos tiene que mostrar vacio
 SELECT
     COUNT(*) AS cantidad_tablas
 FROM INFORMATION_SCHEMA.TABLES

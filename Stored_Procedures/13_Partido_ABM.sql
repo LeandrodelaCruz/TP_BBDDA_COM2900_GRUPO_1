@@ -71,15 +71,6 @@ BEGIN
     IF @asistencia_publico IS NOT NULL AND @asistencia_publico < 0
         SET @errores += N'- La asistencia no puede ser negativa. ';
 
-    -- Validación 8: asistencia no supera capacidad de la sede
-    IF @asistencia_publico IS NOT NULL
-       AND EXISTS (
-            SELECT 1 FROM dbo.Sede
-            WHERE id_sede = @id_sede
-              AND capacidad < @asistencia_publico
-       )
-        SET @errores += N'- La asistencia supera la capacidad de la sede. ';
-
     -- Validación 9: fecha coherente con horario local
     IF @horario_local IS NOT NULL AND CAST(@horario_local AS DATE) <> @fecha
         SET @errores += N'- La fecha no coincide con la del horario local. ';
@@ -193,13 +184,6 @@ BEGIN
 
     IF @asistencia_publico IS NOT NULL AND @asistencia_publico < 0
         SET @errores += N'- La asistencia no puede ser negativa. ';
-
-    IF @asistencia_publico IS NOT NULL
-       AND EXISTS (
-            SELECT 1 FROM dbo.Sede
-            WHERE id_sede = @id_sede AND capacidad < @asistencia_publico
-       )
-        SET @errores += N'- La asistencia supera la capacidad de la sede. ';
 
     IF @horario_local IS NOT NULL AND CAST(@horario_local AS DATE) <> @fecha
         SET @errores += N'- La fecha no coincide con la del horario local. ';

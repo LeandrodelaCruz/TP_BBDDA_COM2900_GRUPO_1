@@ -25,17 +25,17 @@ USE MUNDIALDEFUTBOL;
 GO
 
 DECLARE @archivo NVARCHAR(1000) =
-    N'/var/opt/mssql/import/teams.csv';
+    N'/home/proyecto/teams.csv';
 
 PRINT N'===== PRIMERA IMPORTACION =====';
-EXEC importacion.SP_Importar_Seleccion_CSV
+EXEC importacion.Importar_Seleccion_CSV
     @archivo = @archivo;
 
 PRINT N'===== DATOS DESPUES DE LA PRIMERA IMPORTACION =====';
 EXEC abm.Seleccion_Listar;
 
 PRINT N'===== SEGUNDA IMPORTACION - PRUEBA DE UPSERT =====';
-EXEC importacion.SP_Importar_Seleccion_CSV
+EXEC importacion.Importar_Seleccion_CSV
     @archivo = @archivo;
 
 PRINT N'===== VERIFICACION DE DUPLICADOS =====';
@@ -47,4 +47,13 @@ GROUP BY pais
 HAVING COUNT(*) > 1;
 
 -- Resultado esperado: 0 filas.
+
+PRINT N'===== VERIFICACION UTF-8 =====';
+-- Deben mostrarse exactamente estos tres nombres, sin caracteres dañados.
+SELECT id_seleccion, pais
+FROM dbo.Seleccion
+WHERE pais IN (N'Türkiye', N'Curaçao', N'Côte d''Ivoire');
+IF (SELECT COUNT(*) FROM dbo.Seleccion
+    WHERE pais IN (N'Türkiye', N'Curaçao', N'Côte d''Ivoire')) <> 3
+    THROW 52501, N'Faltan selecciones con sus nombres Unicode correctos.', 1;
 GO

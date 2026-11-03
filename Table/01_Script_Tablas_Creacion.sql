@@ -27,6 +27,7 @@ BEGIN
     (
         id_anunciante INT IDENTITY(1,1) NOT NULL,
         nombre NVARCHAR(120) NOT NULL,
+        pais nvarchar(80) not null,
 
         CONSTRAINT PK_Anunciante
             PRIMARY KEY (id_anunciante),
@@ -198,8 +199,8 @@ BEGIN
     (
         id_personal INT IDENTITY(1,1) NOT NULL,
         id_seleccion INT NOT NULL,
-        nombre NVARCHAR(60) NOT NULL,
-        apellido NVARCHAR(60) NOT NULL,
+        nombre_completo NVARCHAR(120) NOT NULL,
+        --apellido NVARCHAR(60) NOT NULL,
         rol VARCHAR(50) NOT NULL,
 
         CONSTRAINT PK_Personal_Tecnico 
