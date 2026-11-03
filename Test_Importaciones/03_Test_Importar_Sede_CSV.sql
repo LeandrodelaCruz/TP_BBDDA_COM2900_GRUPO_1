@@ -25,7 +25,11 @@ BEGIN
     SET NOCOUNT ON;
 
     PRINT '===== PRIMERA IMPORTACION DE SEDES =====';
+<<<<<<< HEAD:Test_Importaciones/03_Test_Importar_Sede_CSV.sql
+    EXEC importacion.importar_Sede_CSV
+=======
     EXEC importacion.Importar_Sede_CSV
+>>>>>>> main:Test/22_Test_Importar_Sede_CSV.sql
         @archivo = @archivo;
 
     PRINT '===== SEGUNDA IMPORTACION - PRUEBA DE UPSERT =====';
@@ -60,5 +64,5 @@ GO
     /var/opt/mssql/import/venues.csv
 */
 EXEC test.Importar_Sede_CSV_Test
-    @archivo = N'/home/proyecto/venues.csv';
+    @archivo = N'/var/opt/mssql/import/venues.csv';
 GO
