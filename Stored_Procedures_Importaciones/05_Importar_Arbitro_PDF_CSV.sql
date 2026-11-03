@@ -22,7 +22,7 @@
     - informa resumen y detalle de errores.
 
     CSV esperado:
-        nombre,apellido,fecha_nacimiento,pais,puesto
+        nombre,apellido,fecha_nacimiento,pais,puesto,idiomas
 
     SQL dinámico:
     Se usa únicamente para parametrizar la ruta de BULK INSERT.
@@ -31,7 +31,7 @@
 USE MUNDIALDEFUTBOL;
 GO
 
-CREATE OR ALTER PROCEDURE importacion.SP_Importar_Arbitro_PDF_CSV
+CREATE OR ALTER PROCEDURE importacion.Importar_Arbitro_PDF_CSV
     @archivo NVARCHAR(1000)
 AS
 BEGIN
@@ -58,7 +58,8 @@ BEGIN
         apellido         NVARCHAR(150) NULL,
         fecha_nacimiento NVARCHAR(30)  NULL,
         pais             NVARCHAR(100) NULL,
-        puesto           NVARCHAR(100) NULL
+        puesto           NVARCHAR(100) NULL,
+        idiomas          NVARCHAR(200) NULL  -- Presente en el CSV; no se utiliza en la importacion.
     );
 
     CREATE TABLE #Errores
@@ -79,9 +80,11 @@ BEGIN
         FROM ''' + REPLACE(@archivo, '''', '''''') + N'''
         WITH
         (
-            FORMAT = ''CSV'',
             FIRSTROW = 2,
-            FIELDQUOTE = ''"''
+            FIELDTERMINATOR = '','',
+            ROWTERMINATOR = ''\n'',
+            CODEPAGE = ''65001'',
+            DATAFILETYPE = ''char''
         );';
 
     BEGIN TRY
@@ -103,6 +106,7 @@ BEGIN
         @fecha_raw        NVARCHAR(30),
         @pais_raw         NVARCHAR(100),
         @puesto_raw       NVARCHAR(100),
+        @idiomas_raw      NVARCHAR(200),
 
         @nombre           NVARCHAR(60),
         @apellido         NVARCHAR(60),
@@ -122,13 +126,14 @@ BEGIN
             apellido,
             fecha_nacimiento,
             pais,
-            puesto
+            puesto,
+            idiomas
         FROM #Arbitro_Staging;
 
     OPEN cursor_arbitros;
 
     FETCH NEXT FROM cursor_arbitros INTO
-        @nombre_raw, @apellido_raw, @fecha_raw, @pais_raw, @puesto_raw;
+        @nombre_raw, @apellido_raw, @fecha_raw, @pais_raw, @puesto_raw, @idiomas_raw;
 
     WHILE @@FETCH_STATUS = 0
     BEGIN
@@ -140,7 +145,7 @@ BEGIN
             SET @apellido = NULLIF(LTRIM(RTRIM(@apellido_raw)), N'');
             SET @pais = LTRIM(RTRIM(@pais_raw));
             SET @puesto = LTRIM(RTRIM(@puesto_raw));
-            SET @idiomas = NULL;
+            SET @idiomas = NULLIF(LTRIM(RTRIM(@idiomas_raw)), N'');
 
             /* Transformación del puesto al dominio del modelo. */
             SET @puesto = CASE UPPER(@puesto)
@@ -255,7 +260,7 @@ BEGIN
         END CATCH;
 
         FETCH NEXT FROM cursor_arbitros INTO
-            @nombre_raw, @apellido_raw, @fecha_raw, @pais_raw, @puesto_raw;
+            @nombre_raw, @apellido_raw, @fecha_raw, @pais_raw, @puesto_raw, @idiomas_raw;
     END;
 
     CLOSE cursor_arbitros;
