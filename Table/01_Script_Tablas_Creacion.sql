@@ -104,9 +104,9 @@ BEGIN
     CREATE TABLE dbo.Arbitro
     (
         id_arbitro INT IDENTITY(1,1) NOT NULL,
-        nombre NVARCHAR(60) NOT NULL,
+        nombre NVARCHAR(60) NULL,
         apellido NVARCHAR(60) NOT NULL,
-        fecha_nacimiento DATE NOT NULL,
+        fecha_nacimiento DATE NULL,
         pais NVARCHAR(80) NOT NULL,
         puesto VARCHAR(50) NOT NULL,
         idiomas NVARCHAR(200) NULL,
