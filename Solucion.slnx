@@ -45,11 +45,6 @@
     <File Path="Table/00_Script_DB_Schemas_Creacion.sql" />
     <File Path="Table/01_Script_Tablas_Creacion.sql" />
   </Folder>
-  <Folder Name="/Test Importaciones/">
-    <File Path="Test/21_Test_Importar_Seleccion_CSV.sql" />
-    <File Path="Test/22_Test_Importar_Sede_CSV.sql" />
-    <File Path="Test/23_Test_Importar_Jugador_PDF_CSV.sql" />
-    <File Path="Test/25_Test_Importar_Arbitro_PDF_CSV.sql" />
   <Folder Name="/Test/Datos_Importacion/">
     <File Path="Test/Datos_Importacion/personal_tecnico_casos.csv" />
   </Folder>
@@ -78,12 +73,6 @@
     <File Path="Test/11_Test_Formacion.sql" />
     <File Path="Test/12_Test_Formacion_Jugador.sql" />
     <File Path="Test/13_Test_Partido.sql" />
-    <File Path="Test/14_Test_Reemplazo.sql" />
-    <File Path="Test/15_Asignacion_Publicitaria_Test.sql" />
-    <File Path="Test/16_Designacion_Arbitral_Test.sql" />
-    <File Path="Test/17_Incidencia_Test.sql" />
-    <File Path="Test/18_Sancion_Arbitral_Test.sql" />
-    <File Path="Test/19_Sustitucion_Test.sql" />
     <File Path="Test/25_Test_Importar_Campania_CSV.sql" />
     <File Path="Test/26_Test_Importar_Pieza_Publicitaria_CSV.sql" />
     <File Path="Test/33_Test_Importar_Partido_JSON.sql" />
