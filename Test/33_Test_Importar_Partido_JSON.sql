@@ -83,5 +83,5 @@ GO
     N'C:\Import\partidos_mundial_2026.json'
 */
 EXEC test.Importar_Partido_JSON_Test
-    @archivo = N'/home/proyecto/partidos_mundial_2026.json';
+    @archivo = N'C:\TP_BBDDA_COM2900_GRUPO_1-main\Archivos_Importacion\partidos_mundial_2026.json';
 GO
