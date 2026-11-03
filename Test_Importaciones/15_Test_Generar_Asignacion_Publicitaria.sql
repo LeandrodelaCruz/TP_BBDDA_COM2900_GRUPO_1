@@ -56,7 +56,7 @@ BEGIN
         --    PARA CADA PARTIDO
         ----------------------------------------------------
 
-        CREATE TABLE #PartidosCandidatos
+        CREATE TABLE #PartidosCandidatos 
         (
             id_partido INT NOT NULL,
             cantidad_candidatos INT NOT NULL
@@ -64,7 +64,7 @@ BEGIN
 
         ;WITH RegionesConPieza AS
         (
-            SELECT DISTINCT
+            SELECT DISTINCT --trae solo aquellas que tengan al menos una pieza
                 R.id_region,
                 R.huso_horario,
                 R.hora_prime_inicio,
@@ -73,7 +73,7 @@ BEGIN
             INNER JOIN dbo.Pieza_Para_Region PR
                 ON PR.id_region = R.id_region
         ),
-        PartidoRegion AS
+        PartidoRegion AS -- combina cada partido existente con todas las regiones filtradas  en el paso anterior
         (
             SELECT
                 P.id_partido,
@@ -81,7 +81,9 @@ BEGIN
                 R.hora_prime_inicio,
                 R.hora_prime_fin,
 
-                CASE R.huso_horario
+                CASE R.huso_horario  -- Este case lee el horario original del partido y lo establece como punto de partida UTC.
+                                                    -- Lee la columna huso_horario y con case toma el valor IANA y obtiene el equivalente en el reg de windows.
+                                                    -- AT TIME ZONE,  sabe cuantas horas sumar o restar.
 
                     WHEN 'America/Argentina/Buenos_Aires'
                     THEN
@@ -190,7 +192,6 @@ BEGIN
             CROSS JOIN RegionesConPieza R
         )
 
-
         INSERT INTO #PartidosCandidatos
         (
             id_partido,
@@ -207,7 +208,7 @@ BEGIN
             AND CAST(PR.hora_local AS TIME)
                 >= PR.hora_prime_inicio
             AND CAST(PR.hora_local AS TIME)
-                < PR.hora_prime_fin
+                < PR.hora_prime_fin --verifica que este dentro del horario prime time
 
         GROUP BY PR.id_partido;
 
