@@ -1,0 +1,3060 @@
+[
+    {
+        "id_match_fifa": "400021463",
+        "id_stage_fifa": "289273",
+        "fecha": "2026-06-13",
+        "horario_local": "2026-06-13T21:00:00Z",
+        "horario_utc": "2026-06-14T04:00:00Z",
+        "estadio": "BC Place Vancouver",
+        "ciudad": "Vancouver",
+        "pais_estadio": "CAN",
+        "fase": "First Stage",
+        "grupo": "Group D",
+        "seleccion_1_nombre": "Australia",
+        "seleccion_1_abreviatura": "AUS",
+        "seleccion_1_esquema_tactico": "5-4-1",
+        "seleccion_2_nombre": "Türkiye",
+        "seleccion_2_abreviatura": "TUR",
+        "seleccion_2_esquema_tactico": "4-2-3-1",
+        "jugadores_seleccion_1": [
+            {
+                "nombre_jugador": "Patrick BEACH",
+                "dorsal_en_cancha": 18,
+                "es_titular": true,
+                "posicion_en_cancha": "Goalkeeper",
+                "es_capitan": false,
+                "id_jugador_fifa": "494557"
+            },
+            {
+                "nombre_jugador": "Alessandro CIRCATI",
+                "dorsal_en_cancha": 3,
+                "es_titular": true,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "448014"
+            },
+            {
+                "nombre_jugador": "Jacob ITALIANO",
+                "dorsal_en_cancha": 4,
+                "es_titular": true,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "430450"
+            },
+            {
+                "nombre_jugador": "Jordan BOS",
+                "dorsal_en_cancha": 5,
+                "es_titular": true,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "423522"
+            },
+            {
+                "nombre_jugador": "Harry SOUTTAR",
+                "dorsal_en_cancha": 19,
+                "es_titular": true,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": true,
+                "id_jugador_fifa": "430442"
+            },
+            {
+                "nombre_jugador": "Cameron BURGESS",
+                "dorsal_en_cancha": 21,
+                "es_titular": true,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "382312"
+            },
+            {
+                "nombre_jugador": "Connor METCALFE",
+                "dorsal_en_cancha": 8,
+                "es_titular": true,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "430452"
+            },
+            {
+                "nombre_jugador": "Aiden ONEILL",
+                "dorsal_en_cancha": 13,
+                "es_titular": true,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "430440"
+            },
+            {
+                "nombre_jugador": "Paul OKON-ENGSTLER",
+                "dorsal_en_cancha": 24,
+                "es_titular": true,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "498421"
+            },
+            {
+                "nombre_jugador": "Mohamed TOURE",
+                "dorsal_en_cancha": 9,
+                "es_titular": true,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": false,
+                "id_jugador_fifa": "498806"
+            },
+            {
+                "nombre_jugador": "Nestory IRANKUNDA",
+                "dorsal_en_cancha": 17,
+                "es_titular": true,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": false,
+                "id_jugador_fifa": "486306"
+            },
+            {
+                "nombre_jugador": "Mathew RYAN",
+                "dorsal_en_cancha": 1,
+                "es_titular": false,
+                "posicion_en_cancha": "Goalkeeper",
+                "es_capitan": false,
+                "id_jugador_fifa": "339117"
+            },
+            {
+                "nombre_jugador": "Paul Izzo",
+                "dorsal_en_cancha": 12,
+                "es_titular": false,
+                "posicion_en_cancha": "Goalkeeper",
+                "es_capitan": false,
+                "id_jugador_fifa": "331135"
+            },
+            {
+                "nombre_jugador": "Milos DEGENEK",
+                "dorsal_en_cancha": 2,
+                "es_titular": false,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "331149"
+            },
+            {
+                "nombre_jugador": "Jason GERIA",
+                "dorsal_en_cancha": 6,
+                "es_titular": false,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "339112"
+            },
+            {
+                "nombre_jugador": "Kai TREWIN",
+                "dorsal_en_cancha": 15,
+                "es_titular": false,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "494411"
+            },
+            {
+                "nombre_jugador": "Aziz BEHICH",
+                "dorsal_en_cancha": 16,
+                "es_titular": false,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "349342"
+            },
+            {
+                "nombre_jugador": "Lucas HERRINGTON",
+                "dorsal_en_cancha": 25,
+                "es_titular": false,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "504931"
+            },
+            {
+                "nombre_jugador": "Cameron DEVLIN",
+                "dorsal_en_cancha": 14,
+                "es_titular": false,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "430437"
+            },
+            {
+                "nombre_jugador": "Jackson IRVINE",
+                "dorsal_en_cancha": 22,
+                "es_titular": false,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "355775"
+            },
+            {
+                "nombre_jugador": "Mathew LECKIE",
+                "dorsal_en_cancha": 7,
+                "es_titular": false,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": false,
+                "id_jugador_fifa": "321697"
+            },
+            {
+                "nombre_jugador": "Ajdin HRUSTIC",
+                "dorsal_en_cancha": 10,
+                "es_titular": false,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": false,
+                "id_jugador_fifa": "404319"
+            },
+            {
+                "nombre_jugador": "Awer MABIL",
+                "dorsal_en_cancha": 11,
+                "es_titular": false,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": false,
+                "id_jugador_fifa": "406606"
+            },
+            {
+                "nombre_jugador": "Cristian VOLPATO",
+                "dorsal_en_cancha": 20,
+                "es_titular": false,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": false,
+                "id_jugador_fifa": "448015"
+            },
+            {
+                "nombre_jugador": "Nishan VELUPILLAY",
+                "dorsal_en_cancha": 23,
+                "es_titular": false,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": false,
+                "id_jugador_fifa": "491166"
+            },
+            {
+                "nombre_jugador": "Tete YENGI",
+                "dorsal_en_cancha": 26,
+                "es_titular": false,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": false,
+                "id_jugador_fifa": "518200"
+            }
+        ],
+        "jugadores_seleccion_2": [
+            {
+                "nombre_jugador": "Ugurcan CAKIR",
+                "dorsal_en_cancha": 23,
+                "es_titular": true,
+                "posicion_en_cancha": "Goalkeeper",
+                "es_capitan": false,
+                "id_jugador_fifa": "441181"
+            },
+            {
+                "nombre_jugador": "Zeki CELIK",
+                "dorsal_en_cancha": 2,
+                "es_titular": true,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "433072"
+            },
+            {
+                "nombre_jugador": "Merih DEMIRAL",
+                "dorsal_en_cancha": 3,
+                "es_titular": true,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "441179"
+            },
+            {
+                "nombre_jugador": "Abdulkerim BARDAKCI",
+                "dorsal_en_cancha": 14,
+                "es_titular": true,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "484082"
+            },
+            {
+                "nombre_jugador": "Ferdi KADIOGLU",
+                "dorsal_en_cancha": 20,
+                "es_titular": true,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "484113"
+            },
+            {
+                "nombre_jugador": "Orkun KOKCU",
+                "dorsal_en_cancha": 6,
+                "es_titular": true,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "433118"
+            },
+            {
+                "nombre_jugador": "Hakan CALHANOGLU",
+                "dorsal_en_cancha": 10,
+                "es_titular": true,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": true,
+                "id_jugador_fifa": "369304"
+            },
+            {
+                "nombre_jugador": "Ismail YUKSEK",
+                "dorsal_en_cancha": 16,
+                "es_titular": true,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "484092"
+            },
+            {
+                "nombre_jugador": "Kerem AKTURKOGLU",
+                "dorsal_en_cancha": 7,
+                "es_titular": true,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": false,
+                "id_jugador_fifa": "441188"
+            },
+            {
+                "nombre_jugador": "Arda GULER",
+                "dorsal_en_cancha": 8,
+                "es_titular": true,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": false,
+                "id_jugador_fifa": "484087"
+            },
+            {
+                "nombre_jugador": "Baris Alper YILMAZ",
+                "dorsal_en_cancha": 21,
+                "es_titular": true,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": false,
+                "id_jugador_fifa": "484139"
+            },
+            {
+                "nombre_jugador": "Mert GUNOK",
+                "dorsal_en_cancha": 1,
+                "es_titular": false,
+                "posicion_en_cancha": "Goalkeeper",
+                "es_capitan": false,
+                "id_jugador_fifa": "360498"
+            },
+            {
+                "nombre_jugador": "Altay BAYINDIR",
+                "dorsal_en_cancha": 12,
+                "es_titular": false,
+                "posicion_en_cancha": "Goalkeeper",
+                "es_capitan": false,
+                "id_jugador_fifa": "441180"
+            },
+            {
+                "nombre_jugador": "Caglar SOYUNCU",
+                "dorsal_en_cancha": 4,
+                "es_titular": false,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "401167"
+            },
+            {
+                "nombre_jugador": "Eren ELMALI",
+                "dorsal_en_cancha": 13,
+                "es_titular": false,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "484065"
+            },
+            {
+                "nombre_jugador": "Ozan KABAK",
+                "dorsal_en_cancha": 15,
+                "es_titular": false,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "406249"
+            },
+            {
+                "nombre_jugador": "Mert MULDUR",
+                "dorsal_en_cancha": 18,
+                "es_titular": false,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "430120"
+            },
+            {
+                "nombre_jugador": "Samet AKAYDIN",
+                "dorsal_en_cancha": 25,
+                "es_titular": false,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "484072"
+            },
+            {
+                "nombre_jugador": "Salih OZCAN",
+                "dorsal_en_cancha": 5,
+                "es_titular": false,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "389907"
+            },
+            {
+                "nombre_jugador": "Kaan Ayhan",
+                "dorsal_en_cancha": 22,
+                "es_titular": false,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "336170"
+            },
+            {
+                "nombre_jugador": "Deniz GUL",
+                "dorsal_en_cancha": 9,
+                "es_titular": false,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": false,
+                "id_jugador_fifa": "495347"
+            },
+            {
+                "nombre_jugador": "Kenan YILDIZ",
+                "dorsal_en_cancha": 11,
+                "es_titular": false,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": false,
+                "id_jugador_fifa": "484112"
+            },
+            {
+                "nombre_jugador": "Irfan Can KAHVECI",
+                "dorsal_en_cancha": 17,
+                "es_titular": false,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": false,
+                "id_jugador_fifa": "472877"
+            },
+            {
+                "nombre_jugador": "Yunus AKGUN",
+                "dorsal_en_cancha": 19,
+                "es_titular": false,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": false,
+                "id_jugador_fifa": "406231"
+            },
+            {
+                "nombre_jugador": "Oguz AYDIN",
+                "dorsal_en_cancha": 24,
+                "es_titular": false,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": false,
+                "id_jugador_fifa": "486076"
+            },
+            {
+                "nombre_jugador": "Can UZUN",
+                "dorsal_en_cancha": 26,
+                "es_titular": false,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": false,
+                "id_jugador_fifa": "486074"
+            }
+        ]
+    },
+    {
+        "id_match_fifa": "400021464",
+        "id_stage_fifa": "289273",
+        "fecha": "2026-06-14",
+        "horario_local": "2026-06-14T12:00:00Z",
+        "horario_utc": "2026-06-14T17:00:00Z",
+        "estadio": "Houston Stadium",
+        "ciudad": "Houston",
+        "pais_estadio": "USA",
+        "fase": "First Stage",
+        "grupo": "Group E",
+        "seleccion_1_nombre": "Germany",
+        "seleccion_1_abreviatura": "GER",
+        "seleccion_1_esquema_tactico": "3-4-3",
+        "seleccion_2_nombre": "Curaçao",
+        "seleccion_2_abreviatura": "CUW",
+        "seleccion_2_esquema_tactico": "4-1-2-3",
+        "jugadores_seleccion_1": [
+            {
+                "nombre_jugador": "Manuel NEUER",
+                "dorsal_en_cancha": 1,
+                "es_titular": true,
+                "posicion_en_cancha": "Goalkeeper",
+                "es_capitan": false,
+                "id_jugador_fifa": "228912"
+            },
+            {
+                "nombre_jugador": "Jonathan TAH",
+                "dorsal_en_cancha": 4,
+                "es_titular": true,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "401378"
+            },
+            {
+                "nombre_jugador": "Joshua KIMMICH",
+                "dorsal_en_cancha": 6,
+                "es_titular": true,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": true,
+                "id_jugador_fifa": "386413"
+            },
+            {
+                "nombre_jugador": "Nico SCHLOTTERBECK",
+                "dorsal_en_cancha": 15,
+                "es_titular": true,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "430667"
+            },
+            {
+                "nombre_jugador": "Nathaniel BROWN",
+                "dorsal_en_cancha": 18,
+                "es_titular": true,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "511015"
+            },
+            {
+                "nombre_jugador": "Aleksandar PAVLOVIC",
+                "dorsal_en_cancha": 5,
+                "es_titular": true,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "484849"
+            },
+            {
+                "nombre_jugador": "Jamal MUSIALA",
+                "dorsal_en_cancha": 10,
+                "es_titular": true,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "429642"
+            },
+            {
+                "nombre_jugador": "Florian WIRTZ",
+                "dorsal_en_cancha": 17,
+                "es_titular": true,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "430669"
+            },
+            {
+                "nombre_jugador": "Leroy SANE",
+                "dorsal_en_cancha": 19,
+                "es_titular": true,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "404353"
+            },
+            {
+                "nombre_jugador": "Felix NMECHA",
+                "dorsal_en_cancha": 23,
+                "es_titular": true,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "492363"
+            },
+            {
+                "nombre_jugador": "Kai HAVERTZ",
+                "dorsal_en_cancha": 7,
+                "es_titular": true,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": false,
+                "id_jugador_fifa": "411367"
+            },
+            {
+                "nombre_jugador": "Oliver Baumann",
+                "dorsal_en_cancha": 12,
+                "es_titular": false,
+                "posicion_en_cancha": "Goalkeeper",
+                "es_capitan": false,
+                "id_jugador_fifa": "306538"
+            },
+            {
+                "nombre_jugador": "Alexander NUEBEL",
+                "dorsal_en_cancha": 21,
+                "es_titular": false,
+                "posicion_en_cancha": "Goalkeeper",
+                "es_capitan": false,
+                "id_jugador_fifa": "429639"
+            },
+            {
+                "nombre_jugador": "Antonio RUEDIGER",
+                "dorsal_en_cancha": 2,
+                "es_titular": false,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "379955"
+            },
+            {
+                "nombre_jugador": "Waldemar ANTON",
+                "dorsal_en_cancha": 3,
+                "es_titular": false,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "430658"
+            },
+            {
+                "nombre_jugador": "David RAUM",
+                "dorsal_en_cancha": 22,
+                "es_titular": false,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "430657"
+            },
+            {
+                "nombre_jugador": "Malick THIAW",
+                "dorsal_en_cancha": 24,
+                "es_titular": false,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "514188"
+            },
+            {
+                "nombre_jugador": "Leon GORETZKA",
+                "dorsal_en_cancha": 8,
+                "es_titular": false,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "379953"
+            },
+            {
+                "nombre_jugador": "Jamie LEWELING",
+                "dorsal_en_cancha": 9,
+                "es_titular": false,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "491218"
+            },
+            {
+                "nombre_jugador": "Pascal GROSS",
+                "dorsal_en_cancha": 13,
+                "es_titular": false,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "484848"
+            },
+            {
+                "nombre_jugador": "Angelo Stiller",
+                "dorsal_en_cancha": 16,
+                "es_titular": false,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "429640"
+            },
+            {
+                "nombre_jugador": "Nadiem Amiri",
+                "dorsal_en_cancha": 20,
+                "es_titular": false,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "395471"
+            },
+            {
+                "nombre_jugador": "Assan OUEDRAOGO",
+                "dorsal_en_cancha": 25,
+                "es_titular": false,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "475195"
+            },
+            {
+                "nombre_jugador": "Nick WOLTEMADE",
+                "dorsal_en_cancha": 11,
+                "es_titular": false,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": false,
+                "id_jugador_fifa": "498416"
+            },
+            {
+                "nombre_jugador": "Maximilian BEIER",
+                "dorsal_en_cancha": 14,
+                "es_titular": false,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": false,
+                "id_jugador_fifa": "484850"
+            },
+            {
+                "nombre_jugador": "Deniz UNDAV",
+                "dorsal_en_cancha": 26,
+                "es_titular": false,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": false,
+                "id_jugador_fifa": "484851"
+            }
+        ],
+        "jugadores_seleccion_2": [
+            {
+                "nombre_jugador": "Eloy ROOM",
+                "dorsal_en_cancha": 1,
+                "es_titular": true,
+                "posicion_en_cancha": "Goalkeeper",
+                "es_capitan": false,
+                "id_jugador_fifa": "390650"
+            },
+            {
+                "nombre_jugador": "Sherel FLORANUS",
+                "dorsal_en_cancha": 5,
+                "es_titular": true,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "466350"
+            },
+            {
+                "nombre_jugador": "Armando OBISPO",
+                "dorsal_en_cancha": 18,
+                "es_titular": true,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "511141"
+            },
+            {
+                "nombre_jugador": "Riechedly Bazoer",
+                "dorsal_en_cancha": 23,
+                "es_titular": true,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "398569"
+            },
+            {
+                "nombre_jugador": "Deveron FONVILLE",
+                "dorsal_en_cancha": 24,
+                "es_titular": true,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "506471"
+            },
+            {
+                "nombre_jugador": "Juninho BACUNA",
+                "dorsal_en_cancha": 7,
+                "es_titular": true,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "466317"
+            },
+            {
+                "nombre_jugador": "Livano COMENENCIA",
+                "dorsal_en_cancha": 8,
+                "es_titular": true,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "494989"
+            },
+            {
+                "nombre_jugador": "Leandro BACUNA",
+                "dorsal_en_cancha": 10,
+                "es_titular": true,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": true,
+                "id_jugador_fifa": "466340"
+            },
+            {
+                "nombre_jugador": "Tahith CHONG",
+                "dorsal_en_cancha": 21,
+                "es_titular": true,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "485347"
+            },
+            {
+                "nombre_jugador": "Juergen LOCADIA",
+                "dorsal_en_cancha": 9,
+                "es_titular": true,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": false,
+                "id_jugador_fifa": "407680"
+            },
+            {
+                "nombre_jugador": "Sontje HANSEN",
+                "dorsal_en_cancha": 12,
+                "es_titular": true,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": false,
+                "id_jugador_fifa": "424056"
+            },
+            {
+                "nombre_jugador": "Tyrick BODAK",
+                "dorsal_en_cancha": 25,
+                "es_titular": false,
+                "posicion_en_cancha": "Goalkeeper",
+                "es_capitan": false,
+                "id_jugador_fifa": "466370"
+            },
+            {
+                "nombre_jugador": "Trevor DOORNBUSCH",
+                "dorsal_en_cancha": 26,
+                "es_titular": false,
+                "posicion_en_cancha": "Goalkeeper",
+                "es_capitan": false,
+                "id_jugador_fifa": "466382"
+            },
+            {
+                "nombre_jugador": "Shurandy SAMBO",
+                "dorsal_en_cancha": 2,
+                "es_titular": false,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "485379"
+            },
+            {
+                "nombre_jugador": "Jurien GAARI",
+                "dorsal_en_cancha": 3,
+                "es_titular": false,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "431698"
+            },
+            {
+                "nombre_jugador": "Roshon VAN EIJMA",
+                "dorsal_en_cancha": 4,
+                "es_titular": false,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "466361"
+            },
+            {
+                "nombre_jugador": "Joshua BRENET",
+                "dorsal_en_cancha": 20,
+                "es_titular": false,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "401023"
+            },
+            {
+                "nombre_jugador": "Godfried ROEMERATOE",
+                "dorsal_en_cancha": 6,
+                "es_titular": false,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "466359"
+            },
+            {
+                "nombre_jugador": "Arjany MARTHA",
+                "dorsal_en_cancha": 15,
+                "es_titular": false,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "485324"
+            },
+            {
+                "nombre_jugador": "Kevin FELIDA",
+                "dorsal_en_cancha": 22,
+                "es_titular": false,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "466365"
+            },
+            {
+                "nombre_jugador": "Jeremy Antonisse",
+                "dorsal_en_cancha": 11,
+                "es_titular": false,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": false,
+                "id_jugador_fifa": "424047"
+            },
+            {
+                "nombre_jugador": "Tyrese NOSLIN",
+                "dorsal_en_cancha": 13,
+                "es_titular": false,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": false,
+                "id_jugador_fifa": "506473"
+            },
+            {
+                "nombre_jugador": "Kenji GORRE",
+                "dorsal_en_cancha": 14,
+                "es_titular": false,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": false,
+                "id_jugador_fifa": "466352"
+            },
+            {
+                "nombre_jugador": "Jearl MARGARITHA",
+                "dorsal_en_cancha": 16,
+                "es_titular": false,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": false,
+                "id_jugador_fifa": "466363"
+            },
+            {
+                "nombre_jugador": "Brandley KUWAS",
+                "dorsal_en_cancha": 17,
+                "es_titular": false,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": false,
+                "id_jugador_fifa": "466346"
+            },
+            {
+                "nombre_jugador": "Gervane KASTANEER",
+                "dorsal_en_cancha": 19,
+                "es_titular": false,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": false,
+                "id_jugador_fifa": "466372"
+            }
+        ]
+    },
+    {
+        "id_match_fifa": "400021470",
+        "id_stage_fifa": "289273",
+        "fecha": "2026-06-14",
+        "horario_local": "2026-06-14T15:00:00Z",
+        "horario_utc": "2026-06-14T20:00:00Z",
+        "estadio": "Dallas Stadium",
+        "ciudad": "Dallas",
+        "pais_estadio": "USA",
+        "fase": "First Stage",
+        "grupo": "Group F",
+        "seleccion_1_nombre": "Netherlands",
+        "seleccion_1_abreviatura": "NED",
+        "seleccion_1_esquema_tactico": "4-1-2-3",
+        "seleccion_2_nombre": "Japan",
+        "seleccion_2_abreviatura": "JPN",
+        "seleccion_2_esquema_tactico": "3-4-3",
+        "jugadores_seleccion_1": [
+            {
+                "nombre_jugador": "Bart Verbruggen",
+                "dorsal_en_cancha": 1,
+                "es_titular": true,
+                "posicion_en_cancha": "Goalkeeper",
+                "es_capitan": false,
+                "id_jugador_fifa": "424081"
+            },
+            {
+                "nombre_jugador": "Virgil VAN DIJK",
+                "dorsal_en_cancha": 4,
+                "es_titular": true,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": true,
+                "id_jugador_fifa": "397786"
+            },
+            {
+                "nombre_jugador": "Jan Paul VAN HECKE",
+                "dorsal_en_cancha": 6,
+                "es_titular": true,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "489517"
+            },
+            {
+                "nombre_jugador": "Micky VAN DE VEN",
+                "dorsal_en_cancha": 15,
+                "es_titular": true,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "448140"
+            },
+            {
+                "nombre_jugador": "Denzel DUMFRIES",
+                "dorsal_en_cancha": 22,
+                "es_titular": true,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "436612"
+            },
+            {
+                "nombre_jugador": "Ryan GRAVENBERCH",
+                "dorsal_en_cancha": 8,
+                "es_titular": true,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "430176"
+            },
+            {
+                "nombre_jugador": "Tijjani REIJNDERS",
+                "dorsal_en_cancha": 14,
+                "es_titular": true,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "483526"
+            },
+            {
+                "nombre_jugador": "Frenkie DE JONG",
+                "dorsal_en_cancha": 21,
+                "es_titular": true,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "422657"
+            },
+            {
+                "nombre_jugador": "Cody GAKPO",
+                "dorsal_en_cancha": 11,
+                "es_titular": true,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": false,
+                "id_jugador_fifa": "448152"
+            },
+            {
+                "nombre_jugador": "Donyell Malen",
+                "dorsal_en_cancha": 18,
+                "es_titular": true,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": false,
+                "id_jugador_fifa": "433066"
+            },
+            {
+                "nombre_jugador": "Crysencio SUMMERVILLE",
+                "dorsal_en_cancha": 24,
+                "es_titular": true,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": false,
+                "id_jugador_fifa": "489518"
+            },
+            {
+                "nombre_jugador": "Robin ROEFS",
+                "dorsal_en_cancha": 13,
+                "es_titular": false,
+                "posicion_en_cancha": "Goalkeeper",
+                "es_capitan": false,
+                "id_jugador_fifa": "506028"
+            },
+            {
+                "nombre_jugador": "Mark FLEKKEN",
+                "dorsal_en_cancha": 23,
+                "es_titular": false,
+                "posicion_en_cancha": "Goalkeeper",
+                "es_capitan": false,
+                "id_jugador_fifa": "448151"
+            },
+            {
+                "nombre_jugador": "Lutsharel GEERTRUIDA",
+                "dorsal_en_cancha": 2,
+                "es_titular": false,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "483553"
+            },
+            {
+                "nombre_jugador": "Nathan AKE",
+                "dorsal_en_cancha": 5,
+                "es_titular": false,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "336088"
+            },
+            {
+                "nombre_jugador": "Mats WIEFFER",
+                "dorsal_en_cancha": 12,
+                "es_titular": false,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "483481"
+            },
+            {
+                "nombre_jugador": "Jorrel HATO",
+                "dorsal_en_cancha": 25,
+                "es_titular": false,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "483512"
+            },
+            {
+                "nombre_jugador": "Marten DE ROON",
+                "dorsal_en_cancha": 3,
+                "es_titular": false,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "402044"
+            },
+            {
+                "nombre_jugador": "Justin KLUIVERT",
+                "dorsal_en_cancha": 7,
+                "es_titular": false,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "478364"
+            },
+            {
+                "nombre_jugador": "Guus TIL",
+                "dorsal_en_cancha": 16,
+                "es_titular": false,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "448157"
+            },
+            {
+                "nombre_jugador": "Teun KOOPMEINERS",
+                "dorsal_en_cancha": 20,
+                "es_titular": false,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "448149"
+            },
+            {
+                "nombre_jugador": "Quinten TIMBER",
+                "dorsal_en_cancha": 26,
+                "es_titular": false,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "484859"
+            },
+            {
+                "nombre_jugador": "Wout WEGHORST",
+                "dorsal_en_cancha": 9,
+                "es_titular": false,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": false,
+                "id_jugador_fifa": "448159"
+            },
+            {
+                "nombre_jugador": "Memphis DEPAY",
+                "dorsal_en_cancha": 10,
+                "es_titular": false,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": false,
+                "id_jugador_fifa": "336098"
+            },
+            {
+                "nombre_jugador": "Noa LANG",
+                "dorsal_en_cancha": 17,
+                "es_titular": false,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": false,
+                "id_jugador_fifa": "448153"
+            },
+            {
+                "nombre_jugador": "Brian BROBBEY",
+                "dorsal_en_cancha": 19,
+                "es_titular": false,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": false,
+                "id_jugador_fifa": "424051"
+            }
+        ],
+        "jugadores_seleccion_2": [
+            {
+                "nombre_jugador": "Zion Suzuki",
+                "dorsal_en_cancha": 1,
+                "es_titular": true,
+                "posicion_en_cancha": "Goalkeeper",
+                "es_capitan": false,
+                "id_jugador_fifa": "405530"
+            },
+            {
+                "nombre_jugador": "Shogo TANIGUCHI",
+                "dorsal_en_cancha": 3,
+                "es_titular": true,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "390541"
+            },
+            {
+                "nombre_jugador": "Tsuyoshi Watanabe",
+                "dorsal_en_cancha": 16,
+                "es_titular": true,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "430401"
+            },
+            {
+                "nombre_jugador": "Hiroki ITO",
+                "dorsal_en_cancha": 21,
+                "es_titular": true,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "403274"
+            },
+            {
+                "nombre_jugador": "Takefusa KUBO",
+                "dorsal_en_cancha": 8,
+                "es_titular": true,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "403304"
+            },
+            {
+                "nombre_jugador": "Ritsu DOAN",
+                "dorsal_en_cancha": 10,
+                "es_titular": true,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": true,
+                "id_jugador_fifa": "391646"
+            },
+            {
+                "nombre_jugador": "Daizen MAEDA",
+                "dorsal_en_cancha": 11,
+                "es_titular": true,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "430407"
+            },
+            {
+                "nombre_jugador": "Keito Nakamura",
+                "dorsal_en_cancha": 13,
+                "es_titular": true,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "405522"
+            },
+            {
+                "nombre_jugador": "Daichi KAMADA",
+                "dorsal_en_cancha": 15,
+                "es_titular": true,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "448557"
+            },
+            {
+                "nombre_jugador": "Kaishu SANO",
+                "dorsal_en_cancha": 24,
+                "es_titular": true,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "479294"
+            },
+            {
+                "nombre_jugador": "Ayase UEDA",
+                "dorsal_en_cancha": 18,
+                "es_titular": true,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": false,
+                "id_jugador_fifa": "430413"
+            },
+            {
+                "nombre_jugador": "Keisuke OSAKO",
+                "dorsal_en_cancha": 12,
+                "es_titular": false,
+                "posicion_en_cancha": "Goalkeeper",
+                "es_capitan": false,
+                "id_jugador_fifa": "403305"
+            },
+            {
+                "nombre_jugador": "Tomoki HAYAKAWA",
+                "dorsal_en_cancha": 23,
+                "es_titular": false,
+                "posicion_en_cancha": "Goalkeeper",
+                "es_capitan": false,
+                "id_jugador_fifa": "511710"
+            },
+            {
+                "nombre_jugador": "Yukinari Sugawara",
+                "dorsal_en_cancha": 2,
+                "es_titular": false,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "405528"
+            },
+            {
+                "nombre_jugador": "Kou ITAKURA",
+                "dorsal_en_cancha": 4,
+                "es_titular": false,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "400511"
+            },
+            {
+                "nombre_jugador": "Yuto NAGATOMO",
+                "dorsal_en_cancha": 5,
+                "es_titular": false,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "291372"
+            },
+            {
+                "nombre_jugador": "Ayumu SEKO",
+                "dorsal_en_cancha": 20,
+                "es_titular": false,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "405527"
+            },
+            {
+                "nombre_jugador": "Takehiro TOMIYASU",
+                "dorsal_en_cancha": 22,
+                "es_titular": false,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "403289"
+            },
+            {
+                "nombre_jugador": "Junnosuke SUZUKI",
+                "dorsal_en_cancha": 25,
+                "es_titular": false,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "498455"
+            },
+            {
+                "nombre_jugador": "Ao TANAKA",
+                "dorsal_en_cancha": 7,
+                "es_titular": false,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "400514"
+            },
+            {
+                "nombre_jugador": "Junya ITO",
+                "dorsal_en_cancha": 14,
+                "es_titular": false,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "395321"
+            },
+            {
+                "nombre_jugador": "Yuito SUZUKI",
+                "dorsal_en_cancha": 17,
+                "es_titular": false,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "485503"
+            },
+            {
+                "nombre_jugador": "Shuto MACHINO",
+                "dorsal_en_cancha": 6,
+                "es_titular": false,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": false,
+                "id_jugador_fifa": "448569"
+            },
+            {
+                "nombre_jugador": "Keisuke GOTO",
+                "dorsal_en_cancha": 9,
+                "es_titular": false,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": false,
+                "id_jugador_fifa": "464339"
+            },
+            {
+                "nombre_jugador": "Koki OGAWA",
+                "dorsal_en_cancha": 19,
+                "es_titular": false,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": false,
+                "id_jugador_fifa": "403293"
+            },
+            {
+                "nombre_jugador": "Kento SHIOGAI",
+                "dorsal_en_cancha": 26,
+                "es_titular": false,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": false,
+                "id_jugador_fifa": "520218"
+            }
+        ]
+    },
+    {
+        "id_match_fifa": "400021467",
+        "id_stage_fifa": "289273",
+        "fecha": "2026-06-14",
+        "horario_local": "2026-06-14T19:00:00Z",
+        "horario_utc": "2026-06-14T23:00:00Z",
+        "estadio": "Philadelphia Stadium",
+        "ciudad": "Philadelphia",
+        "pais_estadio": "USA",
+        "fase": "First Stage",
+        "grupo": "Group E",
+        "seleccion_1_nombre": "Côte d'Ivoire",
+        "seleccion_1_abreviatura": "CIV",
+        "seleccion_1_esquema_tactico": "4-4-2",
+        "seleccion_2_nombre": "Ecuador",
+        "seleccion_2_abreviatura": "ECU",
+        "seleccion_2_esquema_tactico": "4-4-2",
+        "jugadores_seleccion_1": [
+            {
+                "nombre_jugador": "Yahia Fofana",
+                "dorsal_en_cancha": 1,
+                "es_titular": true,
+                "posicion_en_cancha": "Goalkeeper",
+                "es_capitan": false,
+                "id_jugador_fifa": "405873"
+            },
+            {
+                "nombre_jugador": "Ghislain KONAN",
+                "dorsal_en_cancha": 3,
+                "es_titular": true,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "407343"
+            },
+            {
+                "nombre_jugador": "Wilfried SINGO",
+                "dorsal_en_cancha": 5,
+                "es_titular": true,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "430854"
+            },
+            {
+                "nombre_jugador": "Guela DOUE",
+                "dorsal_en_cancha": 17,
+                "es_titular": true,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "486317"
+            },
+            {
+                "nombre_jugador": "Emmanuel AGBADOU",
+                "dorsal_en_cancha": 20,
+                "es_titular": true,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "486268"
+            },
+            {
+                "nombre_jugador": "Seko Fofana",
+                "dorsal_en_cancha": 6,
+                "es_titular": true,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "405175"
+            },
+            {
+                "nombre_jugador": "Franck KESSIE",
+                "dorsal_en_cancha": 8,
+                "es_titular": true,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": true,
+                "id_jugador_fifa": "371609"
+            },
+            {
+                "nombre_jugador": "Yan DIOMANDE",
+                "dorsal_en_cancha": 11,
+                "es_titular": true,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": false,
+                "id_jugador_fifa": "510922"
+            },
+            {
+                "nombre_jugador": "Elye WAHI",
+                "dorsal_en_cancha": 12,
+                "es_titular": true,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": false,
+                "id_jugador_fifa": "464133"
+            },
+            {
+                "nombre_jugador": "Nicolas PEPE",
+                "dorsal_en_cancha": 19,
+                "es_titular": true,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": false,
+                "id_jugador_fifa": "402261"
+            },
+            {
+                "nombre_jugador": "Bazoumana TOURE",
+                "dorsal_en_cancha": 24,
+                "es_titular": true,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": false,
+                "id_jugador_fifa": "506202"
+            },
+            {
+                "nombre_jugador": "Mohamed KONE",
+                "dorsal_en_cancha": 16,
+                "es_titular": false,
+                "posicion_en_cancha": "Goalkeeper",
+                "es_capitan": false,
+                "id_jugador_fifa": "486259"
+            },
+            {
+                "nombre_jugador": "Alban Lafont",
+                "dorsal_en_cancha": 23,
+                "es_titular": false,
+                "posicion_en_cancha": "Goalkeeper",
+                "es_capitan": false,
+                "id_jugador_fifa": "403090"
+            },
+            {
+                "nombre_jugador": "Ousmane DIOMANDE",
+                "dorsal_en_cancha": 2,
+                "es_titular": false,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "477802"
+            },
+            {
+                "nombre_jugador": "Odilon KOSSOUNOU",
+                "dorsal_en_cancha": 7,
+                "es_titular": false,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "477825"
+            },
+            {
+                "nombre_jugador": "Christopher OPERI",
+                "dorsal_en_cancha": 13,
+                "es_titular": false,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "486260"
+            },
+            {
+                "nombre_jugador": "Evan NDICKA",
+                "dorsal_en_cancha": 21,
+                "es_titular": false,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "419172"
+            },
+            {
+                "nombre_jugador": "Jean Michael SERI",
+                "dorsal_en_cancha": 4,
+                "es_titular": false,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "335807"
+            },
+            {
+                "nombre_jugador": "Ibrahim SANGARE",
+                "dorsal_en_cancha": 18,
+                "es_titular": false,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "430831"
+            },
+            {
+                "nombre_jugador": "Parfait GUIAGON",
+                "dorsal_en_cancha": 25,
+                "es_titular": false,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "430834"
+            },
+            {
+                "nombre_jugador": "Christ Inao OULAI",
+                "dorsal_en_cancha": 26,
+                "es_titular": false,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "514208"
+            },
+            {
+                "nombre_jugador": "Ange-Yoan BONNY",
+                "dorsal_en_cancha": 9,
+                "es_titular": false,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": false,
+                "id_jugador_fifa": "464103"
+            },
+            {
+                "nombre_jugador": "Simon ADINGRA",
+                "dorsal_en_cancha": 10,
+                "es_titular": false,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": false,
+                "id_jugador_fifa": "477778"
+            },
+            {
+                "nombre_jugador": "Oumar DIAKITE",
+                "dorsal_en_cancha": 14,
+                "es_titular": false,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": false,
+                "id_jugador_fifa": "477777"
+            },
+            {
+                "nombre_jugador": "Amad DIALLO",
+                "dorsal_en_cancha": 15,
+                "es_titular": false,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": false,
+                "id_jugador_fifa": "430822"
+            },
+            {
+                "nombre_jugador": "Evann GUESSAND",
+                "dorsal_en_cancha": 22,
+                "es_titular": false,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": false,
+                "id_jugador_fifa": "485675"
+            }
+        ],
+        "jugadores_seleccion_2": [
+            {
+                "nombre_jugador": "Hernan GALINDEZ",
+                "dorsal_en_cancha": 1,
+                "es_titular": true,
+                "posicion_en_cancha": "Goalkeeper",
+                "es_capitan": false,
+                "id_jugador_fifa": "441236"
+            },
+            {
+                "nombre_jugador": "Piero HINCAPIE",
+                "dorsal_en_cancha": 3,
+                "es_titular": true,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "424031"
+            },
+            {
+                "nombre_jugador": "Joel ORDONEZ",
+                "dorsal_en_cancha": 4,
+                "es_titular": true,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "463465"
+            },
+            {
+                "nombre_jugador": "Willian PACHO",
+                "dorsal_en_cancha": 6,
+                "es_titular": true,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "448290"
+            },
+            {
+                "nombre_jugador": "Alan MINDA",
+                "dorsal_en_cancha": 14,
+                "es_titular": true,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "463468"
+            },
+            {
+                "nombre_jugador": "Pedro VITE",
+                "dorsal_en_cancha": 15,
+                "es_titular": true,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "424036"
+            },
+            {
+                "nombre_jugador": "Alan FRANCO",
+                "dorsal_en_cancha": 21,
+                "es_titular": true,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "389784"
+            },
+            {
+                "nombre_jugador": "Moises CAICEDO",
+                "dorsal_en_cancha": 23,
+                "es_titular": true,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "428885"
+            },
+            {
+                "nombre_jugador": "John YEBOAH",
+                "dorsal_en_cancha": 9,
+                "es_titular": true,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": false,
+                "id_jugador_fifa": "405920"
+            },
+            {
+                "nombre_jugador": "Enner VALENCIA",
+                "dorsal_en_cancha": 13,
+                "es_titular": true,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": true,
+                "id_jugador_fifa": "373400"
+            },
+            {
+                "nombre_jugador": "Gonzalo PLATA",
+                "dorsal_en_cancha": 19,
+                "es_titular": true,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": false,
+                "id_jugador_fifa": "419020"
+            },
+            {
+                "nombre_jugador": "Moises RAMIREZ",
+                "dorsal_en_cancha": 12,
+                "es_titular": false,
+                "posicion_en_cancha": "Goalkeeper",
+                "es_capitan": false,
+                "id_jugador_fifa": "419002"
+            },
+            {
+                "nombre_jugador": "Gonzalo VALLE",
+                "dorsal_en_cancha": 22,
+                "es_titular": false,
+                "posicion_en_cancha": "Goalkeeper",
+                "es_capitan": false,
+                "id_jugador_fifa": "448295"
+            },
+            {
+                "nombre_jugador": "Felix TORRES",
+                "dorsal_en_cancha": 2,
+                "es_titular": false,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "402979"
+            },
+            {
+                "nombre_jugador": "Pervis ESTUPINAN",
+                "dorsal_en_cancha": 7,
+                "es_titular": false,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "389782"
+            },
+            {
+                "nombre_jugador": "Angelo PRECIADO",
+                "dorsal_en_cancha": 17,
+                "es_titular": false,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "402974"
+            },
+            {
+                "nombre_jugador": "Jackson POROZO",
+                "dorsal_en_cancha": 25,
+                "es_titular": false,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "419003"
+            },
+            {
+                "nombre_jugador": "Yaimar MEDINA",
+                "dorsal_en_cancha": 26,
+                "es_titular": false,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "463489"
+            },
+            {
+                "nombre_jugador": "Jordy ALCIVAR",
+                "dorsal_en_cancha": 5,
+                "es_titular": false,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "419005"
+            },
+            {
+                "nombre_jugador": "Anthony VALENCIA",
+                "dorsal_en_cancha": 8,
+                "es_titular": false,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "448299"
+            },
+            {
+                "nombre_jugador": "Kendry PAEZ",
+                "dorsal_en_cancha": 10,
+                "es_titular": false,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "463495"
+            },
+            {
+                "nombre_jugador": "Denil CASTILLO",
+                "dorsal_en_cancha": 18,
+                "es_titular": false,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "463476"
+            },
+            {
+                "nombre_jugador": "Kevin RODRIGUEZ",
+                "dorsal_en_cancha": 11,
+                "es_titular": false,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": false,
+                "id_jugador_fifa": "448310"
+            },
+            {
+                "nombre_jugador": "Jordy CAICEDO",
+                "dorsal_en_cancha": 16,
+                "es_titular": false,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": false,
+                "id_jugador_fifa": "402985"
+            },
+            {
+                "nombre_jugador": "Nilson ANGULO",
+                "dorsal_en_cancha": 20,
+                "es_titular": false,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": false,
+                "id_jugador_fifa": "448312"
+            },
+            {
+                "nombre_jugador": "Jeremy AREVALO",
+                "dorsal_en_cancha": 24,
+                "es_titular": false,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": false,
+                "id_jugador_fifa": "514326"
+            }
+        ]
+    },
+    {
+        "id_match_fifa": "400021474",
+        "id_stage_fifa": "289273",
+        "fecha": "2026-06-14",
+        "horario_local": "2026-06-14T20:00:00Z",
+        "horario_utc": "2026-06-15T02:00:00Z",
+        "estadio": "Monterrey Stadium",
+        "ciudad": "Monterrey",
+        "pais_estadio": "MEX",
+        "fase": "First Stage",
+        "grupo": "Group F",
+        "seleccion_1_nombre": "Sweden",
+        "seleccion_1_abreviatura": "SWE",
+        "seleccion_1_esquema_tactico": "3-4-1-2",
+        "seleccion_2_nombre": "Tunisia",
+        "seleccion_2_abreviatura": "TUN",
+        "seleccion_2_esquema_tactico": "5-3-2",
+        "jugadores_seleccion_1": [
+            {
+                "nombre_jugador": "Kristoffer NORDFELDT",
+                "dorsal_en_cancha": 23,
+                "es_titular": true,
+                "posicion_en_cancha": "Goalkeeper",
+                "es_capitan": false,
+                "id_jugador_fifa": "360496"
+            },
+            {
+                "nombre_jugador": "Gustaf LAGERBIELKE",
+                "dorsal_en_cancha": 2,
+                "es_titular": true,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "483304"
+            },
+            {
+                "nombre_jugador": "Victor LINDELOF",
+                "dorsal_en_cancha": 3,
+                "es_titular": true,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": true,
+                "id_jugador_fifa": "395283"
+            },
+            {
+                "nombre_jugador": "Isak HIEN",
+                "dorsal_en_cancha": 4,
+                "es_titular": true,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "483312"
+            },
+            {
+                "nombre_jugador": "Gabriel GUDMUNDSSON",
+                "dorsal_en_cancha": 5,
+                "es_titular": true,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "483276"
+            },
+            {
+                "nombre_jugador": "Alexander BERNHARDSSON",
+                "dorsal_en_cancha": 21,
+                "es_titular": true,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "502945"
+            },
+            {
+                "nombre_jugador": "Benjamin NYGREN",
+                "dorsal_en_cancha": 10,
+                "es_titular": true,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "502946"
+            },
+            {
+                "nombre_jugador": "Jesper KARLSTROM",
+                "dorsal_en_cancha": 16,
+                "es_titular": true,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "441135"
+            },
+            {
+                "nombre_jugador": "Yasin AYARI",
+                "dorsal_en_cancha": 18,
+                "es_titular": true,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "489688"
+            },
+            {
+                "nombre_jugador": "Alexander Isak",
+                "dorsal_en_cancha": 9,
+                "es_titular": true,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": false,
+                "id_jugador_fifa": "430150"
+            },
+            {
+                "nombre_jugador": "Viktor GYOKERES",
+                "dorsal_en_cancha": 17,
+                "es_titular": true,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": false,
+                "id_jugador_fifa": "483327"
+            },
+            {
+                "nombre_jugador": "Jacob WIDELL ZETTERSTROM",
+                "dorsal_en_cancha": 1,
+                "es_titular": false,
+                "posicion_en_cancha": "Goalkeeper",
+                "es_capitan": false,
+                "id_jugador_fifa": "489685"
+            },
+            {
+                "nombre_jugador": "Viktor JOHANSSON",
+                "dorsal_en_cancha": 12,
+                "es_titular": false,
+                "posicion_en_cancha": "Goalkeeper",
+                "es_capitan": false,
+                "id_jugador_fifa": "483264"
+            },
+            {
+                "nombre_jugador": "Herman JOHANSSON",
+                "dorsal_en_cancha": 6,
+                "es_titular": false,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "514639"
+            },
+            {
+                "nombre_jugador": "Daniel SVENSSON",
+                "dorsal_en_cancha": 8,
+                "es_titular": false,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "491255"
+            },
+            {
+                "nombre_jugador": "Hjalmar EKDAL",
+                "dorsal_en_cancha": 14,
+                "es_titular": false,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "483319"
+            },
+            {
+                "nombre_jugador": "Carl STARFELT",
+                "dorsal_en_cancha": 15,
+                "es_titular": false,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "441132"
+            },
+            {
+                "nombre_jugador": "Eric SMITH",
+                "dorsal_en_cancha": 20,
+                "es_titular": false,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "493061"
+            },
+            {
+                "nombre_jugador": "Elliot STROUD",
+                "dorsal_en_cancha": 24,
+                "es_titular": false,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "519958"
+            },
+            {
+                "nombre_jugador": "Lucas BERGVALL",
+                "dorsal_en_cancha": 7,
+                "es_titular": false,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "489689"
+            },
+            {
+                "nombre_jugador": "Ken SEMA",
+                "dorsal_en_cancha": 13,
+                "es_titular": false,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "395286"
+            },
+            {
+                "nombre_jugador": "Mattias SVANBERG",
+                "dorsal_en_cancha": 19,
+                "es_titular": false,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "433795"
+            },
+            {
+                "nombre_jugador": "Besfort ZENELI",
+                "dorsal_en_cancha": 22,
+                "es_titular": false,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "503047"
+            },
+            {
+                "nombre_jugador": "Anthony ELANGA",
+                "dorsal_en_cancha": 11,
+                "es_titular": false,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": false,
+                "id_jugador_fifa": "441137"
+            },
+            {
+                "nombre_jugador": "Gustaf NILSSON",
+                "dorsal_en_cancha": 25,
+                "es_titular": false,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": false,
+                "id_jugador_fifa": "489691"
+            },
+            {
+                "nombre_jugador": "Taha ALI",
+                "dorsal_en_cancha": 26,
+                "es_titular": false,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": false,
+                "id_jugador_fifa": "514202"
+            }
+        ],
+        "jugadores_seleccion_2": [
+            {
+                "nombre_jugador": "Mouhib CHAMAKH",
+                "dorsal_en_cancha": 1,
+                "es_titular": true,
+                "posicion_en_cancha": "Goalkeeper",
+                "es_capitan": false,
+                "id_jugador_fifa": "520245"
+            },
+            {
+                "nombre_jugador": "Ali ABDI",
+                "dorsal_en_cancha": 2,
+                "es_titular": true,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "433362"
+            },
+            {
+                "nombre_jugador": "Montassar TALBI",
+                "dorsal_en_cancha": 3,
+                "es_titular": true,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "433380"
+            },
+            {
+                "nombre_jugador": "Omar Rekik",
+                "dorsal_en_cancha": 4,
+                "es_titular": true,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "433367"
+            },
+            {
+                "nombre_jugador": "Yan Valery",
+                "dorsal_en_cancha": 20,
+                "es_titular": true,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "419189"
+            },
+            {
+                "nombre_jugador": "Mohamed Amine BEN HMIDA",
+                "dorsal_en_cancha": 21,
+                "es_titular": true,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "425607"
+            },
+            {
+                "nombre_jugador": "Hannibal MEJBRI",
+                "dorsal_en_cancha": 10,
+                "es_titular": true,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "433378"
+            },
+            {
+                "nombre_jugador": "Rani Khedira",
+                "dorsal_en_cancha": 13,
+                "es_titular": true,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "336459"
+            },
+            {
+                "nombre_jugador": "Ellyes SKHIRI",
+                "dorsal_en_cancha": 17,
+                "es_titular": true,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": true,
+                "id_jugador_fifa": "411658"
+            },
+            {
+                "nombre_jugador": "Anis SLIMANE",
+                "dorsal_en_cancha": 25,
+                "es_titular": true,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "433361"
+            },
+            {
+                "nombre_jugador": "Elias SAAD",
+                "dorsal_en_cancha": 8,
+                "es_titular": true,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": false,
+                "id_jugador_fifa": "482885"
+            },
+            {
+                "nombre_jugador": "Aymen DAHMEN",
+                "dorsal_en_cancha": 16,
+                "es_titular": false,
+                "posicion_en_cancha": "Goalkeeper",
+                "es_capitan": false,
+                "id_jugador_fifa": "433365"
+            },
+            {
+                "nombre_jugador": "Sabri BEN HESSEN",
+                "dorsal_en_cancha": 22,
+                "es_titular": false,
+                "posicion_en_cancha": "Goalkeeper",
+                "es_capitan": false,
+                "id_jugador_fifa": "372294"
+            },
+            {
+                "nombre_jugador": "Adam AROUS",
+                "dorsal_en_cancha": 5,
+                "es_titular": false,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "516043"
+            },
+            {
+                "nombre_jugador": "Dylan BRONN",
+                "dorsal_en_cancha": 6,
+                "es_titular": false,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "411653"
+            },
+            {
+                "nombre_jugador": "Mortadha BEN OUANES",
+                "dorsal_en_cancha": 12,
+                "es_titular": false,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "441362"
+            },
+            {
+                "nombre_jugador": "Moutaz NEFFATI",
+                "dorsal_en_cancha": 23,
+                "es_titular": false,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "506335"
+            },
+            {
+                "nombre_jugador": "Raed CHIKHAOUI",
+                "dorsal_en_cancha": 24,
+                "es_titular": false,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "520246"
+            },
+            {
+                "nombre_jugador": "Ismael GHARBI",
+                "dorsal_en_cancha": 11,
+                "es_titular": false,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "464484"
+            },
+            {
+                "nombre_jugador": "Khalil AYARI",
+                "dorsal_en_cancha": 14,
+                "es_titular": false,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "512039"
+            },
+            {
+                "nombre_jugador": "Mohamed HADJ MAHMOUD",
+                "dorsal_en_cancha": 15,
+                "es_titular": false,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "479781"
+            },
+            {
+                "nombre_jugador": "Sebastian TOUNEKTI",
+                "dorsal_en_cancha": 26,
+                "es_titular": false,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "504502"
+            },
+            {
+                "nombre_jugador": "Elias ACHOURI",
+                "dorsal_en_cancha": 7,
+                "es_titular": false,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": false,
+                "id_jugador_fifa": "448662"
+            },
+            {
+                "nombre_jugador": "Hazem MASTOURI",
+                "dorsal_en_cancha": 9,
+                "es_titular": false,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": false,
+                "id_jugador_fifa": "494374"
+            },
+            {
+                "nombre_jugador": "Rayan ELLOUMI",
+                "dorsal_en_cancha": 18,
+                "es_titular": false,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": false,
+                "id_jugador_fifa": "520247"
+            },
+            {
+                "nombre_jugador": "Firas CHAOUAT",
+                "dorsal_en_cancha": 19,
+                "es_titular": false,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": false,
+                "id_jugador_fifa": "494375"
+            }
+        ]
+    },
+    {
+        "id_match_fifa": "400021482",
+        "id_stage_fifa": "289273",
+        "fecha": "2026-06-15",
+        "horario_local": "2026-06-15T12:00:00Z",
+        "horario_utc": "2026-06-15T16:00:00Z",
+        "estadio": "Atlanta Stadium",
+        "ciudad": "Atlanta",
+        "pais_estadio": "USA",
+        "fase": "First Stage",
+        "grupo": "Group H",
+        "seleccion_1_nombre": "Spain",
+        "seleccion_1_abreviatura": "ESP",
+        "seleccion_1_esquema_tactico": "4-1-2-3",
+        "seleccion_2_nombre": "Cabo Verde",
+        "seleccion_2_abreviatura": "CPV",
+        "seleccion_2_esquema_tactico": "4-1-2-3",
+        "jugadores_seleccion_1": [
+            {
+                "nombre_jugador": "Unai SIMON",
+                "dorsal_en_cancha": 23,
+                "es_titular": true,
+                "posicion_en_cancha": "Goalkeeper",
+                "es_capitan": false,
+                "id_jugador_fifa": "430753"
+            },
+            {
+                "nombre_jugador": "Marcos LLORENTE",
+                "dorsal_en_cancha": 5,
+                "es_titular": true,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "382739"
+            },
+            {
+                "nombre_jugador": "Aymeric LAPORTE",
+                "dorsal_en_cancha": 14,
+                "es_titular": true,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "335999"
+            },
+            {
+                "nombre_jugador": "Pau CUBARSI",
+                "dorsal_en_cancha": 22,
+                "es_titular": true,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "474973"
+            },
+            {
+                "nombre_jugador": "Marc CUCURELLA",
+                "dorsal_en_cancha": 24,
+                "es_titular": true,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "430735"
+            },
+            {
+                "nombre_jugador": "Fabian RUIZ",
+                "dorsal_en_cancha": 8,
+                "es_titular": true,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "430718"
+            },
+            {
+                "nombre_jugador": "GAVI",
+                "dorsal_en_cancha": 9,
+                "es_titular": true,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "447866"
+            },
+            {
+                "nombre_jugador": "RODRI",
+                "dorsal_en_cancha": 16,
+                "es_titular": true,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": true,
+                "id_jugador_fifa": "411375"
+            },
+            {
+                "nombre_jugador": "PEDRI",
+                "dorsal_en_cancha": 20,
+                "es_titular": true,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "423646"
+            },
+            {
+                "nombre_jugador": "Ferran TORRES",
+                "dorsal_en_cancha": 7,
+                "es_titular": true,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": false,
+                "id_jugador_fifa": "405545"
+            },
+            {
+                "nombre_jugador": "Mikel OYARZABAL",
+                "dorsal_en_cancha": 21,
+                "es_titular": true,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": false,
+                "id_jugador_fifa": "430751"
+            },
+            {
+                "nombre_jugador": "David RAYA",
+                "dorsal_en_cancha": 1,
+                "es_titular": false,
+                "posicion_en_cancha": "Goalkeeper",
+                "es_capitan": false,
+                "id_jugador_fifa": "447853"
+            },
+            {
+                "nombre_jugador": "Joan GARCIA",
+                "dorsal_en_cancha": 13,
+                "es_titular": false,
+                "posicion_en_cancha": "Goalkeeper",
+                "es_capitan": false,
+                "id_jugador_fifa": "484691"
+            },
+            {
+                "nombre_jugador": "Marc PUBILL",
+                "dorsal_en_cancha": 2,
+                "es_titular": false,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "484728"
+            },
+            {
+                "nombre_jugador": "Alex GRIMALDO",
+                "dorsal_en_cancha": 3,
+                "es_titular": false,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "391297"
+            },
+            {
+                "nombre_jugador": "Eric GARCIA",
+                "dorsal_en_cancha": 4,
+                "es_titular": false,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "405562"
+            },
+            {
+                "nombre_jugador": "Pedro PORRO",
+                "dorsal_en_cancha": 12,
+                "es_titular": false,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "430144"
+            },
+            {
+                "nombre_jugador": "Mikel MERINO",
+                "dorsal_en_cancha": 6,
+                "es_titular": false,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "430733"
+            },
+            {
+                "nombre_jugador": "Alex BAENA",
+                "dorsal_en_cancha": 15,
+                "es_titular": false,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "447860"
+            },
+            {
+                "nombre_jugador": "Martin ZUBIMENDI",
+                "dorsal_en_cancha": 18,
+                "es_titular": false,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "430754"
+            },
+            {
+                "nombre_jugador": "Dani OLMO",
+                "dorsal_en_cancha": 10,
+                "es_titular": false,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": false,
+                "id_jugador_fifa": "430750"
+            },
+            {
+                "nombre_jugador": "Yeremy PINO",
+                "dorsal_en_cancha": 11,
+                "es_titular": false,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": false,
+                "id_jugador_fifa": "423658"
+            },
+            {
+                "nombre_jugador": "Nico WILLIAMS",
+                "dorsal_en_cancha": 17,
+                "es_titular": false,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": false,
+                "id_jugador_fifa": "447855"
+            },
+            {
+                "nombre_jugador": "Lamine YAMAL",
+                "dorsal_en_cancha": 19,
+                "es_titular": false,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": false,
+                "id_jugador_fifa": "484320"
+            },
+            {
+                "nombre_jugador": "Victor MUNOZ",
+                "dorsal_en_cancha": 25,
+                "es_titular": false,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": false,
+                "id_jugador_fifa": "492859"
+            },
+            {
+                "nombre_jugador": "Borja IGLESIAS",
+                "dorsal_en_cancha": 26,
+                "es_titular": false,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": false,
+                "id_jugador_fifa": "447864"
+            }
+        ],
+        "jugadores_seleccion_2": [
+            {
+                "nombre_jugador": "VOZINHA",
+                "dorsal_en_cancha": 1,
+                "es_titular": true,
+                "posicion_en_cancha": "Goalkeeper",
+                "es_capitan": false,
+                "id_jugador_fifa": "364752"
+            },
+            {
+                "nombre_jugador": "DINEY BORGES",
+                "dorsal_en_cancha": 3,
+                "es_titular": true,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "409241"
+            },
+            {
+                "nombre_jugador": "PICO LOPES",
+                "dorsal_en_cancha": 4,
+                "es_titular": true,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "477770"
+            },
+            {
+                "nombre_jugador": "SIDNY LOPES CABRAL",
+                "dorsal_en_cancha": 13,
+                "es_titular": true,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "477832"
+            },
+            {
+                "nombre_jugador": "STEVEN MOREIRA",
+                "dorsal_en_cancha": 22,
+                "es_titular": true,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "477847"
+            },
+            {
+                "nombre_jugador": "KEVIN PINA",
+                "dorsal_en_cancha": 6,
+                "es_titular": true,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "477852"
+            },
+            {
+                "nombre_jugador": "JOVANE CABRAL",
+                "dorsal_en_cancha": 7,
+                "es_titular": true,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "477856"
+            },
+            {
+                "nombre_jugador": "JAMIRO MONTEIRO",
+                "dorsal_en_cancha": 10,
+                "es_titular": true,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "401894"
+            },
+            {
+                "nombre_jugador": "LAROS DUARTE",
+                "dorsal_en_cancha": 15,
+                "es_titular": true,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "480966"
+            },
+            {
+                "nombre_jugador": "DAILON LIVRAMENTO",
+                "dorsal_en_cancha": 19,
+                "es_titular": true,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": false,
+                "id_jugador_fifa": "482782"
+            },
+            {
+                "nombre_jugador": "RYAN MENDES",
+                "dorsal_en_cancha": 20,
+                "es_titular": true,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": true,
+                "id_jugador_fifa": "355642"
+            },
+            {
+                "nombre_jugador": "MARCIO ROSA",
+                "dorsal_en_cancha": 12,
+                "es_titular": false,
+                "posicion_en_cancha": "Goalkeeper",
+                "es_capitan": false,
+                "id_jugador_fifa": "407114"
+            },
+            {
+                "nombre_jugador": "CJ DOS SANTOS",
+                "dorsal_en_cancha": 23,
+                "es_titular": false,
+                "posicion_en_cancha": "Goalkeeper",
+                "es_capitan": false,
+                "id_jugador_fifa": "406281"
+            },
+            {
+                "nombre_jugador": "STOPIRA",
+                "dorsal_en_cancha": 2,
+                "es_titular": false,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "297266"
+            },
+            {
+                "nombre_jugador": "LOGAN COSTA",
+                "dorsal_en_cancha": 5,
+                "es_titular": false,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "477831"
+            },
+            {
+                "nombre_jugador": "WAGNER PINA",
+                "dorsal_en_cancha": 24,
+                "es_titular": false,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "482783"
+            },
+            {
+                "nombre_jugador": "KELVIN PIRES",
+                "dorsal_en_cancha": 25,
+                "es_titular": false,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "482780"
+            },
+            {
+                "nombre_jugador": "JOAO PAULO",
+                "dorsal_en_cancha": 8,
+                "es_titular": false,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "477855"
+            },
+            {
+                "nombre_jugador": "GARRY RODRIGUES",
+                "dorsal_en_cancha": 11,
+                "es_titular": false,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "373344"
+            },
+            {
+                "nombre_jugador": "DEROY DUARTE",
+                "dorsal_en_cancha": 14,
+                "es_titular": false,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "477827"
+            },
+            {
+                "nombre_jugador": "YANNICK SEMEDO",
+                "dorsal_en_cancha": 16,
+                "es_titular": false,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "494313"
+            },
+            {
+                "nombre_jugador": "WILLY SEMEDO",
+                "dorsal_en_cancha": 17,
+                "es_titular": false,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "433724"
+            },
+            {
+                "nombre_jugador": "TELMO ARCANJO",
+                "dorsal_en_cancha": 18,
+                "es_titular": false,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "494314"
+            },
+            {
+                "nombre_jugador": "NUNO DA COSTA",
+                "dorsal_en_cancha": 21,
+                "es_titular": false,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "401893"
+            },
+            {
+                "nombre_jugador": "HELIO VARELA",
+                "dorsal_en_cancha": 26,
+                "es_titular": false,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "477849"
+            },
+            {
+                "nombre_jugador": "GILSON BENCHIMOL",
+                "dorsal_en_cancha": 9,
+                "es_titular": false,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": false,
+                "id_jugador_fifa": "477862"
+            }
+        ]
+    },
+    {
+        "id_match_fifa": "400021478",
+        "id_stage_fifa": "289273",
+        "fecha": "2026-06-15",
+        "horario_local": "2026-06-15T12:00:00Z",
+        "horario_utc": "2026-06-15T19:00:00Z",
+        "estadio": "Seattle Stadium",
+        "ciudad": "Seattle",
+        "pais_estadio": "USA",
+        "fase": "First Stage",
+        "grupo": "Group G",
+        "seleccion_1_nombre": "Belgium",
+        "seleccion_1_abreviatura": "BEL",
+        "seleccion_1_esquema_tactico": "4-2-3-1",
+        "seleccion_2_nombre": "Egypt",
+        "seleccion_2_abreviatura": "EGY",
+        "seleccion_2_esquema_tactico": "4-2-3-1",
+        "jugadores_seleccion_1": [
+            {
+                "nombre_jugador": "Thibaut COURTOIS",
+                "dorsal_en_cancha": 1,
+                "es_titular": true,
+                "posicion_en_cancha": "Goalkeeper",
+                "es_capitan": false,
+                "id_jugador_fifa": "358106"
+            },
+            {
+                "nombre_jugador": "Brandon MECHELE",
+                "dorsal_en_cancha": 4,
+                "es_titular": true,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "448360"
+            },
+            {
+                "nombre_jugador": "Thomas MEUNIER",
+                "dorsal_en_cancha": 15,
+                "es_titular": true,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "358122"
+            },
+            {
+                "nombre_jugador": "Timothy CASTAGNE",
+                "dorsal_en_cancha": 21,
+                "es_titular": true,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "411443"
+            },
+            {
+                "nombre_jugador": "Nathan NGOY",
+                "dorsal_en_cancha": 25,
+                "es_titular": true,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "514166"
+            },
+            {
+                "nombre_jugador": "Kevin DE BRUYNE",
+                "dorsal_en_cancha": 7,
+                "es_titular": true,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "358120"
+            },
+            {
+                "nombre_jugador": "Youri TIELEMANS",
+                "dorsal_en_cancha": 8,
+                "es_titular": true,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": true,
+                "id_jugador_fifa": "401444"
+            },
+            {
+                "nombre_jugador": "Amadou ONANA",
+                "dorsal_en_cancha": 24,
+                "es_titular": true,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "448364"
+            },
+            {
+                "nombre_jugador": "Leandro TROSSARD",
+                "dorsal_en_cancha": 10,
+                "es_titular": true,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": false,
+                "id_jugador_fifa": "448355"
+            },
+            {
+                "nombre_jugador": "Jeremy DOKU",
+                "dorsal_en_cancha": 11,
+                "es_titular": true,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": false,
+                "id_jugador_fifa": "448341"
+            },
+            {
+                "nombre_jugador": "Charles DE KETELAERE",
+                "dorsal_en_cancha": 17,
+                "es_titular": true,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": false,
+                "id_jugador_fifa": "448362"
+            },
+            {
+                "nombre_jugador": "Senne LAMMENS",
+                "dorsal_en_cancha": 12,
+                "es_titular": false,
+                "posicion_en_cancha": "Goalkeeper",
+                "es_capitan": false,
+                "id_jugador_fifa": "495348"
+            },
+            {
+                "nombre_jugador": "Mike PENDERS",
+                "dorsal_en_cancha": 13,
+                "es_titular": false,
+                "posicion_en_cancha": "Goalkeeper",
+                "es_capitan": false,
+                "id_jugador_fifa": "499803"
+            },
+            {
+                "nombre_jugador": "Arthur THEATE",
+                "dorsal_en_cancha": 3,
+                "es_titular": false,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "448346"
+            },
+            {
+                "nombre_jugador": "Maxim DE CUYPER",
+                "dorsal_en_cancha": 5,
+                "es_titular": false,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "448373"
+            },
+            {
+                "nombre_jugador": "Koni DE WINTER",
+                "dorsal_en_cancha": 16,
+                "es_titular": false,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "448366"
+            },
+            {
+                "nombre_jugador": "Joaquin SEYS",
+                "dorsal_en_cancha": 18,
+                "es_titular": false,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "506088"
+            },
+            {
+                "nombre_jugador": "Axel WITSEL",
+                "dorsal_en_cancha": 6,
+                "es_titular": false,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "290821"
+            },
+            {
+                "nombre_jugador": "Diego MOREIRA",
+                "dorsal_en_cancha": 19,
+                "es_titular": false,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "497902"
+            },
+            {
+                "nombre_jugador": "Hans VANAKEN",
+                "dorsal_en_cancha": 20,
+                "es_titular": false,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "448343"
+            },
+            {
+                "nombre_jugador": "Alexis SAELEMAEKERS",
+                "dorsal_en_cancha": 22,
+                "es_titular": false,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "433092"
+            },
+            {
+                "nombre_jugador": "Nicolas RASKIN",
+                "dorsal_en_cancha": 23,
+                "es_titular": false,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "495349"
+            },
+            {
+                "nombre_jugador": "Romelu LUKAKU",
+                "dorsal_en_cancha": 9,
+                "es_titular": false,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": false,
+                "id_jugador_fifa": "358112"
+            },
+            {
+                "nombre_jugador": "Dodi LUKEBAKIO",
+                "dorsal_en_cancha": 14,
+                "es_titular": false,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": false,
+                "id_jugador_fifa": "448377"
+            },
+            {
+                "nombre_jugador": "Matias FERNANDEZ-PARDO",
+                "dorsal_en_cancha": 26,
+                "es_titular": false,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": false,
+                "id_jugador_fifa": "494025"
+            }
+        ],
+        "jugadores_seleccion_2": [
+            {
+                "nombre_jugador": "MOSTAFA SHOUBIR",
+                "dorsal_en_cancha": 23,
+                "es_titular": true,
+                "posicion_en_cancha": "Goalkeeper",
+                "es_capitan": false,
+                "id_jugador_fifa": "416906"
+            },
+            {
+                "nombre_jugador": "YASSER IBRAHIM",
+                "dorsal_en_cancha": 2,
+                "es_titular": true,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "369267"
+            },
+            {
+                "nombre_jugador": "MOHAMED HANY",
+                "dorsal_en_cancha": 3,
+                "es_titular": true,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "408950"
+            },
+            {
+                "nombre_jugador": "AHMED FATOUH",
+                "dorsal_en_cancha": 13,
+                "es_titular": true,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "430477"
+            },
+            {
+                "nombre_jugador": "EMAM ASHOUR",
+                "dorsal_en_cancha": 8,
+                "es_titular": true,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "430482"
+            },
+            {
+                "nombre_jugador": "MOSTAFA ZICO",
+                "dorsal_en_cancha": 11,
+                "es_titular": true,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "483161"
+            },
+            {
+                "nombre_jugador": "HAMDY FATHY",
+                "dorsal_en_cancha": 14,
+                "es_titular": true,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "429095"
+            },
+            {
+                "nombre_jugador": "MOHANAD LASHIN",
+                "dorsal_en_cancha": 17,
+                "es_titular": true,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "433469"
+            },
+            {
+                "nombre_jugador": "MARAWAN ATTIA",
+                "dorsal_en_cancha": 19,
+                "es_titular": true,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "461788"
+            },
+            {
+                "nombre_jugador": "MOHAMED SALAH",
+                "dorsal_en_cancha": 10,
+                "es_titular": true,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": true,
+                "id_jugador_fifa": "344654"
+            },
+            {
+                "nombre_jugador": "OMAR MARMOUSH",
+                "dorsal_en_cancha": 22,
+                "es_titular": true,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": false,
+                "id_jugador_fifa": "430476"
+            },
+            {
+                "nombre_jugador": "MOHAMED ELSHENAWY",
+                "dorsal_en_cancha": 1,
+                "es_titular": false,
+                "posicion_en_cancha": "Goalkeeper",
+                "es_capitan": false,
+                "id_jugador_fifa": "408948"
+            },
+            {
+                "nombre_jugador": "MAHDY SOLIMAN",
+                "dorsal_en_cancha": 16,
+                "es_titular": false,
+                "posicion_en_cancha": "Goalkeeper",
+                "es_capitan": false,
+                "id_jugador_fifa": "395860"
+            },
+            {
+                "nombre_jugador": "MOHAMED ALAA",
+                "dorsal_en_cancha": 26,
+                "es_titular": false,
+                "posicion_en_cancha": "Goalkeeper",
+                "es_capitan": false,
+                "id_jugador_fifa": "512079"
+            },
+            {
+                "nombre_jugador": "HOSSAM ABDELMAGUID",
+                "dorsal_en_cancha": 4,
+                "es_titular": false,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "483182"
+            },
+            {
+                "nombre_jugador": "RAMY RABIA",
+                "dorsal_en_cancha": 5,
+                "es_titular": false,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "344661"
+            },
+            {
+                "nombre_jugador": "MOHAMED ABDELMONEIM",
+                "dorsal_en_cancha": 6,
+                "es_titular": false,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "416902"
+            },
+            {
+                "nombre_jugador": "KARIM HAFEZ",
+                "dorsal_en_cancha": 15,
+                "es_titular": false,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "407022"
+            },
+            {
+                "nombre_jugador": "TAREK ALAA",
+                "dorsal_en_cancha": 24,
+                "es_titular": false,
+                "posicion_en_cancha": "Defender",
+                "es_capitan": false,
+                "id_jugador_fifa": "506124"
+            },
+            {
+                "nombre_jugador": "NABIL DONGA",
+                "dorsal_en_cancha": 18,
+                "es_titular": false,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "433466"
+            },
+            {
+                "nombre_jugador": "MAHMOUD SABER",
+                "dorsal_en_cancha": 21,
+                "es_titular": false,
+                "posicion_en_cancha": "Midfielder",
+                "es_capitan": false,
+                "id_jugador_fifa": "483183"
+            },
+            {
+                "nombre_jugador": "TREZEGUET",
+                "dorsal_en_cancha": 7,
+                "es_titular": false,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": false,
+                "id_jugador_fifa": "363863"
+            },
+            {
+                "nombre_jugador": "HAMZA ABDELKARIM",
+                "dorsal_en_cancha": 9,
+                "es_titular": false,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": false,
+                "id_jugador_fifa": "495488"
+            },
+            {
+                "nombre_jugador": "Haissem HASSAN",
+                "dorsal_en_cancha": 12,
+                "es_titular": false,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": false,
+                "id_jugador_fifa": "424106"
+            },
+            {
+                "nombre_jugador": "IBRAHIM ADEL",
+                "dorsal_en_cancha": 20,
+                "es_titular": false,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": false,
+                "id_jugador_fifa": "430465"
+            },
+            {
+                "nombre_jugador": "ZIZO",
+                "dorsal_en_cancha": 25,
+                "es_titular": false,
+                "posicion_en_cancha": "Forward",
+                "es_capitan": false,
+                "id_jugador_fifa": "433461"
+            }
+        ]
+    }
+]

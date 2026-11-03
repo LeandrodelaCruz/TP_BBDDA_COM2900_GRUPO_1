@@ -31,11 +31,8 @@ GO
 
 
 IF SCHEMA_ID(N'importacion') IS NULL
-BEGIN
-    EXEC(N'CREATE SCHEMA importacion');
-END;
+    THROW 51910, N'Falta el esquema importacion. Ejecute primero Table/00_Script_DB_Schemas_Creacion.sql.', 1;
 GO
-
 
 CREATE OR ALTER PROCEDURE importacion.Importar_Pieza_Publicitaria_CSV
     @archivo NVARCHAR(1000)
@@ -43,7 +40,6 @@ AS
 BEGIN
 
     SET NOCOUNT ON;
-
 
     --------------------------------------------------------
     -- 1. VALIDAR PARAMETRO
@@ -56,7 +52,6 @@ BEGIN
               'Debe indicar el archivo CSV a importar.',
               1;
     END;
-
 
     --------------------------------------------------------
     -- 2. STAGING
@@ -73,13 +68,10 @@ BEGIN
         fuente           NVARCHAR(1000) NULL
     );
 
-
     --------------------------------------------------------
     -- 3. CARGAR CSV
     --------------------------------------------------------
-
     DECLARE @sql NVARCHAR(MAX);
-
 
     SET @sql =
         N'BULK INSERT #Publicidad_Staging
@@ -94,7 +86,6 @@ BEGIN
               FIELDQUOTE = ''"'',
               TABLOCK
           );';
-
 
     BEGIN TRY
 
@@ -113,7 +104,6 @@ BEGIN
 
     END CATCH;
 
-
     --------------------------------------------------------
     -- 4. DATOS A PROCESAR
     --------------------------------------------------------
@@ -127,7 +117,6 @@ BEGIN
         contenido      NVARCHAR(1000) NULL,
         idioma         NVARCHAR(100)  NULL
     );
-
 
     INSERT INTO #Pieza_Procesar
     (
@@ -144,12 +133,9 @@ BEGIN
         LTRIM(RTRIM(pieza_contenido)),
         LTRIM(RTRIM(pieza_idioma))
     FROM #Publicidad_Staging;
-
-
     --------------------------------------------------------
     -- 5. TABLA DE ERRORES
     --------------------------------------------------------
-
     CREATE TABLE #Errores
     (
         numero_fila INT,
@@ -158,8 +144,6 @@ BEGIN
         pieza       NVARCHAR(500),
         mensaje     NVARCHAR(2048)
     );
-
-
     --------------------------------------------------------
     -- 6. CONTADORES
     --------------------------------------------------------
@@ -169,8 +153,6 @@ BEGIN
         @insertados   INT = 0,
         @actualizados INT = 0,
         @errores      INT = 0;
-
-
     --------------------------------------------------------
     -- 7. VARIABLES
     --------------------------------------------------------
@@ -186,12 +168,9 @@ BEGIN
         @id_anunciante INT,
         @id_campania   INT,
         @id_pieza      INT;
-
-
     --------------------------------------------------------
     -- 8. CURSOR
     --------------------------------------------------------
-
     DECLARE cursor_piezas CURSOR LOCAL FAST_FORWARD
     FOR
         SELECT
@@ -204,9 +183,7 @@ BEGIN
         FROM #Pieza_Procesar
         ORDER BY numero_fila;
 
-
     OPEN cursor_piezas;
-
 
     FETCH NEXT FROM cursor_piezas
     INTO
@@ -217,7 +194,6 @@ BEGIN
         @contenido,
         @idioma;
 
-
     WHILE @@FETCH_STATUS = 0
     BEGIN
 
@@ -227,7 +203,6 @@ BEGIN
         SET @id_campania = NULL;
         SET @id_pieza = NULL;
 
-
         BEGIN TRY
 
             ------------------------------------------------
@@ -236,19 +211,14 @@ BEGIN
 
             SET @anunciante =
                 LTRIM(RTRIM(@anunciante));
-
             SET @campania =
                 LTRIM(RTRIM(@campania));
-
             SET @nombre =
                 LTRIM(RTRIM(@nombre));
-
             SET @contenido =
                 LTRIM(RTRIM(@contenido));
-
             SET @idioma =
                 LTRIM(RTRIM(@idioma));
-
 
             ------------------------------------------------
             -- 10. VALIDACIONES
@@ -262,7 +232,6 @@ BEGIN
                       1;
             END;
 
-
             IF @campania IS NULL
                OR @campania = N''
             BEGIN
@@ -270,7 +239,6 @@ BEGIN
                       'La campaña esta vacia.',
                       1;
             END;
-
 
             IF @nombre IS NULL
                OR @nombre = N''
@@ -289,7 +257,6 @@ BEGIN
                       1;
             END;
 
-
             IF @idioma IS NULL
                OR @idioma = N''
             BEGIN
@@ -298,8 +265,7 @@ BEGIN
                       1;
             END;
 
-
-            ------------------------------------------------
+            -----------------------------------------------
             -- 11. BUSCAR ANUNCIANTE
             ------------------------------------------------
 
@@ -318,7 +284,6 @@ BEGIN
                       'El anunciante asociado a la pieza no existe.',
                       1;
             END;
-
 
             ------------------------------------------------
             -- 12. BUSCAR CAMPAÑA
@@ -341,7 +306,6 @@ BEGIN
                       1;
             END;
 
-
             ------------------------------------------------
             -- 13. BUSCAR PIEZA
             --
@@ -357,7 +321,6 @@ BEGIN
                 AND UPPER(LTRIM(RTRIM(nombre)))
                     =
                     UPPER(LTRIM(RTRIM(@nombre)));
-
 
             ------------------------------------------------
             -- 14. UPSERT

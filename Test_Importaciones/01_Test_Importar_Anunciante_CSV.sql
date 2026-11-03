@@ -28,9 +28,7 @@ GO
 ------------------------------------------------------------
 
 IF SCHEMA_ID(N'test') IS NULL
-BEGIN
-    EXEC(N'CREATE SCHEMA test');
-END;
+    THROW 51910, N'Falta el esquema test. Ejecute primero Table/00_Script_DB_Schemas_Creacion.sql.', 1;
 GO
 
 
@@ -44,7 +42,6 @@ AS
 BEGIN
 
     SET NOCOUNT ON;
-
 
     --------------------------------------------------------
     -- DATOS ESPERADOS
