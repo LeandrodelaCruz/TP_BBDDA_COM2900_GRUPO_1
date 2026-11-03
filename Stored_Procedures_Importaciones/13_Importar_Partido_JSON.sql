@@ -130,21 +130,26 @@ BEGIN
     -- 4. Leer el archivo JSON con OPENROWSET + OPENJSON.
     --    OPENROWSET(BULK) exige un literal de ruta, por eso se usa
     --    SQL dinámico sólo en este bloque. El contenido se guarda en
-    --    una variable NVARCHAR(MAX) y luego se procesa con OPENJSON.
+    --    una variable NVARCHAR(MAX) y luego se procesa con OPEN    JSON.
     -------------------------------------------------------------------------
-    DECLARE @json NVARCHAR(MAX);
-    DECLARE @sql  NVARCHAR(MAX);
+
+    DECLARE @json_bytes VARBINARY(MAX);
+    DECLARE @json       NVARCHAR(MAX);
+    DECLARE @sql        NVARCHAR(MAX);
 
     SET @sql = N'
         SELECT @out = BulkColumn
         FROM OPENROWSET
         (
             BULK ''' + REPLACE(@archivo, N'''', N'''''') + N''',
-            SINGLE_CLOB
+            SINGLE_BLOB
         ) AS x;';
 
     BEGIN TRY
-        EXEC sys.sp_executesql @sql, N'@out NVARCHAR(MAX) OUTPUT', @out = @json OUTPUT;
+        EXEC sys.sp_executesql
+             @sql,
+             N'@out VARBINARY(MAX) OUTPUT',
+             @out = @json_bytes OUTPUT;
     END TRY
     BEGIN CATCH
         DECLARE @mensajeCarga NVARCHAR(2048) =
@@ -152,12 +157,23 @@ BEGIN
         THROW 52002, @mensajeCarga, 1;
     END CATCH;
 
-    IF @json IS NULL
+    IF @json_bytes IS NULL OR DATALENGTH(@json_bytes) = 0
         THROW 52003, N'El archivo JSON está vacío o no se pudo leer.', 1;
+
+    BEGIN TRY
+
+        SET @json = CAST(CAST(@json_bytes AS XML) AS NVARCHAR(MAX));
+    END TRY
+    BEGIN CATCH
+        DECLARE @mensajeUtf8 NVARCHAR(2048) =
+            N'El archivo no está codificado en UTF-8 válido. Detalle: ' + ERROR_MESSAGE();
+        THROW 52005, @mensajeUtf8, 1;
+    END CATCH;
 
     -------------------------------------------------------------------------
     -- 5. Parsear el JSON a la tabla de staging.
     -------------------------------------------------------------------------
+
     BEGIN TRY
         INSERT INTO #Partido_Staging
         (
