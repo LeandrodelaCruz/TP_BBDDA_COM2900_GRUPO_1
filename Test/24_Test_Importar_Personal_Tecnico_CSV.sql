@@ -26,7 +26,7 @@ BEGIN
     BEGIN TRY
         BEGIN TRANSACTION;
         PRINT N'Primera importación: revisar resumen y errores (esperados: 0).';
-        EXEC importacion.ortar_Personal_Tecnico_CSV @archivo = @archivo;
+        EXEC importacion.Importar_Personal_Tecnico_CSV @archivo = @archivo;
         SELECT id_personal, id_seleccion, nombre_completo, rol
         INTO #Primera FROM dbo.Personal_Tecnico;
 
