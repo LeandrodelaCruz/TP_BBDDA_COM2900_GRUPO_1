@@ -1,5 +1,15 @@
 # Jugador desde SquadLists-Spanish.pdf
 
+## Lectura UTF-8
+
+El importador usa columnas `VARCHAR` con intercalación
+`Latin1_General_100_CI_AS_SC_UTF8` en staging y `CODEPAGE = 'RAW'` en
+`BULK INSERT`. Después convierte a variables `NVARCHAR` y llama a los ABM.
+No requiere cambiar la intercalación de la base. Las longitudes son acotadas
+y permiten validar nombres, apellidos y clubes antes de pasarlos a los ABM.
+También se elimina el retorno de carro que puede quedar en el campo club al
+leer filas CRLF en Linux.
+
 ## Fuente
 PDF de convocatorias de la Copa Mundial de la FIFA 2026.
 Cada página corresponde a una selección y contiene 26 jugadores.

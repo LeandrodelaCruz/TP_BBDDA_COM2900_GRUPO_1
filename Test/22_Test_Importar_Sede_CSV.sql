@@ -25,7 +25,7 @@ BEGIN
     SET NOCOUNT ON;
 
     PRINT '===== PRIMERA IMPORTACION DE SEDES =====';
-    EXEC importacion.ortar_Sede_CSV
+    EXEC importacion.Importar_Sede_CSV
         @archivo = @archivo;
 
     PRINT '===== SEGUNDA IMPORTACION - PRUEBA DE UPSERT =====';
