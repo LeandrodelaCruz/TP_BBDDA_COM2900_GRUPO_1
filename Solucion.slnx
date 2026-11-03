@@ -20,6 +20,14 @@
     <File Path="Stored_Procedures_Importaciones/06_Importar_Pieza_Publicitaria_CSV.sql" />
     <File Path="Stored_Procedures_Importaciones/13_Importar_Partido_JSON.sql" />
   </Folder>
+  <Folder Name="/Stored_Procedures_Negocio/">
+    <File Path="Stored_Procedures_Negocio/14_Registrar_Reemplazo.sql" />
+    <File Path="Stored_Procedures_Negocio/15_Cargar_Reemplazos_Manuales.sql" />
+    <File Path="Stored_Procedures_Negocio/README_Reemplazos_Manuales.md" />
+  </Folder>
+  <Folder Name="/Datos_Manuales/">
+    <File Path="Datos_Manuales/14_Carga_Reemplazos.sql" />
+  </Folder>
   <Folder Name="/Store_Procedures/">
     <File Path="Stored_Procedures/01.1_Anunciante_ABM.sql" />
     <File Path="Stored_Procedures/02_Region_ABM.sql" />
@@ -49,6 +57,8 @@
     <File Path="Test/Datos_Importacion/personal_tecnico_casos.csv" />
   </Folder>
   <Folder Name="/Test/">
+    <File Path="Test/34_Test_Registrar_Reemplazo.sql" />
+    <File Path="Test/35_Test_Cargar_Reemplazos_Manuales.sql" />
     <File Path="Test/01.2_Anunciante_Test.sql" />
     <File Path="Test/02_Region_Test.sql" />
     <File Path="Test/03_Sede_Test.sql" />
