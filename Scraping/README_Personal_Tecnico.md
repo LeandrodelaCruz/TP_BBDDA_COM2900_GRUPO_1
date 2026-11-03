@@ -48,8 +48,8 @@ Fuente: https://www.transfermarkt.com.ar/
 
 ## Importacion en SQL Server
 
-El SP `importacion.SP_Importar_Personal_Tecnico_CSV` esta en
-`Stored_Procedures_Importaciones/04_SP_Importar_Personal_Tecnico_CSV.sql`.
+El SP `importacion.Importar_Personal_Tecnico_CSV` esta en
+`Stored_Procedures_Importaciones/04_Importar_Personal_Tecnico_CSV.sql`.
 
 Antes de crearlo, deben estar cargadas las selecciones, la tabla Personal_Tecnico
 debe tener `nombre_completo NVARCHAR(120)` y los ABM del archivo
@@ -66,7 +66,7 @@ incluso si sus valores no cambiaron.
 Copiar el CSV a una ruta visible para el servicio SQL Server y ejecutar:
 
 ```sql
-EXEC importacion.SP_Importar_Personal_Tecnico_CSV
+EXEC importacion.Importar_Personal_Tecnico_CSV
     @archivo = N'/var/opt/mssql/import/personal_tecnico.csv';
 ```
 

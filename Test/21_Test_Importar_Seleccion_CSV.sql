@@ -28,14 +28,14 @@ DECLARE @archivo NVARCHAR(1000) =
     N'/var/opt/mssql/import/teams.csv';
 
 PRINT N'===== PRIMERA IMPORTACION =====';
-EXEC importacion.SP_Importar_Seleccion_CSV
+EXEC importacion.Importar_Seleccion_CSV
     @archivo = @archivo;
 
 PRINT N'===== DATOS DESPUES DE LA PRIMERA IMPORTACION =====';
 EXEC abm.Seleccion_Listar;
 
 PRINT N'===== SEGUNDA IMPORTACION - PRUEBA DE UPSERT =====';
-EXEC importacion.SP_Importar_Seleccion_CSV
+EXEC importacion.Importar_Seleccion_CSV
     @archivo = @archivo;
 
 PRINT N'===== VERIFICACION DE DUPLICADOS =====';

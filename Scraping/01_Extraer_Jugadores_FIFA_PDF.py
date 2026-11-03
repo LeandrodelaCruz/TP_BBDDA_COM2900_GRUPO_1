@@ -9,7 +9,7 @@ Uso:
       Archivos_Importacion/jugadores_fifa_pdf.csv
 
 El script NO inserta datos en SQL Server. Solo extrae del PDF las columnas
-que luego consume importacion.SP_Importar_Jugador_PDF_CSV.
+que luego consume importacion.Importar_Jugador_PDF_CSV.
 """
 
 from __future__ import annotations

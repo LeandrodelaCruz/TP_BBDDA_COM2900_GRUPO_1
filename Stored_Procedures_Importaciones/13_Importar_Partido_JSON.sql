@@ -40,7 +40,7 @@
 USE MUNDIALDEFUTBOL;
 GO
 
-CREATE OR ALTER PROCEDURE importacion.SP_Importar_Partido_JSON
+CREATE OR ALTER PROCEDURE importacion.Importar_Partido_JSON
     @archivo NVARCHAR(1000)
 AS
 BEGIN

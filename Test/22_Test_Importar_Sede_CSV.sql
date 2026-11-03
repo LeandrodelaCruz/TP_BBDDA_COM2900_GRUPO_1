@@ -18,18 +18,18 @@
 USE MUNDIALDEFUTBOL;
 GO
 
-CREATE OR ALTER PROCEDURE test.SP_Importar_Sede_CSV_Test
+CREATE OR ALTER PROCEDURE test.Importar_Sede_CSV_Test
     @archivo NVARCHAR(1000)
 AS
 BEGIN
     SET NOCOUNT ON;
 
     PRINT '===== PRIMERA IMPORTACION DE SEDES =====';
-    EXEC importacion.SP_Importar_Sede_CSV
+    EXEC importacion.importar_Sede_CSV
         @archivo = @archivo;
 
     PRINT '===== SEGUNDA IMPORTACION - PRUEBA DE UPSERT =====';
-    EXEC importacion.SP_Importar_Sede_CSV
+    EXEC importacion.Importar_Sede_CSV
         @archivo = @archivo;
 
     PRINT '===== SEDES CARGADAS =====';
@@ -59,6 +59,6 @@ GO
     Ruta esperada si SQL Server corre en el contenedor Docker "sqlserver":
     /var/opt/mssql/import/venues.csv
 */
-EXEC test.SP_Importar_Sede_CSV_Test
+EXEC test.Importar_Sede_CSV_Test
     @archivo = N'/var/opt/mssql/import/venues.csv';
 GO
