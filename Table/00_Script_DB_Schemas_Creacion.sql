@@ -10,7 +10,7 @@
     - Rodríguez Elías Uriel
 
     Descripción:
-    Script de creación de tablas y restricciones
+    Script de creación de la base de datos y todos los esquemas
     del Sistema de Registro y Gestión del Mundial.
 */
 
@@ -43,7 +43,7 @@ BEGIN
 END
 GO
 
---5. Crear el esquema 'importaciones' si no existe
+-- 5. Crear el esquema 'importacion' si no existe
 IF NOT EXISTS (
     SELECT 1
     FROM sys.schemas
@@ -51,5 +51,19 @@ IF NOT EXISTS (
 )
 BEGIN
     EXEC(N'CREATE SCHEMA importacion');
+END;
+GO
+
+-- 6. Crear el esquema de procedimientos de logica de negocio.
+IF SCHEMA_ID(N'negocio') IS NULL
+BEGIN
+    EXEC(N'CREATE SCHEMA negocio AUTHORIZATION dbo;');
+END;
+GO
+
+-- 7. Crear el esquema de cargas manuales y configuracion interna.
+IF SCHEMA_ID(N'carga') IS NULL
+BEGIN
+    EXEC(N'CREATE SCHEMA carga AUTHORIZATION dbo;');
 END;
 GO

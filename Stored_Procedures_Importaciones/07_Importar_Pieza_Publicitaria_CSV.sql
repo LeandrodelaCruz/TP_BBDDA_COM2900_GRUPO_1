@@ -31,9 +31,7 @@ GO
 
 
 IF SCHEMA_ID(N'importacion') IS NULL
-BEGIN
-    EXEC(N'CREATE SCHEMA importacion');
-END;
+    THROW 51910, N'Falta el esquema importacion. Ejecute primero Table/00_Script_DB_Schemas_Creacion.sql.', 1;
 GO
 
 CREATE OR ALTER PROCEDURE importacion.Importar_Pieza_Publicitaria_CSV

@@ -22,13 +22,11 @@
 USE MUNDIALDEFUTBOL;
 GO
 ------------------------------------------------------------
--- CREAR ESQUEMA
+-- VALIDAR ESQUEMA (creado en Table/00_Script_DB_Schemas_Creacion.sql)
 ------------------------------------------------------------
 
 IF SCHEMA_ID(N'carga') IS NULL
-BEGIN
-    EXEC(N'CREATE SCHEMA carga');
-END;
+    THROW 51910, N'Falta el esquema carga. Ejecute primero Table/00_Script_DB_Schemas_Creacion.sql.', 1;
 GO
 
 
