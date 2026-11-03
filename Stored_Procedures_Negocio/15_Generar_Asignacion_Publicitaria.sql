@@ -24,11 +24,9 @@ go
             -> Asignacion_Publicitaria
 ============================================================*/
 
--- crear esquema si no existe
-if schema_id(N'negocio') is null
-begin
-    exec(N'create schema negocio');
-end;
+-- Validar esquema creado por Table/00_Script_DB_Schemas_Creacion.sql
+IF SCHEMA_ID(N'negocio') IS NULL
+    THROW 51910, N'Falta el esquema negocio. Ejecute primero Table/00_Script_DB_Schemas_Creacion.sql.', 1;
 go
 
 create or alter procedure negocio.Generar_Asignacion_Publicitaria

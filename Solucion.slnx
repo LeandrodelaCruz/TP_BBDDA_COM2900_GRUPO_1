@@ -3,6 +3,10 @@
     <BuildType Name="Default" />
     <Platform Name="Default" />
   </Configurations>
+  <Folder Name="/Table/">
+    <File Path="Table/00_Script_DB_Schemas_Creacion.sql" />
+    <File Path="Table/01_Script_Tablas_Creacion.sql" />
+  </Folder>
   <Folder Name="/Extras/">
     <File Path="Extras/Limpiar_Datos_Prueba.sql" />
     <File Path="Extras/Limpiar_Datos_Test_Lucas.sql" />
@@ -10,18 +14,8 @@
     <File Path="Extras/Script Tabla S3 Eliminado Rapido.sql" />
     <File Path="Extras/Ver_Datos_Rapido.sql" />
   </Folder>
-  <Folder Name="/Stored_Procedures_Importaciones/">
-    <File Path="Stored_Procedures_Importaciones/01_Importar_Seleccion_CSV.sql" />
-    <File Path="Stored_Procedures_Importaciones/02_Importar_Sede_CSV.sql" />
-    <File Path="Stored_Procedures_Importaciones/03_Importar_Jugador_PDF_CSV.sql" />
-    <File Path="Stored_Procedures_Importaciones/04_Importar_Anunciante_CSV.sql" />
-    <File Path="Stored_Procedures_Importaciones/04_Importar_Personal_Tecnico_CSV.sql" />
-    <File Path="Stored_Procedures_Importaciones/05_Importar_Campania_CSV.sql" />
-    <File Path="Stored_Procedures_Importaciones/06_Importar_Pieza_Publicitaria_CSV.sql" />
-    <File Path="Stored_Procedures_Importaciones/13_Importar_Partido_JSON.sql" />
-  </Folder>
-  <Folder Name="/Store_Procedures/">
-    <File Path="Stored_Procedures/01.1_Anunciante_ABM.sql" />
+  <Folder Name="/Stored_Procedures/">
+    <File Path="Stored_Procedures/01_Anunciante_ABM.sql" />
     <File Path="Stored_Procedures/02_Region_ABM.sql" />
     <File Path="Stored_Procedures/03_Sede_ABM.sql" />
     <File Path="Stored_Procedures/04_Seleccion_ABM.sql" />
@@ -41,15 +35,28 @@
     <File Path="Stored_Procedures/18_Sancion_Arbitral_ABM.sql" />
     <File Path="Stored_Procedures/19_Sustitucion_ABM.sql" />
   </Folder>
-  <Folder Name="/Table/">
-    <File Path="Table/00_Script_DB_Schemas_Creacion.sql" />
-    <File Path="Table/01_Script_Tablas_Creacion.sql" />
+  <Folder Name="/Stored_Procedures_Importaciones/">
+    <File Path="Stored_Procedures_Importaciones/01_Importar_Anunciante_CSV.sql" />
+    <File Path="Stored_Procedures_Importaciones/01_Importar_Seleccion_CSV.sql" />
+    <File Path="Stored_Procedures_Importaciones/02_Cargar_Regiones.sql" />
+    <File Path="Stored_Procedures_Importaciones/03_Importar_Sede_CSV.sql" />
+    <File Path="Stored_Procedures_Importaciones/05_SP_Importar_Arbitro_PDF_CSV.sql" />
+    <File Path="Stored_Procedures_Importaciones/06_Importar_Campania_CSV.sql" />
+    <File Path="Stored_Procedures_Importaciones/07_Importar_Pieza_Publicitaria_CSV.sql" />
+    <File Path="Stored_Procedures_Importaciones/08_Cargar_Pieza_Region.sql" />
+    <File Path="Stored_Procedures_Importaciones/09_Importar_Personal_Tecnico_CSV.sql" />
+    <File Path="Stored_Procedures_Importaciones/10_Importar_Jugador_PDF_CSV.sql" />
+    <File Path="Stored_Procedures_Importaciones/13_Importar_Partido_JSON.sql" />
+    <File Path="Stored_Procedures_Importaciones/14_Cargar_Reemplazos_Manuales.sql" />
+    <File Path="Stored_Procedures_Importaciones/README_Reemplazos_Manuales.md" />
   </Folder>
-  <Folder Name="/Test/Datos_Importacion/">
-    <File Path="Test/Datos_Importacion/personal_tecnico_casos.csv" />
+  <Folder Name="/Stored_Procedures_Negocio/">
+    <File Path="Stored_Procedures_Negocio/14_Registrar_Reemplazo.sql" />
+    <File Path="Stored_Procedures_Negocio/15_Generar_Asignacion_Publicitaria.sql" />
+    <File Path="Stored_Procedures_Negocio/README.md" />
   </Folder>
   <Folder Name="/Test/">
-    <File Path="Test/01.2_Anunciante_Test.sql" />
+    <File Path="Test/01_Anunciante_Test.sql" />
     <File Path="Test/02_Region_Test.sql" />
     <File Path="Test/03_Sede_Test.sql" />
     <File Path="Test/04_Seleccion_Test.sql" />
@@ -58,24 +65,37 @@
     <File Path="Test/07_Pieza_Publicitaria_Test.sql" />
     <File Path="Test/08_Pieza_Para_Region_Test.sql" />
     <File Path="Test/09_Personal_Tecnico_Test.sql" />
+    <File Path="Test/10_Jugador_Test.sql" />
+    <File Path="Test/11_Test_Formacion.sql" />
+    <File Path="Test/12_Test_Formacion_Jugador.sql" />
+    <File Path="Test/13_Test_Partido.sql" />
     <File Path="Test/14_Test_Reemplazo.sql" />
     <File Path="Test/15_Asignacion_Publicitaria_Test.sql" />
     <File Path="Test/16_Designacion_Arbitral_Test.sql" />
     <File Path="Test/17_Incidencia_Test.sql" />
     <File Path="Test/18_Sancion_Arbitral_Test.sql" />
     <File Path="Test/19_Sustitucion_Test.sql" />
-    <File Path="Test/21_Test_Importar_Seleccion_CSV.sql" />
-    <File Path="Test/22_Test_Importar_Sede_CSV.sql" />
-    <File Path="Test/23_Test_Importar_Jugador_PDF_CSV.sql" />
-    <File Path="Test/24_Test_Importar_Anunciante_CSV.sql" />
-    <File Path="Test/24_Test_Importar_Personal_Tecnico_CSV.sql" />
-    <File Path="Test/10_Jugador_Test.sql" />
-    <File Path="Test/11_Test_Formacion.sql" />
-    <File Path="Test/12_Test_Formacion_Jugador.sql" />
-    <File Path="Test/13_Test_Partido.sql" />
-    <File Path="Test/25_Test_Importar_Campania_CSV.sql" />
-    <File Path="Test/26_Test_Importar_Pieza_Publicitaria_CSV.sql" />
-    <File Path="Test/33_Test_Importar_Partido_JSON.sql" />
+    <File Path="Test/25_Test_Importar_Arbitro_PDF_CSV.sql" />
+  </Folder>
+  <Folder Name="/Test/Datos_Importacion/">
+    <File Path="Test/Datos_Importacion/personal_tecnico_casos.csv" />
+  </Folder>
+  <Folder Name="/Test_Importaciones/">
+    <File Path="Test_Importaciones/01_Test_Importar_Anunciante_CSV.sql" />
+    <File Path="Test_Importaciones/02_Test_Carga_Regiones.sql" />
+    <File Path="Test_Importaciones/03_Test_Importar_Sede_CSV.sql" />
+    <File Path="Test_Importaciones/04_Test_Importar_Seleccion_CSV.sql" />
+    <File Path="Test_Importaciones/06_Test_Importar_Campania_CSV.sql" />
+    <File Path="Test_Importaciones/07_Test_Importar_Pieza_Publicitaria_CSV.sql" />
+    <File Path="Test_Importaciones/08_Test_Carga_Pieza_Region.sql" />
+    <File Path="Test_Importaciones/09_Test_Importar_Personal_Tecnico_CSV.sql" />
+    <File Path="Test_Importaciones/10_Test_Importar_Jugador_PDF_CSV.sql" />
+    <File Path="Test_Importaciones/13_Test_Importar_Partido_JSON.sql" />
+    <File Path="Test_Importaciones/14_Test_Carga_Reemplazos.sql" />
+  </Folder>
+  <Folder Name="/Test_Negocio/">
+    <File Path="Test_Negocio/14_Test_Registrar_Reemplazo.sql" />
+    <File Path="Test_Negocio/15_Test_Generar_Asignacion_Publicitaria.sql" />
   </Folder>
   <Project Path="Solucion.ssmssqlproj" Type="4f2e2c19-372f-40d8-9fa7-9d2138c6997a">
     <Platform Project="?" />
