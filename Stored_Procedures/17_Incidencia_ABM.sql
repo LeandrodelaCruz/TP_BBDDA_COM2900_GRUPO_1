@@ -13,8 +13,12 @@
     
     Tipos de incidencias:
     - GOL: Gol marcado por id_jugador, id_jugador_involucrado es asistencia (opcional)
+    - GOL EN CONTRA: Gol en propia meta por id_jugador
+    - GOL DE PENAL: Gol desde el punto penal por id_jugador
+    - PENAL ERRADO: Penal ejecutado por id_jugador que no termino en gol
     - AMONESTACION: Tarjeta amarilla a id_jugador, id_jugador_involucrado es agredido
     - EXPULSION: Tarjeta roja a id_jugador, id_jugador_involucrado es agredido
+    - REVISION VAR: Revision del VAR asociada a id_jugador
 
     PROCEDIMIENTOS INCLUIDOS:
     - Incidencia_Alta (con validaciones)
@@ -79,13 +83,12 @@ BEGIN
             IF @id_seleccion_jugador <> @id_seleccion_involucrado
                 SET @errores = @errores + 'GOL: el asistente debe ser de la misma seleccion. ';
         END
-        
-        -- AMONESTACION y EXPULSION: involucrado debe ser DIFERENTE seleccion (agredido)
-        IF @tipo IN ('AMONESTACION', 'EXPULSION')
+
+        -- AMONESTACION y EXPULSION: el agredido es opcional; si se indica,
+        -- debe ser de seleccion opuesta.
+        IF @tipo IN ('AMONESTACION', 'EXPULSION') AND @id_jugador_involucrado IS NOT NULL
         BEGIN
-            IF @id_jugador_involucrado IS NULL
-                SET @errores = @errores + 'Para ' + @tipo + ' debe especificar el jugador agredido. ';
-            ELSE IF @id_seleccion_jugador = @id_seleccion_involucrado
+            IF @id_seleccion_jugador = @id_seleccion_involucrado
                 SET @errores = @errores + @tipo + ': el jugador agredido debe ser de la seleccion opuesta. ';
         END
         
@@ -210,8 +213,8 @@ BEGIN
     FROM dbo.Incidencia i
     INNER JOIN dbo.Jugador j ON i.id_jugador = j.id_jugador
     INNER JOIN dbo.Seleccion s ON j.id_seleccion = s.id_seleccion
-    INNER JOIN dbo.Jugador ja ON i.id_jugador_involucrado = ja.id_jugador
-    INNER JOIN dbo.Seleccion sa ON ja.id_seleccion = sa.id_seleccion
+    LEFT JOIN dbo.Jugador ja ON i.id_jugador_involucrado = ja.id_jugador
+    LEFT JOIN dbo.Seleccion sa ON ja.id_seleccion = sa.id_seleccion
     WHERE i.id_partido = @id_partido AND i.tipo = 'AMONESTACION'
     ORDER BY i.minuto ASC;
 END;
@@ -243,8 +246,8 @@ BEGIN
     FROM dbo.Incidencia i
     INNER JOIN dbo.Jugador j ON i.id_jugador = j.id_jugador
     INNER JOIN dbo.Seleccion s ON j.id_seleccion = s.id_seleccion
-    INNER JOIN dbo.Jugador ja ON i.id_jugador_involucrado = ja.id_jugador
-    INNER JOIN dbo.Seleccion sa ON ja.id_seleccion = sa.id_seleccion
+    LEFT JOIN dbo.Jugador ja ON i.id_jugador_involucrado = ja.id_jugador
+    LEFT JOIN dbo.Seleccion sa ON ja.id_seleccion = sa.id_seleccion
     WHERE i.id_partido = @id_partido AND i.tipo = 'EXPULSION'
     ORDER BY i.minuto ASC;
 END;

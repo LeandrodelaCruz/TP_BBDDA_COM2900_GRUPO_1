@@ -7,28 +7,24 @@ GO
     Grupo: 1
 
     Procedimiento:
-        importacion.Importar_Pieza_Publicitaria_CSV
+        importacion.Importar_Anunciante_CSV
 
     Objetivo:
-        Importar piezas publicitarias desde el CSV generado
-        mediante scraping de System1.
+        Importar anunciantes desde el CSV generado mediante
+        scraping de System1.
 
-        Del CSV se utilizan:
+        Del archivo completo se utilizan solamente:
             - anunciante
-            - campania
-            - pieza_nombre
-            - pieza_contenido
-            - pieza_idioma
+            - pais
 
-        Dependencias:
-            - dbo.Anunciante debe estar cargada.
-            - dbo.Campania debe estar cargada.
-
-        Implementa UPSERT reutilizando los SP ABM.
+        Se implementa UPSERT reutilizando los SP ABM.
 
         Un error en una fila no impide procesar las demás.
 ============================================================*/
 
+------------------------------------------------------------
+-- CREAR ESQUEMA SI NO EXISTE
+------------------------------------------------------------
 
 IF SCHEMA_ID(N'importacion') IS NULL
 BEGIN
@@ -36,14 +32,15 @@ BEGIN
 END;
 GO
 
+------------------------------------------------------------
+-- PROCEDIMIENTO
+------------------------------------------------------------
 
-CREATE OR ALTER PROCEDURE importacion.Importar_Pieza_Publicitaria_CSV
+CREATE OR ALTER PROCEDURE importacion.Importar_Anunciante_CSV
     @archivo NVARCHAR(1000)
 AS
 BEGIN
-
     SET NOCOUNT ON;
-
 
     --------------------------------------------------------
     -- 1. VALIDAR PARAMETRO
@@ -52,19 +49,20 @@ BEGIN
     IF @archivo IS NULL
        OR LTRIM(RTRIM(@archivo)) = N''
     BEGIN
-        THROW 51201,
+        THROW 51001,
               'Debe indicar el archivo CSV a importar.',
               1;
     END;
 
-
     --------------------------------------------------------
-    -- 2. STAGING
+    -- 2. TABLA STAGING
+    --
+    -- Debe respetar las 7 columnas del CSV.
     --------------------------------------------------------
 
     CREATE TABLE #Publicidad_Staging
     (
-        anunciante       NVARCHAR(200)  NULL,
+        anunciante       NVARCHAR(200)  NULL, -- Aca en realidad solo me interesa anunciante y pais
         pais             NVARCHAR(100)  NULL,
         campania         NVARCHAR(500)  NULL,
         pieza_nombre     NVARCHAR(500)  NULL,
@@ -73,13 +71,17 @@ BEGIN
         fuente           NVARCHAR(1000) NULL
     );
 
-
     --------------------------------------------------------
-    -- 3. CARGAR CSV
+    -- 3. BULK INSERT
+    --
+    -- Se utiliza SQL dinamico solamente porque BULK INSERT
+    -- no permite parametrizar directamente la ruta.
+    --
+    -- El CSV fue generado en UTF-16, por eso se utiliza
+    -- DATAFILETYPE = widechar.
     --------------------------------------------------------
 
     DECLARE @sql NVARCHAR(MAX);
-
 
     SET @sql =
         N'BULK INSERT #Publicidad_Staging
@@ -95,7 +97,6 @@ BEGIN
               TABLOCK
           );';
 
-
     BEGIN TRY
 
         EXEC sys.sp_executesql @sql;
@@ -109,41 +110,34 @@ BEGIN
             N'No se pudo leer el archivo CSV. '
             + ERROR_MESSAGE();
 
-        THROW 51202, @error_bulk, 1;
+        THROW 51002, @error_bulk, 1;
 
     END CATCH;
 
-
     --------------------------------------------------------
     -- 4. DATOS A PROCESAR
+    --
+    -- Para esta importacion solamente interesan:
+    -- anunciante y pais.
     --------------------------------------------------------
 
-    CREATE TABLE #Pieza_Procesar
+    CREATE TABLE #Anunciante_Procesar
     (
-        numero_fila    INT IDENTITY(1,1) NOT NULL,
-        anunciante     NVARCHAR(200)  NULL,
-        campania       NVARCHAR(500)  NULL,
-        nombre         NVARCHAR(500)  NULL,
-        contenido      NVARCHAR(1000) NULL,
-        idioma         NVARCHAR(100)  NULL
+        numero_fila INT IDENTITY(1,1) NOT NULL,
+        nombre      NVARCHAR(200) NULL,
+        pais        NVARCHAR(100) NULL
     );
+ --- Esta la creo para descartar el resto de informacion
 
-
-    INSERT INTO #Pieza_Procesar
+    INSERT INTO #Anunciante_Procesar
     (
-        anunciante,
-        campania,
         nombre,
-        contenido,
-        idioma
+        pais
     )
-    SELECT DISTINCT
+    SELECT DISTINCT -- ESTE DISTINCT Es importante porque evita que si un anunciante tenga varias campanias se cargue varias veces
         LTRIM(RTRIM(anunciante)),
-        LTRIM(RTRIM(campania)),
-        LTRIM(RTRIM(pieza_nombre)),
-        LTRIM(RTRIM(pieza_contenido)),
-        LTRIM(RTRIM(pieza_idioma))
-    FROM #Publicidad_Staging;
+        LTRIM(RTRIM(pais))
+    FROM #Publicidad_Staging; 
 
 
     --------------------------------------------------------
@@ -154,8 +148,7 @@ BEGIN
     (
         numero_fila INT,
         anunciante  NVARCHAR(200),
-        campania    NVARCHAR(500),
-        pieza       NVARCHAR(500),
+        pais        NVARCHAR(100),
         mensaje     NVARCHAR(2048)
     );
 
@@ -177,45 +170,35 @@ BEGIN
 
     DECLARE
         @numero_fila   INT,
-        @anunciante    NVARCHAR(200),
-        @campania      NVARCHAR(500),
-        @nombre        NVARCHAR(500),
-        @contenido     NVARCHAR(1000),
-        @idioma        NVARCHAR(100),
-
+        @nombre        NVARCHAR(200),
+        @pais_origen   NVARCHAR(100),
+        @pais          NVARCHAR(80),
         @id_anunciante INT,
-        @id_campania   INT,
-        @id_pieza      INT;
+        @nuevo_id      INT;
 
 
     --------------------------------------------------------
     -- 8. CURSOR
     --------------------------------------------------------
 
-    DECLARE cursor_piezas CURSOR LOCAL FAST_FORWARD
+    DECLARE cursor_anunciantes CURSOR LOCAL FAST_FORWARD -- Uso cursor porque  la consigna pide que un error en un registro no impida la carga de los demas
     FOR
         SELECT
             numero_fila,
-            anunciante,
-            campania,
             nombre,
-            contenido,
-            idioma
-        FROM #Pieza_Procesar
+            pais
+        FROM #Anunciante_Procesar
         ORDER BY numero_fila;
 
 
-    OPEN cursor_piezas;
+    OPEN cursor_anunciantes;
 
 
-    FETCH NEXT FROM cursor_piezas
+    FETCH NEXT FROM cursor_anunciantes
     INTO
         @numero_fila,
-        @anunciante,
-        @campania,
         @nombre,
-        @contenido,
-        @idioma;
+        @pais_origen;
 
 
     WHILE @@FETCH_STATUS = 0
@@ -223,85 +206,114 @@ BEGIN
 
         SET @procesados += 1;
 
+        -- Muy importante para el UPSERT.
         SET @id_anunciante = NULL;
-        SET @id_campania = NULL;
-        SET @id_pieza = NULL;
+        SET @nuevo_id = NULL;
+        SET @pais = NULL;
 
 
         BEGIN TRY
 
             ------------------------------------------------
-            -- 9. NORMALIZAR
+            -- 9. NORMALIZAR DATOS
             ------------------------------------------------
-
-            SET @anunciante =
-                LTRIM(RTRIM(@anunciante));
-
-            SET @campania =
-                LTRIM(RTRIM(@campania));
 
             SET @nombre =
                 LTRIM(RTRIM(@nombre));
 
-            SET @contenido =
-                LTRIM(RTRIM(@contenido));
-
-            SET @idioma =
-                LTRIM(RTRIM(@idioma));
-
+            SET @pais_origen =
+                LTRIM(RTRIM(@pais_origen));
 
             ------------------------------------------------
             -- 10. VALIDACIONES
             ------------------------------------------------
 
-            IF @anunciante IS NULL
-               OR @anunciante = N''
-            BEGIN
-                THROW 51210,
-                      'El anunciante esta vacio.',
-                      1;
-            END;
-
-
-            IF @campania IS NULL
-               OR @campania = N''
-            BEGIN
-                THROW 51211,
-                      'La campaña esta vacia.',
-                      1;
-            END;
-
-
             IF @nombre IS NULL
                OR @nombre = N''
             BEGIN
-                THROW 51212,
-                      'El nombre de la pieza esta vacio.',
+                THROW 51010,
+                      'El nombre del anunciante esta vacio.',
                       1;
             END;
 
 
-            IF @contenido IS NULL
-               OR @contenido = N''
+            IF LEN(@nombre) > 120
             BEGIN
-                THROW 51213,
-                      'El contenido de la pieza esta vacio.',
+                THROW 51011,
+                      'El nombre del anunciante supera los 120 caracteres.',
                       1;
             END;
 
 
-            IF @idioma IS NULL
-               OR @idioma = N''
+            IF @pais_origen IS NULL
+               OR @pais_origen = N''
             BEGIN
-                THROW 51214,
-                      'El idioma de la pieza esta vacio.',
+                THROW 51012,
+                      'El pais del anunciante esta vacio.',
                       1;
             END;
 
 
             ------------------------------------------------
-            -- 11. BUSCAR ANUNCIANTE
+            -- 11. NORMALIZAR PAIS
+            --
+            -- System1 utiliza nombres de paises en ingles.
+            -- La transformacion se realiza en T-SQL.
             ------------------------------------------------
+
+            SET @pais =
+                CASE UPPER(@pais_origen)
+
+                    WHEN 'ARGENTINA'
+                        THEN N'Argentina'
+
+                    WHEN 'BRAZIL'
+                        THEN N'Brasil'
+
+                    WHEN 'FRANCE'
+                        THEN N'Francia'
+
+                    WHEN 'US'
+                        THEN N'Estados Unidos'
+
+                    WHEN 'UNITED STATES'
+                        THEN N'Estados Unidos'
+
+                    WHEN 'GERMANY'
+                        THEN N'Alemania'
+
+                    WHEN 'SPAIN'
+                        THEN N'España'
+
+                    WHEN 'UK'
+                        THEN N'Reino Unido'
+
+                    WHEN 'UNITED KINGDOM'
+                        THEN N'Reino Unido'
+
+                    WHEN 'MEXICO'
+                        THEN N'México'
+
+                    ELSE
+                        @pais_origen
+
+                END;
+
+
+            IF LEN(@pais) > 80
+            BEGIN
+                THROW 51013,
+                      'El pais supera los 80 caracteres.',
+                      1;
+            END;
+
+
+            ------------------------------------------------
+            -- 12. BUSCAR ANUNCIANTE
+            ------------------------------------------------
+
+            SET @id_anunciante = NULL;
+
 
             SELECT
                 @id_anunciante = id_anunciante
@@ -309,68 +321,20 @@ BEGIN
             WHERE
                 UPPER(LTRIM(RTRIM(nombre)))
                 =
-                UPPER(LTRIM(RTRIM(@anunciante)));
+                UPPER(LTRIM(RTRIM(@nombre)));
 
+
+            ------------------------------------------------
+            -- 13. UPSERT
+            ------------------------------------------------
 
             IF @id_anunciante IS NULL
             BEGIN
-                THROW 51215,
-                      'El anunciante asociado a la pieza no existe.',
-                      1;
-            END;
 
-
-            ------------------------------------------------
-            -- 12. BUSCAR CAMPAÑA
-            ------------------------------------------------
-
-            SELECT
-                @id_campania = id_campania
-            FROM dbo.Campania
-            WHERE
-                id_anunciante = @id_anunciante
-                AND UPPER(LTRIM(RTRIM(descripcion)))
-                    =
-                    UPPER(LTRIM(RTRIM(@campania)));
-
-
-            IF @id_campania IS NULL
-            BEGIN
-                THROW 51216,
-                      'La campaña asociada a la pieza no existe.',
-                      1;
-            END;
-
-
-            ------------------------------------------------
-            -- 13. BUSCAR PIEZA
-            --
-            -- Clave logica:
-            -- campaña + nombre de pieza
-            ------------------------------------------------
-
-            SELECT
-                @id_pieza = id_pieza
-            FROM dbo.Pieza_Publicitaria
-            WHERE
-                id_campania = @id_campania
-                AND UPPER(LTRIM(RTRIM(nombre)))
-                    =
-                    UPPER(LTRIM(RTRIM(@nombre)));
-
-
-            ------------------------------------------------
-            -- 14. UPSERT
-            ------------------------------------------------
-
-            IF @id_pieza IS NULL
-            BEGIN
-
-                EXEC abm.Pieza_Publicitaria_Alta
-                    @nombre = @nombre,
-                    @contenido = @contenido,
-                    @idioma = @idioma,
-                    @id_campania = @id_campania;
+                EXEC abm.Anunciante_Alta
+                    @nombre = @nombre, -- Busca por nombre porque es la clave natural
+                    @pais = @pais,
+                    @id_anunciante = @nuevo_id OUTPUT;
 
 
                 SET @insertados += 1;
@@ -379,12 +343,10 @@ BEGIN
             ELSE
             BEGIN
 
-                EXEC abm.Pieza_Publicitaria_Modificar
-                    @id_pieza = @id_pieza,
+                EXEC abm.Anunciante_Modificar
+                    @id_anunciante = @id_anunciante,
                     @nombre = @nombre,
-                    @contenido = @contenido,
-                    @idioma = @idioma,
-                    @id_campania = @id_campania;
+                    @pais = @pais;
 
 
                 SET @actualizados += 1;
@@ -402,16 +364,14 @@ BEGIN
             (
                 numero_fila,
                 anunciante,
-                campania,
-                pieza,
+                pais,
                 mensaje
             )
             VALUES
             (
                 @numero_fila,
-                @anunciante,
-                @campania,
                 @nombre,
+                @pais_origen,
                 ERROR_MESSAGE()
             );
 
@@ -422,28 +382,25 @@ BEGIN
         -- SIGUIENTE FILA
         ----------------------------------------------------
 
-        FETCH NEXT FROM cursor_piezas
+        FETCH NEXT FROM cursor_anunciantes
         INTO
             @numero_fila,
-            @anunciante,
-            @campania,
             @nombre,
-            @contenido,
-            @idioma;
+            @pais_origen;
 
     END;
 
 
     --------------------------------------------------------
-    -- 15. CERRAR CURSOR
+    -- 14. CERRAR CURSOR
     --------------------------------------------------------
 
-    CLOSE cursor_piezas;
-    DEALLOCATE cursor_piezas;
+    CLOSE cursor_anunciantes;
+    DEALLOCATE cursor_anunciantes;
 
 
     --------------------------------------------------------
-    -- 16. RESUMEN
+    -- 15. RESUMEN
     --------------------------------------------------------
 
     SELECT
@@ -454,14 +411,13 @@ BEGIN
 
 
     --------------------------------------------------------
-    -- 17. ERRORES PARCIALES
+    -- 16. ERRORES PARCIALES
     --------------------------------------------------------
 
     SELECT
         numero_fila,
         anunciante,
-        campania,
-        pieza,
+        pais,
         mensaje
     FROM #Errores
     ORDER BY numero_fila;

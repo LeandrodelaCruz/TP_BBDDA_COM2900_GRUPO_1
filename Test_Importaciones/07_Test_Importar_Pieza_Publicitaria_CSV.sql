@@ -25,14 +25,12 @@ BEGIN
 END;
 GO
 
-
 CREATE OR ALTER PROCEDURE test.Test_Importar_Pieza_Publicitaria_CSV
     @archivo NVARCHAR(1000)
 AS
 BEGIN
 
     SET NOCOUNT ON;
-
 
     --------------------------------------------------------
     -- DATOS ESPERADOS

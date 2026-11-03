@@ -256,10 +256,10 @@ BEGIN
     END CATCH
 
     -- ---------------------------------------------------------
-    -- CASO 5: Validacion fallida - AMONESTACION sin agredido
+    -- CASO 5: Insercion exitosa - AMONESTACION sin agredido
     -- ---------------------------------------------------------
     PRINT '';
-    PRINT '--- CASO 5: Validacion fallida - AMONESTACION sin agredido ---';
+    PRINT '--- CASO 5: Insercion exitosa - AMONESTACION sin agredido ---';
 
     DECLARE @id_partido_test_b11 INT = (SELECT id_partido FROM dbo.Partido WHERE resultado_final = N'TEST-INCIDENCIA');
     DECLARE @id_jugador_b11 INT = (SELECT TOP 1 id_jugador FROM dbo.Jugador WHERE nombre LIKE N'%Test%');
@@ -268,17 +268,17 @@ BEGIN
     BEGIN TRY
         EXEC abm.Incidencia_Alta
             @id_partido = @id_partido_test_b11,
-            @id_jugador_b11 = @id_jugador_b11,
+            @id_jugador = @id_jugador_b11,
             @tipo = 'AMONESTACION',
             @periodo = 'PRIMER TIEMPO',
             @minuto = 25,
             @id_jugador_involucrado = NULL,
             @id_incidencia = @id_incidencia_test_b11 OUTPUT;
 
-        PRINT 'ERROR: Deberia haber fallado';
+        PRINT 'OK - AMONESTACION sin agredido insertada con ID: ' + CAST(@id_incidencia_test_b11 AS VARCHAR(10));
     END TRY
     BEGIN CATCH
-        PRINT 'OK - Validacion correcta: ' + ERROR_MESSAGE();
+        PRINT 'ERROR: ' + ERROR_MESSAGE();
     END CATCH
 
     -- ---------------------------------------------------------

@@ -17,9 +17,9 @@ GO
 
 
 CREATE OR ALTER PROCEDURE abm.Arbitro_Alta
-    @nombre NVARCHAR(60),
+    @nombre NVARCHAR(60) = NULL,
     @apellido NVARCHAR(60),
-    @fecha_nacimiento DATE,
+    @fecha_nacimiento DATE = NULL,
     @pais NVARCHAR(80),
     @puesto VARCHAR(50),
     @idiomas NVARCHAR(200) = NULL
@@ -28,19 +28,20 @@ BEGIN
     SET NOCOUNT ON;
     DECLARE @errores NVARCHAR(2048) = N'';
 
-    IF @nombre IS NULL OR LTRIM(RTRIM(@nombre)) = N''
-        SET @errores += N'- El nombre del árbitro es obligatorio. ';
-    IF @nombre IS NOT NULL AND LEN(@nombre) > 60
-        SET @errores += N'- El nombre no puede superar 60 caracteres. ';
+    IF @nombre IS NOT NULL
+    BEGIN
+        IF LTRIM(RTRIM(@nombre)) = N''
+            SET @nombre = NULL;
+        ELSE IF LEN(@nombre) > 60
+            SET @errores += N'- El nombre no puede superar 60 caracteres. ';
+    END
 
     IF @apellido IS NULL OR LTRIM(RTRIM(@apellido)) = N''
         SET @errores += N'- El apellido del árbitro es obligatorio. ';
     IF @apellido IS NOT NULL AND LEN(@apellido) > 60
         SET @errores += N'- El apellido no puede superar 60 caracteres. ';
 
-    IF @fecha_nacimiento IS NULL
-        SET @errores += N'- La fecha de nacimiento es obligatoria. ';
-    ELSE IF @fecha_nacimiento > CAST(GETDATE() AS DATE)
+    IF @fecha_nacimiento IS NOT NULL AND @fecha_nacimiento > CAST(GETDATE() AS DATE)
         SET @errores += N'- La fecha de nacimiento no puede estar en el futuro. ';
 
     IF @pais IS NULL OR LTRIM(RTRIM(@pais)) = N''
@@ -88,9 +89,9 @@ GO
 
 CREATE OR ALTER PROCEDURE abm.Arbitro_Modificar
     @id_arbitro INT,
-    @nombre NVARCHAR(60),
+    @nombre NVARCHAR(60) = NULL,
     @apellido NVARCHAR(60),
-    @fecha_nacimiento DATE,
+    @fecha_nacimiento DATE = NULL,
     @pais NVARCHAR(80),
     @puesto VARCHAR(50),
     @idiomas NVARCHAR(200) = NULL
@@ -106,19 +107,20 @@ BEGIN
     )
         SET @errores += N'- El árbitro indicado no existe. ';
 
-    IF @nombre IS NULL OR LTRIM(RTRIM(@nombre)) = N''
-        SET @errores += N'- El nombre del árbitro es obligatorio. ';
-    IF @nombre IS NOT NULL AND LEN(@nombre) > 60
-        SET @errores += N'- El nombre no puede superar 60 caracteres. ';
+    IF @nombre IS NOT NULL
+    BEGIN
+        IF LTRIM(RTRIM(@nombre)) = N''
+            SET @nombre = NULL;
+        ELSE IF LEN(@nombre) > 60
+            SET @errores += N'- El nombre no puede superar 60 caracteres. ';
+    END
 
     IF @apellido IS NULL OR LTRIM(RTRIM(@apellido)) = N''
         SET @errores += N'- El apellido del árbitro es obligatorio. ';
     IF @apellido IS NOT NULL AND LEN(@apellido) > 60
         SET @errores += N'- El apellido no puede superar 60 caracteres. ';
 
-    IF @fecha_nacimiento IS NULL
-        SET @errores += N'- La fecha de nacimiento es obligatoria. ';
-    ELSE IF @fecha_nacimiento > CAST(GETDATE() AS DATE)
+    IF @fecha_nacimiento IS NOT NULL AND @fecha_nacimiento > CAST(GETDATE() AS DATE)
         SET @errores += N'- La fecha de nacimiento no puede estar en el futuro. ';
 
     IF @pais IS NULL OR LTRIM(RTRIM(@pais)) = N''

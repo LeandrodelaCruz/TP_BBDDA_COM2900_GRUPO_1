@@ -105,9 +105,9 @@ BEGIN
     CREATE TABLE dbo.Arbitro
     (
         id_arbitro INT IDENTITY(1,1) NOT NULL,
-        nombre NVARCHAR(60) NOT NULL,
+        nombre NVARCHAR(60) NULL,
         apellido NVARCHAR(60) NOT NULL,
-        fecha_nacimiento DATE NOT NULL,
+        fecha_nacimiento DATE NULL,
         pais NVARCHAR(80) NOT NULL,
         puesto VARCHAR(50) NOT NULL,
         idiomas NVARCHAR(200) NULL,
@@ -570,9 +570,13 @@ BEGIN
         CONSTRAINT CK_Incidencia_Tipo
             CHECK (
                 tipo IN (
-                    'GOL',
-                    'AMONESTACION', --Tarjeta Amarilla
-                    'EXPULSION' --Tarjeta Roja
+                    'GOL',              -- Gol de campo (con asistencia opcional)
+                    'GOL EN CONTRA',    -- Gol en propia meta
+                    'GOL DE PENAL',     -- Gol desde penalti (tiempo regular o prorroga)
+                    'PENAL ERRADO',     -- Penalti errado (no gol)
+                    'AMONESTACION',     -- Tarjeta amarilla
+                    'EXPULSION',        -- Tarjeta roja
+                    'REVISION VAR'      -- Revision del VAR
                 )
             ),
 
