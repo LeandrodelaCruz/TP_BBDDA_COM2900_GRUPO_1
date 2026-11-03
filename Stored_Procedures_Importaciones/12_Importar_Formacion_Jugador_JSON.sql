@@ -1,4 +1,47 @@
-﻿
+﻿/*
+    Universidad: Universidad Nacional de La Matanza - UNLaM
+    Materia: Bases de Datos Aplicada - 2C-2026
+    Comisión: Com: 01-2900
+    Grupo 01:
+    - Caro, Nicolás Darío
+    - Clara, Lucas
+    - De La Cruz, Leandro Ariel
+    - Rodríguez Elías Uriel
+
+    Fecha: 01/11/2026
+
+    Descripción:
+    Importa formaciones (esquema táctico por selección y partido) desde
+    un archivo JSON (formato FIFA 2026). El archivo se lee con
+    OPENROWSET(BULK, SINGLE_BLOB) + conversión UTF-8 explícita,
+    se normaliza en una tabla de staging y luego se aplica lógica UPSERT
+    reutilizando los SP de la Entrega 5:
+        - abm.Formacion_Alta
+        - abm.Formacion_Modificacion
+
+    Reglas:
+    - El JSON no trae jugadores: sólo se carga la cabecera dbo.Formacion.
+      NO se inserta en dbo.Formacion_Jugador.
+    - El partido se resuelve por clave natural
+      (fecha, horario_UTC, id_seleccion_1, id_seleccion_2), igual que
+      en importacion.Importar_Partido_JSON. No se usa id_match_fifa.
+    - Las selecciones se resuelven por nombre EXACTO en inglés contra
+      dbo.Seleccion.pais, con fallback por alias FIFA (tabla variable).
+    - El esquema táctico se valida con formato ^[0-9](-[0-9]){2,4}$
+      (ej: 4-4-2, 4-1-2-3, 3-4-1-2) y longitud <= 10 (VARCHAR(10)).
+    - Una fila inválida NO cancela el procesamiento de las demás:
+      se registra en #Errores_Importacion y se continúa.
+    - Si falla la resolución del partido (fecha, selecciones, partido
+      inexistente), se registra UN error a nivel partido y se salta
+      ese partido completo. Si falla el UPSERT de una selección, se
+      registra el error con el nombre de esa selección y se continúa
+      con la otra.
+
+    Nota sobre SQL dinámico:
+    Se usa únicamente para OPENROWSET porque SQL Server no permite
+    parametrizar la ruta del archivo. El resto es T-SQL estático.
+*/
+
 USE MUNDIALDEFUTBOL;
 GO
 
@@ -19,36 +62,40 @@ BEGIN
     --------------------------------------------------------------------
     -- 1. LECTURA DEL ARCHIVO JSON
     --------------------------------------------------------------------
+    BEGIN TRY
+    DECLARE @json_bytes VARBINARY(MAX);
+
+    SET @sql = N'
+        SELECT @out = BulkColumn
+        FROM OPENROWSET
+        (
+            BULK ''' + REPLACE(@archivo, N'''', N'''''') + N''',
+            SINGLE_BLOB
+        ) AS x;';
 
     BEGIN TRY
-
-         SET @sql = N'
-            SELECT @contenido =
-                CONVERT(
-                    NVARCHAR(MAX),
-                    CONVERT(VARCHAR(MAX), BulkColumn)
-                        COLLATE Latin1_General_100_CI_AS_SC_UTF8
-                )
-            FROM OPENROWSET(
-                BULK ''' + REPLACE(@archivo, '''', '''''') + N''',
-                SINGLE_BLOB
-            ) AS archivo;
-        ';
-
         EXEC sys.sp_executesql
-            @sql,
-            N'@contenido NVARCHAR(MAX) OUTPUT',
-            @contenido = @json OUTPUT;
+             @sql,
+             N'@out VARBINARY(MAX) OUTPUT',
+             @out = @json_bytes OUTPUT;
+    END TRY
+        BEGIN CATCH
+            DECLARE @mensajeCarga NVARCHAR(2048) =
+                N'No se pudo leer el archivo indicado. Detalle: ' + ERROR_MESSAGE();
+            THROW 53002, @mensajeCarga, 1;
+        END CATCH;
 
-        IF @json IS NULL OR ISJSON(@json) <> 1
-        BEGIN
-            RAISERROR(
-                'El archivo no contiene un JSON válido.',
-                16,
-                1
-            );
-            RETURN;
-        END;
+        IF @json_bytes IS NULL OR DATALENGTH(@json_bytes) = 0
+            THROW 53003, N'El archivo JSON está vacío o no se pudo leer.', 1;
+
+        BEGIN TRY
+            SET @json = CAST(CAST(@json_bytes AS XML) AS NVARCHAR(MAX));
+        END TRY
+        BEGIN CATCH
+            DECLARE @mensajeUtf8 NVARCHAR(2048) =
+                N'El archivo no está codificado en UTF-8 válido. Detalle: ' + ERROR_MESSAGE();
+            THROW 53005, @mensajeUtf8, 1;
+        END CATCH;
 
         ----------------------------------------------------------------
         -- 2. TABLA TEMPORAL DE PARTIDOS DEL JSON
@@ -150,24 +197,6 @@ BEGIN
                 END;
 
         ----------------------------------------------------------------
-        -- DEBUG: VERIFICAR SELECCIONES RESUELTAS
-        ----------------------------------------------------------------
-
-        SELECT
-            JSON_VALUE(
-                @json,
-                '$[0].seleccion_2_nombre'
-            ) AS seleccion_2_nombre;
-
-        SELECT
-            seleccion_1_nombre,
-            seleccion_2_nombre,
-            id_seleccion_1,
-            id_seleccion_2
-        FROM #PartidosJSON
-        WHERE seleccion_1_nombre LIKE '%Australia%';
-
-        ----------------------------------------------------------------
         -- 4. RESOLVER PARTIDOS
         ----------------------------------------------------------------
 
@@ -204,21 +233,6 @@ BEGIN
                     )
                 )
         ) coincidencias;
-
-        ----------------------------------------------------------------
-        -- DEBUG: VERIFICAR PARTIDO IDENTIFICADO
-        ----------------------------------------------------------------
-
-        SELECT
-            seleccion_1_nombre,
-            seleccion_2_nombre,
-            fecha,
-            horario_utc,
-            id_seleccion_1,
-            id_seleccion_2,
-            id_partido
-        FROM #PartidosJSON
-        WHERE seleccion_1_nombre LIKE '%Australia%';
 
         ----------------------------------------------------------------
         -- 5. TABLA TEMPORAL DE JUGADORES
