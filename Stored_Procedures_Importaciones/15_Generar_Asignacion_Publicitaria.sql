@@ -185,18 +185,18 @@ begin
     --------------------------------------------------------
     -- 5. priorizar y elegir máximo 4
     --------------------------------------------------------
-    create table #Seleccionados (
+    create table #Seleccionados ( -- Tabla temporal para guardar los ganadores
         numero_espacio tinyint not null,
         id_region int not null,
         region nvarchar(80) not null,
         id_pieza int not null,
         pieza nvarchar(500) not null,
         hora_local datetime2(0) not null,
-        distancia_centro_prime int not null,
-        costo_aplicado decimal(14,2) not null
+        distancia_centro_prime int not null, -- Incorporo
+        costo_aplicado decimal(14,2) not null -- Incorporo
     );
 
-    ;with Rankeados as (
+    ;with Rankeados as ( -- Arma un ranking por prioridad
         select
             C.*,
             row_number() over (
@@ -223,7 +223,7 @@ begin
             when 4 then @costo_espacio_4
         end
     from Rankeados
-    where prioridad <= 4;
+    where prioridad <= 4; --FIltra el top 4
 
     select @cantidad_asignados = count(*)
     from #Seleccionados;

@@ -272,7 +272,6 @@ BEGIN
                     =
                     UPPER(LTRIM(RTRIM(@descripcion)));
 
-
             ------------------------------------------------
             -- 13. UPSERT
             ------------------------------------------------
@@ -342,10 +341,8 @@ BEGIN
     --------------------------------------------------------
     -- 14. CERRAR CURSOR
     --------------------------------------------------------
-
     CLOSE cursor_campanias;
     DEALLOCATE cursor_campanias; --libera el cursor de la memoria
-
 
     --------------------------------------------------------
     -- 15. RESUMEN
@@ -356,7 +353,6 @@ BEGIN
         @insertados   AS insertados,
         @actualizados AS actualizados,
         @errores      AS errores;
-
 
     --------------------------------------------------------
     -- 16. ERRORES PARCIALES

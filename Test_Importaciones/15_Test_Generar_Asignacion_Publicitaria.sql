@@ -51,7 +51,6 @@ BEGIN
                   1;
         END;
 
-
         ----------------------------------------------------
         -- 2. CALCULAR CANTIDAD DE CANDIDATOS
         --    PARA CADA PARTIDO
@@ -63,7 +62,6 @@ BEGIN
             cantidad_candidatos INT NOT NULL
         );
 
-
         ;WITH RegionesConPieza AS
         (
             SELECT DISTINCT
@@ -71,23 +69,17 @@ BEGIN
                 R.huso_horario,
                 R.hora_prime_inicio,
                 R.hora_prime_fin
-
             FROM dbo.Region R
-
             INNER JOIN dbo.Pieza_Para_Region PR
                 ON PR.id_region = R.id_region
         ),
-
         PartidoRegion AS
         (
             SELECT
                 P.id_partido,
-
                 R.id_region,
-
                 R.hora_prime_inicio,
                 R.hora_prime_fin,
-
 
                 CASE R.huso_horario
 
@@ -104,8 +96,6 @@ BEGIN
 
                             AS DATETIME2(0)
                         )
-
-
                     WHEN 'America/Sao_Paulo'
                     THEN
                         CAST
@@ -119,8 +109,6 @@ BEGIN
 
                             AS DATETIME2(0)
                         )
-
-
                     WHEN 'Europe/Paris'
                     THEN
                         CAST
@@ -134,8 +122,6 @@ BEGIN
 
                             AS DATETIME2(0)
                         )
-
-
                     WHEN 'America/New_York'
                     THEN
                         CAST
@@ -149,8 +135,6 @@ BEGIN
 
                             AS DATETIME2(0)
                         )
-
-
                     WHEN 'Europe/Berlin'
                     THEN
                         CAST
@@ -164,8 +148,6 @@ BEGIN
 
                             AS DATETIME2(0)
                         )
-
-
                     WHEN 'Europe/Madrid'
                     THEN
                         CAST
@@ -179,8 +161,6 @@ BEGIN
 
                             AS DATETIME2(0)
                         )
-
-
                     WHEN 'Europe/London'
                     THEN
                         CAST
@@ -191,11 +171,8 @@ BEGIN
                             )
                             AT TIME ZONE
                                 'GMT Standard Time'
-
                             AS DATETIME2(0)
                         )
-
-
                     WHEN 'America/Mexico_City'
                     THEN
                         CAST
@@ -206,15 +183,10 @@ BEGIN
                             )
                             AT TIME ZONE
                                 'Central Standard Time (Mexico)'
-
                             AS DATETIME2(0)
                         )
-
                 END AS hora_local
-
-
             FROM dbo.Partido P
-
             CROSS JOIN RegionesConPieza R
         )
 
@@ -228,15 +200,12 @@ BEGIN
         SELECT
             PR.id_partido,
             COUNT(*)
-
         FROM PartidoRegion PR
-
         WHERE
             PR.hora_local IS NOT NULL
 
             AND CAST(PR.hora_local AS TIME)
                 >= PR.hora_prime_inicio
-
             AND CAST(PR.hora_local AS TIME)
                 < PR.hora_prime_fin
 
@@ -256,13 +225,10 @@ BEGIN
         SELECT TOP (1)
             @id_partido = id_partido,
             @cantidad_candidatos = cantidad_candidatos
-
         FROM #PartidosCandidatos
-
         ORDER BY
             cantidad_candidatos DESC,
             id_partido ASC;
-
 
         IF @id_partido IS NULL
         BEGIN
@@ -270,7 +236,6 @@ BEGIN
                   'TEST FALLIDO: ningún partido cae en prime time en las regiones configuradas.',
                   1;
         END;
-
 
         PRINT '';
         PRINT 'Partido seleccionado para el test:';
@@ -293,14 +258,12 @@ BEGIN
 
         WHERE P.id_partido = @id_partido;
 
-
         ----------------------------------------------------
         -- 4. PRIMERA GENERACION
         ----------------------------------------------------
 
         PRINT '';
         PRINT 'TEST 1 - Generando asignaciones...';
-
 
         EXEC negocio.Generar_Asignacion_Publicitaria
             @id_partido = @id_partido,
@@ -315,15 +278,12 @@ BEGIN
         PRINT '';
         PRINT 'TEST 2 - Verificando máximo de cuatro espacios...';
 
-
         DECLARE @cantidad_bd INT;
-
 
         SELECT
             @cantidad_bd = COUNT(*)
         FROM dbo.Asignacion_Publicitaria
         WHERE id_partido = @id_partido;
-
 
         IF @cantidad_bd > 4
         BEGIN
@@ -332,9 +292,7 @@ BEGIN
                   1;
         END;
 
-
         PRINT 'OK - Nunca se asignan más de cuatro espacios.';
-
 
         ----------------------------------------------------
         -- 6. ESPACIOS VALIDOS 1..4
@@ -342,7 +300,6 @@ BEGIN
 
         PRINT '';
         PRINT 'TEST 3 - Verificando números de espacio...';
-
 
         IF EXISTS
         (
@@ -357,7 +314,6 @@ BEGIN
                   1;
         END;
 
-
         PRINT 'OK - Todos los espacios están entre 1 y 4.';
 
 
@@ -368,18 +324,13 @@ BEGIN
         PRINT '';
         PRINT 'TEST 4 - Verificando duplicados...';
 
-
         IF EXISTS
         (
             SELECT
                 numero_espacio
-
             FROM dbo.Asignacion_Publicitaria
-
             WHERE id_partido = @id_partido
-
             GROUP BY numero_espacio
-
             HAVING COUNT(*) > 1
         )
         BEGIN
@@ -388,9 +339,7 @@ BEGIN
                   1;
         END;
 
-
         PRINT 'OK - No existen espacios duplicados.';
-
 
         ----------------------------------------------------
         -- 8. COSTO VALIDO
@@ -398,7 +347,6 @@ BEGIN
 
         PRINT '';
         PRINT 'TEST 5 - Verificando costos...';
-
 
         IF EXISTS
         (
@@ -413,17 +361,13 @@ BEGIN
                   1;
         END;
 
-
         PRINT 'OK - Todos los costos son válidos.';
 
-
-        ----------------------------------------------------
+        ---------------------------------------------------
         -- 9. CASO DE PRIORIZACION
         ----------------------------------------------------
-
         PRINT '';
         PRINT 'TEST 6 - Verificando criterio de priorización...';
-
 
         IF @cantidad_candidatos > 4
         BEGIN
@@ -435,19 +379,15 @@ BEGIN
                       1;
             END;
 
-
             PRINT
                 'OK - Había más de 4 mercados candidatos y se eligieron solamente 4.';
-
         END
         ELSE
         BEGIN
-
             PRINT
                 'ADVERTENCIA - El juego de datos actual no posee un partido con más de 4 mercados candidatos.';
 
         END;
-
 
         ----------------------------------------------------
         -- 10. SEGUNDA EJECUCION / UPSERT
@@ -456,24 +396,19 @@ BEGIN
         PRINT '';
         PRINT 'TEST 7 - Ejecutando nuevamente la generación...';
 
-
         DECLARE @cantidad_antes INT;
-
 
         SELECT
             @cantidad_antes = COUNT(*)
         FROM dbo.Asignacion_Publicitaria
         WHERE id_partido = @id_partido;
 
-
         EXEC negocio.Generar_Asignacion_Publicitaria
             @id_partido = @id_partido,
             @cantidad_candidatos = @cantidad_candidatos OUTPUT,
             @cantidad_asignados = @cantidad_asignados OUTPUT;
 
-
         DECLARE @cantidad_despues INT;
-
 
         SELECT
             @cantidad_despues = COUNT(*)
@@ -506,14 +441,10 @@ BEGIN
             AP.id_asignacion,
             AP.id_partido,
             AP.numero_espacio,
-
             AP.id_pieza,
             PP.nombre AS pieza,
-
             C.descripcion AS campania,
-
             A.nombre AS anunciante,
-
             AP.costo_aplicado
 
         FROM dbo.Asignacion_Publicitaria AP
@@ -552,7 +483,6 @@ BEGIN
         PRINT 'TEST ASIGNACION PUBLICITARIA FALLIDO';
         PRINT '=============================================';
 
-
         SELECT
             ERROR_NUMBER() AS numero_error,
             ERROR_MESSAGE() AS mensaje_error,
@@ -565,7 +495,6 @@ BEGIN
 
 END;
 GO
-
 
 EXEC test.Generar_Asignacion_Publicitaria_Test;
 GO
