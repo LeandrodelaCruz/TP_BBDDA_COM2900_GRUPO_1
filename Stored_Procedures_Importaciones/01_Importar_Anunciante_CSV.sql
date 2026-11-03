@@ -22,7 +22,6 @@ GO
         Un error en una fila no impide procesar las demás.
 ============================================================*/
 
-
 ------------------------------------------------------------
 -- CREAR ESQUEMA SI NO EXISTE
 ------------------------------------------------------------
@@ -33,7 +32,6 @@ BEGIN
 END;
 GO
 
-
 ------------------------------------------------------------
 -- PROCEDIMIENTO
 ------------------------------------------------------------
@@ -43,7 +41,6 @@ CREATE OR ALTER PROCEDURE importacion.Importar_Anunciante_CSV
 AS
 BEGIN
     SET NOCOUNT ON;
-
 
     --------------------------------------------------------
     -- 1. VALIDAR PARAMETRO
@@ -57,7 +54,6 @@ BEGIN
               1;
     END;
 
-
     --------------------------------------------------------
     -- 2. TABLA STAGING
     --
@@ -66,7 +62,7 @@ BEGIN
 
     CREATE TABLE #Publicidad_Staging
     (
-        anunciante       NVARCHAR(200)  NULL,
+        anunciante       NVARCHAR(200)  NULL, -- Aca en realidad solo me interesa anunciante y pais
         pais             NVARCHAR(100)  NULL,
         campania         NVARCHAR(500)  NULL,
         pieza_nombre     NVARCHAR(500)  NULL,
@@ -74,7 +70,6 @@ BEGIN
         pieza_idioma     NVARCHAR(100)  NULL,
         fuente           NVARCHAR(1000) NULL
     );
-
 
     --------------------------------------------------------
     -- 3. BULK INSERT
@@ -102,7 +97,6 @@ BEGIN
               TABLOCK
           );';
 
-
     BEGIN TRY
 
         EXEC sys.sp_executesql @sql;
@@ -120,7 +114,6 @@ BEGIN
 
     END CATCH;
 
-
     --------------------------------------------------------
     -- 4. DATOS A PROCESAR
     --
@@ -134,17 +127,17 @@ BEGIN
         nombre      NVARCHAR(200) NULL,
         pais        NVARCHAR(100) NULL
     );
-
+ --- Esta la creo para descartar el resto de informacion
 
     INSERT INTO #Anunciante_Procesar
     (
         nombre,
         pais
     )
-    SELECT DISTINCT
+    SELECT DISTINCT -- ESTE DISTINCT Es importante porque evita que si un anunciante tenga varias campanias se cargue varias veces
         LTRIM(RTRIM(anunciante)),
         LTRIM(RTRIM(pais))
-    FROM #Publicidad_Staging;
+    FROM #Publicidad_Staging; 
 
 
     --------------------------------------------------------
@@ -188,7 +181,7 @@ BEGIN
     -- 8. CURSOR
     --------------------------------------------------------
 
-    DECLARE cursor_anunciantes CURSOR LOCAL FAST_FORWARD
+    DECLARE cursor_anunciantes CURSOR LOCAL FAST_FORWARD -- Uso cursor porque  la consigna pide que un error en un registro no impida la carga de los demas
     FOR
         SELECT
             numero_fila,
@@ -230,7 +223,6 @@ BEGIN
 
             SET @pais_origen =
                 LTRIM(RTRIM(@pais_origen));
-
 
             ------------------------------------------------
             -- 10. VALIDACIONES
@@ -340,7 +332,7 @@ BEGIN
             BEGIN
 
                 EXEC abm.Anunciante_Alta
-                    @nombre = @nombre,
+                    @nombre = @nombre, -- Busca por nombre porque es la clave natural
                     @pais = @pais,
                     @id_anunciante = @nuevo_id OUTPUT;
 

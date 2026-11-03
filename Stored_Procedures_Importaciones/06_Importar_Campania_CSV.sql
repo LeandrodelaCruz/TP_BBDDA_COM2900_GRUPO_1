@@ -75,7 +75,6 @@ BEGIN
 
     DECLARE @sql NVARCHAR(MAX);
 
-
     SET @sql =
         N'BULK INSERT #Publicidad_Staging
           FROM '''
@@ -258,7 +257,7 @@ BEGIN
 
 
             ------------------------------------------------
-            -- 12. BUSCAR CAMPAÑA
+            -- 12. BUSCAR CAMPAniaA
             --
             -- Clave logica:
             -- anunciante + descripcion
@@ -277,7 +276,7 @@ BEGIN
             ------------------------------------------------
             -- 13. UPSERT
             ------------------------------------------------
-
+            -- si el id de la campania es null, entonces crea uno nuevo
             IF @id_campania IS NULL
             BEGIN
 
@@ -345,7 +344,7 @@ BEGIN
     --------------------------------------------------------
 
     CLOSE cursor_campanias;
-    DEALLOCATE cursor_campanias;
+    DEALLOCATE cursor_campanias; --libera el cursor de la memoria
 
 
     --------------------------------------------------------

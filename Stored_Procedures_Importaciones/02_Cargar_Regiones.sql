@@ -1,6 +1,3 @@
-USE MUNDIALDEFUTBOL;
-GO
-
 /*============================================================
     Universidad:
     Materia: Bases de Datos Aplicada
@@ -22,7 +19,8 @@ GO
         Se implementa UPSERT reutilizando los ABM.
 ============================================================*/
 
-
+USE MUNDIALDEFUTBOL;
+GO
 ------------------------------------------------------------
 -- CREAR ESQUEMA
 ------------------------------------------------------------
@@ -59,7 +57,6 @@ BEGIN
         hora_prime_fin    TIME(0)
     );
 
-
     INSERT INTO @Regiones
     (
         nombre,
@@ -76,7 +73,6 @@ BEGIN
         '18:00',
         '23:00'
     ),
-
     (
         N'Brasil',
         N'Portugués',
@@ -84,7 +80,6 @@ BEGIN
         '18:00',
         '23:00'
     ),
-
     (
         N'Francia',
         N'Francés',
@@ -92,7 +87,6 @@ BEGIN
         '20:00',
         '23:59'
     ),
-
     (
         N'Estados Unidos',
         N'Inglés',
@@ -100,7 +94,6 @@ BEGIN
         '19:00',
         '22:00'
     ),
-
     (
         N'Alemania',
         N'Alemán',
@@ -108,7 +101,6 @@ BEGIN
         '20:00',
         '23:59'
     ),
-
     (
         N'España',
         N'Español',
@@ -116,7 +108,6 @@ BEGIN
         '20:00',
         '23:59'
     ),
-
     (
         N'Reino Unido',
         N'Inglés',
@@ -124,7 +115,6 @@ BEGIN
         '19:00',
         '23:00'
     ),
-
     (
         N'México',
         N'Español',

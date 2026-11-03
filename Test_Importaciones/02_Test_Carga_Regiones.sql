@@ -1,6 +1,3 @@
-USE MUNDIALDEFUTBOL;
-GO
-
 /*============================================================
     Test:
         test.Cargar_Regiones_Test
@@ -17,6 +14,9 @@ GO
         5. Que existan al menos 3 husos horarios diferentes.
         6. Que una segunda ejecución no genere duplicados.
 ============================================================*/
+
+USE MUNDIALDEFUTBOL;
+GO
 
 
 IF SCHEMA_ID(N'test') IS NULL
@@ -158,9 +158,7 @@ BEGIN
                   1;
         END;
 
-
         PRINT 'OK - Todas las regiones tienen huso horario.';
-
 
         ----------------------------------------------------
         -- TEST 4
@@ -251,12 +249,9 @@ BEGIN
         PRINT '';
         PRINT 'TEST 6 - Ejecutando nuevamente la carga...';
 
-
         EXEC carga.Cargar_Regiones;
 
-
         DECLARE @cantidad_despues INT;
-
 
         SELECT
             @cantidad_despues = COUNT(*)
@@ -274,9 +269,7 @@ BEGIN
                   1;
         END;
 
-
         PRINT 'OK - La segunda carga no genero duplicados.';
-
 
         ----------------------------------------------------
         -- TEST 7
@@ -285,7 +278,6 @@ BEGIN
 
         PRINT '';
         PRINT 'TEST 7 - Verificando duplicados...';
-
 
         IF EXISTS
         (
@@ -301,9 +293,7 @@ BEGIN
                   1;
         END;
 
-
         PRINT 'OK - No existen regiones duplicadas.';
-
 
         ----------------------------------------------------
         -- RESULTADO
@@ -313,7 +303,6 @@ BEGIN
         PRINT '=============================================';
         PRINT 'TODOS LOS TESTS DE REGION FUERON EXITOSOS';
         PRINT '=============================================';
-
 
         SELECT
             R.id_region,
@@ -340,7 +329,6 @@ BEGIN
              =
                UPPER(LTRIM(RTRIM(E.nombre)));
 
-
     END TRY
 
     BEGIN CATCH
@@ -356,14 +344,12 @@ BEGIN
             ERROR_MESSAGE() AS mensaje_error,
             ERROR_LINE() AS linea_error;
 
-
         THROW;
 
     END CATCH;
 
 END;
 GO
-
 
 EXEC test.Cargar_Regiones_Test;
 GO
