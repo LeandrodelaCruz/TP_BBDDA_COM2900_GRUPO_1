@@ -23,7 +23,9 @@ Estructura del PDF:
     - Tabla 5: lista de video match officials (nombre, país)
 
 Columnas del CSV generado:
-    nombre, apellido, fecha_nacimiento, pais, puesto
+    nombre, apellido, fecha_nacimiento, pais, puesto, idiomas
+
+La columna idiomas no figura en el PDF y se genera vacía.
 
 La fecha de nacimiento no figura en el PDF oficial. El campo se genera vacío
 y el modelo dbo.Arbitro permite NULL en esa columna. Opcionalmente, el usuario
@@ -271,6 +273,7 @@ def construir_registros(arbitros: list[dict[str, str]]) -> list[dict[str, str]]:
                 "fecha_nacimiento": "",
                 "pais": pais,
                 "puesto": puesto,
+                "idiomas": "",
             }
         )
 
@@ -282,7 +285,7 @@ def escribir_csv(registros: list[dict[str, str]], salida: Path) -> None:
     with salida.open("w", encoding="utf-8", newline="") as archivo:
         writer = csv.DictWriter(
             archivo,
-            fieldnames=["nombre", "apellido", "fecha_nacimiento", "pais", "puesto"],
+            fieldnames=["nombre", "apellido", "fecha_nacimiento", "pais", "puesto", "idiomas"],
         )
         writer.writeheader()
         writer.writerows(registros)

@@ -83,7 +83,7 @@ BEGIN
             FIRSTROW = 2,
             FIELDTERMINATOR = '','',
             ROWTERMINATOR = ''\n'',
-            CODEPAGE = ''65001'',
+            CODEPAGE = ''RAW'',
             DATAFILETYPE = ''char''
         );';
 
@@ -97,7 +97,7 @@ BEGIN
     END CATCH;
 
     /* ----------------------------------------------------------------------
-       3. Cursor de procesamiento fila por fila.
+       3. Bucle WHILE de procesamiento fila por fila.
     ---------------------------------------------------------------------- */
     DECLARE
         @numero_fila      INT = 0,
@@ -118,26 +118,55 @@ BEGIN
         @id_arbitro       INT,
         @insertados       INT = 0,
         @actualizados     INT = 0,
-        @errores          INT = 0;
+        @errores          INT = 0,
+        @hay_fila         BIT = 1;
 
-    DECLARE cursor_arbitros CURSOR LOCAL FAST_FORWARD FOR
-        SELECT
-            nombre,
-            apellido,
-            fecha_nacimiento,
-            pais,
-            puesto,
-            idiomas
-        FROM #Arbitro_Staging;
+    CREATE TABLE #Arbitro_Trabajo
+    (
+        numero_fila      INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+        nombre           NVARCHAR(150) NULL,
+        apellido         NVARCHAR(150) NULL,
+        fecha_nacimiento NVARCHAR(30)  NULL,
+        pais             NVARCHAR(100) NULL,
+        puesto           NVARCHAR(100) NULL,
+        idiomas          NVARCHAR(200) NULL
+    );
 
-    OPEN cursor_arbitros;
+    INSERT INTO #Arbitro_Trabajo
+    (
+        nombre,
+        apellido,
+        fecha_nacimiento,
+        pais,
+        puesto,
+        idiomas
+    )
+    SELECT
+        nombre,
+        apellido,
+        fecha_nacimiento,
+        pais,
+        puesto,
+        idiomas
+    FROM #Arbitro_Staging;
 
-    FETCH NEXT FROM cursor_arbitros INTO
-        @nombre_raw, @apellido_raw, @fecha_raw, @pais_raw, @puesto_raw, @idiomas_raw;
-
-    WHILE @@FETCH_STATUS = 0
+    WHILE @hay_fila = 1
     BEGIN
-        SET @numero_fila += 1;
+        SELECT TOP (1)
+            @numero_fila  = numero_fila,
+            @nombre_raw   = nombre,
+            @apellido_raw = apellido,
+            @fecha_raw    = fecha_nacimiento,
+            @pais_raw     = pais,
+            @puesto_raw   = puesto,
+            @idiomas_raw  = idiomas
+        FROM #Arbitro_Trabajo
+        WHERE numero_fila > @numero_fila
+        ORDER BY numero_fila;
+
+        SET @hay_fila = CASE WHEN @@ROWCOUNT > 0 THEN 1 ELSE 0 END;
+        IF @hay_fila = 0
+            CONTINUE;
 
         BEGIN TRY
             SET @id_arbitro = NULL;
@@ -259,12 +288,9 @@ BEGIN
             SET @errores += 1;
         END CATCH;
 
-        FETCH NEXT FROM cursor_arbitros INTO
-            @nombre_raw, @apellido_raw, @fecha_raw, @pais_raw, @puesto_raw, @idiomas_raw;
     END;
 
-    CLOSE cursor_arbitros;
-    DEALLOCATE cursor_arbitros;
+    DROP TABLE #Arbitro_Trabajo;
 
     /* ----------------------------------------------------------------------
        4. Resumen y detalle de errores.
