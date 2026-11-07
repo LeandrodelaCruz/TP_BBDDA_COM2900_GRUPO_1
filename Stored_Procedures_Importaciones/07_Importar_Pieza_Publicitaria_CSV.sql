@@ -169,33 +169,29 @@ BEGIN
         @id_campania   INT,
         @id_pieza      INT;
     --------------------------------------------------------
-    -- 8. CURSOR
+    -- 8. recorrido con WHILE
     --------------------------------------------------------
-    DECLARE cursor_piezas CURSOR LOCAL FAST_FORWARD
-    FOR
-        SELECT
-            numero_fila,
-            anunciante,
-            campania,
-            nombre,
-            contenido,
-            idioma
-        FROM #Pieza_Procesar
-        ORDER BY numero_fila;
+    -- Copia fija de las filas a procesar; conserva el orden del proceso original.
+    SELECT ROW_NUMBER() OVER (ORDER BY numero_fila) AS orden_recorrido,
+           numero_fila, anunciante, campania, nombre, contenido, idioma
+    INTO #Trabajo_Recorrido
+    FROM #Pieza_Procesar;
+    CREATE UNIQUE CLUSTERED INDEX IX_Trabajo_Recorrido
+        ON #Trabajo_Recorrido (orden_recorrido);
 
-    OPEN cursor_piezas;
+    DECLARE @fila_recorrido BIGINT;
+    SELECT @fila_recorrido = MIN(orden_recorrido) FROM #Trabajo_Recorrido;
 
-    FETCH NEXT FROM cursor_piezas
-    INTO
-        @numero_fila,
-        @anunciante,
-        @campania,
-        @nombre,
-        @contenido,
-        @idioma;
 
-    WHILE @@FETCH_STATUS = 0
+    WHILE @fila_recorrido IS NOT NULL
     BEGIN
+        SELECT @numero_fila = numero_fila,
+               @anunciante = anunciante,
+               @campania = campania,
+               @nombre = nombre,
+               @contenido = contenido,
+               @idioma = idioma
+        FROM #Trabajo_Recorrido WHERE orden_recorrido = @fila_recorrido;
 
         SET @procesados += 1;
 
@@ -385,24 +381,15 @@ BEGIN
         -- SIGUIENTE FILA
         ----------------------------------------------------
 
-        FETCH NEXT FROM cursor_piezas
-        INTO
-            @numero_fila,
-            @anunciante,
-            @campania,
-            @nombre,
-            @contenido,
-            @idioma;
+        SELECT @fila_recorrido = MIN(orden_recorrido)
+            FROM #Trabajo_Recorrido WHERE orden_recorrido > @fila_recorrido;
 
     END;
 
 
     --------------------------------------------------------
-    -- 15. CERRAR CURSOR
+    -- 15. FIN DEL RECORRIDO
     --------------------------------------------------------
-
-    CLOSE cursor_piezas;
-    DEALLOCATE cursor_piezas;
 
 
     --------------------------------------------------------

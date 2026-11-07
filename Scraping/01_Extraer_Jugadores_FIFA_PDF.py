@@ -17,9 +17,19 @@ from __future__ import annotations
 import csv
 import re
 import sys
+import subprocess
+import importlib
 from pathlib import Path
 
-import pdfplumber
+try:
+    import pdfplumber
+except ModuleNotFoundError as exc:
+    if exc.name != "pdfplumber":
+        raise
+    print("Instalando la dependencia faltante: pdfplumber...", flush=True)
+    subprocess.check_call([sys.executable, "-m", "pip", "install", "pdfplumber"])
+    importlib.invalidate_caches()
+    import pdfplumber
 
 # El PDF usa "Korea Republic", mientras que dbo.Seleccion fue cargada desde
 # teams.csv con "South Korea". Se normaliza solo esa diferencia de nombre.

@@ -240,17 +240,12 @@ begin
             @id_asignacion int,
             @id_asignacion_nueva int;
 
-        declare cursor_asignaciones cursor local fast_forward for
-            select numero_espacio, id_pieza, costo_aplicado
-            from #Seleccionados
-            order by numero_espacio;
-
-        open cursor_asignaciones;
-        fetch next from cursor_asignaciones
-            into @numero_espacio, @id_pieza, @costo_aplicado;
-
-        while @@fetch_status = 0
+        -- Fase 1: recorrer los espacios seleccionados en el mismo orden.
+        select @numero_espacio = min(numero_espacio) from #Seleccionados;
+        while @numero_espacio is not null
         begin
+            select @id_pieza = id_pieza, @costo_aplicado = costo_aplicado
+            from #Seleccionados where numero_espacio = @numero_espacio;
             set @id_asignacion = null;
             set @id_pieza_actual = null;
             set @id_asignacion_nueva = null;
@@ -293,41 +288,38 @@ begin
                     @id_asignacion = @id_asignacion_nueva output;
             end;
 
-            fetch next from cursor_asignaciones
-                into @numero_espacio, @id_pieza, @costo_aplicado;
+            select @numero_espacio = min(numero_espacio)
+            from #Seleccionados where numero_espacio > @numero_espacio;
         end;
 
-        close cursor_asignaciones;
-        deallocate cursor_asignaciones;
 
         ----------------------------------------------------
         -- eliminar asignaciones viejas que ya no aplican
         ----------------------------------------------------
         declare @id_asignacion_baja int;
 
-        declare cursor_bajas cursor local fast_forward for
-            select AP.id_asignacion
-            from dbo.Asignacion_Publicitaria AP
-            where AP.id_partido = @id_partido
-              and not exists (
-                  select 1
-                  from #Seleccionados S
-                  where S.numero_espacio = AP.numero_espacio
-              );
+        -- Fase 2: fijar los IDs pendientes DESPUES de aplicar los espacios.
+        -- Se recorre esta copia, no la tabla de la que se eliminan filas.
+        select AP.id_asignacion
+        into #Bajas_Pendientes
+        from dbo.Asignacion_Publicitaria AP
+        where AP.id_partido = @id_partido
+          and not exists (
+              select 1 from #Seleccionados S
+              where S.numero_espacio = AP.numero_espacio
+          );
+        create unique clustered index IX_Bajas_Pendientes
+            on #Bajas_Pendientes (id_asignacion);
 
-        open cursor_bajas;
-        fetch next from cursor_bajas into @id_asignacion_baja;
-
-        while @@fetch_status = 0
+        select @id_asignacion_baja = min(id_asignacion) from #Bajas_Pendientes;
+        while @id_asignacion_baja is not null
         begin
             exec abm.Asignacion_Publicitaria_Baja
                 @id_asignacion = @id_asignacion_baja;
 
-            fetch next from cursor_bajas into @id_asignacion_baja;
+            select @id_asignacion_baja = min(id_asignacion)
+            from #Bajas_Pendientes where id_asignacion > @id_asignacion_baja;
         end;
-
-        close cursor_bajas;
-        deallocate cursor_bajas;
 
         commit transaction;
     end try
@@ -335,15 +327,6 @@ begin
         if xact_state() <> 0
             rollback transaction;
 
-        if cursor_status('local', 'cursor_asignaciones') >= 0
-            close cursor_asignaciones;
-        if cursor_status('local', 'cursor_asignaciones') > -3
-            deallocate cursor_asignaciones;
-
-        if cursor_status('local', 'cursor_bajas') >= 0
-            close cursor_bajas;
-        if cursor_status('local', 'cursor_bajas') > -3
-            deallocate cursor_bajas;
 
         throw;
     end catch;

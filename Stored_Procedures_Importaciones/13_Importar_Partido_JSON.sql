@@ -1,4 +1,4 @@
-﻿/*
+/*
     Universidad: Universidad Nacional de La Matanza - UNLaM
     Materia: Bases de Datos Aplicada - 2C-2026
     Comisión: Com: 01-2900
@@ -265,32 +265,33 @@ BEGIN
     );
 
     -------------------------------------------------------------------------
-    -- 8. Cursor sobre el staging.
+    -- 8. recorrido con WHILE sobre el staging.
     -------------------------------------------------------------------------
-    DECLARE cur_partidos CURSOR LOCAL FAST_FORWARD FOR
-        SELECT
-            numero_partido,
-            sede,
-            fecha,
-            horario_local,
-            horario_UTC,
-            fase,
-            resultado_final,
-            asistencia_publico,
-            seleccion_local,
-            seleccion_visitante
-        FROM #Partido_Staging
-        ORDER BY TRY_CAST(numero_partido AS INT);
+    -- Copia fija de las filas a procesar; conserva el orden del proceso original.
+    SELECT ROW_NUMBER() OVER (ORDER BY TRY_CAST(numero_partido AS INT)) AS orden_recorrido,
+           numero_partido, sede, fecha, horario_local, horario_UTC, fase, resultado_final, asistencia_publico, seleccion_local, seleccion_visitante
+    INTO #Trabajo_Recorrido
+    FROM #Partido_Staging;
+    CREATE UNIQUE CLUSTERED INDEX IX_Trabajo_Recorrido
+        ON #Trabajo_Recorrido (orden_recorrido);
 
-    OPEN cur_partidos;
+    DECLARE @fila_recorrido BIGINT;
+    SELECT @fila_recorrido = MIN(orden_recorrido) FROM #Trabajo_Recorrido;
 
-    FETCH NEXT FROM cur_partidos
-    INTO @numero_partido, @sede_json, @fecha_str, @horario_local_str,
-         @horario_UTC_str, @fase_en, @resultado_final, @asistencia_str,
-         @pais_local, @pais_visitante;
 
-    WHILE @@FETCH_STATUS = 0
+    WHILE @fila_recorrido IS NOT NULL
     BEGIN
+        SELECT @numero_partido = numero_partido,
+               @sede_json = sede,
+               @fecha_str = fecha,
+               @horario_local_str = horario_local,
+               @horario_UTC_str = horario_UTC,
+               @fase_en = fase,
+               @resultado_final = resultado_final,
+               @asistencia_str = asistencia_publico,
+               @pais_local = seleccion_local,
+               @pais_visitante = seleccion_visitante
+        FROM #Trabajo_Recorrido WHERE orden_recorrido = @fila_recorrido;
         SET @procesados += 1;
 
         -- Reset de variables por iteración
@@ -488,14 +489,10 @@ BEGIN
             SET @cantidad_errores += 1;
         END CATCH;
 
-        FETCH NEXT FROM cur_partidos
-        INTO @numero_partido, @sede_json, @fecha_str, @horario_local_str,
-             @horario_UTC_str, @fase_en, @resultado_final, @asistencia_str,
-             @pais_local, @pais_visitante;
+        SELECT @fila_recorrido = MIN(orden_recorrido)
+            FROM #Trabajo_Recorrido WHERE orden_recorrido > @fila_recorrido;
     END;
 
-    CLOSE cur_partidos;
-    DEALLOCATE cur_partidos;
 
     -------------------------------------------------------------------------
     -- 9. Resumen final.

@@ -1,4 +1,4 @@
-﻿/*
+/*
     Universidad: Universidad Nacional de La Matanza - UNLaM
     Materia: Bases de Datos Aplicada - 2C-2026
     Comisión: Com: 01-2900
@@ -243,29 +243,30 @@ BEGIN
     );
 
     -------------------------------------------------------------------------
-    -- 8. Cursor sobre el staging (una fila por partido).
+    -- 8. recorrido con WHILE sobre el staging (una fila por partido).
     -------------------------------------------------------------------------
-    DECLARE cur_formaciones CURSOR LOCAL FAST_FORWARD FOR
-        SELECT
-            numero_partido,
-            fecha,
-            horario_UTC,
-            sel1_nombre,
-            sel1_esquema_tactico,
-            sel2_nombre,
-            sel2_esquema_tactico
-        FROM #Formacion_Staging
-        ORDER BY TRY_CAST(numero_partido AS INT), fecha;
+    -- Copia fija de las filas a procesar; conserva el orden del proceso original.
+    SELECT ROW_NUMBER() OVER (ORDER BY TRY_CAST(numero_partido AS INT), fecha) AS orden_recorrido,
+           numero_partido, fecha, horario_UTC, sel1_nombre, sel1_esquema_tactico, sel2_nombre, sel2_esquema_tactico
+    INTO #Trabajo_Recorrido
+    FROM #Formacion_Staging;
+    CREATE UNIQUE CLUSTERED INDEX IX_Trabajo_Recorrido
+        ON #Trabajo_Recorrido (orden_recorrido);
 
-    OPEN cur_formaciones;
+    DECLARE @fila_recorrido BIGINT;
+    SELECT @fila_recorrido = MIN(orden_recorrido) FROM #Trabajo_Recorrido;
 
-    FETCH NEXT FROM cur_formaciones
-    INTO @numero_partido, @fecha_str, @horario_UTC_str,
-         @sel1_nombre, @sel1_esquema,
-         @sel2_nombre, @sel2_esquema;
 
-    WHILE @@FETCH_STATUS = 0
+    WHILE @fila_recorrido IS NOT NULL
     BEGIN
+        SELECT @numero_partido = numero_partido,
+               @fecha_str = fecha,
+               @horario_UTC_str = horario_UTC,
+               @sel1_nombre = sel1_nombre,
+               @sel1_esquema = sel1_esquema_tactico,
+               @sel2_nombre = sel2_nombre,
+               @sel2_esquema = sel2_esquema_tactico
+        FROM #Trabajo_Recorrido WHERE orden_recorrido = @fila_recorrido;
         SET @procesados += 1;
 
         -- Reset de variables por iteración
@@ -355,10 +356,8 @@ BEGIN
 
             SET @cantidad_errores += 1;
 
-            FETCH NEXT FROM cur_formaciones
-            INTO @numero_partido, @fecha_str, @horario_UTC_str,
-                 @sel1_nombre, @sel1_esquema,
-                 @sel2_nombre, @sel2_esquema;
+            SELECT @fila_recorrido = MIN(orden_recorrido)
+            FROM #Trabajo_Recorrido WHERE orden_recorrido > @fila_recorrido;
             CONTINUE;
         END CATCH;
 
@@ -472,14 +471,10 @@ BEGIN
             SET @iter += 1;
         END;
 
-        FETCH NEXT FROM cur_formaciones
-        INTO @numero_partido, @fecha_str, @horario_UTC_str,
-             @sel1_nombre, @sel1_esquema,
-             @sel2_nombre, @sel2_esquema;
+        SELECT @fila_recorrido = MIN(orden_recorrido)
+            FROM #Trabajo_Recorrido WHERE orden_recorrido > @fila_recorrido;
     END;
 
-    CLOSE cur_formaciones;
-    DEALLOCATE cur_formaciones;
 
     -------------------------------------------------------------------------
     -- 9. Resumen final.

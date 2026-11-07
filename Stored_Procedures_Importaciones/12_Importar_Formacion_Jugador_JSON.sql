@@ -1,4 +1,4 @@
-﻿/*
+/*
     Universidad: Universidad Nacional de La Matanza - UNLaM
     Materia: Bases de Datos Aplicada - 2C-2026
     Comisión: Com: 01-2900
@@ -384,35 +384,17 @@ BEGIN
             @titular_actual BIT,
             @filas_afectadas INT;
 
-        DECLARE cursor_jugadores CURSOR LOCAL FAST_FORWARD FOR
+        -- Conservar el orden del JSON: cada fila consulta el estado que
+        -- dejaron las anteriores (limites de titulares y convocados).
+        SELECT @id_registro = MIN(id_registro) FROM #JugadoresJSON;
 
-            SELECT
-                id_registro,
-                id_partido,
-                id_seleccion,
-                id_formacion,
-                nombre_jugador,
-                dorsal_en_cancha,
-                es_titular,
-                posicion_en_cancha
-            FROM #JugadoresJSON
-            ORDER BY id_registro;
-
-        OPEN cursor_jugadores;
-
-        FETCH NEXT FROM cursor_jugadores
-        INTO
-            @id_registro,
-            @id_partido,
-            @id_seleccion,
-            @id_formacion,
-            @nombre_jugador,
-            @dorsal_en_cancha,
-            @es_titular,
-            @posicion_en_cancha;
-
-        WHILE @@FETCH_STATUS = 0
+        WHILE @id_registro IS NOT NULL
         BEGIN
+            SELECT @id_partido = id_partido, @id_seleccion = id_seleccion,
+                   @id_formacion = id_formacion, @nombre_jugador = nombre_jugador,
+                   @dorsal_en_cancha = dorsal_en_cancha, @es_titular = es_titular,
+                   @posicion_en_cancha = posicion_en_cancha
+            FROM #JugadoresJSON WHERE id_registro = @id_registro;
 
             SET @total_procesados += 1;
 
@@ -852,21 +834,11 @@ BEGIN
 
             END;
 
-            FETCH NEXT FROM cursor_jugadores
-            INTO
-                @id_registro,
-                @id_partido,
-                @id_seleccion,
-                @id_formacion,
-                @nombre_jugador,
-                @dorsal_en_cancha,
-                @es_titular,
-                @posicion_en_cancha;
+            SELECT @id_registro = MIN(id_registro)
+            FROM #JugadoresJSON WHERE id_registro > @id_registro;
 
         END;
 
-        CLOSE cursor_jugadores;
-        DEALLOCATE cursor_jugadores;
 
         ----------------------------------------------------------------
         -- 11. RESUMEN DE IMPORTACIÓN
@@ -893,11 +865,6 @@ BEGIN
 
     BEGIN CATCH
 
-        IF CURSOR_STATUS('local', 'cursor_jugadores') >= 0
-            CLOSE cursor_jugadores;
-
-        IF CURSOR_STATUS('local', 'cursor_jugadores') > -3
-            DEALLOCATE cursor_jugadores;
 
         DECLARE @mensaje NVARCHAR(MAX);
 
