@@ -131,21 +131,25 @@ BEGIN
     -- 6. Se procesa fila por fila porque la consigna exige reutilizar los
     --    Stored Procedures ABM de la Entrega 5 para cada registro.
 
-    DECLARE cur_selecciones CURSOR LOCAL FAST_FORWARD FOR
-        SELECT
-            team_id,
-            team_name,
-            confederation,
-            group_letter
-        FROM #Seleccion_Staging;
+    -- Copia fija de las filas a procesar; conserva el orden del proceso original.
+    SELECT ROW_NUMBER() OVER (ORDER BY (SELECT NULL)) AS orden_recorrido,
+           team_id, team_name, confederation, group_letter
+    INTO #Trabajo_Recorrido
+    FROM #Seleccion_Staging;
+    CREATE UNIQUE CLUSTERED INDEX IX_Trabajo_Recorrido
+        ON #Trabajo_Recorrido (orden_recorrido);
 
-    OPEN cur_selecciones;
+    DECLARE @fila_recorrido BIGINT;
+    SELECT @fila_recorrido = MIN(orden_recorrido) FROM #Trabajo_Recorrido;
 
-    FETCH NEXT FROM cur_selecciones
-    INTO @team_id, @pais, @confederacion, @grupo_asignado;
 
-    WHILE @@FETCH_STATUS = 0
+    WHILE @fila_recorrido IS NOT NULL
     BEGIN
+        SELECT @team_id = team_id,
+               @pais = team_name,
+               @confederacion = confederation,
+               @grupo_asignado = group_letter
+        FROM #Trabajo_Recorrido WHERE orden_recorrido = @fila_recorrido;
         SET @procesados += 1;
 
         BEGIN TRY
@@ -235,12 +239,10 @@ BEGIN
             SET @cantidad_errores += 1;
         END CATCH;
 
-        FETCH NEXT FROM cur_selecciones
-        INTO @team_id, @pais, @confederacion, @grupo_asignado;
+        SELECT @fila_recorrido = MIN(orden_recorrido)
+            FROM #Trabajo_Recorrido WHERE orden_recorrido > @fila_recorrido;
     END;
 
-    CLOSE cur_selecciones;
-    DEALLOCATE cur_selecciones;
 
     -- 7. Resumen final de la importación.
     SELECT

@@ -94,7 +94,7 @@ BEGIN
     END CATCH;
 
     /* ----------------------------------------------------------------------
-       3. Cursor de procesamiento fila por fila.
+       3. recorrido con WHILE de procesamiento fila por fila.
     ---------------------------------------------------------------------- */
     DECLARE
         @numero_fila      INT = 0,
@@ -116,22 +116,26 @@ BEGIN
         @actualizados     INT = 0,
         @errores          INT = 0;
 
-    DECLARE cursor_arbitros CURSOR LOCAL FAST_FORWARD FOR
-        SELECT
-            nombre,
-            apellido,
-            fecha_nacimiento,
-            pais,
-            puesto
-        FROM #Arbitro_Staging;
+    -- Copia fija de las filas a procesar; conserva el orden del proceso original.
+    SELECT ROW_NUMBER() OVER (ORDER BY (SELECT NULL)) AS orden_recorrido,
+           nombre, apellido, fecha_nacimiento, pais, puesto
+    INTO #Trabajo_Recorrido
+    FROM #Arbitro_Staging;
+    CREATE UNIQUE CLUSTERED INDEX IX_Trabajo_Recorrido
+        ON #Trabajo_Recorrido (orden_recorrido);
 
-    OPEN cursor_arbitros;
+    DECLARE @fila_recorrido BIGINT;
+    SELECT @fila_recorrido = MIN(orden_recorrido) FROM #Trabajo_Recorrido;
 
-    FETCH NEXT FROM cursor_arbitros INTO
-        @nombre_raw, @apellido_raw, @fecha_raw, @pais_raw, @puesto_raw;
 
-    WHILE @@FETCH_STATUS = 0
+    WHILE @fila_recorrido IS NOT NULL
     BEGIN
+        SELECT @nombre_raw = nombre,
+               @apellido_raw = apellido,
+               @fecha_raw = fecha_nacimiento,
+               @pais_raw = pais,
+               @puesto_raw = puesto
+        FROM #Trabajo_Recorrido WHERE orden_recorrido = @fila_recorrido;
         SET @numero_fila += 1;
 
         BEGIN TRY
@@ -254,12 +258,10 @@ BEGIN
             SET @errores += 1;
         END CATCH;
 
-        FETCH NEXT FROM cursor_arbitros INTO
-            @nombre_raw, @apellido_raw, @fecha_raw, @pais_raw, @puesto_raw;
+        SELECT @fila_recorrido = MIN(orden_recorrido)
+            FROM #Trabajo_Recorrido WHERE orden_recorrido > @fila_recorrido;
     END;
 
-    CLOSE cursor_arbitros;
-    DEALLOCATE cursor_arbitros;
 
     /* ----------------------------------------------------------------------
        4. Resumen y detalle de errores.

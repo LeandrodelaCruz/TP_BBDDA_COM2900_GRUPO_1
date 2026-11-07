@@ -1,0 +1,167 @@
+[
+  {
+    "fecha": "2026-06-11",
+    "horario_utc": "2026-06-11T19:00:00",
+    "seleccion_1_nombre": "Mexico",
+    "seleccion_2_nombre": "South Africa",
+    "jugadores_seleccion_1": [
+      {
+        "nombre_jugador": "José Raúl RANGEL AGUILAR",
+        "dorsal_en_cancha": 1,
+        "es_titular": true,
+        "posicion_en_cancha": "Defensa"
+      },
+      {
+        "nombre_jugador": "Jorge Eduardo SÁNCHEZ RAMOS",
+        "dorsal_en_cancha": 2,
+        "es_titular": true,
+        "posicion_en_cancha": "Defensa"
+      },
+      {
+        "nombre_jugador": "César Jasib MONTES CASTRO",
+        "dorsal_en_cancha": 3,
+        "es_titular": true,
+        "posicion_en_cancha": "Defensa"
+      },
+      {
+        "nombre_jugador": "Edson Omar ÁLVAREZ VELÁZQUEZ",
+        "dorsal_en_cancha": 4,
+        "es_titular": true,
+        "posicion_en_cancha": "Defensa"
+      },
+      {
+        "nombre_jugador": "Johan Felipe VÁSQUEZ IBARRA",
+        "dorsal_en_cancha": 5,
+        "es_titular": true,
+        "posicion_en_cancha": "Defensa"
+      },
+      {
+        "nombre_jugador": "Erik Antonio LIRA MÉNDEZ",
+        "dorsal_en_cancha": 6,
+        "es_titular": true,
+        "posicion_en_cancha": "Defensa"
+      },
+      {
+        "nombre_jugador": "Luis Francisco ROMO BARRÓN",
+        "dorsal_en_cancha": 7,
+        "es_titular": true,
+        "posicion_en_cancha": "Defensa"
+      },
+      {
+        "nombre_jugador": "Álvaro FIDALGO FERNÁNDEZ",
+        "dorsal_en_cancha": 8,
+        "es_titular": true,
+        "posicion_en_cancha": "Defensa"
+      },
+      {
+        "nombre_jugador": "Raúl Alonso JIMÉNEZ RODRÍGUEZ",
+        "dorsal_en_cancha": 9,
+        "es_titular": true,
+        "posicion_en_cancha": "Defensa"
+      },
+      {
+        "nombre_jugador": "Ernesto Alexis VEGA ROJAS",
+        "dorsal_en_cancha": 10,
+        "es_titular": true,
+        "posicion_en_cancha": "Defensa"
+      },
+      {
+        "nombre_jugador": "Santiago Tomás GIMENEZ",
+        "dorsal_en_cancha": 11,
+        "es_titular": true,
+        "posicion_en_cancha": "Defensa"
+      },
+      {
+        "nombre_jugador": "Carlos ACEVEDO LÓPEZ",
+        "dorsal_en_cancha": 12,
+        "es_titular": true,
+        "posicion_en_cancha": "Defensa"
+      },
+      {
+        "nombre_jugador": "Francisco Guillermo OCHOA MAGAÑA",
+        "dorsal_en_cancha": 13,
+        "es_titular": false,
+        "posicion_en_cancha": "Defensa"
+      },
+      {
+        "nombre_jugador": "Armando GONZÁLEZ ALBA",
+        "dorsal_en_cancha": 14,
+        "es_titular": false,
+        "posicion_en_cancha": "Defensa"
+      },
+      {
+        "nombre_jugador": "Israel REYES ROMERO",
+        "dorsal_en_cancha": 15,
+        "es_titular": false,
+        "posicion_en_cancha": "Defensa"
+      },
+      {
+        "nombre_jugador": "Julián Andrés QUIÑONES QUIÑONES",
+        "dorsal_en_cancha": 16,
+        "es_titular": false,
+        "posicion_en_cancha": "Defensa"
+      },
+      {
+        "nombre_jugador": "Orbelín PINEDA ALVARADO",
+        "dorsal_en_cancha": 17,
+        "es_titular": false,
+        "posicion_en_cancha": "Defensa"
+      },
+      {
+        "nombre_jugador": "Obed Goméz VARGAS",
+        "dorsal_en_cancha": 18,
+        "es_titular": false,
+        "posicion_en_cancha": "Defensa"
+      },
+      {
+        "nombre_jugador": "Gilberto Rafael MORA ZAMBRANO",
+        "dorsal_en_cancha": 19,
+        "es_titular": false,
+        "posicion_en_cancha": "Defensa"
+      },
+      {
+        "nombre_jugador": "Mateo CHÁVEZ GARCÍA",
+        "dorsal_en_cancha": 20,
+        "es_titular": false,
+        "posicion_en_cancha": "Defensa"
+      },
+      {
+        "nombre_jugador": "César Saúl HUERTA VALERA",
+        "dorsal_en_cancha": 21,
+        "es_titular": false,
+        "posicion_en_cancha": "Defensa"
+      },
+      {
+        "nombre_jugador": "Guillermo MARTÍNEZ AYALA",
+        "dorsal_en_cancha": 22,
+        "es_titular": false,
+        "posicion_en_cancha": "Defensa"
+      },
+      {
+        "nombre_jugador": "Jesús Daniel GALLARDO VASCONCELOS",
+        "dorsal_en_cancha": 23,
+        "es_titular": false,
+        "posicion_en_cancha": "Defensa"
+      },
+      {
+        "nombre_jugador": "Luis Gerardo CHÁVEZ MAGALLÓN",
+        "dorsal_en_cancha": 24,
+        "es_titular": false,
+        "posicion_en_cancha": "Defensa"
+      },
+      {
+        "nombre_jugador": "Roberto Carlos ALVARADO HERNÁNDEZ",
+        "dorsal_en_cancha": 25,
+        "es_titular": false,
+        "posicion_en_cancha": "Defensa"
+      },
+      {
+        "nombre_jugador": "Brian GUTIÉRREZ",
+        "dorsal_en_cancha": 26,
+        "es_titular": false,
+        "posicion_en_cancha": "Defensa"
+      }
+    ],
+    "jugadores_seleccion_2": []
+  }
+]
