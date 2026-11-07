@@ -19,10 +19,11 @@ IF @@TRANCOUNT <> 0 OR EXISTS (SELECT 1 FROM dbo.Jugador) OR EXISTS (SELECT 1 FR
     THROW 51700, N'El test requiere una base vacia y sin transacciones abiertas.', 1;
 
 DECLARE @plantillas TABLE
-(pais NVARCHAR(80), confederacion NVARCHAR(50), dorsal TINYINT,
+(orden INT IDENTITY(1,1) PRIMARY KEY,
+ pais NVARCHAR(80), confederacion NVARCHAR(50), dorsal TINYINT,
  nombre NVARCHAR(60), apellido NVARCHAR(60), nacimiento DATE,
  club NVARCHAR(100), posicion VARCHAR(40), debut DATE);
-INSERT INTO @plantillas VALUES
+INSERT INTO @plantillas (pais,confederacion,dorsal,nombre,apellido,nacimiento,club,posicion,debut) VALUES
 (N'Argentina',N'CONMEBOL',2,N'Marcos Nicolás',N'SENESI BARON','19970510',N'AFC Bournemouth (ENG)','Defensa','20260616'),
 (N'Brazil',N'CONMEBOL',2,N'Éderson José',N'DOS SANTOS LOURENÇO DA SILVA','19990707',N'Atalanta Bergamo (ITA)','Mediocentro','20260613'),
 (N'Germany',N'UEFA',25,N'Forzan Assan',N'OUÉDRAOGO','20060509',N'RB Leipzig (GER)','Mediocentro','20260614'),
@@ -37,20 +38,21 @@ DECLARE @rival INT = (SELECT id_seleccion FROM dbo.Seleccion WHERE pais = N'Riva
         @nombre NVARCHAR(60), @apellido NVARCHAR(60), @nacimiento DATE,
         @club NVARCHAR(100), @posicion VARCHAR(40), @debut DATE,
         @seleccion INT, @horario DATETIME2(0);
-DECLARE plantillas CURSOR LOCAL FAST_FORWARD FOR SELECT * FROM @plantillas;
-OPEN plantillas;
-FETCH NEXT FROM plantillas INTO @pais,@conf,@dorsal,@nombre,@apellido,@nacimiento,@club,@posicion,@debut;
-WHILE @@FETCH_STATUS = 0
+DECLARE @orden_plantilla INT;
+SELECT @orden_plantilla = MIN(orden) FROM @plantillas;
+WHILE @orden_plantilla IS NOT NULL
 BEGIN
+    SELECT @pais = pais, @conf = confederacion, @dorsal = dorsal,
+           @nombre = nombre, @apellido = apellido, @nacimiento = nacimiento,
+           @club = club, @posicion = posicion, @debut = debut
+    FROM @plantillas WHERE orden = @orden_plantilla;
     EXEC abm.Seleccion_Alta @pais,@conf,'A';
     SELECT @seleccion = id_seleccion FROM dbo.Seleccion WHERE pais = @pais;
     EXEC abm.Jugador_Alta @nacimiento,@club,@apellido,@nombre,@posicion,@dorsal,@seleccion;
     SET @horario = CONVERT(DATETIME2(0),@debut);
     EXEC abm.Partidos_Alta @sede,@seleccion,@rival,@debut,@horario,@horario,'GRUPOS';
-    FETCH NEXT FROM plantillas INTO @pais,@conf,@dorsal,@nombre,@apellido,@nacimiento,@club,@posicion,@debut;
+    SELECT @orden_plantilla = MIN(orden) FROM @plantillas WHERE orden > @orden_plantilla;
 END;
-CLOSE plantillas;
-DEALLOCATE plantillas;
 
 DECLARE @a INT, @o INT, @e INT;
 -- Caso 1: sin habilitar reconstruccion, 5 errores y ninguna escritura.

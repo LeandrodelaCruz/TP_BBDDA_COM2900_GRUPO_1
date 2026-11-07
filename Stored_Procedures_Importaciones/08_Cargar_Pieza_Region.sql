@@ -146,33 +146,28 @@ BEGIN
 
 
     --------------------------------------------------------
-    -- 5. CURSOR
+    -- 5. recorrido con WHILE
     --------------------------------------------------------
 
-    DECLARE cursor_relaciones CURSOR LOCAL FAST_FORWARD
-    FOR
-        SELECT
-            numero_fila,
-            anunciante,
-            campania,
-            region
-        FROM @Relaciones
-        ORDER BY numero_fila;
+    -- Copia fija de las filas a procesar; conserva el orden del proceso original.
+    SELECT ROW_NUMBER() OVER (ORDER BY numero_fila) AS orden_recorrido,
+           numero_fila, anunciante, campania, region
+    INTO #Trabajo_Recorrido
+    FROM @Relaciones;
+    CREATE UNIQUE CLUSTERED INDEX IX_Trabajo_Recorrido
+        ON #Trabajo_Recorrido (orden_recorrido);
+
+    DECLARE @fila_recorrido BIGINT;
+    SELECT @fila_recorrido = MIN(orden_recorrido) FROM #Trabajo_Recorrido;
 
 
-    OPEN cursor_relaciones;
-
-
-    FETCH NEXT FROM cursor_relaciones
-    INTO
-        @numero_fila,
-        @anunciante,
-        @campania,
-        @region;
-
-
-    WHILE @@FETCH_STATUS = 0
+    WHILE @fila_recorrido IS NOT NULL
     BEGIN
+        SELECT @numero_fila = numero_fila,
+               @anunciante = anunciante,
+               @campania = campania,
+               @region = region
+        FROM #Trabajo_Recorrido WHERE orden_recorrido = @fila_recorrido;
 
         SET @procesados += 1;
 
@@ -347,18 +342,10 @@ BEGIN
         END CATCH;
 
 
-        FETCH NEXT FROM cursor_relaciones
-        INTO
-            @numero_fila,
-            @anunciante,
-            @campania,
-            @region;
+        SELECT @fila_recorrido = MIN(orden_recorrido)
+            FROM #Trabajo_Recorrido WHERE orden_recorrido > @fila_recorrido;
 
     END;
-
-
-    CLOSE cursor_relaciones;
-    DEALLOCATE cursor_relaciones;
 
 
     --------------------------------------------------------

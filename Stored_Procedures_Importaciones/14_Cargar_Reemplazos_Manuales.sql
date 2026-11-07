@@ -71,14 +71,15 @@ BEGIN
         @seleccion INT, @baja INT, @alta INT, @reemplazo INT, @cantidad INT,
         @bloqueo INT, @reconstruido BIT, @vigentes_antes INT, @vigentes_despues INT;
     DECLARE @motivo VARCHAR(200) = 'Reemplazo por lesion (escenario de carga manual; fecha simulada).';
-    DECLARE casos CURSOR LOCAL FAST_FORWARD FOR
-        SELECT orden,pais,fecha,nombre_baja,apellido_baja,nacimiento_baja,
-               club_baja,posicion_baja,dorsal,nombre_alta,apellido_alta,
-               nacimiento_alta,club_alta,posicion_alta FROM @casos ORDER BY orden;
-    OPEN casos;
-    FETCH NEXT FROM casos INTO @orden,@pais,@fecha,@nb,@ab,@fb,@cb,@pb,@dorsal,@na,@aa,@fa,@ca,@pa;
-    WHILE @@FETCH_STATUS = 0
+    SELECT @orden = MIN(orden) FROM @casos;
+    WHILE @orden IS NOT NULL
     BEGIN
+        SELECT @pais = pais, @fecha = fecha, @nb = nombre_baja,
+               @ab = apellido_baja, @fb = nacimiento_baja, @cb = club_baja,
+               @pb = posicion_baja, @dorsal = dorsal, @na = nombre_alta,
+               @aa = apellido_alta, @fa = nacimiento_alta,
+               @ca = club_alta, @pa = posicion_alta
+        FROM @casos WHERE orden = @orden;
         SELECT @seleccion = NULL, @baja = NULL, @alta = NULL,
                @reemplazo = NULL, @reconstruido = 0;
         BEGIN TRY
@@ -190,10 +191,9 @@ BEGIN
             SET @errores += 1;
             INSERT INTO @resultado VALUES (@orden,@pais,'ERROR',NULL,ERROR_NUMBER(),ERROR_MESSAGE());
         END CATCH;
-        FETCH NEXT FROM casos INTO @orden,@pais,@fecha,@nb,@ab,@fb,@cb,@pb,@dorsal,@na,@aa,@fa,@ca,@pa;
+        -- La clave avanza incluso si el caso anterior hizo ROLLBACK.
+        SELECT @orden = MIN(orden) FROM @casos WHERE orden > @orden;
     END;
-    CLOSE casos;
-    DEALLOCATE casos;
     SELECT 5 AS casos_procesados, @aplicados AS aplicados,
            @omitidos AS ya_aplicados, @errores AS errores;
     SELECT seleccion,estado,id_reemplazo,numero_error,detalle FROM @resultado ORDER BY orden;

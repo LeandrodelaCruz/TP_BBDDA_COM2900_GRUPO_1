@@ -176,31 +176,27 @@ BEGIN
 
 
     --------------------------------------------------------
-    -- 8. CURSOR
+    -- 8. recorrido con WHILE
     --------------------------------------------------------
 
-    DECLARE cursor_anunciantes CURSOR LOCAL FAST_FORWARD -- Uso cursor porque  la consigna pide que un error en un registro no impida la carga de los demas
-    FOR
-        SELECT
-            numero_fila,
-            nombre,
-            pais
-        FROM #Anunciante_Procesar
-        ORDER BY numero_fila;
+    -- Copia fija de las filas a procesar; conserva el orden del proceso original.
+    SELECT ROW_NUMBER() OVER (ORDER BY numero_fila) AS orden_recorrido,
+           numero_fila, nombre, pais
+    INTO #Trabajo_Recorrido
+    FROM #Anunciante_Procesar;
+    CREATE UNIQUE CLUSTERED INDEX IX_Trabajo_Recorrido
+        ON #Trabajo_Recorrido (orden_recorrido);
+
+    DECLARE @fila_recorrido BIGINT;
+    SELECT @fila_recorrido = MIN(orden_recorrido) FROM #Trabajo_Recorrido;
 
 
-    OPEN cursor_anunciantes;
-
-
-    FETCH NEXT FROM cursor_anunciantes
-    INTO
-        @numero_fila,
-        @nombre,
-        @pais_origen;
-
-
-    WHILE @@FETCH_STATUS = 0
+    WHILE @fila_recorrido IS NOT NULL
     BEGIN
+        SELECT @numero_fila = numero_fila,
+               @nombre = nombre,
+               @pais_origen = pais
+        FROM #Trabajo_Recorrido WHERE orden_recorrido = @fila_recorrido;
 
         SET @procesados += 1;
 
@@ -380,21 +376,15 @@ BEGIN
         -- SIGUIENTE FILA
         ----------------------------------------------------
 
-        FETCH NEXT FROM cursor_anunciantes
-        INTO
-            @numero_fila,
-            @nombre,
-            @pais_origen;
+        SELECT @fila_recorrido = MIN(orden_recorrido)
+            FROM #Trabajo_Recorrido WHERE orden_recorrido > @fila_recorrido;
 
     END;
 
 
     --------------------------------------------------------
-    -- 14. CERRAR CURSOR
+    -- 14. FIN DEL RECORRIDO
     --------------------------------------------------------
-
-    CLOSE cursor_anunciantes;
-    DEALLOCATE cursor_anunciantes;
 
 
     --------------------------------------------------------

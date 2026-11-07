@@ -166,31 +166,27 @@ BEGIN
 
 
     --------------------------------------------------------
-    -- 8. CURSOR
+    -- 8. recorrido con WHILE
     --------------------------------------------------------
 
-    DECLARE cursor_campanias CURSOR LOCAL FAST_FORWARD
-    FOR
-        SELECT
-            numero_fila,
-            anunciante,
-            descripcion
-        FROM #Campania_Procesar
-        ORDER BY numero_fila;
+    -- Copia fija de las filas a procesar; conserva el orden del proceso original.
+    SELECT ROW_NUMBER() OVER (ORDER BY numero_fila) AS orden_recorrido,
+           numero_fila, anunciante, descripcion
+    INTO #Trabajo_Recorrido
+    FROM #Campania_Procesar;
+    CREATE UNIQUE CLUSTERED INDEX IX_Trabajo_Recorrido
+        ON #Trabajo_Recorrido (orden_recorrido);
+
+    DECLARE @fila_recorrido BIGINT;
+    SELECT @fila_recorrido = MIN(orden_recorrido) FROM #Trabajo_Recorrido;
 
 
-    OPEN cursor_campanias;
-
-
-    FETCH NEXT FROM cursor_campanias
-    INTO
-        @numero_fila,
-        @anunciante,
-        @descripcion;
-
-
-    WHILE @@FETCH_STATUS = 0
+    WHILE @fila_recorrido IS NOT NULL
     BEGIN
+        SELECT @numero_fila = numero_fila,
+               @anunciante = anunciante,
+               @descripcion = descripcion
+        FROM #Trabajo_Recorrido WHERE orden_recorrido = @fila_recorrido;
 
         SET @procesados += 1;
 
@@ -327,20 +323,16 @@ BEGIN
         -- SIGUIENTE FILA
         ----------------------------------------------------
 
-        FETCH NEXT FROM cursor_campanias
-        INTO
-            @numero_fila,
-            @anunciante,
-            @descripcion;
+        SELECT @fila_recorrido = MIN(orden_recorrido)
+            FROM #Trabajo_Recorrido WHERE orden_recorrido > @fila_recorrido;
 
     END;
 
 
     --------------------------------------------------------
-    -- 14. CERRAR CURSOR
+    -- 14. FIN DEL RECORRIDO
     --------------------------------------------------------
-    CLOSE cursor_campanias;
-    DEALLOCATE cursor_campanias; --libera el cursor de la memoria
+
 
     --------------------------------------------------------
     -- 15. RESUMEN

@@ -49,7 +49,7 @@ Fuente: https://www.transfermarkt.com.ar/
 ## Importacion en SQL Server
 
 El SP `importacion.Importar_Personal_Tecnico_CSV` esta en
-`Stored_Procedures_Importaciones/04_Importar_Personal_Tecnico_CSV.sql`.
+`Stored_Procedures_Importaciones/09_Importar_Personal_Tecnico_CSV.sql`.
 
 Antes de crearlo, deben estar cargadas las selecciones, la tabla Personal_Tecnico
 debe tener `nombre_completo NVARCHAR(120)` y los ABM del archivo
@@ -84,8 +84,13 @@ sus limites (nombre completo 120 y seleccion 80). Un campo que supere incluso
 la capacidad de staging queda fuera del formato de entrada admitido.
 `NVARCHAR(MAX)` se reserva para construir la sentencia SQL dinamica.
 
-La prueba esta en `Test/24_Test_Importar_Personal_Tecnico_CSV.sql`; recibe el
+La prueba esta en `Test_Importaciones/09_Test_Importar_Personal_Tecnico_CSV.sql`; recibe el
 CSV real y, opcionalmente, `Test/Datos_Importacion/personal_tecnico_casos.csv`.
 Sus escrituras se revierten al terminar. No ejecutar pruebas con un CSV cuya
 informacion haya sido marcada como incompleta por el scraper sin revisar primero
 el reporte de errores de extraccion.
+
+El recorrido de importacion usa `WHILE` sobre una tabla de trabajo con clave
+interna. Conserva las cuatro columnas originales de staging, las validaciones,
+el UPSERT y la continuacion ante errores de datos. Ver el patron replicable en
+[README_Recorrido_WHILE.md](../Stored_Procedures_Importaciones/README_Recorrido_WHILE.md).

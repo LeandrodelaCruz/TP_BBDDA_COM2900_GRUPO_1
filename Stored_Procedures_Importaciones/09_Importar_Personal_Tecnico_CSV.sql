@@ -37,7 +37,7 @@ BEGIN
     -- El CSV es UTF-8. La intercalación de esta staging permite leerlo en
     -- SQL Server 2019+ sin cambiar la base. RAW conserva los bytes del CSV.
     -- Límites de entrada amplios para validar contra el modelo definitivo.
-    -- VARCHAR UTF-8 mide bytes; el cursor convierte a NVARCHAR con igual n
+    -- VARCHAR UTF-8 mide bytes; la tabla de trabajo convierte a NVARCHAR con igual n
     -- para que ningún valor admitido por staging se recorte antes de validar.
     CREATE TABLE #Personal_Staging
     (
@@ -75,13 +75,29 @@ BEGIN
             @coincidencias INT, @procesados INT = 0, @insertados INT = 0,
             @actualizados INT = 0, @errores INT = 0;
 
-    DECLARE cur_personal CURSOR LOCAL FAST_FORWARD FOR
-        SELECT seleccion, nombre_completo, rol, fecha_extraccion_utc
-        FROM #Personal_Staging;
-    OPEN cur_personal;
-    FETCH NEXT FROM cur_personal INTO @seleccion, @nombre, @rol, @fecha;
-    WHILE @@FETCH_STATUS = 0
+    -- Mantener las cuatro columnas de staging para no alterar BULK INSERT.
+    -- La clave interna se agrega DESPUES de leer el CSV. No representa su
+    -- numero fisico de linea ni garantiza el orden original del archivo.
+    CREATE TABLE #Personal_Trabajo
+    (
+        registro INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+        seleccion NVARCHAR(400) NULL,
+        nombre_completo NVARCHAR(1000) NULL,
+        rol NVARCHAR(200) NULL,
+        fecha_extraccion_utc NVARCHAR(100) NULL
+    );
+    INSERT INTO #Personal_Trabajo (seleccion, nombre_completo, rol, fecha_extraccion_utc)
+    SELECT CONVERT(NVARCHAR(400), seleccion), CONVERT(NVARCHAR(1000), nombre_completo),
+           CONVERT(NVARCHAR(200), rol), CONVERT(NVARCHAR(100), fecha_extraccion_utc)
+    FROM #Personal_Staging;
+
+    DECLARE @registro INT;
+    SELECT @registro = MIN(registro) FROM #Personal_Trabajo;
+    WHILE @registro IS NOT NULL
     BEGIN
+        SELECT @seleccion = seleccion, @nombre = nombre_completo,
+               @rol = rol, @fecha = fecha_extraccion_utc
+        FROM #Personal_Trabajo WHERE registro = @registro;
         SET @procesados += 1;
         BEGIN TRY
             SET @id_seleccion = NULL;
@@ -139,10 +155,10 @@ BEGIN
                 (@procesados, @seleccion, @nombre, @rol, ERROR_NUMBER(), ERROR_MESSAGE());
             SET @errores += 1;
         END CATCH;
-        FETCH NEXT FROM cur_personal INTO @seleccion, @nombre, @rol, @fecha;
+        -- Avanzar tanto despues del exito como despues de un error de datos.
+        SELECT @registro = MIN(registro)
+        FROM #Personal_Trabajo WHERE registro > @registro;
     END;
-    CLOSE cur_personal;
-    DEALLOCATE cur_personal;
 
     SELECT @archivo AS archivo, @procesados AS registros_procesados,
            @insertados AS registros_insertados, @actualizados AS registros_actualizados,

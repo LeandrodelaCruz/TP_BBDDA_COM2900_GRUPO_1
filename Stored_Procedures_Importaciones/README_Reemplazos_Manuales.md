@@ -8,6 +8,9 @@ Como Region y Pieza_Para_Region, el procedimiento pertenece al esquema `carga`
 y se instala desde `Stored_Procedures_Importaciones`. Invoca la operacion
 funcional `negocio.Registrar_Reemplazo` para cada caso.
 
+La carga y la preparacion de su prueba recorren las claves con `WHILE`.
+El patron reutilizable esta explicado en [README_Recorrido_WHILE.md](README_Recorrido_WHILE.md).
+
 ## Casos
 
 | Seleccion | Saliente | Entrante | Dorsal | Fecha simulada |
