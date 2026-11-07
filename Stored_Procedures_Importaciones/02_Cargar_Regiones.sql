@@ -22,13 +22,11 @@
 USE MUNDIALDEFUTBOL;
 GO
 ------------------------------------------------------------
--- CREAR ESQUEMA
+-- VALIDAR ESQUEMA (creado en Table/00_Script_DB_Schemas_Creacion.sql)
 ------------------------------------------------------------
 
 IF SCHEMA_ID(N'carga') IS NULL
-BEGIN
-    EXEC(N'CREATE SCHEMA carga');
-END;
+    THROW 51910, N'Falta el esquema carga. Ejecute primero Table/00_Script_DB_Schemas_Creacion.sql.', 1;
 GO
 
 
@@ -161,37 +159,30 @@ BEGIN
 
 
     --------------------------------------------------------
-    -- 5. CURSOR
+    -- 5. recorrido con WHILE
     --------------------------------------------------------
 
-    DECLARE cursor_regiones CURSOR LOCAL FAST_FORWARD
-    FOR
-        SELECT
-            numero_fila,
-            nombre,
-            idioma,
-            huso_horario,
-            hora_prime_inicio,
-            hora_prime_fin
-        FROM @Regiones
-        ORDER BY numero_fila;
+    -- Copia fija de las filas a procesar; conserva el orden del proceso original.
+    SELECT ROW_NUMBER() OVER (ORDER BY numero_fila) AS orden_recorrido,
+           numero_fila, nombre, idioma, huso_horario, hora_prime_inicio, hora_prime_fin
+    INTO #Trabajo_Recorrido
+    FROM @Regiones;
+    CREATE UNIQUE CLUSTERED INDEX IX_Trabajo_Recorrido
+        ON #Trabajo_Recorrido (orden_recorrido);
+
+    DECLARE @fila_recorrido BIGINT;
+    SELECT @fila_recorrido = MIN(orden_recorrido) FROM #Trabajo_Recorrido;
 
 
-    OPEN cursor_regiones;
-
-
-    FETCH NEXT FROM cursor_regiones
-    INTO
-        @numero_fila,
-        @nombre,
-        @idioma,
-        @huso_horario,
-        @hora_prime_inicio,
-        @hora_prime_fin;
-
-
-    WHILE @@FETCH_STATUS = 0
+    WHILE @fila_recorrido IS NOT NULL
     BEGIN
+        SELECT @numero_fila = numero_fila,
+               @nombre = nombre,
+               @idioma = idioma,
+               @huso_horario = huso_horario,
+               @hora_prime_inicio = hora_prime_inicio,
+               @hora_prime_fin = hora_prime_fin
+        FROM #Trabajo_Recorrido WHERE orden_recorrido = @fila_recorrido;
 
         SET @procesados += 1;
         SET @id_region = NULL;
@@ -315,20 +306,10 @@ BEGIN
         END CATCH;
 
 
-        FETCH NEXT FROM cursor_regiones
-        INTO
-            @numero_fila,
-            @nombre,
-            @idioma,
-            @huso_horario,
-            @hora_prime_inicio,
-            @hora_prime_fin;
+        SELECT @fila_recorrido = MIN(orden_recorrido)
+            FROM #Trabajo_Recorrido WHERE orden_recorrido > @fila_recorrido;
 
     END;
-
-
-    CLOSE cursor_regiones;
-    DEALLOCATE cursor_regiones;
 
 
     --------------------------------------------------------

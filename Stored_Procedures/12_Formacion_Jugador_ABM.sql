@@ -254,6 +254,10 @@ BEGIN
 	)	
 		SET @errores += N'- El jugador no pertenece a la seleccion de la formacion. ';
 
+    -- Validacion: el jugador debe seguir convocado.
+    IF EXISTS (SELECT 1 FROM dbo.Reemplazo WHERE id_jugador_baja = @id_jugador)
+        SET @errores += N'- El jugador fue dado de baja de la convocatoria. ';
+
     -- Validacion: no repetir jugador en la misma formacion
     IF EXISTS (SELECT 1 FROM dbo.Formacion_Jugador
                WHERE id_formacion = @id_formacion AND id_jugador = @id_jugador)
@@ -367,6 +371,10 @@ BEGIN
     IF NOT EXISTS (SELECT 1 FROM dbo.Formacion_Jugador
                    WHERE id_formacion = @id_formacion AND id_jugador = @id_jugador)
         SET @errores += N'- No existe la relacion formacion-jugador indicada. ';
+
+    -- Validacion: el jugador debe seguir convocado.
+    IF EXISTS (SELECT 1 FROM dbo.Reemplazo WHERE id_jugador_baja = @id_jugador)
+        SET @errores += N'- El jugador fue dado de baja de la convocatoria. ';
 
     -- Validacion 2: dorsal entre 1 y 99
     IF @dorsal_en_cancha IS NULL OR @dorsal_en_cancha NOT BETWEEN 1 AND 99

@@ -117,32 +117,29 @@ BEGIN
         @actualizados INT = 0,
         @errores INT = 0;
 
-    DECLARE cursor_jugadores CURSOR LOCAL FAST_FORWARD FOR
-        SELECT
-            seleccion,
-            codigo_fifa,
-            dorsal,
-            posicion_codigo,
-            nombre,
-            apellido,
-            fecha_nacimiento,
-            club_origen
-        FROM #Jugador_Staging;
+    -- Copia fija de las filas a procesar; conserva el orden del proceso original.
+    SELECT ROW_NUMBER() OVER (ORDER BY (SELECT NULL)) AS orden_recorrido,
+           seleccion, codigo_fifa, dorsal, posicion_codigo, nombre, apellido, fecha_nacimiento, club_origen
+    INTO #Trabajo_Recorrido
+    FROM #Jugador_Staging;
+    CREATE UNIQUE CLUSTERED INDEX IX_Trabajo_Recorrido
+        ON #Trabajo_Recorrido (orden_recorrido);
 
-    OPEN cursor_jugadores;
+    DECLARE @fila_recorrido BIGINT;
+    SELECT @fila_recorrido = MIN(orden_recorrido) FROM #Trabajo_Recorrido;
 
-    FETCH NEXT FROM cursor_jugadores INTO
-        @seleccion_raw,
-        @codigo_fifa,
-        @dorsal_raw,
-        @posicion_raw,
-        @nombre_raw,
-        @apellido_raw,
-        @fecha_raw,
-        @club_raw;
 
-    WHILE @@FETCH_STATUS = 0
+    WHILE @fila_recorrido IS NOT NULL
     BEGIN
+        SELECT @seleccion_raw = seleccion,
+               @codigo_fifa = codigo_fifa,
+               @dorsal_raw = dorsal,
+               @posicion_raw = posicion_codigo,
+               @nombre_raw = nombre,
+               @apellido_raw = apellido,
+               @fecha_raw = fecha_nacimiento,
+               @club_raw = club_origen
+        FROM #Trabajo_Recorrido WHERE orden_recorrido = @fila_recorrido;
         SET @numero_fila += 1;
 
         BEGIN TRY
@@ -264,19 +261,10 @@ BEGIN
             SET @errores += 1;
         END CATCH;
 
-        FETCH NEXT FROM cursor_jugadores INTO
-            @seleccion_raw,
-            @codigo_fifa,
-            @dorsal_raw,
-            @posicion_raw,
-            @nombre_raw,
-            @apellido_raw,
-            @fecha_raw,
-            @club_raw;
+        SELECT @fila_recorrido = MIN(orden_recorrido)
+            FROM #Trabajo_Recorrido WHERE orden_recorrido > @fila_recorrido;
     END;
 
-    CLOSE cursor_jugadores;
-    DEALLOCATE cursor_jugadores;
 
     SELECT
         COUNT(*) AS registros_procesados,
