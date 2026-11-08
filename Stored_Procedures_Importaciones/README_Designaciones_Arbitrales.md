@@ -174,7 +174,7 @@ carga.Cargar_Designaciones_Arbitrales acepta @id_partido opcional y @demostrar_r
 
 La repetición conserva equipos completos y completa equipos parciales. No vuelve a sortear lo que ya existe. Un equipo previo inválido se informa como error, no se corrige silenciosamente. El detalle diferencia CARGADO, RECHAZADO, REVERTIDO, ADVERTENCIA, PENDIENTE, YA COMPLETO y ERROR PARTIDO. Los rechazos y reversiones son evidencia de esa ejecución y no se guardan en una tabla permanente: exportar el resultado si se necesita conservarlo.
 
-Se usa WHILE con claves únicas y avance explícito, sin cursores. El recorrido partido/puesto/candidato y la transacción por partido fueron aprobados. Los procedimientos nuevos usan puntos de guardado cuando reciben una transacción externa; la carga exige ejecutarse sin una. Un bloqueo de aplicacion coordina las operaciones del cuadro y las designaciones. No habilitar escrituras directas a tablas para saltear los SP.
+Se usa WHILE con claves únicas y avance explícito, sin cursores. El recorrido partido/puesto/candidato y la transacción por partido fueron aprobados. Los procedimientos nuevos usan puntos de guardado cuando reciben una transacción externa; la carga exige ejecutarse sin una. La ejecucion academica es secuencial; no se solicitan bloqueos de aplicacion ni bloqueos explicitos de lectura. Los puntos de guardado permiten revertir operaciones internas sin perder los pasos anteriores de la carga; no son un mecanismo de concurrencia. Ver ../Stored_Procedures_Negocio/README_Transacciones.md. No habilitar escrituras directas a tablas para saltear los SP.
 
 ## Importación de partidos
 

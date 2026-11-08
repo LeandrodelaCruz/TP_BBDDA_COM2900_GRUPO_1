@@ -14,19 +14,20 @@ AS
 BEGIN
     SET NOCOUNT ON;
     SET XACT_ABORT OFF; -- Los rechazos previstos permiten volver al punto de guardado.
-    DECLARE @tr INT = @@TRANCOUNT, @lock INT;
+    -- Si el llamador abrio una transaccion, conservar su trabajo anterior.
+    DECLARE @transacciones_previas INT = @@TRANCOUNT;
     BEGIN TRY
-        IF @tr = 0 BEGIN TRANSACTION; ELSE SAVE TRANSACTION CruceAlta;
-        EXEC @lock = sys.sp_getapplock @Resource=N'negocio.CuadroArbitral',
-            @LockMode='Exclusive', @LockOwner='Transaction', @LockTimeout=10000;
-        IF @lock < 0 THROW 51690, N'No se pudo bloquear el cuadro arbitral.', 1;
+        IF @transacciones_previas = 0
+            BEGIN TRANSACTION;
+        ELSE
+            SAVE TRANSACTION CruceAlta;
 
     DECLARE @fo VARCHAR(30), @fd VARCHAR(30), @ho DATETIME2, @hd DATETIME2,
         @s1 INT, @s2 INT, @g INT, @actual INT, @esperado INT;
     SELECT @fo=fase,@ho=horario_UTC,@s1=id_seleccion_1,@s2=id_seleccion_2,@g=id_seleccion_ganadora
-        FROM dbo.Partido WITH (UPDLOCK,HOLDLOCK) WHERE id_partido=@id_partido_origen;
+        FROM dbo.Partido WHERE id_partido=@id_partido_origen;
     SELECT @fd=fase,@hd=horario_UTC,@actual=CASE @posicion_destino WHEN 1 THEN id_seleccion_1 ELSE id_seleccion_2 END
-        FROM dbo.Partido WITH (UPDLOCK,HOLDLOCK) WHERE id_partido=@id_partido_destino;
+        FROM dbo.Partido WHERE id_partido=@id_partido_destino;
     SET @tipo_clasificado=UPPER(LTRIM(RTRIM(@tipo_clasificado)));
     IF @fo IS NULL OR @fd IS NULL THROW 51320,N'Los dos partidos del cruce deben existir.',1;
     IF @posicion_destino IS NULL OR @posicion_destino NOT IN (1,2)
@@ -58,11 +59,11 @@ BEGIN
     END
     ELSE INSERT dbo.Cruce_Partido VALUES(@id_partido_destino,@posicion_destino,@id_partido_origen,@tipo_clasificado);
 
-        IF @tr = 0 COMMIT TRANSACTION;
+        IF @transacciones_previas = 0 COMMIT TRANSACTION;
     END TRY
     BEGIN CATCH
-        IF @tr = 0 AND XACT_STATE() <> 0 ROLLBACK TRANSACTION;
-        ELSE IF @tr > 0 AND XACT_STATE() = 1 ROLLBACK TRANSACTION CruceAlta;
+        IF @transacciones_previas = 0 AND XACT_STATE() <> 0 ROLLBACK TRANSACTION;
+        ELSE IF @transacciones_previas > 0 AND XACT_STATE() = 1 ROLLBACK TRANSACTION CruceAlta;
         THROW;
     END CATCH
 END;
@@ -73,12 +74,13 @@ AS
 BEGIN
     SET NOCOUNT ON;
     SET XACT_ABORT OFF; -- Los rechazos previstos permiten volver al punto de guardado.
-    DECLARE @tr INT = @@TRANCOUNT, @lock INT;
+    -- Si el llamador abrio una transaccion, conservar su trabajo anterior.
+    DECLARE @transacciones_previas INT = @@TRANCOUNT;
     BEGIN TRY
-        IF @tr = 0 BEGIN TRANSACTION; ELSE SAVE TRANSACTION CruceBaja;
-        EXEC @lock = sys.sp_getapplock @Resource=N'negocio.CuadroArbitral',
-            @LockMode='Exclusive', @LockOwner='Transaction', @LockTimeout=10000;
-        IF @lock < 0 THROW 51690, N'No se pudo bloquear el cuadro arbitral.', 1;
+        IF @transacciones_previas = 0
+            BEGIN TRANSACTION;
+        ELSE
+            SAVE TRANSACTION CruceBaja;
 
     IF NOT EXISTS (SELECT 1 FROM dbo.Cruce_Partido WHERE id_partido_destino=@id_partido_destino AND posicion_destino=@posicion_destino)
         THROW 51327,N'El cruce no existe.',1;
@@ -89,11 +91,11 @@ BEGIN
         THROW 51328,N'El cruce ya tiene clasificados o participantes de destino; no se puede retirar.',1;
     DELETE dbo.Cruce_Partido WHERE id_partido_destino=@id_partido_destino AND posicion_destino=@posicion_destino;
 
-        IF @tr = 0 COMMIT TRANSACTION;
+        IF @transacciones_previas = 0 COMMIT TRANSACTION;
     END TRY
     BEGIN CATCH
-        IF @tr = 0 AND XACT_STATE() <> 0 ROLLBACK TRANSACTION;
-        ELSE IF @tr > 0 AND XACT_STATE() = 1 ROLLBACK TRANSACTION CruceBaja;
+        IF @transacciones_previas = 0 AND XACT_STATE() <> 0 ROLLBACK TRANSACTION;
+        ELSE IF @transacciones_previas > 0 AND XACT_STATE() = 1 ROLLBACK TRANSACTION CruceBaja;
         THROW;
     END CATCH
 END;
@@ -105,21 +107,22 @@ AS
 BEGIN
     SET NOCOUNT ON;
     SET XACT_ABORT OFF; -- Los rechazos previstos permiten volver al punto de guardado.
-    DECLARE @tr INT = @@TRANCOUNT, @lock INT;
+    -- Si el llamador abrio una transaccion, conservar su trabajo anterior.
+    DECLARE @transacciones_previas INT = @@TRANCOUNT;
     BEGIN TRY
-        IF @tr = 0 BEGIN TRANSACTION; ELSE SAVE TRANSACTION CruceModificar;
-        EXEC @lock = sys.sp_getapplock @Resource=N'negocio.CuadroArbitral',
-            @LockMode='Exclusive', @LockOwner='Transaction', @LockTimeout=10000;
-        IF @lock < 0 THROW 51690, N'No se pudo bloquear el cuadro arbitral.', 1;
+        IF @transacciones_previas = 0
+            BEGIN TRANSACTION;
+        ELSE
+            SAVE TRANSACTION CruceModificar;
 
     EXEC abm.Cruce_Partido_Baja @id_partido_destino,@posicion_destino;
     EXEC abm.Cruce_Partido_Alta @id_partido_destino,@posicion_destino,@id_partido_origen,@tipo_clasificado;
 
-        IF @tr = 0 COMMIT TRANSACTION;
+        IF @transacciones_previas = 0 COMMIT TRANSACTION;
     END TRY
     BEGIN CATCH
-        IF @tr = 0 AND XACT_STATE() <> 0 ROLLBACK TRANSACTION;
-        ELSE IF @tr > 0 AND XACT_STATE() = 1 ROLLBACK TRANSACTION CruceModificar;
+        IF @transacciones_previas = 0 AND XACT_STATE() <> 0 ROLLBACK TRANSACTION;
+        ELSE IF @transacciones_previas > 0 AND XACT_STATE() = 1 ROLLBACK TRANSACTION CruceModificar;
         THROW;
     END CATCH
 END;

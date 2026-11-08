@@ -14,12 +14,13 @@ AS
 BEGIN
     SET NOCOUNT ON;
     SET XACT_ABORT OFF; -- Los rechazos previstos permiten volver al punto de guardado.
-    DECLARE @tr INT = @@TRANCOUNT, @lock INT;
+    -- Si el llamador abrio una transaccion, conservar su trabajo anterior.
+    DECLARE @transacciones_previas INT = @@TRANCOUNT;
     BEGIN TRY
-        IF @tr = 0 BEGIN TRANSACTION; ELSE SAVE TRANSACTION CargarCruces;
-        EXEC @lock = sys.sp_getapplock @Resource=N'negocio.CuadroArbitral',
-            @LockMode='Exclusive', @LockOwner='Transaction', @LockTimeout=10000;
-        IF @lock < 0 THROW 51690, N'No se pudo bloquear el cuadro arbitral.', 1;
+        IF @transacciones_previas = 0
+            BEGIN TRANSACTION;
+        ELSE
+            SAVE TRANSACTION CargarCruces;
 
     DECLARE @referencias TABLE(numero INT PRIMARY KEY,utc DATETIME2(0),fase VARCHAR(30));
     INSERT @referencias VALUES
@@ -108,11 +109,11 @@ BEGIN
         SELECT @n=MIN(orden) FROM @trabajo WHERE orden>@n;
     END;
 
-        IF @tr = 0 COMMIT TRANSACTION;
+        IF @transacciones_previas = 0 COMMIT TRANSACTION;
     END TRY
     BEGIN CATCH
-        IF @tr = 0 AND XACT_STATE() <> 0 ROLLBACK TRANSACTION;
-        ELSE IF @tr > 0 AND XACT_STATE() = 1 ROLLBACK TRANSACTION CargarCruces;
+        IF @transacciones_previas = 0 AND XACT_STATE() <> 0 ROLLBACK TRANSACTION;
+        ELSE IF @transacciones_previas > 0 AND XACT_STATE() = 1 ROLLBACK TRANSACTION CargarCruces;
         THROW;
     END CATCH
     SELECT 32 AS cruces_verificados;

@@ -13,16 +13,17 @@ AS
 BEGIN
     SET NOCOUNT ON;
     SET XACT_ABORT OFF; -- Los rechazos previstos permiten volver al punto de guardado.
-    DECLARE @tr INT = @@TRANCOUNT, @lock INT;
+    -- Si el llamador abrio una transaccion, conservar su trabajo anterior.
+    DECLARE @transacciones_previas INT = @@TRANCOUNT;
     BEGIN TRY
-        IF @tr = 0 BEGIN TRANSACTION; ELSE SAVE TRANSACTION ConfirmarResultado;
-        EXEC @lock = sys.sp_getapplock @Resource=N'negocio.CuadroArbitral',
-            @LockMode='Exclusive', @LockOwner='Transaction', @LockTimeout=10000;
-        IF @lock < 0 THROW 51690, N'No se pudo bloquear el cuadro arbitral.', 1;
+        IF @transacciones_previas = 0
+            BEGIN TRANSACTION;
+        ELSE
+            SAVE TRANSACTION ConfirmarResultado;
 
     DECLARE @s1 INT,@s2 INT,@anterior INT,@fase VARCHAR(30);
     SELECT @s1=id_seleccion_1,@s2=id_seleccion_2,@anterior=id_seleccion_ganadora,@fase=fase
-    FROM dbo.Partido WITH (UPDLOCK,HOLDLOCK) WHERE id_partido=@id_partido;
+    FROM dbo.Partido WHERE id_partido=@id_partido;
     IF @fase IS NULL OR @fase='GRUPOS' OR @s1 IS NULL OR @s2 IS NULL
         THROW 51330,N'Se requiere un partido eliminatorio con ambos participantes.',1;
     IF @id_seleccion_ganadora IS NULL OR @id_seleccion_ganadora NOT IN (@s1,@s2)
@@ -56,11 +57,11 @@ BEGIN
         SELECT @d=MIN(id) FROM @destinos WHERE id>@d;
     END;
 
-        IF @tr = 0 COMMIT TRANSACTION;
+        IF @transacciones_previas = 0 COMMIT TRANSACTION;
     END TRY
     BEGIN CATCH
-        IF @tr = 0 AND XACT_STATE() <> 0 ROLLBACK TRANSACTION;
-        ELSE IF @tr > 0 AND XACT_STATE() = 1 ROLLBACK TRANSACTION ConfirmarResultado;
+        IF @transacciones_previas = 0 AND XACT_STATE() <> 0 ROLLBACK TRANSACTION;
+        ELSE IF @transacciones_previas > 0 AND XACT_STATE() = 1 ROLLBACK TRANSACTION ConfirmarResultado;
         THROW;
     END CATCH
 END;

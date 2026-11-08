@@ -37,24 +37,16 @@ BEGIN
 
     DECLARE @transacciones_previas INT = @@TRANCOUNT,
             @id_seleccion INT, @dorsal TINYINT, @id_jugador_alta INT,
-            @errores NVARCHAR(2048) = N'', @bloqueo INT;
+            @errores NVARCHAR(2048) = N'';
     DECLARE @resultado TABLE (id_reemplazo NUMERIC(38,0));
 
     BEGIN TRY
         IF @transacciones_previas = 0 BEGIN TRANSACTION;
         ELSE SAVE TRANSACTION RegistrarReemplazo;
 
-        -- Serializa las llamadas a esta operacion, incluso para selecciones
-        -- distintas. El bloqueo se libera al finalizar la transaccion.
-        EXEC @bloqueo = sys.sp_getapplock
-            @Resource = N'negocio.Registrar_Reemplazo',
-            @LockMode = 'Exclusive', @LockOwner = 'Transaction',
-            @LockTimeout = 10000;
-        IF @bloqueo < 0
-            THROW 51400, N'No se pudo obtener el bloqueo para registrar el reemplazo.', 1;
 
         SELECT @id_seleccion = id_seleccion, @dorsal = dorsal
-        FROM dbo.Jugador WITH (UPDLOCK, HOLDLOCK)
+        FROM dbo.Jugador
         WHERE id_jugador = @id_jugador_baja;
 
         IF @id_seleccion IS NULL
@@ -74,25 +66,25 @@ BEGIN
         IF NULLIF(LTRIM(RTRIM(@posicion)), '') IS NULL
             SET @errores += N'- La posicion es obligatoria. ';
 
-        IF EXISTS (SELECT 1 FROM dbo.Reemplazo WITH (UPDLOCK, HOLDLOCK)
+        IF EXISTS (SELECT 1 FROM dbo.Reemplazo
                    WHERE id_jugador_baja = @id_jugador_baja)
             SET @errores += N'- El saliente ya fue dado de baja de la convocatoria. ';
-        IF EXISTS (SELECT 1 FROM dbo.Reemplazo WITH (UPDLOCK, HOLDLOCK)
+        IF EXISTS (SELECT 1 FROM dbo.Reemplazo
                    WHERE id_jugador_alta = @id_jugador_baja AND fecha_cambio > @fecha_cambio)
             SET @errores += N'- La baja no puede ser anterior a su incorporacion. ';
 
         -- Misma clave natural que el importador de jugadores.
-        IF EXISTS (SELECT 1 FROM dbo.Jugador WITH (UPDLOCK, HOLDLOCK)
+        IF EXISTS (SELECT 1 FROM dbo.Jugador
                    WHERE id_seleccion = @id_seleccion
                      AND fecha_nacimiento = @fecha_nacimiento
                      AND UPPER(LTRIM(RTRIM(nombre))) = UPPER(LTRIM(RTRIM(@nombre)))
                      AND UPPER(LTRIM(RTRIM(apellido))) = UPPER(LTRIM(RTRIM(@apellido))))
             SET @errores += N'- El entrante ya esta registrado en la seleccion; no se admite duplicarlo ni reincorporarlo. ';
 
-        IF EXISTS (SELECT 1 FROM dbo.Formacion WITH (UPDLOCK, HOLDLOCK)
+        IF EXISTS (SELECT 1 FROM dbo.Formacion
                    WHERE id_seleccion = @id_seleccion)
             SET @errores += N'- Registre los reemplazos antes de cargar formaciones de esta seleccion. ';
-        IF EXISTS (SELECT 1 FROM dbo.Partido WITH (UPDLOCK, HOLDLOCK)
+        IF EXISTS (SELECT 1 FROM dbo.Partido
                    WHERE (id_seleccion_1 = @id_seleccion OR id_seleccion_2 = @id_seleccion)
                      AND fecha <= @fecha_cambio)
             SET @errores += N'- La fecha del reemplazo debe ser anterior al primer partido de la seleccion. ';

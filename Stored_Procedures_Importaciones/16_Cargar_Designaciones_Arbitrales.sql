@@ -33,17 +33,14 @@ BEGIN
     DECLARE @detalle TABLE(orden INT IDENTITY PRIMARY KEY,partido INT,rol VARCHAR(30),arbitro INT,
         estado VARCHAR(25),numero_error INT,detalle NVARCHAR(2048));
     DECLARE @p INT,@s1 INT,@s2 INT,@o INT,@c INT,@a INT,@rol VARCHAR(30),@cat VARCHAR(50),@cantidad INT,
-        @ok BIT,@demo BIT=0,@lock INT,@antes INT,@aviso NVARCHAR(2048);
+        @ok BIT,@demo BIT=0,@antes INT,@aviso NVARCHAR(2048);
     SELECT @p=MIN(id) FROM @partidos;
     WHILE @p IS NOT NULL
     BEGIN
         SELECT @s1=NULL,@s2=NULL,@rol=NULL,@a=NULL;
         BEGIN TRY
             BEGIN TRANSACTION;
-            EXEC @lock=sys.sp_getapplock @Resource=N'negocio.CuadroArbitral',@LockMode='Exclusive',
-                @LockOwner='Transaction',@LockTimeout=10000;
-            IF @lock<0 THROW 51690,N'No se pudo bloquear la carga del partido.',1;
-            SELECT @s1=id_seleccion_1,@s2=id_seleccion_2 FROM dbo.Partido WITH(UPDLOCK,HOLDLOCK) WHERE id_partido=@p;
+            SELECT @s1=id_seleccion_1,@s2=id_seleccion_2 FROM dbo.Partido WHERE id_partido=@p;
             IF @s1 IS NULL OR @s2 IS NULL
             BEGIN
                 SET @omitidos+=1;
