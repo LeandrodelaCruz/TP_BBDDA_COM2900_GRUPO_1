@@ -16,7 +16,7 @@ BEGIN
     DECLARE @total_errores INT = 0;
 
     --------------------------------------------------------------------
-    -- 1. LECTURA DEL ARCHIVO JSON
+    -- 1. LECTURA Y CONVERSIÓN DEL ARCHIVO JSON
     --------------------------------------------------------------------
     DECLARE @json_bytes VARBINARY(MAX);
 
@@ -52,12 +52,10 @@ BEGIN
         THROW 53005, @mensajeUtf8, 1;
     END CATCH;
 
-    ----------------------------------------------------------------
-    -- 2. TABLA TEMPORAL DE PARTIDOS DEL JSON
-    ----------------------------------------------------------------
-    
-        BEGIN TRY  
-
+    BEGIN TRY  
+        ----------------------------------------------------------------
+        -- 2. TABLA TEMPORAL DE PARTIDOS DEL JSON
+        ----------------------------------------------------------------
         CREATE TABLE #PartidosJSON
         (
             id_registro INT IDENTITY(1,1) PRIMARY KEY,
@@ -85,11 +83,7 @@ BEGIN
             fecha,
             TRY_CONVERT(
                 DATETIME2(0),
-                REPLACE(
-                    REPLACE(horario_utc, 'T', ' '),
-                    'Z',
-                    ''
-                ),
+                REPLACE(REPLACE(horario_utc, 'T', ' '), 'Z', ''),
                 126
             ),
             seleccion_1_nombre,
@@ -107,71 +101,39 @@ BEGIN
             jugadores_seleccion_2 NVARCHAR(MAX) '$.jugadores_seleccion_2' AS JSON
         );
 
-
-
         ----------------------------------------------------------------
-        -- 3. RESOLVER SELECCIONES
+        -- 3. RESOLVER SELECCIONES Y PARTIDOS
         ----------------------------------------------------------------
-
         UPDATE pj
         SET
             id_seleccion_1 = s1.id_seleccion,
             id_seleccion_2 = s2.id_seleccion
         FROM #PartidosJSON pj
-
         LEFT JOIN dbo.Seleccion s1
-            ON s1.pais =
-                CASE
-                    WHEN LTRIM(RTRIM(pj.seleccion_1_nombre)) = 'Korea Republic' THEN 'South Korea'
-                    ELSE LTRIM(RTRIM(pj.seleccion_1_nombre))
-                END
-
+            ON s1.pais = CASE WHEN LTRIM(RTRIM(pj.seleccion_1_nombre)) = 'Korea Republic' THEN 'South Korea' ELSE LTRIM(RTRIM(pj.seleccion_1_nombre)) END
         LEFT JOIN dbo.Seleccion s2
-            ON s2.pais =
-                CASE
-                    WHEN LTRIM(RTRIM(pj.seleccion_2_nombre)) = 'Korea Republic' THEN 'South Korea'
-                    ELSE LTRIM(RTRIM(pj.seleccion_2_nombre))
-                END;
-
-        ----------------------------------------------------------------
-        -- 4. RESOLVER PARTIDOS
-        ----------------------------------------------------------------
+            ON s2.pais = CASE WHEN LTRIM(RTRIM(pj.seleccion_2_nombre)) = 'Korea Republic' THEN 'South Korea' ELSE LTRIM(RTRIM(pj.seleccion_2_nombre)) END;
 
         UPDATE pj
-        SET id_partido =
-            CASE
-                WHEN coincidencias.cantidad = 1 THEN coincidencias.id_partido
-                ELSE NULL
-            END
+        SET id_partido = coincidencias.id_partido
         FROM #PartidosJSON pj
-
         OUTER APPLY
         (
-            SELECT
-                MIN(p.id_partido) AS id_partido,
-                COUNT(*) AS cantidad
+            SELECT MIN(p.id_partido) AS id_partido, COUNT(*) AS cantidad
             FROM dbo.Partido p
-            WHERE
-                p.fecha = pj.fecha
-                AND p.horario_UTC = pj.horario_utc
-                AND
-                (
+            WHERE p.fecha = pj.fecha
+              AND p.horario_UTC = pj.horario_utc
+              AND (
                     (p.id_seleccion_1 = pj.id_seleccion_1 AND p.id_seleccion_2 = pj.id_seleccion_2)
                     OR
                     (p.id_seleccion_1 = pj.id_seleccion_2 AND p.id_seleccion_2 = pj.id_seleccion_1)
-                )
+                  )
+            HAVING COUNT(*) = 1
         ) coincidencias;
 
-         -- DEBUG
-
-        SELECT * FROM #PartidosJSON;
-
-
-
         ----------------------------------------------------------------
-        -- 5. TABLA TEMPORAL DE JUGADORES
+        -- 4. TABLA TEMPORAL DE JUGADORES EXTRAÍDOS DEL JSON
         ----------------------------------------------------------------
-
         CREATE TABLE #JugadoresJSON
         (
             id_registro INT IDENTITY(1,1) PRIMARY KEY,
@@ -184,99 +146,40 @@ BEGIN
             posicion_en_cancha VARCHAR(40)
         );
 
-        ----------------------------------------------------------------
-        -- 6. CARGAR JUGADORES DE LA SELECCIÓN 1
-        ----------------------------------------------------------------
-
-        INSERT INTO #JugadoresJSON
-        (
-            id_partido,
-            id_seleccion,
-            nombre_jugador,
-            dorsal_en_cancha,
-            es_titular,
-            posicion_en_cancha
-        )
-        SELECT
-            pj.id_partido,
-            pj.id_seleccion_1,
-            LTRIM(RTRIM(j.nombre_jugador)),
-            j.dorsal_en_cancha,
-            j.es_titular,
-            j.posicion_en_cancha
+        -- Carga de Selección 1
+        INSERT INTO #JugadoresJSON (id_partido, id_seleccion, nombre_jugador, dorsal_en_cancha, es_titular, posicion_en_cancha)
+        SELECT pj.id_partido, pj.id_seleccion_1, LTRIM(RTRIM(j.nombre_jugador)), j.dorsal_en_cancha, j.es_titular, j.posicion_en_cancha
         FROM #PartidosJSON pj
         CROSS APPLY OPENJSON(ISNULL(pj.jugadores_seleccion_1, '[]'))
-        WITH
-        (
+        WITH (
             nombre_jugador NVARCHAR(150) '$.nombre_jugador',
             dorsal_en_cancha TINYINT '$.dorsal_en_cancha',
             es_titular BIT '$.es_titular',
             posicion_en_cancha VARCHAR(40) '$.posicion_en_cancha'
         ) j;
 
-
-
-        ----------------------------------------------------------------
-        -- 7. CARGAR JUGADORES DE LA SELECCIÓN 2
-        ----------------------------------------------------------------
-
-        INSERT INTO #JugadoresJSON
-        (
-            id_partido,
-            id_seleccion,
-            nombre_jugador,
-            dorsal_en_cancha,
-            es_titular,
-            posicion_en_cancha
-        )
-        SELECT
-            pj.id_partido,
-            pj.id_seleccion_2,
-            LTRIM(RTRIM(j.nombre_jugador)),
-            j.dorsal_en_cancha,
-            j.es_titular,
-            j.posicion_en_cancha
+        -- Carga de Selección 2
+        INSERT INTO #JugadoresJSON (id_partido, id_seleccion, nombre_jugador, dorsal_en_cancha, es_titular, posicion_en_cancha)
+        SELECT pj.id_partido, pj.id_seleccion_2, LTRIM(RTRIM(j.nombre_jugador)), j.dorsal_en_cancha, j.es_titular, j.posicion_en_cancha
         FROM #PartidosJSON pj
         CROSS APPLY OPENJSON(ISNULL(pj.jugadores_seleccion_2, '[]'))
-        WITH
-        (
+        WITH (
             nombre_jugador NVARCHAR(150) '$.nombre_jugador',
             dorsal_en_cancha TINYINT '$.dorsal_en_cancha',
             es_titular BIT '$.es_titular',
             posicion_en_cancha VARCHAR(40) '$.posicion_en_cancha'
         ) j;
 
-
-        ----------------------------------------------------------------
-        -- 8. RESOLVER FORMACIONES
-        ----------------------------------------------------------------
-
+        -- Resolver ID de Formación
         UPDATE j
         SET id_formacion = f.id_formacion
         FROM #JugadoresJSON j
         INNER JOIN dbo.Formacion f
             ON f.id_partido = j.id_partido
-            AND f.id_seleccion = j.id_seleccion;
-
-        -- DEBUG
-        select * from #JugadoresJSON
-
-        SELECT COUNT(*)
-        FROM #JugadoresJSON
+           AND f.id_seleccion = j.id_seleccion;
 
         ----------------------------------------------------------------
-        -- 9. TABLA TEMPORAL DE ERRORES
-        ----------------------------------------------------------------
-
-        CREATE TABLE #Errores
-        (
-            id_error INT IDENTITY(1,1) PRIMARY KEY,
-            nombre_jugador NVARCHAR(150),
-            motivo NVARCHAR(MAX)
-        );
-
-        ----------------------------------------------------------------
-        -- 9.B TABLA TEMPORAL DE ALIAS DE JUGADORES
+        -- 5. TABLA TEMPORAL DE ALIAS
         ----------------------------------------------------------------
         CREATE TABLE #AliasJugadores
         (
@@ -323,17 +226,90 @@ BEGIN
         ('Miles ROBINSON', 'Miles Gordon ROBINSON'),
         ('Tyler ADAMS', 'Tyler Shaan ADAMS'),
         ('Mark McKENZIE', 'Mark Alexander McKENZIE'),
-        ('EDERSON SILVA','Éderson José DOS SANTOS LOURENÇO DA SILVA');
-
+        ('EDERSON SILVA','Éderson José DOS SANTOS LOURENÇO DA SILVA'),
+        ('GAVI', 'Pablo PAEZ GAVIRA'),
+        ('RODRI', 'Rodrigo HERNÁNDEZ CASCANTE'),
+        ('PEDRI', 'Pedro GONZÁLEZ LÓPEZ'),
+        ('Alex GRIMALDO', 'Alejandro GRIMALDO GARCÍA'),
+        ('Alex BAENA', 'Alejandro BAENA RODRÍGUEZ'),
+        ('Dani OLMO', 'Daniel OLMO CARVAJAL'),
+        ('Nico WILLIAMS', 'Nicholas WILLIAMS ARTHUER'),
+        ('Alireza BEIRANVAND', 'Ali Reza SAFARBEIRANVAND'),
+        ('Milad MOHAMMADI', 'Milad MOHAMMADIKESHMARZI'),
+        ('Ramin REZAEIAN', 'Ramin REZAEIANSEMESKANDI'),
+        ('Payam NIAZMAND', 'Seyedpayam NIAZMAND'),
+        ('Ehsan HAJISAFI', 'Ehsan HAJI SAFI'),
+        ('Hossein KANANI', 'Mohammadhossein KANANI ZADEGAN'),
+        ('Dayot UPAMECANO', 'Dayotchanculle Oswald UPAMECANO'),
+        ('Manu KONE', 'Kouadio Emmanuel Boris KONE'),
+        ('Ngolo KANTE', 'N''golo KANTE'),
+        ('MERCHAS DOSKI', 'Merchas Ghazi Salih SALIH'),
+        ('AMIR ALAMMARI', 'Amir Fouad Aboud AL-AMMARI'),
+        ('ALI ALHAMADI', 'Ali Ibrahim Karim ALZUBAIDI'),
+        ('FRANS PUTROS', 'Frans Dhia Jirjis HADDAD'),
+        ('AHMED QASEM', 'Ahmed Ihab Ahmed AHMED'),
+        ('MARKO FARJI', 'Marko Jabbar Hussein HUSSEIN'),
+        ('Nico GONZALEZ', 'Nicolas Ivan GONZALEZ'),
+        ('Nico PAZ', 'Nicolas PAZ MARTÍNEZ'),
+        ('VITINHA', 'Vitor MACHADO FERREIRA'),
+        ('SAMU COSTA', 'Samuel DE ALMEIDA COSTA'),
+        ('Nico OREILLY', 'Nico O''REILLY'),
+        ('Noni MADUEKE', 'Chukwunonso Azuka Tristan MADUEKE'),
+        ('Dan BURN', 'Daniel Johnson BURN'),
+        ('Ollie WATKINS', 'Oliver George Arthur WATKINS'),
+        ('Kamaldeen SULEMANA', 'Kamal Deen SULEMANA'),
+        ('Umar ESHMURODOV', 'Umarbek ESHMURODOV'),
+        ('Ali ABDI', 'Ali ELABDI'),
+        ('Mouhib CHAMAKH', 'Abdelmouhib CHAMAKH'),
+        ('Mohamed HADJ MAHMOUD', 'Mohamed BELHADJ MAHMOUD'),
+        ('Maxi ARAUJO', 'Maximiliano Javier ARAÚJO VILCHES'),
+        ('Max CROCOMBE', 'Maxime Teremoana CROCOMBE'),
+        ('Tim PAYNE ', 'Timothy John PAYNE'),
+        ('Chris WOOD', 'Christopher Grant WOOD'),
+        ('Alex PAULSEN', 'Alexander Noah PAULSEN'),
+        ('Tommy SMITH', 'Thomas Jefferson SMITH'),
+        ('Ben OLD', 'Benjamin Craig OLD'),
+        ('Ben WAINE', 'Benjamin Peter WAINE'),
+        ('Thelo AASGAARD', 'Thelonious Gerard AASGAARD'),
+        ('NOOR ALRAWABDEH', 'Noor Al-Deen Mahmoud Ali AL RAWABDEH'),
+        ('MOHANNAD ABUTAHA', 'Mohannad Mahmoud Saleh ABU TAHA'),
+        ('NIZAR ALRASHDAN', 'Nizar Mahmoud Ahmed AL-RASHDAN'),
+        ('MOUSA ALTAMARI', 'Mousa Mohammad Mousa SULEIMAN'),
+        ('NOUR BANIATEYAH', 'Noureddin Zaid Khaleel BANI ATEYAH'),
+        ('SAED ALROSAN', 'Sa''ed Ahmad Salameh ALROSAN'),
+        ('IBRAHIM SADEH', 'Ibrahim Mohammad Sami SA''DEH'),
+        ('MOHAMMAD ABUZRAIQ', 'Mohammad Faisal Yousef ABU ZRAIQ'),
+        ('Cucho HERNANDEZ', 'Juan Camilo HERNANDEZ SUAREZ'),
+        ('VOZINHA', 'Josimar José ÉVORA DIAS'),
+        ('DINEY BORGES', 'Edilson Alberto MONTEIRO SANCHES BORGES'),
+        ('PICO LOPES', 'Roberto Carlos LOPES'),
+        ('CJ DOS SANTOS', 'Carlos Joaquim ANTUNES DOS SANTOS'),
+        ('STOPIRA', 'Ianique DOS SANTOS TAVARES'),
+        ('YANNICK SEMEDO', 'Jair SEMEDO MONTEIRO'),
+        ('AHMED FATOUH', 'Ahmed Mohamed Aboelfetouh MOHAMED'),
+        ('TREZEGUET', 'Mahmoud Ahmed Ibrahim HASSAN'),
+        ('NABIL DONGA', 'Nabil Emad Aly Elmahdy ALY'),
+        ('Aaron WAN-BISSAKA', 'Wan BISSAKA'),
+        ('Ngalayel MUKAU', 'Ngal’ayel MUKAU'),
+        ('NEYMAR JR', 'Neymar DA SILVA SANTOS JÚNIOR'),
+        ('HOSSAM ABDELMAGUID', 'Hossam Abdelmegeed Abdelsalam ABDELMEGEED');
 
         ----------------------------------------------------------------
-        -- 10. PROCESAMIENTO INDIVIDUAL DE JUGADORES (SIN CURSOR, CON WHILE)
+        -- 6. TABLA TEMPORAL DE ERRORES DE IMPORTACIÓN
         ----------------------------------------------------------------
+        CREATE TABLE #Errores
+        (
+            id_error INT IDENTITY(1,1) PRIMARY KEY,
+            nombre_jugador NVARCHAR(150),
+            motivo NVARCHAR(MAX)
+        );
 
+        ----------------------------------------------------------------
+        -- 7. PROCESAMIENTO DIRECTO CON VALIDACIONES
+        ----------------------------------------------------------------
         DECLARE
             @i INT = 1,
             @max_id_registro INT,
-            @id_registro INT,
             @id_partido INT,
             @id_seleccion INT,
             @id_formacion INT,
@@ -344,20 +320,14 @@ BEGIN
             @id_jugador INT,
             @cantidad_coincidencias INT,
             @nombre_db_alias NVARCHAR(150),
-            @cantidad_existente INT,
-            @titulares_actuales INT,
-            @total_actuales INT,
-            @titular_actual BIT,
-            @filas_afectadas INT;
+            @existe_relacion INT,
+            @titular_actual BIT;
 
-        -- Obtener el maximo id_registro para el bucle
         SELECT @max_id_registro = MAX(id_registro) FROM #JugadoresJSON;
 
         WHILE @i <= @max_id_registro
         BEGIN
-            -- Obtener los datos de la fila actual
             SELECT
-                @id_registro = id_registro,
                 @id_partido = id_partido,
                 @id_seleccion = id_seleccion,
                 @id_formacion = id_formacion,
@@ -368,182 +338,179 @@ BEGIN
             FROM #JugadoresJSON
             WHERE id_registro = @i;
 
-            -- Si por alguna razon la fila no existe (por ejemplo, huecos en el IDENTITY), saltar
             IF @@ROWCOUNT > 0
             BEGIN
                 SET @total_procesados += 1;
                 SET @id_jugador = NULL;
                 SET @cantidad_coincidencias = 0;
                 SET @nombre_db_alias = NULL;
-                SET @cantidad_existente = 0;
-                SET @titulares_actuales = 0;
-                SET @total_actuales = 0;
-                SET @titular_actual = NULL;
-                SET @filas_afectadas = 0;
 
-                ------------------------------------------------------------
-                -- 10.1. VALIDAR PARTIDO
-                ------------------------------------------------------------
+                --------------------------------------------------------
+                -- VALIDACIONES ESTRUCTURALES DEL REGISTRO
+                --------------------------------------------------------
                 IF @id_partido IS NULL
                 BEGIN
-                    INSERT INTO #Errores (nombre_jugador, motivo)
-                    VALUES (@nombre_jugador, 'No se pudo identificar el partido correspondiente.');
+                    INSERT INTO #Errores (nombre_jugador, motivo) VALUES (@nombre_jugador, 'No se pudo identificar el partido correspondiente.');
                     SET @total_errores += 1;
                 END
-                ------------------------------------------------------------
-                -- 10.2. VALIDAR SELECCIÓN
-                ------------------------------------------------------------
                 ELSE IF @id_seleccion IS NULL
                 BEGIN
-                    INSERT INTO #Errores (nombre_jugador, motivo)
-                    VALUES (@nombre_jugador, 'No se pudo identificar la selección del jugador.');
+                    INSERT INTO #Errores (nombre_jugador, motivo) VALUES (@nombre_jugador, 'No se pudo identificar la selección del jugador.');
                     SET @total_errores += 1;
                 END
-                ------------------------------------------------------------
-                -- 10.3. VALIDAR FORMACIÓN
-                ------------------------------------------------------------
                 ELSE IF @id_formacion IS NULL
                 BEGIN
-                    INSERT INTO #Errores (nombre_jugador, motivo)
-                    VALUES (@nombre_jugador, 'No existe una formación para el partido y la selección.');
+                    INSERT INTO #Errores (nombre_jugador, motivo) VALUES (@nombre_jugador, 'No existe una formación registrada para esta selección en el partido.');
                     SET @total_errores += 1;
                 END
-                ------------------------------------------------------------
-                -- 10.4. VALIDAR NOMBRE DEL JUGADOR
-                ------------------------------------------------------------
                 ELSE IF @nombre_jugador IS NULL OR LTRIM(RTRIM(@nombre_jugador)) = ''
                 BEGIN
-                    INSERT INTO #Errores (nombre_jugador, motivo)
-                    VALUES (@nombre_jugador, 'El nombre del jugador está vacío o no fue informado.');
+                    INSERT INTO #Errores (nombre_jugador, motivo) VALUES (@nombre_jugador, 'El nombre del jugador está vacío.');
+                    SET @total_errores += 1;
+                END
+                ELSE IF @dorsal_en_cancha IS NULL OR @dorsal_en_cancha NOT BETWEEN 1 AND 99
+                BEGIN
+                    INSERT INTO #Errores (nombre_jugador, motivo) VALUES (@nombre_jugador, 'El dorsal en cancha debe estar comprendido entre 1 y 99.');
+                    SET @total_errores += 1;
+                END
+                ELSE IF @es_titular IS NULL
+                BEGIN
+                    INSERT INTO #Errores (nombre_jugador, motivo) VALUES (@nombre_jugador, 'Debe indicar si el jugador es titular (campo es_titular no nulo).');
                     SET @total_errores += 1;
                 END
                 ELSE
                 BEGIN
-                    --------------------------------------------------------
-                    -- 10.5.a VALIDAR SI EL JUGADOR ESTÁ EN LA TABLA DE ALIAS
-                    --------------------------------------------------------
-                    
+                    ----------------------------------------------------
+                    -- RESOLUCIÓN DE JUGADOR (ALIAS -> EXACTO -> SOUNDEX)
+                    ----------------------------------------------------
+
+                    -- 1. Intentar por Tabla de Alias
                     SELECT @nombre_db_alias = nombre_db 
                     FROM #AliasJugadores 
                     WHERE nombre_json = @nombre_jugador;
 
                     IF @nombre_db_alias IS NOT NULL
                     BEGIN
-                        -- Si hay alias, buscamos directamente por las palabras del nombre en la DB
                         SELECT
                             @cantidad_coincidencias = COUNT(*),
                             @id_jugador = MIN(j.id_jugador)
                         FROM dbo.Jugador j
-                        WHERE
-                            j.id_seleccion = @id_seleccion
-                            AND NOT EXISTS
-                            (
-                                SELECT 1
-                                FROM STRING_SPLIT(@nombre_db_alias, ' ') palabra
-                                WHERE
-                                    LTRIM(RTRIM(palabra.value)) <> ''
-                                    AND CONCAT(' ', j.nombre, ' ', j.apellido, ' ') COLLATE Modern_Spanish_CI_AI
-                                        NOT LIKE ('% ' + LTRIM(RTRIM(palabra.value)) + ' %') COLLATE Modern_Spanish_CI_AI
-                            );
+                        WHERE j.id_seleccion = @id_seleccion
+                          AND NOT EXISTS
+                          (
+                              SELECT 1
+                              FROM STRING_SPLIT(@nombre_db_alias, ' ') palabra
+                              WHERE LTRIM(RTRIM(palabra.value)) <> ''
+                                AND CONCAT(' ', REPLACE(REPLACE(j.nombre, N'Ñ', N'N'), N'ñ', N'n'), ' ', REPLACE(REPLACE(j.apellido, N'Ñ', N'N'), N'ñ', N'n'), ' ') COLLATE Modern_Spanish_CI_AI
+                                    NOT LIKE ('% ' + REPLACE(REPLACE(LTRIM(RTRIM(palabra.value)), N'Ñ', N'N'), N'ñ', N'n') + ' %') COLLATE Modern_Spanish_CI_AI
+                          );
                     END
-                    ELSE
+
+                    -- 2. Búsqueda por Palabras Exactas
+                    IF @cantidad_coincidencias = 0 OR @id_jugador IS NULL
                     BEGIN
-                        ----------------------------------------------------
-                        -- 10.5.b BÚSQUEDA NORMAL (Palabras Exactas)
-                        ----------------------------------------------------
                         SELECT
                             @cantidad_coincidencias = COUNT(*),
                             @id_jugador = MIN(j.id_jugador)
                         FROM dbo.Jugador j
-                        WHERE
-                            j.id_seleccion = @id_seleccion
-                            AND NOT EXISTS
-                            (
-                                SELECT 1
-                                FROM STRING_SPLIT(@nombre_jugador, ' ') palabra
-                                WHERE
-                                    LTRIM(RTRIM(palabra.value)) <> ''
-                                    AND CONCAT(' ', j.nombre, ' ', j.apellido, ' ') COLLATE Modern_Spanish_CI_AI
-                                        NOT LIKE ('% ' + LTRIM(RTRIM(palabra.value)) + ' %') COLLATE Modern_Spanish_CI_AI
-                            );
+                        WHERE j.id_seleccion = @id_seleccion
+                          AND NOT EXISTS
+                          (
+                              SELECT 1
+                              FROM STRING_SPLIT(@nombre_jugador, ' ') palabra
+                              WHERE LTRIM(RTRIM(palabra.value)) <> ''
+                                AND CONCAT(' ', REPLACE(REPLACE(j.nombre, N'Ñ', N'N'), N'ñ', N'n'), ' ', REPLACE(REPLACE(j.apellido, N'Ñ', N'N'), N'ñ', N'n'), ' ') COLLATE Modern_Spanish_CI_AI
+                                    NOT LIKE ('% ' + REPLACE(REPLACE(LTRIM(RTRIM(palabra.value)), N'Ñ', N'N'), N'ñ', N'n') + ' %') COLLATE Modern_Spanish_CI_AI
+                          );
+                    END
 
-                        ----------------------------------------------------
-                        -- 10.5.c BÚSQUEDA POR SOUNDEX (Fallback)
-                        ----------------------------------------------------
-                        IF @cantidad_coincidencias = 0
-                        BEGIN
-                            SELECT
-                                @cantidad_coincidencias = COUNT(*),
-                                @id_jugador = MIN(j.id_jugador)
-                            FROM dbo.Jugador j
-                            WHERE
-                                j.id_seleccion = @id_seleccion
+                    -- 3. Fallback: Búsqueda por Soundex
+                    IF @cantidad_coincidencias = 0 OR @id_jugador IS NULL
+                    BEGIN
+                        SELECT
+                            @cantidad_coincidencias = COUNT(*),
+                            @id_jugador = MIN(j.id_jugador)
+                        FROM dbo.Jugador j
+                        WHERE j.id_seleccion = @id_seleccion
+                          AND NOT EXISTS
+                          (
+                              SELECT 1
+                              FROM STRING_SPLIT(@nombre_jugador, ' ') palabra_json
+                              WHERE LTRIM(RTRIM(palabra_json.value)) <> ''
                                 AND NOT EXISTS
                                 (
                                     SELECT 1
-                                    FROM STRING_SPLIT(@nombre_jugador, ' ') palabra_json
-                                    WHERE
-                                        LTRIM(RTRIM(palabra_json.value)) <> ''
-                                        AND NOT EXISTS
-                                        (
-                                            SELECT 1
-                                            FROM STRING_SPLIT(CONCAT(j.nombre, ' ', j.apellido), ' ') palabra_db
-                                            WHERE
-                                                LTRIM(RTRIM(palabra_db.value)) <> ''
-                                                AND SOUNDEX(LTRIM(RTRIM(palabra_json.value))) = SOUNDEX(LTRIM(RTRIM(palabra_db.value)))
-                                        )
-                                );
-                        END
+                                    FROM STRING_SPLIT(CONCAT(j.nombre, ' ', j.apellido), ' ') palabra_db
+                                    WHERE LTRIM(RTRIM(palabra_db.value)) <> ''
+                                      AND SOUNDEX(REPLACE(REPLACE(LTRIM(RTRIM(palabra_json.value)), N'Ñ', N'N'), N'ñ', N'n')) = 
+                                        SOUNDEX(REPLACE(REPLACE(LTRIM(RTRIM(palabra_db.value)), N'Ñ', N'N'), N'ñ', N'n'))
+                                )
+                          );
                     END
-                    
-                    --------------------------------------------------------
-                    -- 10.6. VALIDAR COINCIDENCIAS
-                    --------------------------------------------------------
-                    IF @cantidad_coincidencias = 0
+
+                    ----------------------------------------------------
+                    -- EVALUACIÓN DE COINCIDENCIAS Y VALIDACIONES DE ABM
+                    ----------------------------------------------------
+                    IF @cantidad_coincidencias = 0 OR @id_jugador IS NULL
                     BEGIN
-                        INSERT INTO #Errores (nombre_jugador, motivo)
-                        VALUES (@nombre_jugador, 'No se encontró el jugador en la selección correspondiente.');
+                        INSERT INTO #Errores (nombre_jugador, motivo) VALUES (@nombre_jugador, 'No se encontró el jugador en la selección correspondiente.');
                         SET @total_errores += 1;
                     END
                     ELSE IF @cantidad_coincidencias > 1
                     BEGIN
-                        INSERT INTO #Errores (nombre_jugador, motivo)
-                        VALUES (@nombre_jugador, 'Se encontraron varios jugadores con ese nombre. No se puede determinar una coincidencia única.');
+                        INSERT INTO #Errores (nombre_jugador, motivo) VALUES (@nombre_jugador, 'Se encontraron varios jugadores coincidentes. No se puede determinar una coincidencia única.');
+                        SET @total_errores += 1;
+                    END
+                    -- Validar que el jugador no esté dado de baja de la convocatoria
+                    ELSE IF EXISTS (SELECT 1 FROM dbo.Reemplazo WHERE id_jugador_baja = @id_jugador)
+                    BEGIN
+                        INSERT INTO #Errores (nombre_jugador, motivo) VALUES (@nombre_jugador, 'El jugador fue dado de baja de la convocatoria (Reemplazo).');
+                        SET @total_errores += 1;
+                    END
+                    -- Validar que el jugador no esté expulsado en este partido
+                    ELSE IF EXISTS (
+                        SELECT 1 
+                        FROM dbo.Incidencia 
+                        WHERE id_partido = @id_partido 
+                          AND id_jugador = @id_jugador 
+                          AND tipo = 'EXPULSION'
+                    )
+                    BEGIN
+                        INSERT INTO #Errores (nombre_jugador, motivo) VALUES (@nombre_jugador, 'El jugador se encuentra expulsado en este partido y no puede ser incluido en la formación.');
+                        SET @total_errores += 1;
+                    END
+                    -- Validar dorsal duplicado en la misma formación por otro jugador
+                    ELSE IF EXISTS (
+                        SELECT 1 
+                        FROM dbo.Formacion_Jugador 
+                        WHERE id_formacion = @id_formacion 
+                          AND dorsal_en_cancha = @dorsal_en_cancha 
+                          AND id_jugador <> @id_jugador
+                    )
+                    BEGIN
+                        INSERT INTO #Errores (nombre_jugador, motivo) VALUES (@nombre_jugador, 'El dorsal ' + CAST(@dorsal_en_cancha AS VARCHAR) + ' ya está asignado a otro jugador en esta formación.');
                         SET @total_errores += 1;
                     END
                     ELSE
                     BEGIN
-                        ----------------------------------------------------
-                        -- 10.7. BUSCAR RELACIÓN EXISTENTE
-                        ----------------------------------------------------
-                        SELECT
-                            @cantidad_existente = COUNT(*),
-                            @titular_actual = CONVERT(BIT, MAX(CONVERT(INT, es_titular)))
+                        ------------------------------------------------
+                        -- INSERCIÓN O MODIFICACIÓN DIRECTA (UPSERT)
+                        ------------------------------------------------
+                        SELECT 
+                            @existe_relacion = COUNT(*),
+                            @titular_actual = MAX(CONVERT(INT, es_titular))
                         FROM dbo.Formacion_Jugador
                         WHERE id_formacion = @id_formacion AND id_jugador = @id_jugador;
 
-                        ----------------------------------------------------
-                        -- 10.8. CONTROLAR DUPLICADOS PREEXISTENTES
-                        ----------------------------------------------------
-                        IF @cantidad_existente > 1
+                        -- CASO 1: MODIFICACIÓN (El jugador ya está en la formación)
+                        IF @existe_relacion > 0
                         BEGIN
-                            INSERT INTO #Errores (nombre_jugador, motivo)
-                            VALUES (@nombre_jugador, 'La relación entre el jugador y la formación ya se encuentra duplicada. No se puede realizar el UPSERT.');
-                            SET @total_errores += 1;
-                        END
-                        ----------------------------------------------------
-                        -- 10.9. ACTUALIZAR SI YA EXISTE
-                        ----------------------------------------------------
-                        ELSE IF @cantidad_existente = 1
-                        BEGIN
-                            SELECT @titulares_actuales = COUNT(*)
-                            FROM dbo.Formacion_Jugador
-                            WHERE id_formacion = @id_formacion AND id_jugador <> @id_jugador AND es_titular = 1;
-
-                            IF @es_titular = 1 AND ISNULL(@titular_actual, 0) = 0 AND @titulares_actuales >= 11
+                            -- Validar si pasa a ser titular y ya hay 11 titulares
+                            IF @es_titular = 1 AND ISNULL(@titular_actual, 0) = 0 AND (
+                                SELECT COUNT(*) FROM dbo.Formacion_Jugador WHERE id_formacion = @id_formacion AND es_titular = 1 AND id_jugador <> @id_jugador
+                            ) >= 11
                             BEGIN
-                                INSERT INTO #Errores (nombre_jugador, motivo)
-                                VALUES (@nombre_jugador, 'No se puede actualizar el jugador como titular porque la formación ya tiene 11 titulares.');
+                                INSERT INTO #Errores (nombre_jugador, motivo) VALUES (@nombre_jugador, 'No se puede cambiar a titular: la formación ya posee 11 titulares.');
                                 SET @total_errores += 1;
                             END
                             ELSE
@@ -551,66 +518,45 @@ BEGIN
                                 BEGIN TRY
                                     UPDATE dbo.Formacion_Jugador
                                     SET posicion_en_cancha = @posicion_en_cancha,
-                                        dorsal_en_cancha = @dorsal_en_cancha,
-                                        es_titular = @es_titular
+                                        dorsal_en_cancha   = @dorsal_en_cancha,
+                                        es_titular         = @es_titular
                                     WHERE id_formacion = @id_formacion AND id_jugador = @id_jugador;
 
-                                    SET @filas_afectadas = @@ROWCOUNT;
-
-                                    IF @filas_afectadas = 1
-                                        SET @total_actualizados += 1;
-                                    ELSE
-                                    BEGIN
-                                        INSERT INTO #Errores (nombre_jugador, motivo)
-                                        VALUES (@nombre_jugador, 'No se pudo actualizar la relación del jugador con la formación.');
-                                        SET @total_errores += 1;
-                                    END;
+                                    SET @total_actualizados += 1;
                                 END TRY
                                 BEGIN CATCH
-                                    INSERT INTO #Errores (nombre_jugador, motivo)
-                                    VALUES (@nombre_jugador, ERROR_MESSAGE());
+                                    INSERT INTO #Errores (nombre_jugador, motivo) VALUES (@nombre_jugador, ERROR_MESSAGE());
                                     SET @total_errores += 1;
                                 END CATCH;
                             END;
                         END
-                        ----------------------------------------------------
-                        -- 10.10. INSERTAR SI NO EXISTE
-                        ----------------------------------------------------
+                        -- CASO 2: ALTA DIRECTA
                         ELSE
                         BEGIN
-                            SELECT
-                                @total_actuales = COUNT(*),
-                                @titulares_actuales = COUNT(CASE WHEN es_titular = 1 THEN 1 END)
-                            FROM dbo.Formacion_Jugador
-                            WHERE id_formacion = @id_formacion;
-
-                            IF @total_actuales >= 26
+                            -- Validar total máximo de convocados (26)
+                            IF (SELECT COUNT(*) FROM dbo.Formacion_Jugador WHERE id_formacion = @id_formacion) >= 26
                             BEGIN
-                                INSERT INTO #Errores (nombre_jugador, motivo)
-                                VALUES (@nombre_jugador, 'No se puede insertar el jugador porque la formación ya tiene 26 convocados.');
+                                INSERT INTO #Errores (nombre_jugador, motivo) VALUES (@nombre_jugador, 'La formación ya alcanzó el tope de 26 jugadores convocados.');
                                 SET @total_errores += 1;
                             END
-                            ELSE IF @es_titular = 1 AND @titulares_actuales >= 11
+                            -- Validar total máximo de titulares (11)
+                            ELSE IF @es_titular = 1 AND (SELECT COUNT(*) FROM dbo.Formacion_Jugador WHERE id_formacion = @id_formacion AND es_titular = 1) >= 11
                             BEGIN
-                                INSERT INTO #Errores (nombre_jugador, motivo)
-                                VALUES (@nombre_jugador, 'No se puede insertar el jugador como titular porque la formación ya tiene 11 titulares.');
+                                INSERT INTO #Errores (nombre_jugador, motivo) VALUES (@nombre_jugador, 'No se puede agregar como titular: la formación ya posee 11 titulares.');
                                 SET @total_errores += 1;
                             END
                             ELSE
                             BEGIN
                                 BEGIN TRY
-                                    EXEC abm.FormacionJugador_Alta
-                                        @id_formacion = @id_formacion,
-                                        @id_jugador = @id_jugador,
-                                        @posicion_en_cancha = @posicion_en_cancha,
-                                        @dorsal_en_cancha = @dorsal_en_cancha,
-                                        @es_titular = @es_titular;
+                                    INSERT INTO dbo.Formacion_Jugador
+                                        (id_formacion, id_jugador, posicion_en_cancha, dorsal_en_cancha, es_titular)
+                                    VALUES
+                                        (@id_formacion, @id_jugador, @posicion_en_cancha, @dorsal_en_cancha, @es_titular);
 
                                     SET @total_insertados += 1;
                                 END TRY
                                 BEGIN CATCH
-                                    INSERT INTO #Errores (nombre_jugador, motivo)
-                                    VALUES (@nombre_jugador, ERROR_MESSAGE());
+                                    INSERT INTO #Errores (nombre_jugador, motivo) VALUES (@nombre_jugador, ERROR_MESSAGE());
                                     SET @total_errores += 1;
                                 END CATCH;
                             END;
@@ -619,30 +565,26 @@ BEGIN
                 END;
             END;
 
-            -- Incrementar el contador
             SET @i += 1;
         END;
 
         ----------------------------------------------------------------
-        -- 11. RESUMEN DE IMPORTACIÓN
+        -- 8. RESUMEN Y DETALLE DE ERRORES
         ----------------------------------------------------------------
         SELECT
-            @total_procesados AS total_jugadores_procesados,
-            @total_insertados AS total_jugadores_insertados,
+            @total_procesados   AS total_jugadores_procesados,
+            @total_insertados   AS total_jugadores_insertados,
             @total_actualizados AS total_jugadores_actualizados,
-            @total_errores AS total_errores;
+            @total_errores      AS total_errores;
 
-        ----------------------------------------------------------------
-        -- 12. DETALLE DE ERRORES
-        ----------------------------------------------------------------
         SELECT id_error, nombre_jugador, motivo
         FROM #Errores
         ORDER BY id_error;
-            END TRY
-        BEGIN CATCH
-            DECLARE @mensaje NVARCHAR(MAX);
-            SET @mensaje = ERROR_MESSAGE();
-            RAISERROR('Error durante la importación de formaciones: %s', 16, 1, @mensaje);
-        END CATCH;
-    END;
+
+    END TRY
+    BEGIN CATCH
+        DECLARE @mensaje NVARCHAR(MAX) = ERROR_MESSAGE();
+        RAISERROR('Error en el proceso de importación directa: %s', 16, 1, @mensaje);
+    END CATCH;
+END;
 GO
