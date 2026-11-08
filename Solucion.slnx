@@ -48,6 +48,8 @@
     <File Path="Stored_Procedures_Importaciones/10_Importar_Jugador_PDF_CSV.sql" />
     <File Path="Stored_Procedures_Importaciones/13_Importar_Partido_JSON.sql" />
     <File Path="Stored_Procedures_Importaciones/14_Cargar_Reemplazos_Manuales.sql" />
+    <File Path="Stored_Procedures_Importaciones/README_Migracion_WHILE.md" />
+    <File Path="Stored_Procedures_Importaciones/README_Recorrido_WHILE.md" />
     <File Path="Stored_Procedures_Importaciones/README_Reemplazos_Manuales.md" />
   </Folder>
   <Folder Name="/Stored_Procedures_Negocio/">
@@ -90,12 +92,19 @@
     <File Path="Test_Importaciones/08_Test_Carga_Pieza_Region.sql" />
     <File Path="Test_Importaciones/09_Test_Importar_Personal_Tecnico_CSV.sql" />
     <File Path="Test_Importaciones/10_Test_Importar_Jugador_PDF_CSV.sql" />
+    <File Path="Test_Importaciones/12_Test_Recorrido_Formacion_Jugador_JSON.sql" />
     <File Path="Test_Importaciones/13_Test_Importar_Partido_JSON.sql" />
     <File Path="Test_Importaciones/14_Test_Carga_Reemplazos.sql" />
   </Folder>
   <Folder Name="/Test_Negocio/">
     <File Path="Test_Negocio/14_Test_Registrar_Reemplazo.sql" />
     <File Path="Test_Negocio/15_Test_Generar_Asignacion_Publicitaria.sql" />
+    <File Path="Test_Negocio/15.1_Test_Recorridos_Asignacion_Publicitaria.sql" />
+  </Folder>
+  <Folder Name="/Test_Importaciones/Datos_Recorridos/">
+    <File Path="Test_Importaciones/Datos_Recorridos/12_Jugadores_12_Titulares.json" />
+    <File Path="Test_Importaciones/Datos_Recorridos/12_Jugadores_26.json" />
+    <File Path="Test_Importaciones/Datos_Recorridos/12_Jugadores_Limite.json" />
   </Folder>
   <Project Path="Solucion.ssmssqlproj" Type="4f2e2c19-372f-40d8-9fa7-9d2138c6997a">
     <Platform Project="?" />

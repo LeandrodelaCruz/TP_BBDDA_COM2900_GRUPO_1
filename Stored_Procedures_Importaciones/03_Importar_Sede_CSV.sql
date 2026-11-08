@@ -114,22 +114,26 @@ BEGIN
         huso_horario VARCHAR(100)
     );
 
-    DECLARE cursor_sedes CURSOR LOCAL FAST_FORWARD FOR
-        SELECT
-            venue_id,
-            stadium_name,
-            city,
-            country,
-            capacity
-        FROM #Sede_Staging;
+    -- Copia fija de las filas a procesar; conserva el orden del proceso original.
+    SELECT ROW_NUMBER() OVER (ORDER BY (SELECT NULL)) AS orden_recorrido,
+           venue_id, stadium_name, city, country, capacity
+    INTO #Trabajo_Recorrido
+    FROM #Sede_Staging;
+    CREATE UNIQUE CLUSTERED INDEX IX_Trabajo_Recorrido
+        ON #Trabajo_Recorrido (orden_recorrido);
 
-    OPEN cursor_sedes;
+    DECLARE @fila_recorrido BIGINT;
+    SELECT @fila_recorrido = MIN(orden_recorrido) FROM #Trabajo_Recorrido;
 
-    FETCH NEXT FROM cursor_sedes
-    INTO @venue_id, @nombre_estadio_raw, @ciudad_raw, @pais_raw, @capacidad_raw;
 
-    WHILE @@FETCH_STATUS = 0
+    WHILE @fila_recorrido IS NOT NULL
     BEGIN
+        SELECT @venue_id = venue_id,
+               @nombre_estadio_raw = stadium_name,
+               @ciudad_raw = city,
+               @pais_raw = country,
+               @capacidad_raw = capacity
+        FROM #Trabajo_Recorrido WHERE orden_recorrido = @fila_recorrido;
         BEGIN TRY
             SET @nombre_estadio = LTRIM(RTRIM(@nombre_estadio_raw));
             SET @ciudad = LTRIM(RTRIM(@ciudad_raw));
@@ -273,12 +277,10 @@ BEGIN
             SET @cantidad_errores += 1;
         END CATCH;
 
-        FETCH NEXT FROM cursor_sedes
-        INTO @venue_id, @nombre_estadio_raw, @ciudad_raw, @pais_raw, @capacidad_raw;
+        SELECT @fila_recorrido = MIN(orden_recorrido)
+            FROM #Trabajo_Recorrido WHERE orden_recorrido > @fila_recorrido;
     END;
 
-    CLOSE cursor_sedes;
-    DEALLOCATE cursor_sedes;
 
     /* Resumen de la importación. */
     SELECT
