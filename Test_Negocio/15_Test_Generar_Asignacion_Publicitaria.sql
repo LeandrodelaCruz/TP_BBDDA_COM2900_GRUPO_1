@@ -221,7 +221,7 @@ BEGIN
             @cantidad_asignados INT;
 
 
-        SELECT TOP (1)
+        SELECT TOP (1) --pone primero al partido que tenga mas mercados candidatos
             @id_partido = id_partido,
             @cantidad_candidatos = cantidad_candidatos
         FROM #PartidosCandidatos
@@ -239,7 +239,7 @@ BEGIN
         PRINT '';
         PRINT 'Partido seleccionado para el test:';
 
-        SELECT
+        SELECT --mostramos el partido elegidos
             P.id_partido,
             P.fecha,
             P.horario_UTC,
@@ -280,11 +280,11 @@ BEGIN
         DECLARE @cantidad_bd INT;
 
         SELECT
-            @cantidad_bd = COUNT(*)
+            @cantidad_bd = COUNT(*) -- aca verificamos cuantas asignaciones quedaron guardadas para un partido
         FROM dbo.Asignacion_Publicitaria
         WHERE id_partido = @id_partido;
 
-        IF @cantidad_bd > 4
+        IF @cantidad_bd > 4 -- sin son mas de cuatro falla
         BEGIN
             THROW 52504,
                   'TEST FALLIDO: existen más de cuatro espacios asignados.',
@@ -471,7 +471,7 @@ BEGIN
                 WHEN @cantidad_candidatos > 4
                     THEN N'SI'
                 ELSE N'NO'
-            END AS cumple_caso_obligatorio_mas_de_4;
+            END AS cumple;
 
     END TRY
 

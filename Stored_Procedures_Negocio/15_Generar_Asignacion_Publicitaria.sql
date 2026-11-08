@@ -30,7 +30,7 @@ IF SCHEMA_ID(N'negocio') IS NULL
 go
 
 create or alter procedure negocio.Generar_Asignacion_Publicitaria
-    @id_partido int,
+    @id_partido int, --el partido que queremos procesar
     @costo_espacio_1 decimal(14,2) = 200000.00,
     @costo_espacio_2 decimal(14,2) = 175000.00,
     @costo_espacio_3 decimal(14,2) = 150000.00,
@@ -71,8 +71,8 @@ begin
     --------------------------------------------------------
     -- 2. obtener horario UTC del partido
     --------------------------------------------------------
-    declare @horario_utc datetime2(0);
-
+    declare @horario_utc datetime2(0); --aca buscamos el UTC almacenado real en el partido
+    --paritdo entra por ID. Con ese ID recupero su horario UTC
     select @horario_utc = horario_UTC
     from dbo.Partido
     where id_partido = @id_partido;
@@ -81,7 +81,7 @@ begin
     -- 3. validar husos horarios soportados
     --------------------------------------------------------
     if exists (
-        select 1
+        select 1 --aca usamos los id mapeados para SQL Servcer. 
         from dbo.Region R
         inner join dbo.Pieza_Para_Region PR on PR.id_region = R.id_region
         where R.huso_horario not in (
@@ -100,7 +100,7 @@ begin
     --------------------------------------------------------
     -- 4. candidatos
     --------------------------------------------------------
-    create table #Candidatos ( --Tabla temporal para almacenar los resultados candidatos
+    create table #Candidatos ( --Tabla temporal para almacenar los resultados candidatos, son candidatos que luego seran rankeado
         id_region int not null,
         region nvarchar(80) not null,
         id_pieza int not null,
@@ -123,7 +123,7 @@ begin
     ),
     RegionConHora as ( --SEGUNDA CTE: COnvierte una hora UTC Base a la hora local exacta de cada region
         select                  -- usa at time zone, convierte el estandar IANA al formato que utiliza windows sql server de manera interna
-            R.id_region,
+            R.id_region,    -- junta region = pieza elegida y calcula la hora local del partido
             R.nombre as region,
             P.id_pieza,
             P.nombre as pieza,
@@ -154,7 +154,7 @@ begin
         inner join dbo.Pieza_Publicitaria P
             on P.id_pieza = PR.id_pieza
     )
-    insert into #Candidatos (
+    insert into #Candidatos ( -- inserta solo regiones en prime time
         id_region, region, id_pieza, pieza, hora_local,
         hora_prime_inicio, hora_prime_fin, distancia_centro_prime
     )
@@ -167,7 +167,7 @@ begin
         RH.hora_prime_inicio,
         RH.hora_prime_fin,
         abs(
-            datediff(minute, cast('00:00:00' as time), cast(RH.hora_local as time)) -- Transforma las horas a minutos
+            datediff(minute, cast('00:00:00' as time), cast(RH.hora_local as time)) -- Transforma las horas a minutos (calcula la dist al centro de prime time)
             - (
                 datediff(minute, cast('00:00:00' as time), RH.hora_prime_inicio)
                 + datediff(minute, cast('00:00:00' as time), RH.hora_prime_fin)
@@ -178,7 +178,7 @@ begin
       and cast(RH.hora_local as time) < RH.hora_prime_fin; --Claramente la hora local debe estar estrictamente entre prime inicio y prime fin
 
     select @cantidad_candidatos = count(*)
-    from #Candidatos;
+    from #Candidatos; -- cuenta la cant de candidatos
 
     --------------------------------------------------------
     -- 5. priorizar y elegir máximo 4
@@ -194,11 +194,11 @@ begin
         costo_aplicado decimal(14,2) not null -- Incorporo
     );
 
-    ;with Rankeados as ( -- Arma un ranking por prioridad
+    ;with Rankeados as ( -- Arma un ranking por prioridad y elige como max 4
         select
             C.*,
             row_number() over (
-                order by C.distancia_centro_prime asc, C.id_region asc
+                order by C.distancia_centro_prime asc, C.id_region asc -- creiterios de desempate
             ) as prioridad
         from #Candidatos C
     )
@@ -222,7 +222,6 @@ begin
         end
     from Rankeados
     where prioridad <= 4; --FIltra el top 4
-
     select @cantidad_asignados = count(*)
     from #Seleccionados;
 
