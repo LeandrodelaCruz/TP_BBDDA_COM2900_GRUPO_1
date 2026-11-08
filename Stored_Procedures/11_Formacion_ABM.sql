@@ -1,7 +1,7 @@
-/*
+﻿/*
     Universidad: Universidad Nacional de la Matanza
     Materia: Bases de Datos Aplicada
-    Integrantes: 
+    Integrantes:
 				Rodriguez, Elias Uriel 44143869
 				Clara, Lucas Nicolas 46265738
 				Caro, Nicolas Dario 40766722
@@ -35,6 +35,10 @@ BEGIN
 
     IF NOT EXISTS (SELECT 1 FROM dbo.Partido WHERE id_partido = @id_partido)
         SET @errores += N'- No existe el partido indicado. ';
+
+    IF EXISTS (SELECT 1 FROM dbo.Partido WHERE id_partido=@id_partido
+               AND (id_seleccion_1 IS NULL OR id_seleccion_2 IS NULL))
+        SET @errores += N'- Confirme ambos participantes antes de registrar formaciones. ';
 
     IF NOT EXISTS (SELECT 1 FROM dbo.Seleccion WHERE id_seleccion = @id_seleccion)
         SET @errores += N'- No existe la seleccion indicada. ';
@@ -119,6 +123,10 @@ BEGIN
 
     IF NOT EXISTS (SELECT 1 FROM dbo.Partido WHERE id_partido = @id_partido)
         SET @errores += N'- No existe el partido indicado. ';
+
+    IF EXISTS (SELECT 1 FROM dbo.Partido WHERE id_partido=@id_partido
+               AND (id_seleccion_1 IS NULL OR id_seleccion_2 IS NULL))
+        SET @errores += N'- Confirme ambos participantes antes de registrar formaciones. ';
 
     IF NOT EXISTS (SELECT 1 FROM dbo.Seleccion WHERE id_seleccion = @id_seleccion)
         SET @errores += N'- No existe la seleccion indicada. ';

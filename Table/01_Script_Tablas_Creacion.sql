@@ -1,9 +1,9 @@
-/*
+﻿/*
 
     Universidad: Universidad Nacional de La Matanza - UNLaM
     Materia: Bases de Datos Aplicada - 2C-2026
     Comisión: Com: 01-2900
-    Grupo 01: 
+    Grupo 01:
     - Caro, Nicolás Darío
     - Clara, Lucas
     - De La Cruz, Leandro Ariel
@@ -195,7 +195,7 @@ GO
 
 IF OBJECT_ID('dbo.Personal_Tecnico', 'U') IS NULL
 BEGIN
-    CREATE TABLE dbo.Personal_Tecnico 
+    CREATE TABLE dbo.Personal_Tecnico
     (
         id_personal INT IDENTITY(1,1) NOT NULL,
         id_seleccion INT NOT NULL,
@@ -203,18 +203,16 @@ BEGIN
         --apellido NVARCHAR(60) NOT NULL,
         rol VARCHAR(50) NOT NULL,
 
-        CONSTRAINT PK_Personal_Tecnico 
+        CONSTRAINT PK_Personal_Tecnico
             PRIMARY KEY (id_personal),
 
-        CONSTRAINT FK_Personal_Seleccion 
-            FOREIGN KEY (id_seleccion) 
+        CONSTRAINT FK_Personal_Seleccion
+            FOREIGN KEY (id_seleccion)
             REFERENCES dbo.Seleccion(id_seleccion)
     );
 END;
 GO
 
-use mundialdefutbol;
-go
 IF OBJECT_ID('dbo.Jugador', 'U') IS NULL
 BEGIN
     CREATE TABLE dbo.Jugador
@@ -289,8 +287,20 @@ BEGIN
         fase VARCHAR(30) NOT NULL,
         resultado_final VARCHAR(20) NULL,
         asistencia_publico INT NULL,
-        id_seleccion_1 INT NOT NULL,
-        id_seleccion_2 INT NOT NULL,
+        id_seleccion_1 INT NULL,
+        id_seleccion_2 INT NULL,
+
+        id_seleccion_ganadora INT NULL,
+        CONSTRAINT FK_Partido_Ganadora FOREIGN KEY (id_seleccion_ganadora)
+            REFERENCES dbo.Seleccion(id_seleccion),
+        CONSTRAINT CK_Partido_Selecciones CHECK
+            (id_seleccion_1 IS NULL OR id_seleccion_2 IS NULL OR id_seleccion_1 <> id_seleccion_2),
+        CONSTRAINT CK_Partido_Resultado CHECK
+            (resultado_final IS NULL OR (id_seleccion_1 IS NOT NULL AND id_seleccion_2 IS NOT NULL)),
+        CONSTRAINT CK_Partido_Ganadora CHECK (id_seleccion_ganadora IS NULL OR
+            (id_seleccion_1 IS NOT NULL AND id_seleccion_2 IS NOT NULL
+             AND resultado_final IS NOT NULL AND fase <> 'GRUPOS'
+             AND id_seleccion_ganadora IN (id_seleccion_1,id_seleccion_2))),
 
         CONSTRAINT PK_Partido
             PRIMARY KEY (id_partido),
@@ -413,7 +423,7 @@ BEGIN
 
         CONSTRAINT CK_Sustitucion_Minuto
             CHECK (minuto >= 0),
-        
+
         CONSTRAINT CK_Sustitucion_Periodo
             CHECK (
                 periodo IN (
@@ -596,6 +606,25 @@ BEGIN
                     'PENALES'
                 )
             )
+    );
+END;
+GO
+-- Mapa explicito entre partidos de eliminacion directa. Sin paises ficticios.
+IF OBJECT_ID('dbo.Cruce_Partido','U') IS NULL
+BEGIN
+    CREATE TABLE dbo.Cruce_Partido
+    (
+        id_partido_destino INT NOT NULL,
+        posicion_destino TINYINT NOT NULL,
+        id_partido_origen INT NOT NULL,
+        tipo_clasificado VARCHAR(8) NOT NULL,
+        CONSTRAINT PK_Cruce_Partido PRIMARY KEY(id_partido_destino,posicion_destino),
+        CONSTRAINT UQ_Cruce_Salida UNIQUE(id_partido_origen,tipo_clasificado),
+        CONSTRAINT FK_Cruce_Destino FOREIGN KEY(id_partido_destino) REFERENCES dbo.Partido(id_partido),
+        CONSTRAINT FK_Cruce_Origen FOREIGN KEY(id_partido_origen) REFERENCES dbo.Partido(id_partido),
+        CONSTRAINT CK_Cruce_Posicion CHECK(posicion_destino IN (1,2)),
+        CONSTRAINT CK_Cruce_Tipo CHECK(tipo_clasificado IN ('GANADOR','PERDEDOR')),
+        CONSTRAINT CK_Cruce_Distintos CHECK(id_partido_destino <> id_partido_origen)
     );
 END;
 GO

@@ -1,4 +1,4 @@
-/*
+﻿/*
     Universidad: Universidad Nacional de la Matanza
     Materia: Bases de Datos Aplicada - Com 01-2900
     Trabajo Práctico: Entrega 6 - Procesos de Importación
@@ -143,7 +143,7 @@ BEGIN
             SET @nombre = NULLIF(LTRIM(RTRIM(@nombre_raw)), N'');
             SET @apellido = NULLIF(LTRIM(RTRIM(@apellido_raw)), N'');
             SET @pais = LTRIM(RTRIM(@pais_raw));
-            SET @puesto = LTRIM(RTRIM(@puesto_raw));
+            SET @puesto = LTRIM(RTRIM(REPLACE(REPLACE(@puesto_raw,CHAR(13),''),CHAR(10),''))); -- CSV CRLF en Linux
             SET @idiomas = NULL;
 
             /* Transformación del puesto al dominio del modelo. */

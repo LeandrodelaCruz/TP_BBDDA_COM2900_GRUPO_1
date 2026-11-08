@@ -1,4 +1,4 @@
-# Logica de negocio: convocatoria y reemplazos
+﻿# Logica de negocio: convocatoria y reemplazos
 
 Los procedimientos de esta carpeta pertenecen al esquema `negocio` y coordinan
 las operaciones ABM de la Entrega 5. No cambian la estructura de las tablas.
@@ -91,3 +91,12 @@ datos obligatorios, fecha incoherente y un fallo simulado de escritura mediante
 un trigger transitorio. Revierte los datos y el trigger creados; pueden avanzar
 los contadores IDENTITY. Requiere permiso para crear ese trigger en la base de
 pruebas. Los seis casos pasaron en SQL Server el 03/11/2026, en una base aislada.
+
+
+## Calendario, cruces y arbitros
+
+Se incorporan 13_Confirmar_Resultado_Eliminatorio.sql y 16_Designacion_Arbitral.sql.
+Instalar el archivo 16 antes de los ABM actualizados, porque define la funcion de
+normalizacion de pais. Ver ../Stored_Procedures_Importaciones/README_Designaciones_Arbitrales.md
+para el orden completo de recreacion, uso, alcances y pruebas. La importacion no
+requiere ganadores; la carga arbitral usa los ABM con controles compartidos.

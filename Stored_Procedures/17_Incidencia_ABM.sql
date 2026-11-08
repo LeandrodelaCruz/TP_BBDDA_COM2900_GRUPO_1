@@ -1,8 +1,8 @@
-/*
+﻿/*
     Universidad: Universidad Nacional de La Matanza - UNLaM
     Materia: Bases de Datos Aplicada - 2C-2026
     Comision: Com: 01-2900
-    Grupo 01: 
+    Grupo 01:
     - Caro, Nicolas Dario
     - Clara, Lucas
     - De La Cruz, Leandro Ariel
@@ -10,7 +10,7 @@
 
     Descripcion:
     Stored Procedures ABM para la tabla Incidencia
-    
+
     Tipos de incidencias:
     - GOL: Gol marcado por id_jugador, id_jugador_involucrado es asistencia (opcional)
     - GOL EN CONTRA: Gol en propia meta por id_jugador
@@ -24,7 +24,7 @@
     - Incidencia_Alta (con validaciones)
     - Incidencia_Modificacion (solo motivo)
     - Incidencia_Baja
-    
+
     GET especializados:
     - Incidencia_GetGoles: Muestra goles con asistencias
     - Incidencia_GetAmonestaciones: Muestra amarillas con agredido
@@ -51,32 +51,36 @@ CREATE OR ALTER PROCEDURE abm.Incidencia_Alta
 AS
 BEGIN
     SET NOCOUNT ON;
-    
+
     DECLARE @errores NVARCHAR(MAX) = '';
     DECLARE @id_seleccion_jugador INT;
     DECLARE @id_seleccion_involucrado INT;
-    
+
+    IF EXISTS(SELECT 1 FROM dbo.Partido WHERE id_partido=@id_partido
+              AND (id_seleccion_1 IS NULL OR id_seleccion_2 IS NULL))
+        THROW 51350,N'Confirme ambos participantes antes de registrar eventos del partido.',1;
+
     BEGIN TRY
         BEGIN TRANSACTION;
-        
+
         -- =========================================================
         -- Obtener selecciones de ambos jugadores
         -- =========================================================
-        SELECT @id_seleccion_jugador = id_seleccion 
-        FROM dbo.Jugador 
+        SELECT @id_seleccion_jugador = id_seleccion
+        FROM dbo.Jugador
         WHERE id_jugador = @id_jugador;
-        
+
         IF @id_jugador_involucrado IS NOT NULL
         BEGIN
-            SELECT @id_seleccion_involucrado = id_seleccion 
-            FROM dbo.Jugador 
+            SELECT @id_seleccion_involucrado = id_seleccion
+            FROM dbo.Jugador
             WHERE id_jugador = @id_jugador_involucrado;
         END
-        
+
         -- =========================================================
         -- VALIDACIoN DE NEGOCIO: Logica segun tipo de incidencia
         -- =========================================================
-        
+
         -- GOL: involucrado debe ser MISMA seleccion (asistencia)
         IF @tipo = 'GOL' AND @id_jugador_involucrado IS NOT NULL
         BEGIN
@@ -91,13 +95,13 @@ BEGIN
             IF @id_seleccion_jugador = @id_seleccion_involucrado
                 SET @errores = @errores + @tipo + ': el jugador agredido debe ser de la seleccion opuesta. ';
         END
-        
+
         -- Si hay errores, lanzar excepcion
         IF @errores <> ''
         BEGIN
             RAISERROR(@errores, 16, 1);
         END
-        
+
         -- =========================================================
         -- INSERCIoN
         -- =========================================================
@@ -118,27 +122,27 @@ BEGIN
             @minuto,
             @periodo
         );
-        
+
         SET @id_incidencia = SCOPE_IDENTITY();
-        
+
         COMMIT TRANSACTION;
         PRINT 'Incidencia registrada exitosamente. ID: ' + CAST(@id_incidencia AS VARCHAR(10));
-        
+
     END TRY
     BEGIN CATCH
         IF @@TRANCOUNT > 0
             ROLLBACK TRANSACTION;
-        
+
         DECLARE @error_message NVARCHAR(MAX);
         DECLARE @error_number INT;
         DECLARE @error_severity INT;
         DECLARE @error_state INT;
-        
+
         SET @error_number = ERROR_NUMBER();
         SET @error_severity = ERROR_SEVERITY();
         SET @error_state = ERROR_STATE();
         SET @error_message = ERROR_MESSAGE();
-        
+
         RAISERROR(
             'Error al registrar incidencia: %s (Codigo de error: %d)',
             @error_severity,
@@ -147,7 +151,7 @@ BEGIN
             @error_number
         );
     END CATCH
-    
+
 END;
 GO
 
@@ -160,8 +164,8 @@ CREATE OR ALTER PROCEDURE abm.Incidencia_GetGoles
 AS
 BEGIN
     SET NOCOUNT ON;
-    
-    SELECT 
+
+    SELECT
         i.id_incidencia,
         i.id_partido,
         i.minuto,
@@ -171,8 +175,8 @@ BEGIN
         j.id_seleccion,
         s.pais AS seleccion_goleador,
         i.id_jugador_involucrado,
-        CASE WHEN i.id_jugador_involucrado IS NOT NULL 
-             THEN ja.nombre + ' ' + ja.apellido 
+        CASE WHEN i.id_jugador_involucrado IS NOT NULL
+             THEN ja.nombre + ' ' + ja.apellido
              ELSE 'Sin asistencia'
         END AS asistencia,
         i.tipo,
@@ -195,8 +199,8 @@ CREATE OR ALTER PROCEDURE abm.Incidencia_GetAmonestaciones
 AS
 BEGIN
     SET NOCOUNT ON;
-    
-    SELECT 
+
+    SELECT
         i.id_incidencia,
         i.id_partido,
         i.minuto,
@@ -228,8 +232,8 @@ CREATE OR ALTER PROCEDURE abm.Incidencia_GetExpulsiones
 AS
 BEGIN
     SET NOCOUNT ON;
-    
-    SELECT 
+
+    SELECT
         i.id_incidencia,
         i.id_partido,
         i.minuto,
@@ -262,8 +266,8 @@ CREATE OR ALTER PROCEDURE abm.Incidencia_GetByPartido
 AS
 BEGIN
     SET NOCOUNT ON;
-    
-    SELECT 
+
+    SELECT
         i.id_incidencia,
         i.id_partido,
         i.minuto,
@@ -271,8 +275,8 @@ BEGIN
         i.tipo,
         j.nombre + ' ' + j.apellido AS jugador,
         s.pais AS seleccion_jugador,
-        CASE WHEN i.id_jugador_involucrado IS NOT NULL 
-             THEN ja.nombre + ' ' + ja.apellido 
+        CASE WHEN i.id_jugador_involucrado IS NOT NULL
+             THEN ja.nombre + ' ' + ja.apellido
              ELSE 'N/A'
         END AS jugador_involucrado,
         i.motivo
@@ -295,29 +299,29 @@ CREATE OR ALTER PROCEDURE abm.Incidencia_Modificacion
 AS
 BEGIN
     SET NOCOUNT ON;
-    
+
     BEGIN TRY
         BEGIN TRANSACTION;
-        
+
         -- Validar que la incidencia existe
         IF NOT EXISTS (SELECT 1 FROM dbo.Incidencia WHERE id_incidencia = @id_incidencia)
         BEGIN
             RAISERROR('La incidencia especificada no existe.', 16, 1);
         END
-        
+
         -- Actualizar solo el motivo
         UPDATE dbo.Incidencia
         SET motivo = @motivo
         WHERE id_incidencia = @id_incidencia;
-        
+
         COMMIT TRANSACTION;
         PRINT 'Incidencia actualizada exitosamente.';
-        
+
     END TRY
     BEGIN CATCH
         IF @@TRANCOUNT > 0
             ROLLBACK TRANSACTION;
-        
+
         DECLARE @error_message NVARCHAR(MAX) = ERROR_MESSAGE();
         RAISERROR(@error_message, 16, 1);
     END CATCH
@@ -333,25 +337,25 @@ CREATE OR ALTER PROCEDURE abm.Incidencia_Baja
 AS
 BEGIN
     SET NOCOUNT ON;
-    
+
     BEGIN TRY
         BEGIN TRANSACTION;
-        
+
         IF NOT EXISTS (SELECT 1 FROM dbo.Incidencia WHERE id_incidencia = @id_incidencia)
         BEGIN
             RAISERROR('La incidencia especificada no existe.', 16, 1);
         END
-        
+
         DELETE FROM dbo.Incidencia WHERE id_incidencia = @id_incidencia;
-        
+
         COMMIT TRANSACTION;
         PRINT 'Incidencia eliminada exitosamente.';
-        
+
     END TRY
     BEGIN CATCH
         IF @@TRANCOUNT > 0
             ROLLBACK TRANSACTION;
-        
+
         DECLARE @error_message NVARCHAR(MAX) = ERROR_MESSAGE();
         RAISERROR(@error_message, 16, 1);
     END CATCH

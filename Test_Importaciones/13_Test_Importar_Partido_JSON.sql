@@ -1,4 +1,4 @@
-/*
+﻿/*
     Universidad: Universidad Nacional de la Matanza
     Materia: Bases de Datos Aplicada - Com 01-2900
     Trabajo Práctico: Entrega 6 - Procesos de Importación
@@ -8,7 +8,7 @@
     Descripción:
     Test de importación de partidos desde JSON (partidos_mundial_2026.json).
     Se ejecuta la importación dos veces para verificar la lógica de UPSERT
-    basada en la clave natural (fecha, horario_UTC, id_seleccion_1, id_seleccion_2).
+    basada en la clave natural (id_sede, horario_UTC, fase).
 
     Resultado esperado:
     - Primera ejecución: los partidos inexistentes se insertan.
@@ -58,19 +58,18 @@ BEGIN
         p.asistencia_publico
     FROM dbo.Partido p
     INNER JOIN dbo.Sede      s  ON s.id_sede       = p.id_sede
-    INNER JOIN dbo.Seleccion sl ON sl.id_seleccion = p.id_seleccion_1
-    INNER JOIN dbo.Seleccion sv ON sv.id_seleccion = p.id_seleccion_2
+    LEFT JOIN dbo.Seleccion sl ON sl.id_seleccion = p.id_seleccion_1
+    LEFT JOIN dbo.Seleccion sv ON sv.id_seleccion = p.id_seleccion_2
     ORDER BY p.fecha, p.horario_UTC;
 
     PRINT '===== DUPLICADOS (RESULTADO ESPERADO: 0 FILAS) =====';
     SELECT
-        fecha,
+        id_sede,
         horario_UTC,
-        id_seleccion_1,
-        id_seleccion_2,
+        fase,
         COUNT(*) AS cantidad
     FROM dbo.Partido
-    GROUP BY fecha, horario_UTC, id_seleccion_1, id_seleccion_2
+    GROUP BY id_sede, horario_UTC, fase
     HAVING COUNT(*) > 1;
 END;
 GO
