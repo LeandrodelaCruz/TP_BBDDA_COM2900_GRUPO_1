@@ -1,4 +1,4 @@
-# Carga manual de reemplazos de convocatoria
+﻿# Carga manual de reemplazos de convocatoria
 
 Carga por otros medios admitida en la seccion I. No cuenta como dataset
 externo importado, API ni scraping. Los SQL conservan los acentos y nombres
@@ -94,11 +94,11 @@ el historial de reemplazos.
 
 ## Pruebas
 
-`Test_Importaciones/14_Test_Carga_Reemplazos.sql` exige una base vacia y aislada
-cuyo nombre comience por `MUNDIALDEFUTBOL_Test_Reemplazos_`; seleccionarla en
-SSMS. Requiere tambien los ABM 03/04/13 para crear datos de apoyo. No ejecutar
-en la base del proyecto. Crea cinco plantillas minimas y un fixture, y conserva
-la evidencia en esa base de pruebas.
+`Test_Importaciones/14_Test_Carga_Reemplazos.sql` apunta a MUNDIALDEFUTBOL.
+Requiere Seleccion y Jugador vacias y ninguna transaccion abierta; ejecutarlo
+antes de la poblacion de esas tablas. Requiere tambien los ABM 03/04/13 para
+crear datos de apoyo. Crea cinco plantillas minimas y un fixture, y conserva
+la evidencia en la base principal. No elimina datos previos para preparar el caso.
 
 Verifica reconstruccion explicita, cuatro casos exitosos y un quinto con fallo
 de escritura simulado, restauracion completa del quinto, reintento solo del

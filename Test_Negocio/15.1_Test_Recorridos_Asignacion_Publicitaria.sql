@@ -1,20 +1,20 @@
-/*
+﻿/*
     Universidad: Universidad Nacional de La Matanza - UNLaM
     Materia: Bases de Datos Aplicada - Comision 01-2900
     Integrantes: Caro, Nicolas Dario; Clara, Lucas Nicolas;
                  de la Cruz, Leandro Ariel; Rodriguez, Elias Uriel.
     Fecha: 07/11/2026
     Objetivo: validar los dos recorridos WHILE de asignacion publicitaria.
-    SOLO en una base aislada MUNDIALDEFUTBOL_Test_While_* con los datos del repo:
+    Ejecutar en MUNDIALDEFUTBOL con los datos del repo:
     partidos, regiones, publicidad, relaciones, ABM y negocio 15 instalados.
-    Modifica horarios prime time de prueba y conserva evidencia en esa base.
+    Modifica horarios prime time de prueba y conserva evidencia en MUNDIALDEFUTBOL.
     Esperado: 4 espacios, costo sin cambiar IDs, cambio de pieza, rollback
     completo ante fallo en la ultima baja, y retiro de los 4 al reintentar.
 */
+USE MUNDIALDEFUTBOL;
+GO
 SET NOCOUNT ON;
 SET XACT_ABORT OFF;
-IF DB_NAME() NOT LIKE N'MUNDIALDEFUTBOL[_]Test[_]While[_]%'
-    THROW 51800, N'Ejecute solo en una base aislada MUNDIALDEFUTBOL_Test_While_.', 1;
 IF @@TRANCOUNT <> 0
     THROW 51800, N'Ejecute sin una transaccion externa.', 1;
 IF (SELECT COUNT(*) FROM dbo.Region) <> 8
