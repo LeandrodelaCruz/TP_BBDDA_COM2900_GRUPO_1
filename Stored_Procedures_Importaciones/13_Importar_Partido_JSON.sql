@@ -1,4 +1,4 @@
-/*
+﻿/*
     Universidad: Universidad Nacional de La Matanza - UNLaM
     Materia: Bases de Datos Aplicada - 2C-2026
     Comisión: Com: 01-2900
@@ -28,8 +28,9 @@
         2) nombre exacto en dbo.Sede
         3) prefijo normalizado (cubre "... (Estadio X)")
     - La fase llega en inglés y se traduce al español que espera el ABM.
-    - Clave natural para el UPSERT: (fecha, horario_UTC,
-      id_seleccion_1, id_seleccion_2). No se usa id_partido_fifa.
+    - Clave operativa para UPSERT: (fecha, horario_UTC,
+      id_seleccion_1, id_seleccion_2), igual que antes de la ampliacion arbitral.
+      Ambas selecciones deben existir. No se usa id_partido_fifa.
     - Una fila inválida no cancela el procesamiento de las demás.
 
     Nota sobre SQL dinámico:
@@ -254,15 +255,7 @@ BEGIN
     -------------------------------------------------------------------------
     -- 7. Tablas variables para capturar lo que devuelven los ABM.
     -------------------------------------------------------------------------
-    DECLARE @ResultadoAlta TABLE
-    (
-        id_partido_generado INT
-    );
-
-    DECLARE @ResultadoModificacion TABLE
-    (
-        id_partido_modificado INT
-    );
+    -- Los ABM se invocan sin resultados para permitir errores parciales.
 
     -------------------------------------------------------------------------
     -- 8. recorrido con WHILE sobre el staging.
@@ -419,21 +412,19 @@ BEGIN
             --     id_seleccion_1, id_seleccion_2). Si existe → UPDATE,
             --     si no → INSERT.
             -----------------------------------------------------------------
-            SELECT @id_partido = id_partido
-            FROM dbo.Partido
-            WHERE fecha          = @fecha
-              AND horario_UTC    = @horario_UTC
-              AND id_seleccion_1 = @id_seleccion_1
-              AND id_seleccion_2 = @id_seleccion_2;
+            IF (SELECT COUNT(*) FROM dbo.Partido
+                WHERE fecha=@fecha AND horario_UTC=@horario_UTC
+                  AND id_seleccion_1=@id_seleccion_1 AND id_seleccion_2=@id_seleccion_2)>1
+                THROW 52109, N'Hay varios partidos para la fecha, horario y selecciones.', 1;
+            SELECT @id_partido=id_partido FROM dbo.Partido
+            WHERE fecha=@fecha AND horario_UTC=@horario_UTC
+              AND id_seleccion_1=@id_seleccion_1 AND id_seleccion_2=@id_seleccion_2;
 
             IF @id_partido IS NULL
             BEGIN
                 -----------------------------------------------------------------
                 -- 8.6 ALTA reutilizando abm.Partidos_Alta.
                 -----------------------------------------------------------------
-                DELETE FROM @ResultadoAlta;
-
-                INSERT INTO @ResultadoAlta (id_partido_generado)
                 EXEC abm.Partidos_Alta
                     @id_sede            = @id_sede,
                     @id_seleccion_1     = @id_seleccion_1,
@@ -443,7 +434,8 @@ BEGIN
                     @horario_UTC        = @horario_UTC,
                     @fase               = @fase_es,
                     @resultado_final    = @resultado_final,
-                    @asistencia_publico = @asistencia;
+                    @asistencia_publico = @asistencia,
+                    @devolver = 0;
 
                 SET @insertados += 1;
             END
@@ -452,9 +444,6 @@ BEGIN
                 -----------------------------------------------------------------
                 -- 8.7 MODIFICACIÓN reutilizando abm.Partidos_Modificacion.
                 -----------------------------------------------------------------
-                DELETE FROM @ResultadoModificacion;
-
-                INSERT INTO @ResultadoModificacion (id_partido_modificado)
                 EXEC abm.Partidos_Modificacion
                     @id_partido         = @id_partido,
                     @id_sede            = @id_sede,
@@ -465,7 +454,8 @@ BEGIN
                     @horario_UTC        = @horario_UTC,
                     @fase               = @fase_es,
                     @resultado_final    = @resultado_final,
-                    @asistencia_publico = @asistencia;
+                    @asistencia_publico = @asistencia,
+                    @devolver = 0;
 
                 SET @actualizados += 1;
             END;

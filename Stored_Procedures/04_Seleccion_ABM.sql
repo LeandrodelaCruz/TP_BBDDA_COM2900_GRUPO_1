@@ -1,4 +1,4 @@
-/*
+﻿/*
     Universidad: Universidad Nacional de la Matanza
     Materia: Bases de Datos Aplicada - Com 01-2900
     Trabajo Práctico: Entrega 5
@@ -74,6 +74,15 @@ CREATE OR ALTER PROCEDURE abm.Seleccion_Modificar
 AS
 BEGIN
     SET NOCOUNT ON;
+    SET XACT_ABORT OFF; -- Los rechazos previstos permiten volver al punto de guardado.
+    -- Si el llamador abrio una transaccion, conservar su trabajo anterior.
+    DECLARE @transacciones_previas INT = @@TRANCOUNT;
+    BEGIN TRY
+        IF @transacciones_previas = 0
+            BEGIN TRANSACTION;
+        ELSE
+            SAVE TRANSACTION SeleccionModificar;
+
     DECLARE @errores NVARCHAR(2048) = N'';
 
     IF @id_seleccion IS NULL OR @id_seleccion <= 0
@@ -112,6 +121,10 @@ BEGIN
        )
         SET @errores += N'- Ya existe una selección registrada para ese país. ';
 
+    IF EXISTS(SELECT 1 FROM dbo.Partido WHERE id_seleccion_1=@id_seleccion OR id_seleccion_2=@id_seleccion)
+       AND EXISTS(SELECT 1 FROM dbo.Seleccion WHERE id_seleccion=@id_seleccion
+                  AND UPPER(LTRIM(RTRIM(pais)))<>UPPER(LTRIM(RTRIM(@pais))))
+        SET @errores += N'- No se puede cambiar el pais de una seleccion con partidos vinculados. ';
     IF @errores <> N'' THROW 50302, @errores, 1;
 
     UPDATE dbo.Seleccion
@@ -121,6 +134,14 @@ BEGIN
      WHERE id_seleccion = @id_seleccion;
 
     SELECT * FROM dbo.Seleccion WHERE id_seleccion = @id_seleccion;
+
+        IF @transacciones_previas = 0 COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        IF @transacciones_previas = 0 AND XACT_STATE() <> 0 ROLLBACK TRANSACTION;
+        ELSE IF @transacciones_previas > 0 AND XACT_STATE() = 1 ROLLBACK TRANSACTION SeleccionModificar;
+        THROW;
+    END CATCH
 END;
 GO
 

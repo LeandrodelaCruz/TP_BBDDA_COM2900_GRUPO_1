@@ -1,4 +1,4 @@
-# Logica de negocio: convocatoria y reemplazos
+﻿# Logica de negocio: convocatoria y reemplazos
 
 Los procedimientos de esta carpeta pertenecen al esquema `negocio` y coordinan
 las operaciones ABM de la Entrega 5. No cambian la estructura de las tablas.
@@ -82,12 +82,22 @@ derivada; no hay una operacion de anulacion automatica ni se elimina al entrante
 
 El procedimiento acepta una transaccion externa usando un punto de guardado.
 Si un error deja esa transaccion no confirmable (`XACT_STATE() = -1`), el llamador
-debe ejecutar un `ROLLBACK` completo. Las llamadas de negocio se serializan con
-un bloqueo de aplicacion y las lecturas de validacion mantienen bloqueos hasta
-el fin de la transaccion.
+debe ejecutar un `ROLLBACK` completo. La ejecucion academica es secuencial: no
+se solicitan bloqueos de aplicacion ni bloqueos explicitos de lectura. Ver
+[Transacciones](README_Transacciones.md) para explicar el patron compartido.
 
 El test incluye reemplazo exitoso, cadena, baja repetida, entrante existente,
 datos obligatorios, fecha incoherente y un fallo simulado de escritura mediante
 un trigger transitorio. Revierte los datos y el trigger creados; pueden avanzar
 los contadores IDENTITY. Requiere permiso para crear ese trigger en la base de
 pruebas. Los seis casos pasaron en SQL Server el 03/11/2026, en una base aislada.
+
+
+## Mapa de cruces y arbitros
+
+Instalar 16_Designacion_Arbitral.sql antes de los ABM actualizados: define la
+normalizacion de pais y el evaluador. Partido exige ambas selecciones; no se
+registran ni propagan ganadores. Cruce_Partido solo describe las conexiones
+para advertencias arbitrales sobre los participantes cargados. Ver
+../Stored_Procedures_Importaciones/README_Designaciones_Arbitrales.md para
+instalacion, funcionamiento, pruebas y limites de la configuracion local.

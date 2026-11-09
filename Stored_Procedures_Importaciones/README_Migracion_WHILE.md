@@ -1,4 +1,4 @@
-# Migracion del proyecto a WHILE
+﻿# Migracion del proyecto a WHILE
 
 Fecha: 07/11/2026. Motivo: correccion docente que prohibe cursores SQL.
 El usuario autorizo extender el patron de Reemplazo y Personal_Tecnico y,
@@ -204,3 +204,15 @@ trigger transitorio y lo elimina al finalizar. Tambien paso la prueba existente
 La busqueda final sobre todos los archivos SQL del repo, incluida la copia de
 Jugador, no encontro declaraciones, operaciones de lectura ni limpieza de
 cursores. No se cambiaron los formatos de entrada ni se agregaron esquemas.
+
+
+## Designaciones arbitrales y cuadro (07/11/2026)
+
+Antes no habia carga de designaciones ni mapa. Ahora Cargar_Designaciones_Arbitrales
+recorre partido, puesto y candidato mediante claves unicas y MIN(clave) mayor que la
+anterior. Esta adaptacion fue aprobada por el usuario: las filas del equipo dependen
+entre si y se confirman por partido completo. Los candidatos se ordenan una sola vez
+por puesto y no se eliminan para controlar el avance. Los rechazos previstos usan un
+punto de guardado; al fallar el equipo se revierte el partido y se avanza al siguiente.
+La carga de cruces y la propagacion de resultados tambien usan claves unicas y avance
+explicito. No se introdujeron cursores. Ver README_Designaciones_Arbitrales.md.
