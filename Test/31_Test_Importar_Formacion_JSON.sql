@@ -93,5 +93,5 @@ GO
     N'C:\Import\formaciones_mundial_2026.json'
 */
 EXEC test.Importar_Formacion_JSON_Test
-    @archivo = N'C:\TP_BBDDA_COM2900_GRUPO_1-main\Archivos_Importacion\formaciones_mundial_2026.json';
+    @archivo = N'/var/opt/mssql/import/formaciones_mundial_2026.json';
 GO
