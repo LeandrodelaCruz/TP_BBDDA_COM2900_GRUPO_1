@@ -1,4 +1,4 @@
-/*
+﻿/*
     Universidad: Universidad Nacional de La Matanza - UNLaM
     Materia: Bases de Datos Aplicada - 2C-2026
     Comision: Com: 01-2900
@@ -27,7 +27,7 @@ USE MUNDIALDEFUTBOL;
 GO
 
 IF SCHEMA_ID(N'test') IS NULL
-    EXEC (N'CREATE SCHEMA test');
+    THROW 51910,N'Ejecute primero Table/00_Script_DB_Schemas_Creacion.sql.',1;
 GO
 
 CREATE OR ALTER PROCEDURE test.Reportes_Tarjetas_Test
