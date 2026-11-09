@@ -59,9 +59,6 @@ BEGIN
     DECLARE @hay_suplementario BIT = 0;
     DECLARE @limite_ventanas INT;
 
-    IF EXISTS(SELECT 1 FROM dbo.Partido WHERE id_partido=@id_partido
-              AND (id_seleccion_1 IS NULL OR id_seleccion_2 IS NULL))
-        THROW 51350,N'Confirme ambos participantes antes de registrar eventos del partido.',1;
 
     BEGIN TRY
         BEGIN TRANSACTION;

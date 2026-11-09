@@ -31,46 +31,33 @@ BEGIN
     IF @fase IS NULL OR @pais IS NULL THROW 51610,N'Partido o arbitro inexistente.',1;
     IF @fase='GRUPOS' RETURN;
 
-    DECLARE @posibles TABLE(partido INT,posicion TINYINT,seleccion INT,PRIMARY KEY(partido,posicion,seleccion));
-    ;WITH Posibles AS
-    (
-        SELECT p.id_partido AS partido, v.posicion, v.seleccion
-        FROM dbo.Partido p CROSS APPLY (VALUES(CAST(1 AS TINYINT),p.id_seleccion_1),
-                                              (CAST(2 AS TINYINT),p.id_seleccion_2)) v(posicion,seleccion)
-        WHERE v.seleccion IS NOT NULL AND p.fase<>'GRUPOS'
-        UNION ALL
-        SELECT c.id_partido_destino,c.posicion_destino,x.seleccion
-        FROM Posibles x JOIN dbo.Cruce_Partido c ON c.id_partido_origen=x.partido
-        JOIN dbo.Partido o ON o.id_partido=c.id_partido_origen
-        JOIN dbo.Partido d ON d.id_partido=c.id_partido_destino
-        WHERE (o.id_seleccion_ganadora IS NULL
-            OR (c.tipo_clasificado='GANADOR' AND x.seleccion=o.id_seleccion_ganadora)
-            OR (c.tipo_clasificado='PERDEDOR' AND x.seleccion<>o.id_seleccion_ganadora))
-          AND (CASE c.posicion_destino WHEN 1 THEN d.id_seleccion_1 ELSE d.id_seleccion_2 END IS NULL
-            OR CASE c.posicion_destino WHEN 1 THEN d.id_seleccion_1 ELSE d.id_seleccion_2 END=x.seleccion)
-    )
-    INSERT @posibles SELECT DISTINCT partido,posicion,seleccion FROM Posibles OPTION(MAXRECURSION 16);
-
+    -- Seguir a los participantes del encuentro por los destinos donde ya figuran.
+    -- No interpretar resultados ni inferir ganadores: todos los encuentros tienen dos selecciones.
     DECLARE @ruta TABLE(partido INT,posicion TINYINT,seleccion INT,PRIMARY KEY(partido,posicion,seleccion));
     ;WITH Ruta AS
     (
-        SELECT partido,posicion,seleccion FROM @posibles WHERE partido=@id_partido
+        SELECT p.id_partido AS partido,v.posicion,v.seleccion
+        FROM dbo.Partido p
+        CROSS APPLY (VALUES(CAST(1 AS TINYINT),p.id_seleccion_1),
+                           (CAST(2 AS TINYINT),p.id_seleccion_2)) v(posicion,seleccion)
+        WHERE p.id_partido=@id_partido
         UNION ALL
         SELECT c.id_partido_destino,c.posicion_destino,x.seleccion
         FROM Ruta x JOIN dbo.Cruce_Partido c ON c.id_partido_origen=x.partido
-        JOIN dbo.Partido o ON o.id_partido=x.partido
-        JOIN @posibles d ON d.partido=c.id_partido_destino AND d.posicion=c.posicion_destino AND d.seleccion=x.seleccion
-        WHERE o.id_seleccion_ganadora IS NULL
-           OR (c.tipo_clasificado='GANADOR' AND x.seleccion=o.id_seleccion_ganadora)
-           OR (c.tipo_clasificado='PERDEDOR' AND x.seleccion<>o.id_seleccion_ganadora)
+        JOIN dbo.Partido d ON d.id_partido=c.id_partido_destino
+        WHERE CASE c.posicion_destino WHEN 1 THEN d.id_seleccion_1 ELSE d.id_seleccion_2 END=x.seleccion
     )
     INSERT @ruta SELECT DISTINCT partido,posicion,seleccion FROM Ruta OPTION(MAXRECURSION 16);
     DECLARE @cruce INT;
-    SELECT @cruce=MIN(r.partido) FROM @ruta r JOIN @posibles q ON q.partido=r.partido AND q.posicion<>r.posicion
-        JOIN dbo.Seleccion se ON se.id_seleccion=q.seleccion
-        WHERE r.partido<>@id_partido AND negocio.Pais_Arbitral_Normalizado(se.pais)=negocio.Pais_Arbitral_Normalizado(@pais);
+    SELECT @cruce=MIN(r.partido)
+    FROM @ruta r JOIN dbo.Partido p ON p.id_partido=r.partido
+    JOIN dbo.Seleccion se ON se.id_seleccion=
+        CASE r.posicion WHEN 1 THEN p.id_seleccion_2 ELSE p.id_seleccion_1 END
+    WHERE r.partido<>@id_partido
+      AND negocio.Pais_Arbitral_Normalizado(se.pais)=negocio.Pais_Arbitral_Normalizado(@pais);
     IF @cruce IS NOT NULL SET @advertencia=CONCAT(N'POSIBLE CRUCE: ',@pais,
-        N' puede enfrentar a un participante en el partido ',@cruce,N'. No impide designar. ');
+        N' puede enfrentar a un participante en el partido ',@cruce,
+        N', segun los participantes cargados. No impide designar. ');
 
     -- Subcuadro relevante: destinos estructurales, y todos sus origenes.
     DECLARE @relevantes TABLE(id INT PRIMARY KEY);
@@ -86,10 +73,7 @@ BEGIN
            OR (p.fase IN ('DIECISEISAVOS','OCTAVOS','CUARTOS') AND
                NOT EXISTS(SELECT 1 FROM dbo.Cruce_Partido c WHERE c.id_partido_origen=p.id_partido AND c.tipo_clasificado='GANADOR'))
            OR (p.fase='SEMIFINAL' AND (SELECT COUNT(*) FROM dbo.Cruce_Partido c WHERE c.id_partido_origen=p.id_partido)<>2)
-           OR (p.fase='DIECISEISAVOS' AND (p.id_seleccion_1 IS NULL OR p.id_seleccion_2 IS NULL)))
-        SET @advertencia+=N'EVALUACION INCOMPLETA: faltan cruces o participantes de entrada. ';
-    IF EXISTS (SELECT 1 FROM @relevantes r JOIN dbo.Partido p ON p.id_partido=r.id
-               WHERE p.id_seleccion_ganadora IS NULL AND p.fase NOT IN ('FINAL','TERCER PUESTO'))
-        SET @advertencia+=N'Hay avances sin confirmar: los cruces se consideran potenciales segun el cuadro.';
+)
+        SET @advertencia+=N'EVALUACION INCOMPLETA: faltan conexiones en el mapa de cruces. ';
 END;
 GO

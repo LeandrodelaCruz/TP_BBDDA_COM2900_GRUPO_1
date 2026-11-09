@@ -15,7 +15,7 @@ SET XACT_ABORT OFF;
 BEGIN TRANSACTION;
 BEGIN TRY
 
-    DECLARE @sede INT,@sa INT,@sb INT,@sc INT,@sd INT,@p INT,@q INT,@semi INT,@final INT,@tercero INT;
+    DECLARE @sede INT,@sa INT,@sb INT,@sc INT,@sd INT,@p INT,@q INT,@semi INT;
     INSERT dbo.Sede(nombre_estadio,ciudad,pais,capacidad,huso_horario) VALUES(N'TA_Estadio',N'TA_Ciudad',N'TA_Sede',50000,'UTC');
     SET @sede=SCOPE_IDENTITY();
     INSERT dbo.Seleccion(pais,confederacion,grupo_asignado) VALUES(N'TA_A','UEFA','A'); SET @sa=SCOPE_IDENTITY();
@@ -27,16 +27,10 @@ BEGIN TRY
     SELECT @p=id FROM @ids; DELETE @ids;
     INSERT @ids EXEC abm.Partidos_Alta @sede,@sc,@sd,'20260701','20260701 18:00','20260701 18:00','CUARTOS';
     SELECT @q=id FROM @ids; DELETE @ids;
-    INSERT @ids EXEC abm.Partidos_Alta @sede,NULL,NULL,'20260705','20260705 12:00','20260705 12:00','SEMIFINAL';
+    INSERT @ids EXEC abm.Partidos_Alta @sede,@sa,@sc,'20260705','20260705 12:00','20260705 12:00','SEMIFINAL';
     SELECT @semi=id FROM @ids; DELETE @ids;
-    INSERT @ids EXEC abm.Partidos_Alta @sede,NULL,NULL,'20260710','20260710 12:00','20260710 12:00','FINAL';
-    SELECT @final=id FROM @ids; DELETE @ids;
-    INSERT @ids EXEC abm.Partidos_Alta @sede,NULL,NULL,'20260709','20260709 12:00','20260709 12:00','TERCER PUESTO';
-    SELECT @tercero=id FROM @ids; DELETE @ids;
     EXEC abm.Cruce_Partido_Alta @semi,1,@p,'GANADOR';
     EXEC abm.Cruce_Partido_Alta @semi,2,@q,'GANADOR';
-    EXEC abm.Cruce_Partido_Alta @final,1,@semi,'GANADOR';
-    EXEC abm.Cruce_Partido_Alta @tercero,1,@semi,'PERDEDOR';
     DECLARE @conflicto INT,@externo INT,@futuro INT,@asistente INT,@otro INT,@var INT,@avar INT;
     INSERT dbo.Arbitro(apellido,pais,puesto) VALUES(N'TA_Conflicto',N'TA_A','Principal'); SET @conflicto=SCOPE_IDENTITY();
     INSERT dbo.Arbitro(apellido,pais,puesto) VALUES(N'TA_Externo',N'TA_X','Principal'); SET @externo=SCOPE_IDENTITY();
@@ -82,14 +76,6 @@ BEGIN TRY
         IF ERROR_NUMBER()<>51602 THROW;
         PRINT N'OK: Categoria incompatible';
     END CATCH;
-    BEGIN TRY
-        EXEC abm.Designacion_Arbitral_Alta @semi,@externo,'PRINCIPAL';
-        THROW 59999,N'FALLO: se esperaba rechazo: No designar con participantes pendientes',1;
-    END TRY
-    BEGIN CATCH
-        IF ERROR_NUMBER()<>51602 THROW;
-        PRINT N'OK: No designar con participantes pendientes';
-    END CATCH;
     EXEC abm.Designacion_Arbitral_Alta @p,@futuro,'PRINCIPAL',@aviso OUTPUT,0;
     IF @aviso NOT LIKE N'%POSIBLE CRUCE%' OR @aviso NOT LIKE N'%INCOMPLETA%'
         THROW 59999,N'Falta advertencia de cruce potencial o cuadro parcial.',1;
@@ -131,10 +117,11 @@ BEGIN TRY
         IF ERROR_NUMBER()<>50402 THROW;
         PRINT N'OK: Cambio de pais con designaciones';
     END CATCH;
-    EXEC negocio.Confirmar_Resultado_Eliminatorio @q,@sd,'0-1';
+    -- La ruta se precisa con los participantes informados, sin propagacion de resultados.
+    EXEC abm.Partidos_Modificacion @semi,@sede,@sa,@sd,'20260705','20260705 12:00','20260705 12:00','SEMIFINAL',@devolver=0;
     EXEC negocio.Evaluar_Cruce_Arbitral @p,@futuro,@aviso OUTPUT;
     IF @aviso LIKE N'%POSIBLE CRUCE%' THROW 59999,N'La seleccion eliminada sigue generando conflicto potencial.',1;
-    PRINT N'OK: el conflicto potencial desaparece al confirmar la eliminacion';
+    PRINT N'OK: el conflicto desaparece al informar otro participante en el destino';
     IF @@TRANCOUNT<>1 THROW 59999,N'Un rechazo destruyo la transaccion externa.',1;
     IF (SELECT COUNT(*) FROM dbo.Designacion_Arbitral WHERE id_partido=@p)<>6
         THROW 59999,N'Equipo incompleto.',1;

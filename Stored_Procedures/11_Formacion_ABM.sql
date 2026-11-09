@@ -36,9 +36,6 @@ BEGIN
     IF NOT EXISTS (SELECT 1 FROM dbo.Partido WHERE id_partido = @id_partido)
         SET @errores += N'- No existe el partido indicado. ';
 
-    IF EXISTS (SELECT 1 FROM dbo.Partido WHERE id_partido=@id_partido
-               AND (id_seleccion_1 IS NULL OR id_seleccion_2 IS NULL))
-        SET @errores += N'- Confirme ambos participantes antes de registrar formaciones. ';
 
     IF NOT EXISTS (SELECT 1 FROM dbo.Seleccion WHERE id_seleccion = @id_seleccion)
         SET @errores += N'- No existe la seleccion indicada. ';
@@ -124,9 +121,6 @@ BEGIN
     IF NOT EXISTS (SELECT 1 FROM dbo.Partido WHERE id_partido = @id_partido)
         SET @errores += N'- No existe el partido indicado. ';
 
-    IF EXISTS (SELECT 1 FROM dbo.Partido WHERE id_partido=@id_partido
-               AND (id_seleccion_1 IS NULL OR id_seleccion_2 IS NULL))
-        SET @errores += N'- Confirme ambos participantes antes de registrar formaciones. ';
 
     IF NOT EXISTS (SELECT 1 FROM dbo.Seleccion WHERE id_seleccion = @id_seleccion)
         SET @errores += N'- No existe la seleccion indicada. ';

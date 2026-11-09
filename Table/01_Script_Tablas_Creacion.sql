@@ -287,20 +287,8 @@ BEGIN
         fase VARCHAR(30) NOT NULL,
         resultado_final VARCHAR(20) NULL,
         asistencia_publico INT NULL,
-        id_seleccion_1 INT NULL,
-        id_seleccion_2 INT NULL,
-
-        id_seleccion_ganadora INT NULL,
-        CONSTRAINT FK_Partido_Ganadora FOREIGN KEY (id_seleccion_ganadora)
-            REFERENCES dbo.Seleccion(id_seleccion),
-        CONSTRAINT CK_Partido_Selecciones CHECK
-            (id_seleccion_1 IS NULL OR id_seleccion_2 IS NULL OR id_seleccion_1 <> id_seleccion_2),
-        CONSTRAINT CK_Partido_Resultado CHECK
-            (resultado_final IS NULL OR (id_seleccion_1 IS NOT NULL AND id_seleccion_2 IS NOT NULL)),
-        CONSTRAINT CK_Partido_Ganadora CHECK (id_seleccion_ganadora IS NULL OR
-            (id_seleccion_1 IS NOT NULL AND id_seleccion_2 IS NOT NULL
-             AND resultado_final IS NOT NULL AND fase <> 'GRUPOS'
-             AND id_seleccion_ganadora IN (id_seleccion_1,id_seleccion_2))),
+        id_seleccion_1 INT NOT NULL,
+        id_seleccion_2 INT NOT NULL,
 
         CONSTRAINT PK_Partido
             PRIMARY KEY (id_partido),

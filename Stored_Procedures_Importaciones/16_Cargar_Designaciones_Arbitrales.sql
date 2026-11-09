@@ -41,69 +41,61 @@ BEGIN
         BEGIN TRY
             BEGIN TRANSACTION;
             SELECT @s1=id_seleccion_1,@s2=id_seleccion_2 FROM dbo.Partido WHERE id_partido=@p;
-            IF @s1 IS NULL OR @s2 IS NULL
+            -- Validar datos previos: no omitir silenciosamente un equipo invalido.
+            DELETE @existentes;
+            INSERT @existentes SELECT id_arbitro,rol_arbitro FROM dbo.Designacion_Arbitral WHERE id_partido=@p;
+            SELECT @a=MIN(id) FROM @existentes;
+            WHILE @a IS NOT NULL
+            BEGIN
+                SELECT @rol=rol FROM @existentes WHERE id=@a;
+                EXEC abm.Designacion_Arbitral_Guardar @p,@a,@rol,1,@aviso OUTPUT;
+                IF @aviso<>N'' INSERT @detalle VALUES(@p,@rol,@a,'ADVERTENCIA',NULL,@aviso);
+                SELECT @a=MIN(id) FROM @existentes WHERE id>@a;
+            END;
+            SELECT @antes=COUNT(*) FROM @existentes;
+            SELECT @o=MIN(orden) FROM @puestos;
+            WHILE @o IS NOT NULL
+            BEGIN
+                SELECT @rol=rol,@cat=categoria,@cantidad=cantidad FROM @puestos WHERE orden=@o;
+                IF (SELECT COUNT(*) FROM dbo.Designacion_Arbitral WHERE id_partido=@p AND rol_arbitro=@rol)<@cantidad
+                BEGIN
+                    DELETE @candidatos;
+                    -- El orden se sortea una sola vez por puesto; luego MIN(clave) garantiza avance finito.
+                    INSERT @candidatos
+                    SELECT CONVERT(INT,ROW_NUMBER() OVER(ORDER BY
+                        CASE WHEN @demostrar_rechazo=1 AND @demo=0 AND EXISTS
+                            (SELECT 1 FROM dbo.Seleccion se WHERE se.id_seleccion IN (@s1,@s2)
+                             AND negocio.Pais_Arbitral_Normalizado(se.pais)=negocio.Pais_Arbitral_Normalizado(a.pais)) THEN 0 ELSE 1 END,
+                        NEWID(),a.id_arbitro)),a.id_arbitro
+                    FROM dbo.Arbitro a WHERE UPPER(LTRIM(RTRIM(REPLACE(REPLACE(a.puesto,CHAR(13),''),CHAR(10),''))))=@cat
+                      AND NOT EXISTS(SELECT 1 FROM dbo.Designacion_Arbitral d WHERE d.id_partido=@p AND d.id_arbitro=a.id_arbitro);
+                    SELECT @c=MIN(orden),@ok=0 FROM @candidatos;
+                    WHILE @c IS NOT NULL AND @ok=0
+                    BEGIN
+                        SELECT @a=id FROM @candidatos WHERE orden=@c;
+                        BEGIN TRY
+                            EXEC abm.Designacion_Arbitral_Alta @p,@a,@rol,@aviso OUTPUT,0;
+                            SET @ok=1;
+                            INSERT @detalle VALUES(@p,@rol,@a,'PROVISIONAL',NULL,@aviso);
+                        END TRY
+                        BEGIN CATCH
+                            IF ERROR_NUMBER() NOT IN (51601,51602) OR XACT_STATE()<>1 THROW;
+                            SET @rechazados+=1;
+                            IF ERROR_NUMBER()=51601 SET @demo=1;
+                            INSERT @detalle VALUES(@p,@rol,@a,'RECHAZADO',ERROR_NUMBER(),ERROR_MESSAGE());
+                        END CATCH;
+                        SELECT @c=MIN(orden) FROM @candidatos WHERE orden>@c;
+                    END;
+                    IF @ok=0 THROW 51621,N'Se agotaron los candidatos del puesto: se revierten las nuevas designaciones de este partido.',1;
+                END;
+                SELECT @o=MIN(orden) FROM @puestos WHERE orden>@o;
+            END;
+            IF @antes=6
             BEGIN
                 SET @omitidos+=1;
-                INSERT @detalle VALUES(@p,NULL,NULL,'PENDIENTE',NULL,N'Participantes sin confirmar: no se designan arbitros.');
+                INSERT @detalle VALUES(@p,NULL,NULL,'YA COMPLETO',NULL,N'Se conserva el equipo existente.');
             END
-            ELSE
-            BEGIN
-                -- Validar datos previos: no omitir silenciosamente un equipo invalido.
-                DELETE @existentes;
-                INSERT @existentes SELECT id_arbitro,rol_arbitro FROM dbo.Designacion_Arbitral WHERE id_partido=@p;
-                SELECT @a=MIN(id) FROM @existentes;
-                WHILE @a IS NOT NULL
-                BEGIN
-                    SELECT @rol=rol FROM @existentes WHERE id=@a;
-                    EXEC abm.Designacion_Arbitral_Guardar @p,@a,@rol,1,@aviso OUTPUT;
-                    IF @aviso<>N'' INSERT @detalle VALUES(@p,@rol,@a,'ADVERTENCIA',NULL,@aviso);
-                    SELECT @a=MIN(id) FROM @existentes WHERE id>@a;
-                END;
-                SELECT @antes=COUNT(*) FROM @existentes;
-                SELECT @o=MIN(orden) FROM @puestos;
-                WHILE @o IS NOT NULL
-                BEGIN
-                    SELECT @rol=rol,@cat=categoria,@cantidad=cantidad FROM @puestos WHERE orden=@o;
-                    IF (SELECT COUNT(*) FROM dbo.Designacion_Arbitral WHERE id_partido=@p AND rol_arbitro=@rol)<@cantidad
-                    BEGIN
-                        DELETE @candidatos;
-                        -- El orden se sortea una sola vez por puesto; luego MIN(clave) garantiza avance finito.
-                        INSERT @candidatos
-                        SELECT CONVERT(INT,ROW_NUMBER() OVER(ORDER BY
-                            CASE WHEN @demostrar_rechazo=1 AND @demo=0 AND EXISTS
-                                (SELECT 1 FROM dbo.Seleccion se WHERE se.id_seleccion IN (@s1,@s2)
-                                 AND negocio.Pais_Arbitral_Normalizado(se.pais)=negocio.Pais_Arbitral_Normalizado(a.pais)) THEN 0 ELSE 1 END,
-                            NEWID(),a.id_arbitro)),a.id_arbitro
-                        FROM dbo.Arbitro a WHERE UPPER(LTRIM(RTRIM(REPLACE(REPLACE(a.puesto,CHAR(13),''),CHAR(10),''))))=@cat
-                          AND NOT EXISTS(SELECT 1 FROM dbo.Designacion_Arbitral d WHERE d.id_partido=@p AND d.id_arbitro=a.id_arbitro);
-                        SELECT @c=MIN(orden),@ok=0 FROM @candidatos;
-                        WHILE @c IS NOT NULL AND @ok=0
-                        BEGIN
-                            SELECT @a=id FROM @candidatos WHERE orden=@c;
-                            BEGIN TRY
-                                EXEC abm.Designacion_Arbitral_Alta @p,@a,@rol,@aviso OUTPUT,0;
-                                SET @ok=1;
-                                INSERT @detalle VALUES(@p,@rol,@a,'PROVISIONAL',NULL,@aviso);
-                            END TRY
-                            BEGIN CATCH
-                                IF ERROR_NUMBER() NOT IN (51601,51602) OR XACT_STATE()<>1 THROW;
-                                SET @rechazados+=1;
-                                IF ERROR_NUMBER()=51601 SET @demo=1;
-                                INSERT @detalle VALUES(@p,@rol,@a,'RECHAZADO',ERROR_NUMBER(),ERROR_MESSAGE());
-                            END CATCH;
-                            SELECT @c=MIN(orden) FROM @candidatos WHERE orden>@c;
-                        END;
-                        IF @ok=0 THROW 51621,N'Se agotaron los candidatos del puesto: se revierten las nuevas designaciones de este partido.',1;
-                    END;
-                    SELECT @o=MIN(orden) FROM @puestos WHERE orden>@o;
-                END;
-                IF @antes=6
-                BEGIN
-                    SET @omitidos+=1;
-                    INSERT @detalle VALUES(@p,NULL,NULL,'YA COMPLETO',NULL,N'Se conserva el equipo existente.');
-                END
-                ELSE SET @completados+=1;
-            END;
+            ELSE SET @completados+=1;
             COMMIT TRANSACTION;
             UPDATE @detalle SET estado='CARGADO' WHERE partido=@p AND estado='PROVISIONAL';
         END TRY

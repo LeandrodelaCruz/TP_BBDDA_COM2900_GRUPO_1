@@ -25,8 +25,8 @@ GO
 
 CREATE OR ALTER PROCEDURE abm.Partidos_Alta
     @id_sede           INT,
-	@id_seleccion_1     INT = NULL,
-    @id_seleccion_2     INT = NULL,
+	@id_seleccion_1     INT,
+    @id_seleccion_2     INT,
     @fecha             DATE,
     @horario_local     DATETIME2(0),
     @horario_UTC       DATETIME2(0),
@@ -58,11 +58,11 @@ BEGIN
         SET @errores += N'- No existe la sede indicada. ';
 
 	-- Validación 2: selección 1 existente
-    IF @id_seleccion_1 IS NOT NULL AND NOT EXISTS (SELECT 1 FROM dbo.Seleccion WHERE id_seleccion = @id_seleccion_1)
+    IF NOT EXISTS (SELECT 1 FROM dbo.Seleccion WHERE id_seleccion = @id_seleccion_1)
         SET @errores += N'- No existe la selección 1 indicada. ';
 
     -- Validación 3: selección 2 existente
-    IF @id_seleccion_2 IS NOT NULL AND NOT EXISTS (SELECT 1 FROM dbo.Seleccion WHERE id_seleccion = @id_seleccion_2)
+    IF NOT EXISTS (SELECT 1 FROM dbo.Seleccion WHERE id_seleccion = @id_seleccion_2)
         SET @errores += N'- No existe la selección 2 indicada. ';
 
     -- Validación 4: selecciones distintas
@@ -86,8 +86,6 @@ BEGIN
         SET @errores += N'- La fecha no coincide con la del horario local. ';
 
     SET @resultado_final = NULLIF(LTRIM(RTRIM(@resultado_final)), '');
-    IF @resultado_final IS NOT NULL AND (@id_seleccion_1 IS NULL OR @id_seleccion_2 IS NULL)
-        SET @errores += N'- Un resultado requiere ambas selecciones. ';
     IF @fecha IS NULL SET @errores += N'- La fecha es obligatoria. ';
     IF @errores <> N'' THROW 51301, @errores, 1;
 
@@ -155,8 +153,8 @@ GO
 CREATE OR ALTER PROCEDURE abm.Partidos_Modificacion
     @id_partido        INT,
     @id_sede           INT,
-	@id_seleccion_1     INT = NULL,
-    @id_seleccion_2     INT = NULL,
+	@id_seleccion_1     INT,
+    @id_seleccion_2     INT,
     @fecha             DATE,
     @horario_local     DATETIME2(0),
     @horario_UTC       DATETIME2(0),
@@ -189,10 +187,10 @@ BEGIN
     IF NOT EXISTS (SELECT 1 FROM dbo.Sede WHERE id_sede = @id_sede)
         SET @errores += N'- No existe la sede indicada. ';
 
-	IF @id_seleccion_1 IS NOT NULL AND NOT EXISTS (SELECT 1 FROM dbo.Seleccion WHERE id_seleccion = @id_seleccion_1)
+	IF NOT EXISTS (SELECT 1 FROM dbo.Seleccion WHERE id_seleccion = @id_seleccion_1)
         SET @errores += N'- No existe la selección 1 indicada. ';
 
-    IF @id_seleccion_2 IS NOT NULL AND NOT EXISTS (SELECT 1 FROM dbo.Seleccion WHERE id_seleccion = @id_seleccion_2)
+    IF NOT EXISTS (SELECT 1 FROM dbo.Seleccion WHERE id_seleccion = @id_seleccion_2)
         SET @errores += N'- No existe la selección 2 indicada. ';
 
     IF @id_seleccion_1 = @id_seleccion_2
@@ -211,8 +209,6 @@ BEGIN
         SET @errores += N'- La fecha no coincide con la del horario local. ';
 
     SET @resultado_final = NULLIF(LTRIM(RTRIM(@resultado_final)), '');
-    IF @resultado_final IS NOT NULL AND (@id_seleccion_1 IS NULL OR @id_seleccion_2 IS NULL)
-        SET @errores += N'- Un resultado requiere ambas selecciones. ';
     IF @fecha IS NULL SET @errores += N'- La fecha es obligatoria. ';
     IF EXISTS (SELECT 1 FROM dbo.Partido WHERE id_partido=@id_partido AND
           (ISNULL(id_seleccion_1,-1) <> ISNULL(@id_seleccion_1,-1)
@@ -224,21 +220,15 @@ BEGIN
            OR EXISTS (SELECT 1 FROM dbo.Asignacion_Publicitaria WHERE id_partido=@id_partido)
            OR EXISTS (SELECT 1 FROM dbo.Partido WHERE id_partido=@id_partido AND resultado_final IS NOT NULL)
             SET @errores += N'- No se pueden cambiar participantes con datos dependientes o resultado. ';
-        IF EXISTS (SELECT 1 FROM dbo.Designacion_Arbitral WHERE id_partido=@id_partido)
-           AND (@id_seleccion_1 IS NULL OR @id_seleccion_2 IS NULL)
-            SET @errores += N'- Hay arbitros designados: no se pueden dejar participantes pendientes. ';
     END;
     IF EXISTS (SELECT 1 FROM dbo.Designacion_Arbitral d JOIN dbo.Arbitro a ON a.id_arbitro=d.id_arbitro
         JOIN dbo.Seleccion se ON se.id_seleccion IN (@id_seleccion_1,@id_seleccion_2)
         WHERE d.id_partido=@id_partido AND negocio.Pais_Arbitral_Normalizado(a.pais)=negocio.Pais_Arbitral_Normalizado(se.pais))
         SET @errores += N'- Los participantes generan un conflicto de nacionalidad arbitral. ';
-    IF EXISTS (SELECT 1 FROM dbo.Partido WHERE id_partido=@id_partido AND id_seleccion_ganadora IS NOT NULL
-        AND (ISNULL(resultado_final,'')<>ISNULL(@resultado_final,'') OR fase<>@fase))
-        SET @errores += N'- El resultado confirmado se administra desde negocio.Confirmar_Resultado_Eliminatorio. ';
     IF EXISTS (SELECT 1 FROM dbo.Cruce_Partido WHERE id_partido_origen=@id_partido OR id_partido_destino=@id_partido)
        AND EXISTS (SELECT 1 FROM dbo.Partido WHERE id_partido=@id_partido AND (fase<>@fase OR horario_UTC<>@horario_UTC))
         SET @errores += N'- No cambie fase u horario de un partido vinculado sin retirar sus cruces. ';
-    -- Si el origen aun no tiene ganador, un destino conocido debe pertenecer a sus participantes.
+    -- El participante del destino debe pertenecer al partido de origen.
     IF EXISTS (SELECT 1 FROM dbo.Cruce_Partido c JOIN dbo.Partido o ON o.id_partido=c.id_partido_origen
         WHERE c.id_partido_destino=@id_partido AND o.id_seleccion_1 IS NOT NULL AND o.id_seleccion_2 IS NOT NULL
           AND CASE c.posicion_destino WHEN 1 THEN @id_seleccion_1 ELSE @id_seleccion_2 END NOT IN (o.id_seleccion_1,o.id_seleccion_2))
@@ -249,15 +239,6 @@ BEGIN
           AND (@id_seleccion_1 IS NULL OR @id_seleccion_2 IS NULL OR
                CASE c.posicion_destino WHEN 1 THEN d.id_seleccion_1 ELSE d.id_seleccion_2 END NOT IN (@id_seleccion_1,@id_seleccion_2)))
         SET @errores += N'- El cambio contradice un participante del partido siguiente. ';
-    -- Un lugar con origen conocido solo puede contener al clasificado confirmado.
-    IF EXISTS (SELECT 1 FROM dbo.Cruce_Partido c JOIN dbo.Partido o ON o.id_partido=c.id_partido_origen
-        WHERE c.id_partido_destino=@id_partido AND
-        ISNULL(CASE c.posicion_destino WHEN 1 THEN @id_seleccion_1 ELSE @id_seleccion_2 END,-1) <>
-        ISNULL(CASE WHEN o.id_seleccion_ganadora IS NULL THEN
-                 CASE c.posicion_destino WHEN 1 THEN @id_seleccion_1 ELSE @id_seleccion_2 END
-             WHEN c.tipo_clasificado='GANADOR' THEN o.id_seleccion_ganadora
-             WHEN o.id_seleccion_ganadora=o.id_seleccion_1 THEN o.id_seleccion_2 ELSE o.id_seleccion_1 END,-1))
-        SET @errores += N'- El participante contradice el clasificado del partido de origen. ';
     IF @errores <> N'' THROW 51301, @errores, 1;
 
         UPDATE dbo.Partido
@@ -285,15 +266,15 @@ BEGIN
 END;
 GO
 
--- LEFT JOIN conserva los partidos con participantes pendientes.
+-- Consulta del fixture con ambos participantes obligatorios.
 CREATE OR ALTER PROCEDURE abm.Partidos_Listar
 AS
 BEGIN
     SET NOCOUNT ON;
     SELECT p.*, s1.pais AS seleccion_1, s2.pais AS seleccion_2
     FROM dbo.Partido p
-    LEFT JOIN dbo.Seleccion s1 ON s1.id_seleccion=p.id_seleccion_1
-    LEFT JOIN dbo.Seleccion s2 ON s2.id_seleccion=p.id_seleccion_2
+    INNER JOIN dbo.Seleccion s1 ON s1.id_seleccion=p.id_seleccion_1
+    INNER JOIN dbo.Seleccion s2 ON s2.id_seleccion=p.id_seleccion_2
     ORDER BY p.horario_UTC,p.id_partido;
 END;
 GO

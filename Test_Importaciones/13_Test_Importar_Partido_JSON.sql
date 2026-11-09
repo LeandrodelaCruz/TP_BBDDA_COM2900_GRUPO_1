@@ -8,7 +8,7 @@
     Descripción:
     Test de importación de partidos desde JSON (partidos_mundial_2026.json).
     Se ejecuta la importación dos veces para verificar la lógica de UPSERT
-    basada en la clave natural (id_sede, horario_UTC, fase).
+    basada en la clave natural (fecha, horario_UTC, id_seleccion_1, id_seleccion_2).
 
     Resultado esperado:
     - Primera ejecución: los partidos inexistentes se insertan.
@@ -58,18 +58,19 @@ BEGIN
         p.asistencia_publico
     FROM dbo.Partido p
     INNER JOIN dbo.Sede      s  ON s.id_sede       = p.id_sede
-    LEFT JOIN dbo.Seleccion sl ON sl.id_seleccion = p.id_seleccion_1
-    LEFT JOIN dbo.Seleccion sv ON sv.id_seleccion = p.id_seleccion_2
+    INNER JOIN dbo.Seleccion sl ON sl.id_seleccion = p.id_seleccion_1
+    INNER JOIN dbo.Seleccion sv ON sv.id_seleccion = p.id_seleccion_2
     ORDER BY p.fecha, p.horario_UTC;
 
     PRINT '===== DUPLICADOS (RESULTADO ESPERADO: 0 FILAS) =====';
     SELECT
-        id_sede,
+        fecha,
         horario_UTC,
-        fase,
+        id_seleccion_1,
+        id_seleccion_2,
         COUNT(*) AS cantidad
     FROM dbo.Partido
-    GROUP BY id_sede, horario_UTC, fase
+    GROUP BY fecha, horario_UTC, id_seleccion_1, id_seleccion_2
     HAVING COUNT(*) > 1;
 END;
 GO

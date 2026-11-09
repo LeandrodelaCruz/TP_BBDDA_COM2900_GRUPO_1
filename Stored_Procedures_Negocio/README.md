@@ -93,10 +93,11 @@ los contadores IDENTITY. Requiere permiso para crear ese trigger en la base de
 pruebas. Los seis casos pasaron en SQL Server el 03/11/2026, en una base aislada.
 
 
-## Calendario, cruces y arbitros
+## Mapa de cruces y arbitros
 
-Se incorporan 13_Confirmar_Resultado_Eliminatorio.sql y 16_Designacion_Arbitral.sql.
-Instalar el archivo 16 antes de los ABM actualizados, porque define la funcion de
-normalizacion de pais. Ver ../Stored_Procedures_Importaciones/README_Designaciones_Arbitrales.md
-para el orden completo de recreacion, uso, alcances y pruebas. La importacion no
-requiere ganadores; la carga arbitral usa los ABM con controles compartidos.
+Instalar 16_Designacion_Arbitral.sql antes de los ABM actualizados: define la
+normalizacion de pais y el evaluador. Partido exige ambas selecciones; no se
+registran ni propagan ganadores. Cruce_Partido solo describe las conexiones
+para advertencias arbitrales sobre los participantes cargados. Ver
+../Stored_Procedures_Importaciones/README_Designaciones_Arbitrales.md para
+instalacion, funcionamiento, pruebas y limites de la configuracion local.

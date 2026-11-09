@@ -6,7 +6,7 @@
 */
 USE MUNDIALDEFUTBOL;
 GO
--- Alta idempotente: no reescribe relaciones ya utilizadas.
+-- Mapa para advertencias arbitrales. Alta identica no duplica relaciones.
 CREATE OR ALTER PROCEDURE abm.Cruce_Partido_Alta
     @id_partido_destino INT, @posicion_destino TINYINT,
     @id_partido_origen INT, @tipo_clasificado VARCHAR(8)
@@ -23,8 +23,8 @@ BEGIN
             SAVE TRANSACTION CruceAlta;
 
     DECLARE @fo VARCHAR(30), @fd VARCHAR(30), @ho DATETIME2, @hd DATETIME2,
-        @s1 INT, @s2 INT, @g INT, @actual INT, @esperado INT;
-    SELECT @fo=fase,@ho=horario_UTC,@s1=id_seleccion_1,@s2=id_seleccion_2,@g=id_seleccion_ganadora
+        @s1 INT, @s2 INT, @actual INT;
+    SELECT @fo=fase,@ho=horario_UTC,@s1=id_seleccion_1,@s2=id_seleccion_2
         FROM dbo.Partido WHERE id_partido=@id_partido_origen;
     SELECT @fd=fase,@hd=horario_UTC,@actual=CASE @posicion_destino WHEN 1 THEN id_seleccion_1 ELSE id_seleccion_2 END
         FROM dbo.Partido WHERE id_partido=@id_partido_destino;
@@ -46,16 +46,13 @@ BEGIN
         AND tipo_clasificado=@tipo_clasificado
         AND NOT(id_partido_destino=@id_partido_destino AND posicion_destino=@posicion_destino))
         THROW 51324,N'El clasificado ya tiene otro destino.',1;
-    SET @esperado=CASE WHEN @g IS NULL THEN NULL WHEN @tipo_clasificado='GANADOR' THEN @g
-        WHEN @g=@s1 THEN @s2 ELSE @s1 END;
-    IF @actual IS NOT NULL AND ((@esperado IS NOT NULL AND @actual<>@esperado)
-        OR (@s1 IS NOT NULL AND @s2 IS NOT NULL AND @actual NOT IN (@s1,@s2)))
+    IF @actual NOT IN (@s1,@s2)
         THROW 51325,N'El participante del destino no coincide con su origen.',1;
     IF EXISTS (SELECT 1 FROM dbo.Cruce_Partido WHERE id_partido_destino=@id_partido_destino AND posicion_destino=@posicion_destino)
     BEGIN
         IF EXISTS (SELECT 1 FROM dbo.Cruce_Partido WHERE id_partido_destino=@id_partido_destino AND posicion_destino=@posicion_destino
             AND (id_partido_origen<>@id_partido_origen OR tipo_clasificado<>@tipo_clasificado))
-            THROW 51326,N'El lugar ya tiene otro origen. Retire primero el cruce si no fue utilizado.',1;
+            THROW 51326,N'El lugar ya tiene otro origen. Use la modificacion de cruces para corregir el mapa.',1;
     END
     ELSE INSERT dbo.Cruce_Partido VALUES(@id_partido_destino,@posicion_destino,@id_partido_origen,@tipo_clasificado);
 
@@ -84,11 +81,8 @@ BEGIN
 
     IF NOT EXISTS (SELECT 1 FROM dbo.Cruce_Partido WHERE id_partido_destino=@id_partido_destino AND posicion_destino=@posicion_destino)
         THROW 51327,N'El cruce no existe.',1;
-    IF EXISTS (SELECT 1 FROM dbo.Cruce_Partido c JOIN dbo.Partido o ON o.id_partido=c.id_partido_origen
-        JOIN dbo.Partido d ON d.id_partido=c.id_partido_destino
-        WHERE c.id_partido_destino=@id_partido_destino AND c.posicion_destino=@posicion_destino
-        AND (o.id_seleccion_ganadora IS NOT NULL OR d.id_seleccion_1 IS NOT NULL OR d.id_seleccion_2 IS NOT NULL))
-        THROW 51328,N'El cruce ya tiene clasificados o participantes de destino; no se puede retirar.',1;
+    -- Quitar una conexion no cambia participantes, resultados ni designaciones.
+    -- Las siguientes evaluaciones advertiran si el mapa queda incompleto.
     DELETE dbo.Cruce_Partido WHERE id_partido_destino=@id_partido_destino AND posicion_destino=@posicion_destino;
 
         IF @transacciones_previas = 0 COMMIT TRANSACTION;

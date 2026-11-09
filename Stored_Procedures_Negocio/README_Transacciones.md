@@ -1,4 +1,4 @@
-# Transacciones para la demo secuencial
+﻿# Transacciones para la demo secuencial
 
 La base academica se crea y se ejecuta paso a paso, con una operacion por vez.
 Los procedimientos no solicitan bloqueos de aplicacion (`sp_getapplock`) ni
@@ -8,8 +8,8 @@ su manejo normal de bloqueos. No se cambia el nivel de aislamiento.
 ## Que se conserva
 
 Una transaccion agrupa cambios que deben confirmarse juntos. Por ejemplo,
-incorporar un jugador y registrar su reemplazo, o confirmar un ganador y
-completar sus cruces siguientes. Si la operacion falla, se deshace su trabajo
+incorporar un jugador y registrar su reemplazo, o sustituir una conexion
+del mapa conservando la anterior cuando la nueva no es valida. Si la operacion falla, se deshace su trabajo
 y se informa el error mediante `THROW`.
 
 Las cargas de reemplazos y designaciones confirman cada caso o partido por

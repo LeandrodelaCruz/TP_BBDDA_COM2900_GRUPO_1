@@ -32,7 +32,6 @@ BEGIN
     SELECT @p1=negocio.Pais_Arbitral_Normalizado(pais) FROM dbo.Seleccion WHERE id_seleccion=@s1;
     SELECT @p2=negocio.Pais_Arbitral_Normalizado(pais) FROM dbo.Seleccion WHERE id_seleccion=@s2;
     IF @existe=0 SET @errores+=N'- El partido no existe. ';
-    ELSE IF @s1 IS NULL OR @s2 IS NULL SET @errores+=N'- Confirme ambos participantes. ';
     IF @pais IS NULL SET @errores+=N'- El arbitro no existe. ';
     IF @rol_arbitro IS NULL OR @rol_arbitro NOT IN ('PRINCIPAL','ASISTENTE','CUARTO ARBITRO','VAR','AVAR')
         SET @errores+=N'- Rol invalido. ';
@@ -106,8 +105,8 @@ BEGIN
         FROM dbo.Designacion_Arbitral da
         INNER JOIN dbo.Arbitro a ON da.id_arbitro = a.id_arbitro
         INNER JOIN dbo.Partido p ON da.id_partido = p.id_partido
-        LEFT JOIN dbo.Seleccion s1 ON p.id_seleccion_1 = s1.id_seleccion
-        LEFT JOIN dbo.Seleccion s2 ON p.id_seleccion_2 = s2.id_seleccion
+        INNER JOIN dbo.Seleccion s1 ON p.id_seleccion_1 = s1.id_seleccion
+        INNER JOIN dbo.Seleccion s2 ON p.id_seleccion_2 = s2.id_seleccion
         WHERE da.id_partido = @id_partido
         ORDER BY da.rol_arbitro;
 END;
@@ -130,8 +129,8 @@ BEGIN
     FROM dbo.Designacion_Arbitral da
     INNER JOIN dbo.Arbitro a ON da.id_arbitro = a.id_arbitro
     INNER JOIN dbo.Partido p ON da.id_partido = p.id_partido
-    LEFT JOIN dbo.Seleccion s1 ON p.id_seleccion_1 = s1.id_seleccion
-    LEFT JOIN dbo.Seleccion s2 ON p.id_seleccion_2 = s2.id_seleccion
+    INNER JOIN dbo.Seleccion s1 ON p.id_seleccion_1 = s1.id_seleccion
+    INNER JOIN dbo.Seleccion s2 ON p.id_seleccion_2 = s2.id_seleccion
     WHERE da.id_arbitro = @id_arbitro
     ORDER BY p.fecha DESC;
 END;

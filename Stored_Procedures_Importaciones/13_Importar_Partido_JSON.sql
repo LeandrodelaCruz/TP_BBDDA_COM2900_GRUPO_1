@@ -28,9 +28,9 @@
         2) nombre exacto en dbo.Sede
         3) prefijo normalizado (cubre "... (Estadio X)")
     - La fase llega en inglés y se traduce al español que espera el ABM.
-    - Clave operativa para UPSERT: (id_sede, horario_UTC, fase).
-      Participantes vacios son pendientes; no se importa ni deduce ganador.
-      Cambiar sede/horario requiere reconciliacion manual; no se usa id_partido_fifa.
+    - Clave operativa para UPSERT: (fecha, horario_UTC,
+      id_seleccion_1, id_seleccion_2), igual que antes de la ampliacion arbitral.
+      Ambas selecciones deben existir. No se usa id_partido_fifa.
     - Una fila inválida no cancela el procesamiento de las demás.
 
     Nota sobre SQL dinámico:
@@ -390,7 +390,7 @@ BEGIN
                 FROM dbo.Seleccion
                 WHERE pais = @pais_local;
 
-            IF @id_seleccion_1 IS NULL AND NULLIF(LTRIM(RTRIM(@pais_local)),N'') IS NOT NULL
+            IF @id_seleccion_1 IS NULL
                 THROW 52107, N'No existe la selección local en dbo.Seleccion (pais no coincide).', 1;
 
             -- 8.4.3 Alias FIFA → id_seleccion (visitante)
@@ -404,7 +404,7 @@ BEGIN
                 FROM dbo.Seleccion
                 WHERE pais = @pais_visitante;
 
-            IF @id_seleccion_2 IS NULL AND NULLIF(LTRIM(RTRIM(@pais_visitante)),N'') IS NOT NULL
+            IF @id_seleccion_2 IS NULL
                 THROW 52108, N'No existe la selección visitante en dbo.Seleccion (pais no coincide).', 1;
 
             -----------------------------------------------------------------
@@ -412,19 +412,13 @@ BEGIN
             --     id_seleccion_1, id_seleccion_2). Si existe → UPDATE,
             --     si no → INSERT.
             -----------------------------------------------------------------
-            -- Calendario: primero se identifica por sede, UTC y fase, independientes
-            -- de los participantes pendientes. Una coincidencia ambigua se rechaza.
             IF (SELECT COUNT(*) FROM dbo.Partido
-                WHERE id_sede=@id_sede AND horario_UTC=@horario_UTC AND fase=@fase_es)>1
-                THROW 52109, N'Hay varios partidos para la sede, horario y fase.', 1;
+                WHERE fecha=@fecha AND horario_UTC=@horario_UTC
+                  AND id_seleccion_1=@id_seleccion_1 AND id_seleccion_2=@id_seleccion_2)>1
+                THROW 52109, N'Hay varios partidos para la fecha, horario y selecciones.', 1;
             SELECT @id_partido=id_partido FROM dbo.Partido
-            WHERE id_sede=@id_sede AND horario_UTC=@horario_UTC AND fase=@fase_es;
-            -- Un campo vacio del dataset no borra participantes/resultados confirmados.
-            IF @id_partido IS NOT NULL
-                SELECT @id_seleccion_1=COALESCE(@id_seleccion_1,id_seleccion_1),
-                       @id_seleccion_2=COALESCE(@id_seleccion_2,id_seleccion_2),
-                       @resultado_final=COALESCE(NULLIF(LTRIM(RTRIM(@resultado_final)),''),resultado_final)
-                FROM dbo.Partido WHERE id_partido=@id_partido;
+            WHERE fecha=@fecha AND horario_UTC=@horario_UTC
+              AND id_seleccion_1=@id_seleccion_1 AND id_seleccion_2=@id_seleccion_2;
 
             IF @id_partido IS NULL
             BEGIN
