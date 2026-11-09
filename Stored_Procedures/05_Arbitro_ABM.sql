@@ -1,4 +1,4 @@
-/*
+﻿/*
     Universidad: Universidad Nacional de la Matanza
     Materia: Bases de Datos Aplicada - Com 01-2900
     Trabajo Práctico: Entrega 5
@@ -98,6 +98,15 @@ CREATE OR ALTER PROCEDURE abm.Arbitro_Modificar
 AS
 BEGIN
     SET NOCOUNT ON;
+    SET XACT_ABORT OFF; -- Los rechazos previstos permiten volver al punto de guardado.
+    -- Si el llamador abrio una transaccion, conservar su trabajo anterior.
+    DECLARE @transacciones_previas INT = @@TRANCOUNT;
+    BEGIN TRY
+        IF @transacciones_previas = 0
+            BEGIN TRANSACTION;
+        ELSE
+            SAVE TRANSACTION ArbitroModificar;
+
     DECLARE @errores NVARCHAR(2048) = N'';
 
     IF @id_arbitro IS NULL OR @id_arbitro <= 0
@@ -151,6 +160,11 @@ BEGIN
        )
         SET @errores += N'- Ese árbitro ya se encuentra registrado. ';
 
+    IF EXISTS (SELECT 1 FROM dbo.Designacion_Arbitral WHERE id_arbitro=@id_arbitro)
+       AND EXISTS (SELECT 1 FROM dbo.Arbitro WHERE id_arbitro=@id_arbitro AND
+          (UPPER(LTRIM(RTRIM(pais)))<>UPPER(LTRIM(RTRIM(@pais)))
+           OR UPPER(LTRIM(RTRIM(puesto)))<>UPPER(LTRIM(RTRIM(@puesto)))))
+        SET @errores += N'- Retire las designaciones antes de cambiar pais o categoria del arbitro. ';
     IF @errores <> N'' THROW 50402, @errores, 1;
 
     UPDATE dbo.Arbitro
@@ -163,6 +177,14 @@ BEGIN
      WHERE id_arbitro = @id_arbitro;
 
     SELECT * FROM dbo.Arbitro WHERE id_arbitro = @id_arbitro;
+
+        IF @transacciones_previas = 0 COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        IF @transacciones_previas = 0 AND XACT_STATE() <> 0 ROLLBACK TRANSACTION;
+        ELSE IF @transacciones_previas > 0 AND XACT_STATE() = 1 ROLLBACK TRANSACTION ArbitroModificar;
+        THROW;
+    END CATCH
 END;
 GO
 

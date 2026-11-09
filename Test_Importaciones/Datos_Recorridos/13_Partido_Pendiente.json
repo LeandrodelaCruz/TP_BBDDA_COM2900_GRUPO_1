@@ -1,0 +1,14 @@
+﻿[
+  {
+    "numero_partido": 1,
+    "sede": "TPP_Estadio",
+    "fecha": "2026-08-01",
+    "horario_local": "2026-08-01T12:00:00",
+    "horario_UTC": "2026-08-01T12:00:00",
+    "fase": "Final",
+    "resultado_final": null,
+    "asistencia_publico": null,
+    "seleccion_local": null,
+    "seleccion_visitante": null
+  }
+]

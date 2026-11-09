@@ -69,7 +69,7 @@ BEGIN
         @nb NVARCHAR(60), @ab NVARCHAR(60), @fb DATE, @cb NVARCHAR(100), @pb VARCHAR(40),
         @na NVARCHAR(60), @aa NVARCHAR(60), @fa DATE, @ca NVARCHAR(100), @pa VARCHAR(40),
         @seleccion INT, @baja INT, @alta INT, @reemplazo INT, @cantidad INT,
-        @bloqueo INT, @reconstruido BIT, @vigentes_antes INT, @vigentes_despues INT;
+        @reconstruido BIT, @vigentes_antes INT, @vigentes_despues INT;
     DECLARE @motivo VARCHAR(200) = 'Reemplazo por lesion (escenario de carga manual; fecha simulada).';
     SELECT @orden = MIN(orden) FROM @casos;
     WHILE @orden IS NOT NULL
@@ -84,33 +84,27 @@ BEGIN
                @reemplazo = NULL, @reconstruido = 0;
         BEGIN TRY
             BEGIN TRANSACTION;
-            -- Mismo recurso que Registrar_Reemplazo: preparacion y aplicacion
-            -- quedan serializadas con las operaciones individuales.
-            EXEC @bloqueo = sys.sp_getapplock
-                @Resource = N'negocio.Registrar_Reemplazo', @LockMode = 'Exclusive',
-                @LockOwner = 'Transaction', @LockTimeout = 10000;
-            IF @bloqueo < 0 THROW 51601, N'No se pudo obtener el bloqueo del reemplazo.', 1;
 
             SELECT @cantidad = COUNT(*), @seleccion = MIN(id_seleccion)
-            FROM dbo.Seleccion WITH (UPDLOCK,HOLDLOCK)
+            FROM dbo.Seleccion
             WHERE UPPER(LTRIM(RTRIM(pais))) = UPPER(@pais);
             IF @cantidad <> 1 THROW 51602, N'Debe existir exactamente una seleccion para el pais del caso.', 1;
 
             SELECT @cantidad = COUNT(*), @baja = MIN(id_jugador)
-            FROM dbo.Jugador WITH (UPDLOCK,HOLDLOCK)
+            FROM dbo.Jugador
             WHERE id_seleccion = @seleccion AND fecha_nacimiento = @fb
               AND UPPER(LTRIM(RTRIM(nombre))) = UPPER(@nb)
               AND UPPER(LTRIM(RTRIM(apellido))) = UPPER(@ab);
             IF @cantidad > 1 THROW 51603, N'La identidad del saliente es ambigua.', 1;
             SELECT @cantidad = COUNT(*), @alta = MIN(id_jugador)
-            FROM dbo.Jugador WITH (UPDLOCK,HOLDLOCK)
+            FROM dbo.Jugador
             WHERE id_seleccion = @seleccion AND fecha_nacimiento = @fa
               AND UPPER(LTRIM(RTRIM(nombre))) = UPPER(@na)
               AND UPPER(LTRIM(RTRIM(apellido))) = UPPER(@aa);
             IF @cantidad > 1 THROW 51603, N'La identidad del entrante es ambigua.', 1;
 
             SELECT @cantidad = COUNT(*), @reemplazo = MIN(id_reemplazo)
-            FROM dbo.Reemplazo WITH (UPDLOCK,HOLDLOCK)
+            FROM dbo.Reemplazo
             WHERE id_jugador_baja = @baja AND id_jugador_alta = @alta
               AND fecha_cambio = @fecha AND motivo = @motivo;
             IF @cantidad > 1 THROW 51604, N'Hay reemplazos duplicados; revise el historial.', 1;
@@ -124,20 +118,20 @@ BEGIN
             END
             ELSE
             BEGIN
-                IF EXISTS (SELECT 1 FROM dbo.Formacion WITH (UPDLOCK,HOLDLOCK) WHERE id_seleccion = @seleccion)
+                IF EXISTS (SELECT 1 FROM dbo.Formacion WHERE id_seleccion = @seleccion)
                     THROW 51605, N'La seleccion ya tiene formaciones; no se puede preparar este escenario.', 1;
-                IF EXISTS (SELECT 1 FROM dbo.Partido WITH (UPDLOCK,HOLDLOCK)
+                IF EXISTS (SELECT 1 FROM dbo.Partido
                            WHERE (id_seleccion_1 = @seleccion OR id_seleccion_2 = @seleccion) AND fecha <= @fecha)
                     THROW 51606, N'La fecha simulada no es anterior al debut registrado.', 1;
                 IF @baja IS NULL AND @alta IS NULL
                     THROW 51607, N'No existe el saliente ni el entrante; cargue primero las plantillas.', 1;
                 IF @baja IS NOT NULL AND @alta IS NOT NULL
                     THROW 51608, N'Ambos jugadores existen sin el reemplazo esperado; revise la convocatoria.', 1;
-                IF EXISTS (SELECT 1 FROM dbo.Reemplazo WITH (UPDLOCK,HOLDLOCK)
+                IF EXISTS (SELECT 1 FROM dbo.Reemplazo
                            WHERE id_jugador_baja IN (@baja,@alta) OR id_jugador_alta IN (@baja,@alta))
                     THROW 51609, N'Los jugadores tienen otro historial de reemplazos; no se reconstruye automaticamente.', 1;
 
-                SELECT @vigentes_antes = COUNT(*) FROM dbo.Jugador j WITH (UPDLOCK,HOLDLOCK)
+                SELECT @vigentes_antes = COUNT(*) FROM dbo.Jugador j
                 WHERE id_seleccion = @seleccion
                   AND NOT EXISTS (SELECT 1 FROM dbo.Reemplazo r WHERE r.id_jugador_baja = j.id_jugador);
 
@@ -149,9 +143,9 @@ BEGIN
                     IF EXISTS (SELECT 1 FROM dbo.Jugador WHERE id_jugador = @alta
                                AND (dorsal <> @dorsal OR club_origen <> @ca OR posicion <> @pa))
                         THROW 51611, N'Los datos del entrante difieren del CSV de referencia; revise el caso.', 1;
-                    IF EXISTS (SELECT 1 FROM dbo.Formacion_Jugador WITH (UPDLOCK,HOLDLOCK) WHERE id_jugador = @alta)
-                       OR EXISTS (SELECT 1 FROM dbo.Incidencia WITH (UPDLOCK,HOLDLOCK) WHERE id_jugador = @alta OR id_jugador_involucrado = @alta)
-                       OR EXISTS (SELECT 1 FROM dbo.Sustitucion WITH (UPDLOCK,HOLDLOCK) WHERE id_jugador_sale = @alta OR id_jugador_entra = @alta)
+                    IF EXISTS (SELECT 1 FROM dbo.Formacion_Jugador WHERE id_jugador = @alta)
+                       OR EXISTS (SELECT 1 FROM dbo.Incidencia WHERE id_jugador = @alta OR id_jugador_involucrado = @alta)
+                       OR EXISTS (SELECT 1 FROM dbo.Sustitucion WHERE id_jugador_sale = @alta OR id_jugador_entra = @alta)
                         THROW 51612, N'El entrante tiene actividad registrada; no se puede reconstruir la convocatoria.', 1;
 
                     EXEC abm.Jugador_Baja @id_jugador = @alta;

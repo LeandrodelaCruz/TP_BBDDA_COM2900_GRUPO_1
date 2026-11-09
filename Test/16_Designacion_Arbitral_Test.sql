@@ -1,289 +1,98 @@
-/*
-    Universidad: Universidad Nacional de La Matanza - UNLaM
-    Materia: Bases de Datos Aplicada - 2C-2026
-    Comision: Com: 01-2900
-    Grupo 01: 
-    - Caro, Nicolas Dario
-    - Clara, Lucas
-    - De La Cruz, Leandro Ariel
-    - Rodriguez Elias Uriel
-    Descripcion:
-    Script de testing COMPLETO para todos los procedimientos de Designacion Arbitral
-    Incluye pruebas exitosas y pruebas de validaciones fallidas
-    
-    PROCEDIMIENTOS A PROBAR:
-    - Designacion_Arbitral_Alta (con validacion de pais)
-    - Designacion_Arbitral_GetByPartido
-    - Designacion_Arbitral_GetByArbitro
-    - Designacion_Arbitral_Modificacion
-    - Designacion_Arbitral_Baja
-    
-    Estructura correcta:
-    PK: (id_partido, id_arbitro)
-    Campos: id_partido, id_arbitro, rol_arbitro
+﻿/*
+ Universidad Nacional de La Matanza - Bases de Datos Aplicada, Comision 01-2900.
+ Grupo 01: Caro, Nicolas Dario; Clara, Lucas Nicolas;
+ de la Cruz, Leandro Ariel; Rodriguez, Elias Uriel.
+ Fecha: 07/11/2026. Entrega 6: calendario, cruces y designacion arbitral.
 */
-
 USE MUNDIALDEFUTBOL;
 GO
-
+-- Instalar este procedimiento y ejecutar: EXEC test.Designacion_Arbitral_Test;
+-- Usa la misma BD del proyecto. Solo opera sobre datos propios y los revierte.
 CREATE OR ALTER PROCEDURE test.Designacion_Arbitral_Test
 AS
 BEGIN
     SET NOCOUNT ON;
-
-    /* =========================================================
-       LIMPIEZA: Eliminar datos previos de pruebas anteriores
-       =========================================================
-       Se eliminan en orden inverso respetando las FK
-       ========================================================= */
-
-    PRINT '=== Limpiando datos de pruebas anteriores ===';
-
-    -- Eliminar designaciones arbitrales de pruebas anteriores
-    DELETE FROM dbo.Designacion_Arbitral 
-    WHERE id_partido IN (SELECT id_partido FROM dbo.Partido WHERE resultado_final = N'TEST-ARBITRAL');
-
-    -- Eliminar arbitros de prueba
-    DELETE FROM dbo.Arbitro 
-    WHERE nombre LIKE N'%ArbitroTest%';
-
-    -- Eliminar partido de prueba
-    DELETE FROM dbo.Partido WHERE resultado_final = N'TEST-ARBITRAL';
-
-    -- Eliminar selecciones de prueba
-    DELETE FROM dbo.Seleccion WHERE pais LIKE N'%Test Arbitral%';
-
-    -- Eliminar sede de prueba
-    DELETE FROM dbo.Sede WHERE nombre_estadio = N'Estadio Testing Arbitral';
-
-    /* =========================================================
-       PREPARACIoN: datos minimos de apoyo
-       =========================================================
-       Se insertan: sede, selecciones, partido, arbitros
-       ========================================================= */
-
-    PRINT '=== Preparando datos de prueba ===';
-
-    -- Sede de prueba
-    IF NOT EXISTS (SELECT 1 FROM dbo.Sede WHERE nombre_estadio = N'Estadio Testing Arbitral')
-        INSERT INTO dbo.Sede (nombre_estadio, ciudad, pais, capacidad, huso_horario)
-        VALUES (N'Estadio Testing Arbitral', N'Ciudad Test', N'Pais Test', 50000, 'UTC-03:00');
-
-    -- Selecciones de prueba
-    IF NOT EXISTS (SELECT 1 FROM dbo.Seleccion WHERE pais = N'Seleccion Test Arbitral 1')
-        INSERT INTO dbo.Seleccion (pais, confederacion, grupo_asignado)
-        VALUES (N'Seleccion Test Arbitral 1', N'TEST', 'A');
-
-    IF NOT EXISTS (SELECT 1 FROM dbo.Seleccion WHERE pais = N'Seleccion Test Arbitral 2')
-        INSERT INTO dbo.Seleccion (pais, confederacion, grupo_asignado)
-        VALUES (N'Seleccion Test Arbitral 2', N'TEST', 'A');
-
-    DECLARE @id_sede_test INT = (SELECT id_sede FROM dbo.Sede WHERE nombre_estadio = N'Estadio Testing Arbitral');
-    DECLARE @id_sel_test1 INT = (SELECT id_seleccion FROM dbo.Seleccion WHERE pais = N'Seleccion Test Arbitral 1');
-    DECLARE @id_sel_test2 INT = (SELECT id_seleccion FROM dbo.Seleccion WHERE pais = N'Seleccion Test Arbitral 2');
-
-    -- Partido de prueba
-    IF NOT EXISTS (SELECT 1 FROM dbo.Partido WHERE resultado_final = N'TEST-ARBITRAL')
-        INSERT INTO dbo.Partido (id_sede, fecha, horario_local, horario_UTC, fase, resultado_final, asistencia_publico, id_seleccion_1, id_seleccion_2)
-        VALUES (@id_sede_test, '2026-06-20', '2026-06-20 18:00:00', '2026-06-20 21:00:00', 'GRUPOS', N'TEST-ARBITRAL', 40000, @id_sel_test1, @id_sel_test2);
-
-    DECLARE @id_partido_test_b6 INT = (SELECT id_partido FROM dbo.Partido WHERE resultado_final = N'TEST-ARBITRAL');
-
-    -- arbitros de prueba (usando datos reales de estructura)
-    IF NOT EXISTS (SELECT 1 FROM dbo.Arbitro WHERE nombre = N'ArbitroTestEXTRANJERO')
-        INSERT INTO dbo.Arbitro (nombre, apellido, pais, fecha_nacimiento, puesto, idiomas)
-        VALUES (N'ArbitroTestEXTRANJERO', N'Test', N'Pais Arbitro Externo', '1970-01-01', N'PRINCIPAL', N'Español,Ingles');
-
-    IF NOT EXISTS (SELECT 1 FROM dbo.Arbitro WHERE nombre = N'ArbitroTestPAIS1')
-        INSERT INTO dbo.Arbitro (nombre, apellido, pais, fecha_nacimiento, puesto, idiomas)
-        VALUES (N'ArbitroTestPAIS1', N'Test', N'Seleccion Test Arbitral 1', '1975-01-01', N'PRINCIPAL', N'Español');
-
-    IF NOT EXISTS (SELECT 1 FROM dbo.Arbitro WHERE nombre = N'ArbitroTestPAIS2')
-        INSERT INTO dbo.Arbitro (nombre, apellido, pais, fecha_nacimiento, puesto, idiomas)
-        VALUES (N'ArbitroTestPAIS2', N'Test', N'Seleccion Test Arbitral 2', '1980-01-01', N'PRINCIPAL', N'Español,Portugues');
-
-    PRINT ''
-    PRINT '========================================================='
-    PRINT 'TESTING COMPLETO - PROCEDIMIENTOS DE DESIGNACIoN ARBITRAL'
-    PRINT '========================================================='
-
-    -- =========================================================
-    -- PASO 1: Verificar datos de prueba preparados
-    -- =========================================================
-
-    PRINT ''
-    PRINT '--- PASO 1: Verificar datos de prueba preparados ---'
-
-    PRINT 'Partido de prueba:'
-    SELECT id_partido, fecha, resultado_final FROM dbo.Partido WHERE resultado_final = N'TEST-ARBITRAL';
-
-    PRINT 'Selecciones de prueba:'
-    SELECT id_seleccion, pais FROM dbo.Seleccion WHERE pais LIKE N'%Test Arbitral%';
-
-    PRINT 'arbitros de prueba:'
-    SELECT id_arbitro, nombre, apellido, pais FROM dbo.Arbitro WHERE nombre LIKE N'%ArbitroTest%';
-
-    -- =========================================================
-    -- PASO 2: INSERT - CASO EXITOSO
-    -- =========================================================
-
-    PRINT ''
-    PRINT '========================================================='
-    PRINT 'PASO 2: INSERT - Caso exitoso'
-    PRINT '========================================================='
-
-    DECLARE @id_partido_test_b11 INT = (SELECT id_partido FROM dbo.Partido WHERE resultado_final = N'TEST-ARBITRAL');
-    DECLARE @id_arbitro_extranjero_b11 INT = (SELECT id_arbitro FROM dbo.Arbitro WHERE nombre = N'ArbitroTestEXTRANJERO');
-
-    PRINT ''
-    PRINT '--- CASO 1: Insertar arbitro PRINCIPAL (pais diferente) - EXITOSA ---'
-
+    SET XACT_ABORT OFF;
+    -- Evitar que el ROLLBACK final revierta trabajo previo del llamador.
+    IF @@TRANCOUNT <> 0
+        THROW 59990,N'Ejecute el test sin una transaccion previa abierta.',1;
+    BEGIN TRANSACTION;
     BEGIN TRY
-        EXEC abm.Designacion_Arbitral_Alta
-            @id_partido = @id_partido_test_b11,
-            @id_arbitro = @id_arbitro_extranjero_b11,
-            @rol_arbitro = N'PRINCIPAL';
+        DECLARE @marca NVARCHAR(40)=N'T16_'+CONVERT(NVARCHAR(36),NEWID()),
+            @sede INT,@s1 INT,@s2 INT,@partido INT,@arbitro INT,@conflicto INT;
+        INSERT dbo.Sede(nombre_estadio,ciudad,pais,capacidad,huso_horario)
+            VALUES(@marca,N'Test ABM',N'Test sede',50000,'UTC');
+        SET @sede=SCOPE_IDENTITY();
+        INSERT dbo.Seleccion(pais,confederacion,grupo_asignado) VALUES(@marca+N'_A','UEFA','A');
+        SET @s1=SCOPE_IDENTITY();
+        INSERT dbo.Seleccion(pais,confederacion,grupo_asignado) VALUES(@marca+N'_B','UEFA','B');
+        SET @s2=SCOPE_IDENTITY();
+        INSERT dbo.Partido(id_sede,id_seleccion_1,id_seleccion_2,fecha,horario_local,horario_UTC,fase)
+            VALUES(@sede,@s1,@s2,'20260701','20260701 12:00','20260701 12:00','GRUPOS');
+        SET @partido=SCOPE_IDENTITY();
+        INSERT dbo.Arbitro(nombre,apellido,pais,puesto) VALUES(N'Prueba',@marca,@marca+N'_X','Principal');
+        SET @arbitro=SCOPE_IDENTITY();
+        INSERT dbo.Arbitro(apellido,pais,puesto) VALUES(@marca,@marca+N'_A','Principal');
+        SET @conflicto=SCOPE_IDENTITY();
 
-        PRINT 'eXITO: arbitro designado como PRINCIPAL';
+        BEGIN TRY
+            EXEC abm.Designacion_Arbitral_Alta @partido,@conflicto,'PRINCIPAL';
+            THROW 59999,N'FALLO: se acepto una nacionalidad incompatible.',1;
+        END TRY
+        BEGIN CATCH
+            IF ERROR_NUMBER()<>51601 THROW;
+        END CATCH;
+        IF EXISTS(SELECT 1 FROM dbo.Designacion_Arbitral WHERE id_partido=@partido)
+            THROW 59999,N'FALLO: el rechazo dejo una designacion.',1;
 
-        -- Verificar insercion
-        SELECT id_partido, id_arbitro, rol_arbitro 
-        FROM dbo.Designacion_Arbitral 
-        WHERE id_partido = @id_partido_test_b11 AND id_arbitro = @id_arbitro_extranjero_b11;
+        EXEC abm.Designacion_Arbitral_Alta @partido,@arbitro,'PRINCIPAL';
+        IF NOT EXISTS(SELECT 1 FROM dbo.Designacion_Arbitral
+            WHERE id_partido=@partido AND id_arbitro=@arbitro AND rol_arbitro='PRINCIPAL')
+            THROW 59999,N'FALLO: alta no persistida.',1;
+
+        EXEC abm.Designacion_Arbitral_Modificacion @partido,@arbitro,'CUARTO ARBITRO';
+        IF (SELECT COUNT(*) FROM dbo.Designacion_Arbitral WHERE id_partido=@partido)<>1
+            OR NOT EXISTS(SELECT 1 FROM dbo.Designacion_Arbitral
+                WHERE id_partido=@partido AND id_arbitro=@arbitro AND rol_arbitro='CUARTO ARBITRO')
+            THROW 59999,N'FALLO: modificacion no persistida correctamente.',1;
+
+        DECLARE @porPartido TABLE(id_partido INT,id_arbitro INT,nombre_arbitro NVARCHAR(121),
+            pais_arbitro NVARCHAR(80),rol_arbitro VARCHAR(30),fecha DATE,
+            seleccion_1 NVARCHAR(80),seleccion_2 NVARCHAR(80));
+        DECLARE @porArbitro TABLE(id_partido INT,fecha DATE,fase VARCHAR(30),
+            seleccion_1 NVARCHAR(80),seleccion_2 NVARCHAR(80),id_arbitro INT,
+            nombre_arbitro NVARCHAR(121),rol_arbitro VARCHAR(30));
+        INSERT @porPartido EXEC abm.Designacion_Arbitral_GetByPartido @partido;
+        INSERT @porArbitro EXEC abm.Designacion_Arbitral_GetByArbitro @arbitro;
+        IF (SELECT COUNT(*) FROM @porPartido)<>1 OR NOT EXISTS(
+            SELECT 1 FROM @porPartido WHERE id_partido=@partido AND id_arbitro=@arbitro
+                AND rol_arbitro='CUARTO ARBITRO' AND fecha='20260701'
+                AND nombre_arbitro=N'Prueba '+@marca AND pais_arbitro=@marca+N'_X'
+                AND seleccion_1=@marca+N'_A' AND seleccion_2=@marca+N'_B')
+            THROW 59999,N'FALLO: consulta por partido incorrecta.',1;
+        IF (SELECT COUNT(*) FROM @porArbitro)<>1 OR NOT EXISTS(
+            SELECT 1 FROM @porArbitro WHERE id_partido=@partido AND id_arbitro=@arbitro
+                AND rol_arbitro='CUARTO ARBITRO' AND fecha='20260701' AND fase='GRUPOS'
+                AND nombre_arbitro=N'Prueba '+@marca
+                AND seleccion_1=@marca+N'_A' AND seleccion_2=@marca+N'_B')
+            THROW 59999,N'FALLO: consulta por arbitro incorrecta.',1;
+
+        EXEC abm.Designacion_Arbitral_Baja @partido,@arbitro;
+        IF EXISTS(SELECT 1 FROM dbo.Designacion_Arbitral WHERE id_partido=@partido)
+            THROW 59999,N'FALLO: baja no persistida.',1;
+        DELETE @porPartido;
+        DELETE @porArbitro;
+        INSERT @porPartido EXEC abm.Designacion_Arbitral_GetByPartido @partido;
+        INSERT @porArbitro EXEC abm.Designacion_Arbitral_GetByArbitro @arbitro;
+        IF EXISTS(SELECT 1 FROM @porPartido) OR EXISTS(SELECT 1 FROM @porArbitro)
+            THROW 59999,N'FALLO: las consultas devuelven la designacion eliminada.',1;
+        IF @@TRANCOUNT<>1 THROW 59999,N'FALLO: se altero la transaccion del test.',1;
+        ROLLBACK TRANSACTION;
+        PRINT N'OK: alta, rechazo de nacionalidad, modificacion, ambas consultas y baja. Datos revertidos.';
     END TRY
     BEGIN CATCH
-        PRINT 'ERROR: ' + ERROR_MESSAGE();
-    END CATCH
-
-    -- =========================================================
-    -- PASO 3: INSERT - VALIDACIONES FALLIDAS
-    -- =========================================================
-
-    PRINT ''
-    PRINT '========================================================='
-    PRINT 'PASO 3: INSERT - Validaciones fallidas'
-    PRINT '========================================================='
-
-    DECLARE @id_partido_test_b13 INT = (SELECT id_partido FROM dbo.Partido WHERE resultado_final = N'TEST-ARBITRAL');
-    DECLARE @id_arbitro_pais1 INT = (SELECT id_arbitro FROM dbo.Arbitro WHERE nombre = N'ArbitroTestPAIS1');
-
-    PRINT ''
-    PRINT '--- CASO 2: arbitro del MISMO PAiS que seleccion - RECHAZADA ---'
-
-    BEGIN TRY
-        EXEC abm.Designacion_Arbitral_Alta
-            @id_partido = @id_partido_test_b13,
-            @id_arbitro = @id_arbitro_pais1,
-            @rol_arbitro = N'ASISTENTE';
-
-        PRINT 'ERROR: Deberia haber fallado validacion de pais';
-    END TRY
-    BEGIN CATCH
-        PRINT 'VALIDACIoN CORRECTA: ' + ERROR_MESSAGE();
-    END CATCH
-
-    -- =========================================================
-    -- PASO 4: GET - arbitros designados por Partido
-    -- =========================================================
-
-    PRINT ''
-    PRINT '========================================================='
-    PRINT 'PASO 4: GET - arbitros designados por Partido'
-    PRINT '========================================================='
-
-    DECLARE @id_partido_test_b15 INT = (SELECT id_partido FROM dbo.Partido WHERE resultado_final = N'TEST-ARBITRAL');
-
-    PRINT ''
-    PRINT '--- arbitros designados para el partido de prueba ---'
-
-    EXEC abm.Designacion_Arbitral_GetByPartido @id_partido = @id_partido_test_b15;
-
-    -- =========================================================
-    -- PASO 5: GET - Partidos designados a un arbitro
-    -- =========================================================
-
-    PRINT ''
-    PRINT '========================================================='
-    PRINT 'PASO 5: GET - Partidos donde arbitro'
-    PRINT '========================================================='
-
-    DECLARE @id_arbitro_extranjero_b17 INT = (SELECT id_arbitro FROM dbo.Arbitro WHERE nombre = N'ArbitroTestEXTRANJERO');
-
-    PRINT ''
-    PRINT '--- Partidos designados al arbitro de prueba ---'
-
-    EXEC abm.Designacion_Arbitral_GetByArbitro @id_arbitro = @id_arbitro_extranjero_b17;
-
-    -- =========================================================
-    -- PASO 6: UPDATE - Cambiar rol del arbitro
-    -- =========================================================
-
-    PRINT ''
-    PRINT '========================================================='
-    PRINT 'PASO 6: UPDATE - Cambiar rol'
-    PRINT '========================================================='
-
-    DECLARE @id_partido_test_b19 INT = (SELECT id_partido FROM dbo.Partido WHERE resultado_final = N'TEST-ARBITRAL');
-    DECLARE @id_arbitro_extranjero_b19 INT = (SELECT id_arbitro FROM dbo.Arbitro WHERE nombre = N'ArbitroTestEXTRANJERO');
-
-    PRINT ''
-    PRINT '--- CASO 5: Cambiar rol de PRINCIPAL a VAR - EXITOSA ---'
-
-    BEGIN TRY
-        EXEC abm.Designacion_Arbitral_Modificacion
-            @id_partido = @id_partido_test_b19,
-            @id_arbitro = @id_arbitro_extranjero_b19,
-            @rol_arbitro = N'VAR';
-
-        PRINT 'eXITO: Rol actualizado a VAR';
-
-        -- Verificar actualizacion
-        SELECT id_partido, id_arbitro, rol_arbitro 
-        FROM dbo.Designacion_Arbitral 
-        WHERE id_partido = @id_partido_test_b19 AND id_arbitro = @id_arbitro_extranjero_b19;
-    END TRY
-    BEGIN CATCH
-        PRINT 'ERROR: ' + ERROR_MESSAGE();
-    END CATCH
-
-    -- =========================================================
-    -- PASO 7: DELETE - Eliminar designacion arbitral
-    -- =========================================================
-
-    PRINT ''
-    PRINT '========================================================='
-    PRINT 'PASO 7: DELETE - Eliminar designacion'
-    PRINT '========================================================='
-
-    DECLARE @id_partido_test_b21 INT = (SELECT id_partido FROM dbo.Partido WHERE resultado_final = N'TEST-ARBITRAL');
-    DECLARE @id_arbitro_extranjero_b21 INT = (SELECT id_arbitro FROM dbo.Arbitro WHERE nombre = N'ArbitroTestEXTRANJERO');
-
-    PRINT ''
-    PRINT '--- CASO 6: Eliminar designacion - EXITOSA ---'
-
-    BEGIN TRY
-        EXEC abm.Designacion_Arbitral_Baja
-            @id_partido = @id_partido_test_b21,
-            @id_arbitro = @id_arbitro_extranjero_b21;
-
-        PRINT 'eXITO: Designacion eliminada';
-
-        -- Verificar eliminacion
-        IF EXISTS (SELECT 1 FROM dbo.Designacion_Arbitral WHERE id_partido = @id_partido_test_b21 AND id_arbitro = @id_arbitro_extranjero_b21)
-            PRINT 'ERROR: La designacion aun existe';
-        ELSE
-            PRINT 'Confirmado: Registro eliminado correctamente';
-    END TRY
-    BEGIN CATCH
-        PRINT 'ERROR: ' + ERROR_MESSAGE();
-    END CATCH
-
-    PRINT ''
-    PRINT '========================================================='
-    PRINT 'FIN DE TESTING'
-    PRINT '========================================================='
+        IF XACT_STATE()<>0 ROLLBACK TRANSACTION;
+        THROW;
+    END CATCH;
 END;
-GO
-
-EXEC test.Designacion_Arbitral_Test;
 GO

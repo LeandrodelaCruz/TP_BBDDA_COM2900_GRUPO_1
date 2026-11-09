@@ -1,7 +1,7 @@
-/*
+﻿/*
     Universidad: Universidad Nacional de la Matanza
     Materia: Bases de Datos Aplicada
-    Integrantes: 
+    Integrantes:
 				Rodriguez, Elias Uriel 44143869
 				Clara, Lucas Nicolas 46265738
 				Caro, Nicolas Dario 40766722
@@ -32,12 +32,22 @@ CREATE OR ALTER PROCEDURE abm.Partidos_Alta
     @horario_UTC       DATETIME2(0),
     @fase              VARCHAR(30),
     @resultado_final   VARCHAR(20) = NULL,
-    @asistencia_publico INT = NULL
+    @asistencia_publico INT = NULL,
+    @devolver BIT = 1
 AS
 BEGIN
     SET NOCOUNT ON;
+    SET XACT_ABORT OFF; -- Los rechazos previstos permiten volver al punto de guardado.
+    -- Si el llamador abrio una transaccion, conservar su trabajo anterior.
+    DECLARE @transacciones_previas INT = @@TRANCOUNT;
+    BEGIN TRY
+        IF @transacciones_previas = 0
+            BEGIN TRANSACTION;
+        ELSE
+            SAVE TRANSACTION PartidoAlta;
 
-    DECLARE @errores NVARCHAR(MAX) = N'';
+
+    DECLARE @errores NVARCHAR(2048) = N'';
     DECLARE @fasesValidas TABLE (f VARCHAR(30));
     INSERT INTO @fasesValidas VALUES
         ('GRUPOS'), ('DIECISEISAVOS'), ('OCTAVOS'), ('CUARTOS'),
@@ -75,21 +85,23 @@ BEGIN
     IF @horario_local IS NOT NULL AND CAST(@horario_local AS DATE) <> @fecha
         SET @errores += N'- La fecha no coincide con la del horario local. ';
 
-    IF @errores <> N''
-    BEGIN
-        RAISERROR(@errores, 16, 1);
-        RETURN;
-    END
+    SET @resultado_final = NULLIF(LTRIM(RTRIM(@resultado_final)), '');
+    IF @fecha IS NULL SET @errores += N'- La fecha es obligatoria. ';
+    IF @errores <> N'' THROW 51301, @errores, 1;
 
-    BEGIN TRY
         INSERT INTO dbo.Partido (id_sede, id_seleccion_1, id_seleccion_2, fecha, horario_local, horario_UTC,
                                  fase, resultado_final, asistencia_publico)
         VALUES (@id_sede, @id_seleccion_1, @id_seleccion_2, @fecha, @horario_local, @horario_UTC,
                 @fase, @resultado_final, @asistencia_publico);
 
-        SELECT SCOPE_IDENTITY() AS id_partido_generado;
+        IF @devolver=1 SELECT SCOPE_IDENTITY() AS id_partido_generado;
+
+
+        IF @transacciones_previas = 0 COMMIT TRANSACTION;
     END TRY
     BEGIN CATCH
+        IF @transacciones_previas = 0 AND XACT_STATE() <> 0 ROLLBACK TRANSACTION;
+        ELSE IF @transacciones_previas > 0 AND XACT_STATE() = 1 ROLLBACK TRANSACTION PartidoAlta;
         THROW;
     END CATCH
 END;
@@ -101,7 +113,7 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
-    DECLARE @errores NVARCHAR(MAX) = N'';
+    DECLARE @errores NVARCHAR(2048) = N'';
 
     IF NOT EXISTS (SELECT 1 FROM dbo.Partido WHERE id_partido = @id_partido)
         SET @errores += N'- No existe el partido indicado. ';
@@ -122,11 +134,9 @@ BEGIN
     IF EXISTS (SELECT 1 FROM dbo.Asignacion_Publicitaria WHERE id_partido = @id_partido)
         SET @errores += N'- No se puede eliminar: el partido tiene publicidad asignada. ';
 
-    IF @errores <> N''
-    BEGIN
-        RAISERROR(@errores, 16, 1);
-        RETURN;
-    END
+    IF EXISTS (SELECT 1 FROM dbo.Cruce_Partido WHERE id_partido_origen=@id_partido OR id_partido_destino=@id_partido)
+        SET @errores += N'- No se puede eliminar: el partido pertenece al cuadro de cruces. ';
+    IF @errores <> N'' THROW 51301, @errores, 1;
 
     BEGIN TRY
         -- Primero eliminamos la relación N:N
@@ -150,12 +160,22 @@ CREATE OR ALTER PROCEDURE abm.Partidos_Modificacion
     @horario_UTC       DATETIME2(0),
     @fase              VARCHAR(30),
     @resultado_final   VARCHAR(20) = NULL,
-    @asistencia_publico INT = NULL
+    @asistencia_publico INT = NULL,
+    @devolver BIT = 1
 AS
 BEGIN
     SET NOCOUNT ON;
+    SET XACT_ABORT OFF; -- Los rechazos previstos permiten volver al punto de guardado.
+    -- Si el llamador abrio una transaccion, conservar su trabajo anterior.
+    DECLARE @transacciones_previas INT = @@TRANCOUNT;
+    BEGIN TRY
+        IF @transacciones_previas = 0
+            BEGIN TRANSACTION;
+        ELSE
+            SAVE TRANSACTION PartidoModificacion;
 
-    DECLARE @errores NVARCHAR(MAX) = N'';
+
+    DECLARE @errores NVARCHAR(2048) = N'';
     DECLARE @fasesValidas TABLE (f VARCHAR(30));
     INSERT INTO @fasesValidas VALUES
         ('GRUPOS'), ('DIECISEISAVOS'), ('OCTAVOS'), ('CUARTOS'),
@@ -188,13 +208,39 @@ BEGIN
     IF @horario_local IS NOT NULL AND CAST(@horario_local AS DATE) <> @fecha
         SET @errores += N'- La fecha no coincide con la del horario local. ';
 
-    IF @errores <> N''
+    SET @resultado_final = NULLIF(LTRIM(RTRIM(@resultado_final)), '');
+    IF @fecha IS NULL SET @errores += N'- La fecha es obligatoria. ';
+    IF EXISTS (SELECT 1 FROM dbo.Partido WHERE id_partido=@id_partido AND
+          (ISNULL(id_seleccion_1,-1) <> ISNULL(@id_seleccion_1,-1)
+           OR ISNULL(id_seleccion_2,-1) <> ISNULL(@id_seleccion_2,-1)))
     BEGIN
-        RAISERROR(@errores, 16, 1);
-        RETURN;
-    END
+        IF EXISTS (SELECT 1 FROM dbo.Formacion WHERE id_partido=@id_partido)
+           OR EXISTS (SELECT 1 FROM dbo.Incidencia WHERE id_partido=@id_partido)
+           OR EXISTS (SELECT 1 FROM dbo.Sustitucion WHERE id_partido=@id_partido)
+           OR EXISTS (SELECT 1 FROM dbo.Asignacion_Publicitaria WHERE id_partido=@id_partido)
+           OR EXISTS (SELECT 1 FROM dbo.Partido WHERE id_partido=@id_partido AND resultado_final IS NOT NULL)
+            SET @errores += N'- No se pueden cambiar participantes con datos dependientes o resultado. ';
+    END;
+    IF EXISTS (SELECT 1 FROM dbo.Designacion_Arbitral d JOIN dbo.Arbitro a ON a.id_arbitro=d.id_arbitro
+        JOIN dbo.Seleccion se ON se.id_seleccion IN (@id_seleccion_1,@id_seleccion_2)
+        WHERE d.id_partido=@id_partido AND negocio.Pais_Arbitral_Normalizado(a.pais)=negocio.Pais_Arbitral_Normalizado(se.pais))
+        SET @errores += N'- Los participantes generan un conflicto de nacionalidad arbitral. ';
+    IF EXISTS (SELECT 1 FROM dbo.Cruce_Partido WHERE id_partido_origen=@id_partido OR id_partido_destino=@id_partido)
+       AND EXISTS (SELECT 1 FROM dbo.Partido WHERE id_partido=@id_partido AND (fase<>@fase OR horario_UTC<>@horario_UTC))
+        SET @errores += N'- No cambie fase u horario de un partido vinculado sin retirar sus cruces. ';
+    -- El participante del destino debe pertenecer al partido de origen.
+    IF EXISTS (SELECT 1 FROM dbo.Cruce_Partido c JOIN dbo.Partido o ON o.id_partido=c.id_partido_origen
+        WHERE c.id_partido_destino=@id_partido AND o.id_seleccion_1 IS NOT NULL AND o.id_seleccion_2 IS NOT NULL
+          AND CASE c.posicion_destino WHEN 1 THEN @id_seleccion_1 ELSE @id_seleccion_2 END NOT IN (o.id_seleccion_1,o.id_seleccion_2))
+        SET @errores += N'- El participante no pertenece al partido de origen. ';
+    IF EXISTS (SELECT 1 FROM dbo.Cruce_Partido c JOIN dbo.Partido d ON d.id_partido=c.id_partido_destino
+        WHERE c.id_partido_origen=@id_partido
+          AND CASE c.posicion_destino WHEN 1 THEN d.id_seleccion_1 ELSE d.id_seleccion_2 END IS NOT NULL
+          AND (@id_seleccion_1 IS NULL OR @id_seleccion_2 IS NULL OR
+               CASE c.posicion_destino WHEN 1 THEN d.id_seleccion_1 ELSE d.id_seleccion_2 END NOT IN (@id_seleccion_1,@id_seleccion_2)))
+        SET @errores += N'- El cambio contradice un participante del partido siguiente. ';
+    IF @errores <> N'' THROW 51301, @errores, 1;
 
-    BEGIN TRY
         UPDATE dbo.Partido
         SET id_sede            = @id_sede,
 		    id_seleccion_1     = @id_seleccion_1,
@@ -207,10 +253,28 @@ BEGIN
             asistencia_publico = @asistencia_publico
         WHERE id_partido = @id_partido;
 
-        SELECT @id_partido AS id_partido_modificado;
+        IF @devolver=1 SELECT @id_partido AS id_partido_modificado;
+
+
+        IF @transacciones_previas = 0 COMMIT TRANSACTION;
     END TRY
     BEGIN CATCH
+        IF @transacciones_previas = 0 AND XACT_STATE() <> 0 ROLLBACK TRANSACTION;
+        ELSE IF @transacciones_previas > 0 AND XACT_STATE() = 1 ROLLBACK TRANSACTION PartidoModificacion;
         THROW;
     END CATCH
+END;
+GO
+
+-- Consulta del fixture con ambos participantes obligatorios.
+CREATE OR ALTER PROCEDURE abm.Partidos_Listar
+AS
+BEGIN
+    SET NOCOUNT ON;
+    SELECT p.*, s1.pais AS seleccion_1, s2.pais AS seleccion_2
+    FROM dbo.Partido p
+    INNER JOIN dbo.Seleccion s1 ON s1.id_seleccion=p.id_seleccion_1
+    INNER JOIN dbo.Seleccion s2 ON s2.id_seleccion=p.id_seleccion_2
+    ORDER BY p.horario_UTC,p.id_partido;
 END;
 GO
