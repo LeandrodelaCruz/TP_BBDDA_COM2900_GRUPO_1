@@ -46,7 +46,7 @@
     <File Path="Stored_Procedures_Importaciones/01_Importar_Seleccion_CSV.sql" />
     <File Path="Stored_Procedures_Importaciones/02_Cargar_Regiones.sql" />
     <File Path="Stored_Procedures_Importaciones/03_Importar_Sede_CSV.sql" />
-    <File Path="Stored_Procedures_Importaciones/05_SP_Importar_Arbitro_PDF_CSV.sql" />
+    <File Path="Stored_Procedures_Importaciones/05_Importar_Arbitro_PDF_CSV.sql" />
     <File Path="Stored_Procedures_Importaciones/06_Importar_Campania_CSV.sql" />
     <File Path="Stored_Procedures_Importaciones/07_Importar_Pieza_Publicitaria_CSV.sql" />
     <File Path="Stored_Procedures_Importaciones/08_Cargar_Pieza_Region.sql" />
@@ -84,7 +84,7 @@
     <File Path="Test/17_Incidencia_Test.sql" />
     <File Path="Test/18_Sancion_Arbitral_Test.sql" />
     <File Path="Test/19_Sustitucion_Test.sql" />
-    <File Path="Test/25_Test_Importar_Arbitro_PDF_CSV.sql" />
+    <File Path="Test_Importaciones/05_Test_Importar_Arbitro_PDF_CSV.sql" />
   </Folder>
   <Folder Name="/Test/Datos_Importacion/">
     <File Path="Test/Datos_Importacion/personal_tecnico_casos.csv" />
@@ -122,6 +122,16 @@
     <File Path="Test_Importaciones/Datos_Recorridos/12_Jugadores_12_Titulares.json" />
     <File Path="Test_Importaciones/Datos_Recorridos/12_Jugadores_26.json" />
     <File Path="Test_Importaciones/Datos_Recorridos/12_Jugadores_Limite.json" />
+  </Folder>
+  <Folder Name="/Reportes/">
+    <File Path="Reportes/Ejemplo_Designaciones_Arbitrales.xml" />
+    <File Path="Reportes/README_Reporte_Designaciones_Arbitrales.md" />
+    <File Path="Reportes/01_Reporte_Ocupacion_Publicitaria.sql" />
+    <File Path="Reportes/02_Test_Reporte_Ocupacion_Publicitaria.sql" />
+    <File Path="Reportes/16_Reporte_Matriz_Prime_Time.sql" />
+    <File Path="Reportes/17_Test_Reporte_Matriz_Prime_Time.sql" />
+    <File Path="Reportes/18_Reporte_Designaciones_Arbitrales_XML.sql" />
+    <File Path="Reportes/19_Test_Reporte_Designaciones_Arbitrales_XML.sql" />
   </Folder>
   <Folder Name="/Doc/">
     <File Path="Doc/Com2900_Grupo01_Entrega6_Guia_Arbitral.pdf" />

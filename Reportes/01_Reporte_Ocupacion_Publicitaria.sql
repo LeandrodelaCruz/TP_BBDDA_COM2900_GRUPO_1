@@ -1,4 +1,4 @@
-use MUNDIALDEFUTBOL;
+﻿use MUNDIALDEFUTBOL;
 go
 
 /*============================================================
@@ -21,10 +21,8 @@ go
         costo_aplicado e ingresos se interpretan en USD.
 ============================================================*/
 
-if schema_id(N'reportes') is null
-begin
-    exec(N'create schema reportes');
-end;
+IF SCHEMA_ID(N'reportes') IS NULL
+    THROW 51910,N'Ejecute primero Table/00_Script_DB_Schemas_Creacion.sql.',1;
 go
 
 create or alter procedure reportes.Reporte_Ocupacion_Publicitaria

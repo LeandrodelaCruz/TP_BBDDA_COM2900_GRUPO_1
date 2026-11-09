@@ -1,4 +1,4 @@
-/*
+﻿/*
     Universidad: Universidad Nacional de La Matanza - UNLaM
     Materia: Bases de Datos Aplicada - 2C-2026
     Comision: Com: 01-2900
@@ -41,9 +41,7 @@ USE MUNDIALDEFUTBOL;
 GO
 
 IF SCHEMA_ID(N'importacion') IS NULL
-BEGIN
-    EXEC(N'CREATE SCHEMA importacion');
-END;
+    THROW 51910,N'Ejecute primero Table/00_Script_DB_Schemas_Creacion.sql.',1;
 GO
 
 CREATE OR ALTER PROCEDURE importacion.Importar_Incidencia_CSV

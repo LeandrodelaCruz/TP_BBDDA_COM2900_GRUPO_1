@@ -1,4 +1,4 @@
-/*
+﻿/*
     Universidad: Universidad Nacional de La Matanza - UNLaM
     Materia: Bases de Datos Aplicada - 2C-2026
     Comisión: 01-2900
@@ -23,10 +23,8 @@
 use MUNDIALDEFUTBOL;
 go
 
-if schema_id(N'reportes') is null
-begin
-    exec(N'create schema reportes');
-end;
+IF SCHEMA_ID(N'reportes') IS NULL
+    THROW 51910,N'Ejecute primero Table/00_Script_DB_Schemas_Creacion.sql.',1;
 go
 
 create or alter procedure reportes.Reporte_Matriz_Prime_Time

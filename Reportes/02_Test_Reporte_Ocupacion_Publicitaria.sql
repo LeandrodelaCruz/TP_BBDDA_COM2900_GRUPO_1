@@ -1,4 +1,4 @@
-use MUNDIALDEFUTBOL;
+﻿use MUNDIALDEFUTBOL;
 go
 
 /*============================================================
@@ -18,10 +18,8 @@ go
         - respete los filtros por partido y por sede.
 ============================================================*/
 
-if schema_id(N'test') is null
-begin
-    exec(N'create schema test');
-end;
+IF SCHEMA_ID(N'test') IS NULL
+    THROW 51910,N'Ejecute primero Table/00_Script_DB_Schemas_Creacion.sql.',1;
 go
 
 create or alter procedure test.Reporte_Ocupacion_Publicitaria_Test

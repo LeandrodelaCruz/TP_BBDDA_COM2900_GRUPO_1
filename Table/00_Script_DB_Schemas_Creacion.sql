@@ -1,4 +1,4 @@
-/*
+﻿/*
 
     Universidad: Universidad Nacional de La Matanza - UNLaM
     Materia: Bases de Datos Aplicada - 2C-2026
@@ -65,5 +65,12 @@ GO
 IF SCHEMA_ID(N'carga') IS NULL
 BEGIN
     EXEC(N'CREATE SCHEMA carga AUTHORIZATION dbo;');
+END;
+GO
+
+-- 8. Esquema compartido por los reportes de la entrega 7.
+IF SCHEMA_ID(N'reportes') IS NULL
+BEGIN
+    EXEC(N'CREATE SCHEMA reportes AUTHORIZATION dbo;');
 END;
 GO
