@@ -427,6 +427,281 @@ BEGIN
 
 
         ----------------------------------------------------
+        -- 11. GENERAR ASIGNACIONES PARA PARTIDOS DE
+        --     DISTINTAS FASES
+        --
+        -- Sin cursor:
+        -- se seleccionan de forma set-based los partidos con
+        -- mayor cantidad de mercados candidatos dentro de
+        -- cada fase y luego se ejecuta el generador para cada
+        -- ID seleccionado.
+        --
+        -- Muestra:
+        --   3 partidos de GRUPOS
+        --   2 partidos de CUARTOS
+        --   2 partidos de SEMIFINAL
+        --   1 partido de FINAL
+        ----------------------------------------------------
+
+        PRINT '';
+        PRINT 'TEST 8 - Generando muestra de partidos por fase...';
+
+        DECLARE
+            @grupo_1 INT,
+            @grupo_2 INT,
+            @grupo_3 INT,
+            @cuarto_1 INT,
+            @cuarto_2 INT,
+            @semi_1 INT,
+            @semi_2 INT,
+            @final_1 INT,
+            @candidatos_muestra INT,
+            @asignados_muestra INT;
+
+        ;WITH PartidosRankeadosPorFase AS
+        (
+            SELECT
+                P.id_partido,
+                P.fase,
+                P.fecha,
+                ISNULL(PC.cantidad_candidatos, 0) AS cantidad_candidatos,
+                ROW_NUMBER() OVER
+                (
+                    PARTITION BY P.fase
+                    ORDER BY
+                        ISNULL(PC.cantidad_candidatos, 0) DESC,
+                        P.fecha ASC,
+                        P.id_partido ASC
+                ) AS numero_fase
+            FROM dbo.Partido P
+            LEFT JOIN #PartidosCandidatos PC
+                ON PC.id_partido = P.id_partido
+            WHERE P.fase IN
+            (
+                'GRUPOS',
+                'CUARTOS',
+                'SEMIFINAL',
+                'FINAL'
+            )
+        )
+        SELECT
+            @grupo_1 =
+                MAX(CASE
+                        WHEN fase = 'GRUPOS'
+                         AND numero_fase = 1
+                        THEN id_partido
+                    END),
+
+            @grupo_2 =
+                MAX(CASE
+                        WHEN fase = 'GRUPOS'
+                         AND numero_fase = 2
+                        THEN id_partido
+                    END),
+
+            @grupo_3 =
+                MAX(CASE
+                        WHEN fase = 'GRUPOS'
+                         AND numero_fase = 3
+                        THEN id_partido
+                    END),
+
+            @cuarto_1 =
+                MAX(CASE
+                        WHEN fase = 'CUARTOS'
+                         AND numero_fase = 1
+                        THEN id_partido
+                    END),
+
+            @cuarto_2 =
+                MAX(CASE
+                        WHEN fase = 'CUARTOS'
+                         AND numero_fase = 2
+                        THEN id_partido
+                    END),
+
+            @semi_1 =
+                MAX(CASE
+                        WHEN fase = 'SEMIFINAL'
+                         AND numero_fase = 1
+                        THEN id_partido
+                    END),
+
+            @semi_2 =
+                MAX(CASE
+                        WHEN fase = 'SEMIFINAL'
+                         AND numero_fase = 2
+                        THEN id_partido
+                    END),
+
+            @final_1 =
+                MAX(CASE
+                        WHEN fase = 'FINAL'
+                         AND numero_fase = 1
+                        THEN id_partido
+                    END)
+        FROM PartidosRankeadosPorFase;
+
+
+        ----------------------------------------------------
+        -- GRUPOS
+        ----------------------------------------------------
+
+        IF @grupo_1 IS NOT NULL
+        BEGIN
+            PRINT 'Generando GRUPOS - partido '
+                + CAST(@grupo_1 AS VARCHAR(10));
+
+            EXEC negocio.Generar_Asignacion_Publicitaria
+                @id_partido = @grupo_1,
+                @cantidad_candidatos = @candidatos_muestra OUTPUT,
+                @cantidad_asignados = @asignados_muestra OUTPUT;
+        END;
+
+        IF @grupo_2 IS NOT NULL
+        BEGIN
+            PRINT 'Generando GRUPOS - partido '
+                + CAST(@grupo_2 AS VARCHAR(10));
+
+            EXEC negocio.Generar_Asignacion_Publicitaria
+                @id_partido = @grupo_2,
+                @cantidad_candidatos = @candidatos_muestra OUTPUT,
+                @cantidad_asignados = @asignados_muestra OUTPUT;
+        END;
+
+        IF @grupo_3 IS NOT NULL
+        BEGIN
+            PRINT 'Generando GRUPOS - partido '
+                + CAST(@grupo_3 AS VARCHAR(10));
+
+            EXEC negocio.Generar_Asignacion_Publicitaria
+                @id_partido = @grupo_3,
+                @cantidad_candidatos = @candidatos_muestra OUTPUT,
+                @cantidad_asignados = @asignados_muestra OUTPUT;
+        END;
+
+
+        ----------------------------------------------------
+        -- CUARTOS
+        ----------------------------------------------------
+
+        IF @cuarto_1 IS NOT NULL
+        BEGIN
+            PRINT 'Generando CUARTOS - partido '
+                + CAST(@cuarto_1 AS VARCHAR(10));
+
+            EXEC negocio.Generar_Asignacion_Publicitaria
+                @id_partido = @cuarto_1,
+                @cantidad_candidatos = @candidatos_muestra OUTPUT,
+                @cantidad_asignados = @asignados_muestra OUTPUT;
+        END;
+
+        IF @cuarto_2 IS NOT NULL
+        BEGIN
+            PRINT 'Generando CUARTOS - partido '
+                + CAST(@cuarto_2 AS VARCHAR(10));
+
+            EXEC negocio.Generar_Asignacion_Publicitaria
+                @id_partido = @cuarto_2,
+                @cantidad_candidatos = @candidatos_muestra OUTPUT,
+                @cantidad_asignados = @asignados_muestra OUTPUT;
+        END;
+
+
+        ----------------------------------------------------
+        -- SEMIFINALES
+        ----------------------------------------------------
+
+        IF @semi_1 IS NOT NULL
+        BEGIN
+            PRINT 'Generando SEMIFINAL - partido '
+                + CAST(@semi_1 AS VARCHAR(10));
+
+            EXEC negocio.Generar_Asignacion_Publicitaria
+                @id_partido = @semi_1,
+                @cantidad_candidatos = @candidatos_muestra OUTPUT,
+                @cantidad_asignados = @asignados_muestra OUTPUT;
+        END;
+
+        IF @semi_2 IS NOT NULL
+        BEGIN
+            PRINT 'Generando SEMIFINAL - partido '
+                + CAST(@semi_2 AS VARCHAR(10));
+
+            EXEC negocio.Generar_Asignacion_Publicitaria
+                @id_partido = @semi_2,
+                @cantidad_candidatos = @candidatos_muestra OUTPUT,
+                @cantidad_asignados = @asignados_muestra OUTPUT;
+        END;
+
+
+        ----------------------------------------------------
+        -- FINAL
+        ----------------------------------------------------
+
+        IF @final_1 IS NOT NULL
+        BEGIN
+            PRINT 'Generando FINAL - partido '
+                + CAST(@final_1 AS VARCHAR(10));
+
+            EXEC negocio.Generar_Asignacion_Publicitaria
+                @id_partido = @final_1,
+                @cantidad_candidatos = @candidatos_muestra OUTPUT,
+                @cantidad_asignados = @asignados_muestra OUTPUT;
+        END;
+
+
+        ----------------------------------------------------
+        -- RESUMEN DE LA MUESTRA GENERADA
+        ----------------------------------------------------
+
+        PRINT '';
+        PRINT 'Resumen de asignaciones generadas por fase:';
+
+        SELECT
+            P.id_partido,
+            P.fase,
+            P.fecha,
+            P.horario_UTC,
+            COUNT(AP.id_asignacion) AS espacios_asignados,
+            SUM(AP.costo_aplicado) AS ingreso_total_usd
+
+        FROM dbo.Partido P
+
+        LEFT JOIN dbo.Asignacion_Publicitaria AP
+            ON AP.id_partido = P.id_partido
+
+        WHERE P.id_partido IN
+        (
+            @grupo_1,
+            @grupo_2,
+            @grupo_3,
+            @cuarto_1,
+            @cuarto_2,
+            @semi_1,
+            @semi_2,
+            @final_1
+        )
+
+        GROUP BY
+            P.id_partido,
+            P.fase,
+            P.fecha,
+            P.horario_UTC
+
+        ORDER BY
+            CASE P.fase
+                WHEN 'GRUPOS' THEN 1
+                WHEN 'CUARTOS' THEN 2
+                WHEN 'SEMIFINAL' THEN 3
+                WHEN 'FINAL' THEN 4
+                ELSE 5
+            END,
+            P.fecha,
+            P.id_partido;
+
+
+        ----------------------------------------------------
         -- RESULTADO FINAL
         ----------------------------------------------------
 
