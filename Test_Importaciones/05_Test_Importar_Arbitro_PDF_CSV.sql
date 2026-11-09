@@ -30,7 +30,7 @@ BEGIN
        1. Ejecutar la importación desde el CSV generado por el extractor.
     ------------------------------------------------------------------ */
     EXEC importacion.Importar_Arbitro_PDF_CSV
-        @archivo = N'C:\Users\elias\Downloads\TP BDA\TP_BBDDA_COM2900_GRUPO_1\Archivos_Importacion\arbitros_fifa_completo.csv';
+        @archivo = N'/var/opt/mssql/import/arbitros_fifa_completo.csv';
 
     /* ------------------------------------------------------------------
        2. Verificar que existan árbitros importados.
@@ -47,7 +47,7 @@ BEGIN
           generar duplicados.
     ------------------------------------------------------------------ */
     EXEC importacion.Importar_Arbitro_PDF_CSV
-        @archivo = N'C:\Users\elias\Downloads\TP BDA\TP_BBDDA_COM2900_GRUPO_1\Archivos_Importacion\arbitros_fifa_completo.csv';
+        @archivo = N'/var/opt/mssql/import/arbitros_fifa_completo.csv';
 
     SELECT
         (SELECT COUNT(*) FROM dbo.Arbitro) AS total_arbitros,
