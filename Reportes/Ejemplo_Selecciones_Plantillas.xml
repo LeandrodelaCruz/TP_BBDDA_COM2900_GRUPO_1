@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='utf-8'?>
+<ReporteSeleccionesPlantillas>
+  <Seleccion id="58">
+    <Pais>RSP_D8056C53-7657-4F0B-83AA-B50583359280 &amp; Uno</Pais>
+    <Confederacion>UEFA</Confederacion>
+    <Grupo>A</Grupo>
+    <Plantilla convocadosVigentes="2" jugadoresDadosDeBaja="2">
+      <Jugador id="1272" estado="CONVOCADO">
+        <Nombre>Arquero D RSP_D8056C53-7657-4F0B-83AA-B50583359280</Nombre>
+        <Posicion>Arquero</Posicion>
+        <Club>Club D</Club>
+        <Dorsal>1</Dorsal>
+      </Jugador>
+      <Jugador id="1269" estado="BAJA">
+        <Nombre>Saliente A RSP_D8056C53-7657-4F0B-83AA-B50583359280</Nombre>
+        <Posicion>Delantero</Posicion>
+        <Club>Club A</Club>
+        <Dorsal>9</Dorsal>
+        <Baja fecha="2026-06-01" idReemplazante="1270">
+          <Motivo>Reemplazo simulado A-B</Motivo>
+        </Baja>
+      </Jugador>
+      <Jugador id="1270" estado="BAJA">
+        <Nombre>Saliente B RSP_D8056C53-7657-4F0B-83AA-B50583359280</Nombre>
+        <Posicion>Delantero</Posicion>
+        <Club>Club B</Club>
+        <Dorsal>9</Dorsal>
+        <Baja fecha="2026-06-02" idReemplazante="1271">
+          <Motivo>Reemplazo simulado B-C</Motivo>
+        </Baja>
+      </Jugador>
+      <Jugador id="1271" estado="CONVOCADO">
+        <Nombre>Vigente &amp; C RSP_D8056C53-7657-4F0B-83AA-B50583359280</Nombre>
+        <Posicion>Delantero</Posicion>
+        <Club>Club &lt;C&gt; &amp; Asociados</Club>
+        <Dorsal>9</Dorsal>
+      </Jugador>
+    </Plantilla>
+  </Seleccion>
+</ReporteSeleccionesPlantillas>

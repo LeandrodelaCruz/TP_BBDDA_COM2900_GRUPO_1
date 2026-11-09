@@ -124,6 +124,10 @@
     <File Path="Test_Importaciones/Datos_Recorridos/12_Jugadores_Limite.json" />
   </Folder>
   <Folder Name="/Reportes/">
+    <File Path="Reportes/Ejemplo_Selecciones_Plantillas.xml" />
+    <File Path="Reportes/README_Reporte_Selecciones_Plantillas.md" />
+    <File Path="Reportes/21_Test_Reporte_Selecciones_Plantillas_XML.sql" />
+    <File Path="Reportes/20_Reporte_Selecciones_Plantillas_XML.sql" />
     <File Path="Reportes/Ejemplo_Designaciones_Arbitrales.xml" />
     <File Path="Reportes/README_Reporte_Designaciones_Arbitrales.md" />
     <File Path="Reportes/01_Reporte_Ocupacion_Publicitaria.sql" />
