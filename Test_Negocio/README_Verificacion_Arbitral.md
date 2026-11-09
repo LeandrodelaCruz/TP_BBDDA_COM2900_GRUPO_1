@@ -77,3 +77,9 @@ Se comprueba la identidad de la definición de Partido con el respaldo, ausencia
 No se declara una regresión completa de todos los módulos del TP ni pruebas independientes exhaustivas de cada CHECK/FK. Formaciones, incidencias y sustituciones se compilaron, pero sus suites completas no se ejecutaron en esta intervención. No se creó una migración de bases existentes.
 
 La advertencia utiliza participantes actuales de los destinos; no reconstruye posibilidades históricas ni infiere ganadores del marcador. Cruce_Partido continúa alimentándose con la configuración específica del dataset local. La guía de ejecución actualizada detalla estos límites.
+
+## Destino de los tests (actualización del 08/11/2026)
+
+Los tests del proyecto ahora apuntan explícitamente a MUNDIALDEFUTBOL. Se retiraron las restricciones de nombre que exigían bases auxiliares para las pruebas de publicidad, formaciones, reemplazos, importación de partidos, designaciones y sanciones. Se conservaron las precondiciones de datos y transacciones de cada escenario. Los tests que requieren tablas vacías se ejecutan antes de la población correspondiente; no se eliminan datos de trabajo para hacerlos pasar.
+
+La evidencia de ejecución en bases aisladas que figura en este informe corresponde a las pruebas anteriores. El cambio de destino se verificó estáticamente; no se ejecutaron estos escenarios sobre MUNDIALDEFUTBOL en esta intervención.

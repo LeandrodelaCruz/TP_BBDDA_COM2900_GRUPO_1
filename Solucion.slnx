@@ -37,6 +37,8 @@
     <File Path="Stored_Procedures/19_Sustitucion_ABM.sql" />
   </Folder>
   <Folder Name="/Stored_Procedures_Importaciones/">
+    <File Path="Stored_Procedures_Importaciones/README_Sanciones_Arbitrales.md" />
+    <File Path="Stored_Procedures_Importaciones/18_Cargar_Sanciones_Arbitrales_Manuales.sql" />
     <File Path="Stored_Procedures_Importaciones/README_Designaciones_Arbitrales.md" />
     <File Path="Stored_Procedures_Importaciones/16_Cargar_Designaciones_Arbitrales.sql" />
     <File Path="Stored_Procedures_Importaciones/13.1_Cargar_Cruces_Dataset.sql" />
@@ -88,6 +90,7 @@
     <File Path="Test/Datos_Importacion/personal_tecnico_casos.csv" />
   </Folder>
   <Folder Name="/Test_Importaciones/">
+    <File Path="Test_Importaciones/18_Test_Carga_Sanciones_Arbitrales.sql" />
     <File Path="Test_Importaciones/13.2_Test_Partidos_Incompletos.sql" />
     <File Path="Test_Importaciones/16.1_Test_Designaciones_Dataset.sql" />
     <File Path="Test_Importaciones/13.1_Test_Carga_Cruces_Dataset.sql" />

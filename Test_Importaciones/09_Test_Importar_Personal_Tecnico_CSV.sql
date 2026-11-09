@@ -1,4 +1,4 @@
-/*
+﻿/*
     Universidad Nacional de La Matanza - Bases de Datos Aplicada - Com 01-2900
     Grupo 01: Caro, Nicolás; Clara, Lucas; De La Cruz, Leandro; Rodríguez, Elías.
     Fecha: 01/11/2026. Objetivo: pruebas de importación de Personal_Tecnico.
@@ -54,7 +54,7 @@ BEGIN
             IF NOT EXISTS (SELECT 1 FROM dbo.Seleccion WHERE pais = N'USA')
                 THROW 52404, N'El fixture requiere la selección USA.', 1;
             IF EXISTS (SELECT 1 FROM dbo.Personal_Tecnico WHERE nombre_completo LIKE N'__TEST_PERSONAL[_]%')
-                THROW 52405, N'Hay datos reservados del fixture. Use una base de pruebas limpia.', 1;
+                THROW 52405, N'Hay datos reservados del fixture en MUNDIALDEFUTBOL. Revise esos datos antes de ejecutar.', 1;
             -- Preparar el rol anterior en una operación separada del CSV:
             -- la comprobación no depende del orden de lectura de la staging.
             DECLARE @id_usa INT = (SELECT id_seleccion FROM dbo.Seleccion WHERE pais = N'USA');

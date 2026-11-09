@@ -1,17 +1,19 @@
-/*
+﻿/*
     Universidad: Universidad Nacional de La Matanza - UNLaM
     Materia: Bases de Datos Aplicada - Comision 01-2900
     Integrantes: Caro, Nicolas Dario; Clara, Lucas Nicolas;
                  de la Cruz, Leandro Ariel; Rodriguez, Elias Uriel.
     Fecha: 07/11/2026
     Objetivo: verificar orden, limites y continuacion del WHILE de jugadores.
-    Seleccionar una base aislada MUNDIALDEFUTBOL_Test_While_* con las tablas,
+    Ejecutar en MUNDIALDEFUTBOL con las tablas,
     esquemas, ABM, selecciones, jugadores, partidos y formaciones del repo.
     Copiar los tres JSON de Test_Importaciones/Datos_Recorridos a SQL Server.
     Todas las escrituras del test se revierten, incluidos los datos de apoyo.
     Esperado: 11 titulares, 26 convocados, repeticion sin duplicados, errores
     intermedios que no impiden aplicar la ultima fila valida.
 */
+USE MUNDIALDEFUTBOL;
+GO
 CREATE OR ALTER PROCEDURE test.Recorrido_Formacion_Jugador_Test
     @archivo_12_titulares NVARCHAR(1000),
     @archivo_26 NVARCHAR(1000),
@@ -20,8 +22,8 @@ AS
 BEGIN
     SET NOCOUNT ON;
     SET XACT_ABORT OFF;
-    IF DB_NAME() NOT LIKE N'MUNDIALDEFUTBOL[_]Test[_]While[_]%' OR @@TRANCOUNT <> 0
-        THROW 51810, N'Ejecute en una base aislada MUNDIALDEFUTBOL_Test_While_, sin transaccion externa.', 1;
+    IF @@TRANCOUNT <> 0
+        THROW 51810, N'Ejecute sin una transaccion externa.', 1;
 
     DECLARE @formacion INT, @mexico INT, @cantidad INT;
     SELECT @cantidad = COUNT(*), @formacion = MIN(f.id_formacion), @mexico = MIN(f.id_seleccion)

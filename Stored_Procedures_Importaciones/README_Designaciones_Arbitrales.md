@@ -71,6 +71,6 @@ Los esquemas se crean exclusivamente en el script central. Instalar un procedimi
 
 ## Pruebas y límites
 
-La verificación actual está en Test_Negocio/README_Verificacion_Arbitral.md y su PDF. Los scripts sintéticos tienen condiciones de ejecución propias: las pruebas de carga y de errores de importación exigen una base aislada. No ejecutar esos escenarios persistentes sobre una base poblada de trabajo.
+La verificación actual está en Test_Negocio/README_Verificacion_Arbitral.md y su PDF. Los scripts sintéticos tienen condiciones de ejecución propias: todos apuntan a MUNDIALDEFUTBOL. La prueba sintética de carga exige Partido y Arbitro vacías y se ejecuta antes de poblarlas; la prueba del dataset exige designaciones vacías. Los escenarios persistentes conservan sus datos y no vacían tablas para prepararse.
 
 No se automatizan clasificación de grupos, mejores terceros, avance de resultados, descansos, traslados, superposición horaria, reparto equitativo ni habilitación FIFA/confederación. La simplificación no agrega reportes ni un calendario de participantes pendientes.

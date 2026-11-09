@@ -176,12 +176,11 @@ Verificaciones adicionales aprobadas:
 
 ## Pruebas reproducibles de los casos especiales
 
-Partir de una base aislada cuyo nombre comience por
-`MUNDIALDEFUTBOL_Test_While_`, creada con el script central adaptando solo el
-nombre de la base. Instalar tablas, ABM, importadores y negocio. Cargar
+Ejecutar sobre MUNDIALDEFUTBOL, creada con el script central sin cambiar
+el nombre de la base. Instalar tablas, ABM, importadores y negocio. Cargar
 selecciones, sedes, jugadores, publicidad, regiones, relaciones, partidos y
 formaciones con los datasets del repo. Cada archivo de prueba detalla sus
-dependencias y rechaza ejecutarse sobre la base del proyecto.
+dependencias y apunta explicitamente a la base principal.
 
 Para Formacion_Jugador:
 
@@ -189,15 +188,15 @@ Para Formacion_Jugador:
    visible por SQL Server. Contienen jugadores de Mexico del primer partido
    del dataset y un jugador de apoyo que el test crea mediante ABM.
 2. Instalar `Test_Importaciones/12_Test_Recorrido_Formacion_Jugador_JSON.sql`
-   sobre la base aislada seleccionada en SSMS.
+   sobre MUNDIALDEFUTBOL.
 3. Ejecutar `test.Recorrido_Formacion_Jugador_Test` con las tres rutas, como
    indica el ejemplo al final de ese archivo. El test revierte todos sus datos
    y comprueba que restaure las relaciones que habia antes de ejecutarlo.
 
 Para Publicidad, ejecutar
-`Test_Negocio/15.1_Test_Recorridos_Asignacion_Publicitaria.sql` sobre la base
-aislada. Esta prueba cambia los horarios de las regiones para controlar los
-candidatos y deja la evidencia en la base de pruebas. Inyecta un fallo con un
+`Test_Negocio/15.1_Test_Recorridos_Asignacion_Publicitaria.sql` sobre
+MUNDIALDEFUTBOL. Esta prueba cambia los horarios de las regiones para controlar los
+candidatos y deja la evidencia en la base principal. Inyecta un fallo con un
 trigger transitorio y lo elimina al finalizar. Tambien paso la prueba existente
 `Test_Negocio/15_Test_Generar_Asignacion_Publicitaria.sql`.
 
