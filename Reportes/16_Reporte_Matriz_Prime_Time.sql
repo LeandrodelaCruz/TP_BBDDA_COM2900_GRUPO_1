@@ -123,7 +123,7 @@ begin
     ------------------------------------------------------------
 
     ;with PartidoRegion as
-    (
+    ( --primero tomamos los datos del partido
         select
             P.id_partido,
             P.fecha,
@@ -134,7 +134,7 @@ begin
             R.nombre as region,
             R.hora_prime_inicio,
             R.hora_prime_fin,
-
+--Obtenemos el huso horario de esa region
             case R.huso_horario
                 when 'America/Argentina/Buenos_Aires'
                     then cast(
@@ -194,7 +194,7 @@ begin
         inner join dbo.Seleccion S2
             on S2.id_seleccion = P.id_seleccion_2
 
-        cross join dbo.Region R
+        cross join dbo.Region R -- Combinamos cada partido con cada region
 
         where R.nombre in (
             N'Argentina',
@@ -205,12 +205,12 @@ begin
             N'España',
             N'Reino Unido',
             N'México'
-        )
+        ) -- con este where limitamos las regiones
         and (@id_partido is null or P.id_partido = @id_partido)
         and (@fase is null or P.fase = @fase)
     ),
 
-    EstadoPrime as
+    EstadoPrime as --segunda CTE
     (
         select
             id_partido,
@@ -220,7 +220,7 @@ begin
             seleccion_1,
             seleccion_2,
             region,
-            case
+            case -- Aca tomamos los datos de la CTE anterior y verfificamos si cae en horario prime
                 when cast(hora_local as time) >= hora_prime_inicio
                  and cast(hora_local as time) < hora_prime_fin
                     then 'SI'
@@ -230,12 +230,12 @@ begin
     ),
 
     ConteoPrime as
-    (
+    ( -- Aca contamos cuantos mercados prime caen en el horario de ese partido
         select
             id_partido,
             sum(
                 case
-                    when en_prime = 'SI' then 1
+                    when en_prime = 'SI' then 1 -- sumamos los SI
                     else 0
                 end
             ) as cantidad_mercados_prime
@@ -243,7 +243,7 @@ begin
         group by id_partido
     ),
 
-    MatrizPrime as
+    MatrizPrime as -- aca aplicamos pivot y transformamos los valores de region en columnas
     (
         select
             id_partido,
@@ -269,13 +269,13 @@ begin
                 horario_UTC,
                 seleccion_1,
                 seleccion_2,
-                region,
-                en_prime
+                region, -- IMP
+                en_prime -- IMP
             from EstadoPrime
         ) Fuente
         pivot
         (
-            max(en_prime)
+            max(en_prime) -- Use max simplemente para PIVOT, en realidad existe una fila x partido y region
             for region in
             (
                 [Argentina],
@@ -290,7 +290,7 @@ begin
         ) P
     )
 
-    select
+    select -- mostramos los datos del partido
         M.id_partido,
         M.fecha,
         M.fase,
