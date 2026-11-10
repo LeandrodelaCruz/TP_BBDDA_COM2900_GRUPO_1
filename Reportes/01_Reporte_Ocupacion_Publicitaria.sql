@@ -78,33 +78,35 @@ begin
     ------------------------------------------------------------
 
     select
-        S.id_sede,
+        S.id_sede, --S: Sede
         S.nombre_estadio,
         S.ciudad,
         S.pais as pais_sede,
 
-        P.id_partido,
+        P.id_partido, --P: Partido
         P.fecha,
         P.fase,
         P.horario_UTC,
-        SEL1.pais as seleccion_1,
+        SEL1.pais as seleccion_1, --SEL1: Selec1 y SEL2: Selec2
         SEL2.pais as seleccion_2,
         P.resultado_final,
 
-        AP.numero_espacio,
+        AP.numero_espacio, --AP: Asignacion publicitaria
 
-        A.nombre as anunciante,
-        C.descripcion as campania,
-        PP.nombre as pieza,
+        A.nombre as anunciante, --A: Anunciante
+        C.descripcion as campania, --C: Campania
+        PP.nombre as pieza, --PP: Pieza para region
         PP.idioma,
 
-        AP.costo_aplicado as ingreso_usd,
+        AP.costo_aplicado as ingreso_usd, -- costo aplicado es el costo individual
 
         sum(AP.costo_aplicado) over (
             partition by P.id_partido
         ) as ingreso_total_partido_usd
 
     from dbo.Partido P
+
+--A partir de aca, reconstruimos toda la informacion comercial para el partido.
 
     inner join dbo.Sede S
         on S.id_sede = P.id_sede
@@ -126,6 +128,8 @@ begin
 
     inner join dbo.Anunciante A
         on A.id_anunciante = C.id_anunciante
+
+--Ese where es opcional, si vienen los parametros en null, no hace nada, sino filtra.
 
     where
         (@id_sede is null or P.id_sede = @id_sede)

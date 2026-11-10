@@ -27,9 +27,7 @@ as
 begin
     set nocount on;
 
-    ------------------------------------------------------------
-    -- 1. VALIDAR DEPENDENCIAS
-    ------------------------------------------------------------
+ -- 1. VALIDAR DEPENDENCIAS, es decir, que existan los objetos necesarios antes de ejecutar el test.
 
     if object_id(N'reportes.Reporte_Ocupacion_Publicitaria', N'P') is null
         throw 53100, 'TEST FALLIDO: no existe reportes.Reporte_Ocupacion_Publicitaria.', 1;
@@ -39,10 +37,8 @@ begin
 
     ------------------------------------------------------------
     -- 2. ELEGIR UN PARTIDO CON ASIGNACIONES
-    --
     -- Se toma el que tenga mayor cantidad de espacios ocupados.
     -- El id_partido solo se usa como desempate tecnico.
-    ------------------------------------------------------------
 
     declare
         @id_partido int,
@@ -58,10 +54,10 @@ begin
         AP.id_partido,
         P.id_sede
     order by
-        count(*) desc,
-        AP.id_partido asc;
+        count(*) desc, --Aca ordenamos todos los partidos
+        AP.id_partido desc; --Entra el que tiene id_partido mas chico
 
-    if @id_partido is null
+    if @id_partido is null -- valida que encontro 1
         throw 53102, 'TEST FALLIDO: no existen asignaciones publicitarias para probar el reporte.', 1;
 
     print 'Partido seleccionado para el test: ' + cast(@id_partido as varchar(20));
@@ -70,7 +66,7 @@ begin
     ------------------------------------------------------------
     -- 3. CAPTURAR EL REPORTE FILTRADO POR PARTIDO
     ------------------------------------------------------------
-
+--Esta tabla tiene la estructura del reporte
     create table #Resultado (
         id_sede int not null,
         nombre_estadio nvarchar(120) not null,
@@ -95,7 +91,7 @@ begin
         ingreso_usd decimal(14,2) not null,
         ingreso_total_partido_usd decimal(38,2) null
     );
-
+-- Aca ejecutamos el reporte para el partido seleccionado y guardamos las filas que devuelve en resultado
     insert into #Resultado
     exec reportes.Reporte_Ocupacion_Publicitaria
         @id_partido = @id_partido;
@@ -103,17 +99,16 @@ begin
     ------------------------------------------------------------
     -- 4. EL REPORTE DEBE DEVOLVER FILAS
     ------------------------------------------------------------
-
+--Aca se verifica que el reporte devolvio datos
     if not exists (select 1 from #Resultado)
         throw 53103, 'TEST FALLIDO: el reporte no devolvio filas para el partido seleccionado.', 1;
 
     print 'OK - El reporte devolvio datos.';
-
     ------------------------------------------------------------
     -- 5. LA CANTIDAD DE FILAS DEBE COINCIDIR CON LAS
     --    ASIGNACIONES REALES DEL PARTIDO
     ------------------------------------------------------------
-
+--Aca verificamos que si hay 4 asignaciones, debe devolver 4 filas
     declare
         @cantidad_esperada int,
         @cantidad_reporte int;
@@ -156,7 +151,7 @@ begin
         having count(*) > 1
     )
         throw 53106, 'TEST FALLIDO: el reporte contiene espacios duplicados.', 1;
-
+-- En un mismo partido no puede haber dos publicidades ocupando el mismo numero de espacio
     print 'OK - No existen espacios duplicados.';
 
     ------------------------------------------------------------
@@ -181,7 +176,7 @@ begin
     ------------------------------------------------------------
     -- 9. VERIFICAR INGRESO TOTAL DEL PARTIDO
     ------------------------------------------------------------
-
+--Aca verificamos que el total corresponda con la cantidad de espacios ocupados
     declare @total_esperado decimal(38,2);
 
     select
@@ -252,6 +247,10 @@ begin
 end;
 go
 
--- Ejecutar test:
-exec reportes.Reporte_Ocupacion_Publicitaria
-    @id_Partido = 104;
+--Ejecutar test:
+exec test.Reporte_Ocupacion_Publicitaria_Test;
+
+--Ejecutar SP:
+/*
+exec reportes.Reporte_Ocupacion_Publicitaria;
+*/
