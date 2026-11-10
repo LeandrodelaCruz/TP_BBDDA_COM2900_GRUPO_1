@@ -1,4 +1,57 @@
-﻿USE MUNDIALDEFUTBOL;
+﻿/*
+    Universidad: Universidad Nacional de La Matanza - UNLaM
+    Materia: Bases de Datos Aplicada - 2C-2026
+    Comisión: Com: 01-2900
+    Grupo 01: 
+    - Caro, Nicolás Darío
+    - Clara, Lucas
+    - De La Cruz, Leandro Ariel
+    - Rodríguez, Elías Uriel
+
+    Fecha: 10/11/2026
+
+    Descripción:
+    Importa la nómina de jugadores y sus posiciones/titularidad en las formaciones
+    (dbo.Formacion_Jugador) desde un archivo JSON (formato FIFA 2026). 
+    El archivo se lee con OPENROWSET(BULK, SINGLE_BLOB) + conversión UTF-8 explícita.
+    Todo el procesamiento se realiza de forma directa mediante LÓGICA DE CONJUNTOS (Set-Based) 
+    para maximizar la eficiencia y rendimiento del motor de base de datos, omitiendo el uso 
+    de iteraciones procedimentales y llamadas unitarias a procedimientos ABM, e integrando 
+    las validaciones de negocio masivas previo a la ejecución directa del UPSERT.
+
+    Reglas y Flujo de Procesamiento:
+    - Lectura y Desempaquetado: Se extrae la información de los partidos y planteles de ambas 
+      selecciones en tablas de staging temporales mediante OPENJSON y CROSS APPLY.
+    - Resolución de Selecciones y Partidos: Se resuelven las selecciones por nombre en inglés 
+      (con mapeo de alias como 'Korea Republic' -> 'South Korea') y los partidos por clave natural 
+      (fecha, horario_UTC e identificadores de selecciones).
+    - Resolución Jerárquica de Jugadores (Nombres):
+        1. Tabla de Alias (#AliasJugadores): Matcheo directo por apodos o nombres conocidos 
+           con normalización de caracteres de tabulación.
+        2. Coincidencia Exacta por Palabras: Búsqueda por tokenización de palabras contra 
+           j.nombre y j.apellido con colación Modern_Spanish_CI_AI y reemplazo explícito 
+           de la letra 'Ñ/ñ' por 'N/n'.
+        3. Fallback Fonético (SOUNDEX): Búsqueda fonética por palabra normalizada para resolver 
+           variantes ortográficas no capturadas en los pasos previos.
+    - Validaciones Masivas de Negocio:
+        * Formato de entrada (dorsal en cancha entre 1 y 99; es_titular no nulo).
+        * Jugadores habilitados (sin baja de convocatoria registrada en dbo.Reemplazo).
+        * Ausencia de sanciones graves (sin expulsión registrada en dbo.Incidencia para el partido).
+        * Unicidad de dorsal por formación.
+        * Control estricto de cupos por formación: máximo 11 titulares y 26 convocados totales.
+    - Carga Directa (UPSERT Masivo):
+        * UPDATE masivo sobre dbo.Formacion_Jugador para relaciones válidas ya existentes.
+        * INSERT masivo sobre dbo.Formacion_Jugador para nuevos convocados válidos.
+    - Manejo de Inconsistencias: Las filas o registros inválidos no detienen el proceso ni 
+      generan ROLLBACK general; se aíslan y registran en la tabla #Errores, permitiendo que 
+      todos los registros válidos se importen correctamente.
+
+    Nota sobre SQL dinámico:
+    Se usa únicamente para OPENROWSET porque SQL Server no permite parametrizar 
+    la ruta del archivo. El resto es T-SQL estático orientado a conjuntos.
+*/
+
+USE MUNDIALDEFUTBOL;
 GO
 
 CREATE OR ALTER PROCEDURE importacion.Importar_Formacion_Jugador_JSON
