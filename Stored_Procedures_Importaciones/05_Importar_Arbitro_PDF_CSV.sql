@@ -1,4 +1,4 @@
-/*
+﻿/*
     Universidad: Universidad Nacional de la Matanza
     Materia: Bases de Datos Aplicada - Com 01-2900
     Trabajo Práctico: Entrega 6 - Procesos de Importación
@@ -22,7 +22,7 @@
     - informa resumen y detalle de errores.
 
     CSV esperado:
-        nombre,apellido,fecha_nacimiento,pais,puesto
+        nombre,apellido,fecha_nacimiento,pais,puesto,idiomas
 
     SQL dinámico:
     Se usa únicamente para parametrizar la ruta de BULK INSERT.
@@ -31,7 +31,7 @@
 USE MUNDIALDEFUTBOL;
 GO
 
-CREATE OR ALTER PROCEDURE importacion.SP_Importar_Arbitro_PDF_CSV
+CREATE OR ALTER PROCEDURE importacion.Importar_Arbitro_PDF_CSV
     @archivo NVARCHAR(1000)
 AS
 BEGIN
@@ -58,7 +58,8 @@ BEGIN
         apellido         NVARCHAR(150) NULL,
         fecha_nacimiento NVARCHAR(30)  NULL,
         pais             NVARCHAR(100) NULL,
-        puesto           NVARCHAR(100) NULL
+        puesto           NVARCHAR(100) NULL,
+        idiomas          NVARCHAR(200) NULL  -- Presente en el CSV; no se utiliza en la importacion.
     );
 
     CREATE TABLE #Errores
@@ -79,9 +80,11 @@ BEGIN
         FROM ''' + REPLACE(@archivo, '''', '''''') + N'''
         WITH
         (
-            FORMAT = ''CSV'',
             FIRSTROW = 2,
-            FIELDQUOTE = ''"''
+            FIELDTERMINATOR = '','',
+            ROWTERMINATOR = ''\n'',
+            CODEPAGE = ''RAW'',
+            DATAFILETYPE = ''char''
         );';
 
     BEGIN TRY
@@ -94,7 +97,7 @@ BEGIN
     END CATCH;
 
     /* ----------------------------------------------------------------------
-       3. recorrido con WHILE de procesamiento fila por fila.
+       3. Bucle WHILE de procesamiento fila por fila.
     ---------------------------------------------------------------------- */
     DECLARE
         @numero_fila      INT = 0,
@@ -103,6 +106,7 @@ BEGIN
         @fecha_raw        NVARCHAR(30),
         @pais_raw         NVARCHAR(100),
         @puesto_raw       NVARCHAR(100),
+        @idiomas_raw      NVARCHAR(200),
 
         @nombre           NVARCHAR(60),
         @apellido         NVARCHAR(60),
@@ -114,29 +118,55 @@ BEGIN
         @id_arbitro       INT,
         @insertados       INT = 0,
         @actualizados     INT = 0,
-        @errores          INT = 0;
+        @errores          INT = 0,
+        @hay_fila         BIT = 1;
 
-    -- Copia fija de las filas a procesar; conserva el orden del proceso original.
-    SELECT ROW_NUMBER() OVER (ORDER BY (SELECT NULL)) AS orden_recorrido,
-           nombre, apellido, fecha_nacimiento, pais, puesto
-    INTO #Trabajo_Recorrido
+    CREATE TABLE #Arbitro_Trabajo
+    (
+        numero_fila      INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+        nombre           NVARCHAR(150) NULL,
+        apellido         NVARCHAR(150) NULL,
+        fecha_nacimiento NVARCHAR(30)  NULL,
+        pais             NVARCHAR(100) NULL,
+        puesto           NVARCHAR(100) NULL,
+        idiomas          NVARCHAR(200) NULL
+    );
+
+    INSERT INTO #Arbitro_Trabajo
+    (
+        nombre,
+        apellido,
+        fecha_nacimiento,
+        pais,
+        puesto,
+        idiomas
+    )
+    SELECT
+        nombre,
+        apellido,
+        fecha_nacimiento,
+        pais,
+        puesto,
+        idiomas
     FROM #Arbitro_Staging;
-    CREATE UNIQUE CLUSTERED INDEX IX_Trabajo_Recorrido
-        ON #Trabajo_Recorrido (orden_recorrido);
 
-    DECLARE @fila_recorrido BIGINT;
-    SELECT @fila_recorrido = MIN(orden_recorrido) FROM #Trabajo_Recorrido;
-
-
-    WHILE @fila_recorrido IS NOT NULL
+    WHILE @hay_fila = 1
     BEGIN
-        SELECT @nombre_raw = nombre,
-               @apellido_raw = apellido,
-               @fecha_raw = fecha_nacimiento,
-               @pais_raw = pais,
-               @puesto_raw = puesto
-        FROM #Trabajo_Recorrido WHERE orden_recorrido = @fila_recorrido;
-        SET @numero_fila += 1;
+        SELECT TOP (1)
+            @numero_fila  = numero_fila,
+            @nombre_raw   = nombre,
+            @apellido_raw = apellido,
+            @fecha_raw    = fecha_nacimiento,
+            @pais_raw     = pais,
+            @puesto_raw   = puesto,
+            @idiomas_raw  = idiomas
+        FROM #Arbitro_Trabajo
+        WHERE numero_fila > @numero_fila
+        ORDER BY numero_fila;
+
+        SET @hay_fila = CASE WHEN @@ROWCOUNT > 0 THEN 1 ELSE 0 END;
+        IF @hay_fila = 0
+            CONTINUE;
 
         BEGIN TRY
             SET @id_arbitro = NULL;
@@ -144,7 +174,7 @@ BEGIN
             SET @apellido = NULLIF(LTRIM(RTRIM(@apellido_raw)), N'');
             SET @pais = LTRIM(RTRIM(@pais_raw));
             SET @puesto = LTRIM(RTRIM(@puesto_raw));
-            SET @idiomas = NULL;
+            SET @idiomas = NULLIF(LTRIM(RTRIM(@idiomas_raw)), N'');
 
             /* Transformación del puesto al dominio del modelo. */
             SET @puesto = CASE UPPER(@puesto)
@@ -258,10 +288,9 @@ BEGIN
             SET @errores += 1;
         END CATCH;
 
-        SELECT @fila_recorrido = MIN(orden_recorrido)
-            FROM #Trabajo_Recorrido WHERE orden_recorrido > @fila_recorrido;
     END;
 
+    DROP TABLE #Arbitro_Trabajo;
 
     /* ----------------------------------------------------------------------
        4. Resumen y detalle de errores.

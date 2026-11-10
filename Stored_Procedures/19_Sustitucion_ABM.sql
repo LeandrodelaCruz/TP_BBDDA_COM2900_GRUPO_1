@@ -1,8 +1,8 @@
-/*
+﻿/*
     Universidad: Universidad Nacional de La Matanza - UNLaM
     Materia: Bases de Datos Aplicada - 2C-2026
     Comision: Com: 01-2900
-    Grupo 01: 
+    Grupo 01:
     - Caro, Nicolas Dario
     - Clara, Lucas
     - De La Cruz, Leandro Ariel
@@ -17,7 +17,7 @@
     - Sustitucion_GetByPartido
     - Sustitucion_Modificacion
     - Sustitucion_Baja
-    
+
     Validaciones de NEGOCIO:
     - El jugador que entra NO puede ser TITULAR (debe ser SUPLENTE)
     - Máximo 5 sustituciones por equipo por partido dentro de 3 ventanas
@@ -43,25 +43,26 @@ CREATE OR ALTER PROCEDURE abm.Sustitucion_Alta
 AS
 BEGIN
     SET NOCOUNT ON;
-    
+
     DECLARE @errores NVARCHAR(MAX) = '';
-    
+
     -- Variables para jugador que ENTRA
     DECLARE @id_seleccion_entra INT;
     DECLARE @id_formacion_entra INT;
     DECLARE @es_titular_entra BIT;
-    
+
     -- Variables para jugador que SALE
     DECLARE @id_seleccion_sale INT;
     DECLARE @id_formacion_sale INT;
-    
+
     -- Variables para validaciones
     DECLARE @hay_suplementario BIT = 0;
     DECLARE @limite_ventanas INT;
-    
+
+
     BEGIN TRY
         BEGIN TRANSACTION;
-        
+
         -- =========================================================
         -- VALIDACIoN 1: Obtener datos del JUGADOR QUE ENTRA
         -- (seleccion, formacion, si es titular)
@@ -73,7 +74,7 @@ BEGIN
         LEFT JOIN dbo.Formacion f ON f.id_partido = @id_partido AND f.id_seleccion = j.id_seleccion
         LEFT JOIN dbo.Formacion_Jugador fj ON fj.id_formacion = f.id_formacion AND fj.id_jugador = j.id_jugador
         WHERE j.id_jugador = @id_jugador_entra;
-        
+
         -- =========================================================
         -- VALIDACIoN 2: Obtener datos del JUGADOR QUE SALE
         -- (seleccion, formacion)
@@ -84,7 +85,7 @@ BEGIN
         LEFT JOIN dbo.Formacion f ON f.id_partido = @id_partido AND f.id_seleccion = j.id_seleccion
         LEFT JOIN dbo.Formacion_Jugador fj ON fj.id_formacion = f.id_formacion AND fj.id_jugador = j.id_jugador
         WHERE j.id_jugador = @id_jugador_sale;
-        
+
         -- =========================================================
         -- VALIDACIoN 3: Ambos jugadores deben pertenecer a la misma seleccion
         -- =========================================================
@@ -92,7 +93,7 @@ BEGIN
         BEGIN
             SET @errores = @errores + 'Los jugadores deben pertenecer a la misma seleccion. ';
         END
-        
+
         -- =========================================================
         -- VALIDACIoN 4: Ambos jugadores deben estar en la formacion del partido
         -- =========================================================
@@ -100,12 +101,12 @@ BEGIN
         BEGIN
             SET @errores = @errores + 'El jugador que entra no está inscrito en la formacion del partido. ';
         END
-        
+
         IF @id_formacion_sale IS NULL
         BEGIN
             SET @errores = @errores + 'El jugador que sale no está inscrito en la formacion del partido. ';
         END
-        
+
         -- =========================================================
         -- VALIDACIoN 5: El jugador que ENTRA NO puede ser TITULAR
         -- (Debe ser SUPLENTE) - VALIDACIoN DE NEGOCIO
@@ -114,18 +115,18 @@ BEGIN
         BEGIN
             SET @errores = @errores + 'El jugador que entra debe ser un SUPLENTE. ';
         END
-        
-        
+
+
         -- =========================================================
         -- VALIDACIoN 6: Validar número de ventana según período
         -- Detectar si hay suplementario
         -- =========================================================
         IF @periodo IN ('PRIMER SUPLEMENTARIO', 'SEGUNDO SUPLEMENTARIO')
             SET @hay_suplementario = 1;
-        
+
         -- Límite de ventanas: 3 en reglamentario, 4 en suplementario
         SET @limite_ventanas = CASE WHEN @hay_suplementario = 1 THEN 4 ELSE 3 END;
-        
+
         -- Validar que el número de ventana no exceda el límite
         IF @numero_ventana IS NULL
         BEGIN
@@ -142,22 +143,22 @@ BEGIN
             ELSE
                 SET @errores = @errores + 'El número de ventana no puede exceder 3 en tiempo reglamentario. ';
         END
-        
+
         -- =========================================================
         -- VALIDACIoN 7: Validar cantidad de sustituciones
         -- Máximo 5 en tiempo reglamentario, 6 en tiempo suplementario
         -- =========================================================
         DECLARE @contar_sustituciones INT;
         DECLARE @limite_sustituciones INT;
-        
-        SELECT @contar_sustituciones = COUNT(*) 
+
+        SELECT @contar_sustituciones = COUNT(*)
         FROM dbo.Sustitucion s
         INNER JOIN dbo.Jugador j ON s.id_jugador_sale = j.id_jugador
         WHERE s.id_partido = @id_partido AND j.id_seleccion = @id_seleccion_sale;
-        
+
         -- Límite de sustituciones: 6 en suplementario, 5 en reglamentario
         SET @limite_sustituciones = CASE WHEN @hay_suplementario = 1 THEN 6 ELSE 5 END;
-        
+
         IF @contar_sustituciones >= @limite_sustituciones
         BEGIN
             IF @hay_suplementario = 1
@@ -165,7 +166,7 @@ BEGIN
             ELSE
                 SET @errores = @errores + 'Ya se alcanzo el límite de 5 sustituciones para este equipo en tiempo reglamentario. ';
         END
-        
+
         -- =========================================================
         -- Si hay errores acumulados, lanzar excepcion
         -- =========================================================
@@ -173,7 +174,7 @@ BEGIN
         BEGIN
             RAISERROR(@errores, 16, 1);
         END
-        
+
         -- =========================================================
         -- INSERCIoN - Todo validado correctamente
         -- =========================================================
@@ -194,27 +195,27 @@ BEGIN
             @motivo,
             @numero_ventana
         );
-        
+
         SET @id_sustitucion = SCOPE_IDENTITY();
-        
+
         COMMIT TRANSACTION;
         PRINT 'Sustitucion registrada exitosamente. ID: ' + CAST(@id_sustitucion AS VARCHAR(10));
-        
+
     END TRY
     BEGIN CATCH
         IF @@TRANCOUNT > 0
             ROLLBACK TRANSACTION;
-        
+
         DECLARE @error_message NVARCHAR(MAX);
         DECLARE @error_number INT;
         DECLARE @error_severity INT;
         DECLARE @error_state INT;
-        
+
         SET @error_number = ERROR_NUMBER();
         SET @error_severity = ERROR_SEVERITY();
         SET @error_state = ERROR_STATE();
         SET @error_message = ERROR_MESSAGE();
-        
+
         -- Capturar error de constraint o de logica
         RAISERROR(
             'Error al registrar sustitucion: %s (Codigo de error: %d)',
@@ -224,7 +225,7 @@ BEGIN
             @error_number
         );
     END CATCH
-    
+
 END;
 GO
 
@@ -236,8 +237,8 @@ CREATE OR ALTER PROCEDURE abm.Sustitucion_GetById
 AS
 BEGIN
     SET NOCOUNT ON;
-    
-    SELECT 
+
+    SELECT
         s.id_sustitucion,
         s.id_partido,
         js.id_seleccion,
@@ -267,8 +268,8 @@ CREATE OR ALTER PROCEDURE abm.Sustitucion_GetByPartido
 AS
 BEGIN
     SET NOCOUNT ON;
-    
-    SELECT 
+
+    SELECT
         s.id_sustitucion,
         s.id_partido,
         js.id_seleccion,
@@ -300,10 +301,10 @@ CREATE OR ALTER PROCEDURE abm.Sustitucion_Modificacion
 AS
 BEGIN
     SET NOCOUNT ON;
-    
+
     BEGIN TRY
         BEGIN TRANSACTION;
-        
+
         -- =========================================================
         -- VALIDACIoN: La sustitucion debe existir
         -- =========================================================
@@ -311,22 +312,22 @@ BEGIN
         BEGIN
             RAISERROR('La sustitucion especificada no existe.', 16, 1);
         END
-        
+
         -- =========================================================
         -- ACTUALIZACIoN: Solo se permite cambiar el motivo
         -- =========================================================
         UPDATE dbo.Sustitucion
         SET motivo = @motivo
         WHERE id_sustitucion = @id_sustitucion;
-        
+
         COMMIT TRANSACTION;
         PRINT 'Motivo de sustitucion actualizado exitosamente.';
-        
+
     END TRY
     BEGIN CATCH
         IF @@TRANCOUNT > 0
             ROLLBACK TRANSACTION;
-        
+
         DECLARE @error_message NVARCHAR(MAX) = ERROR_MESSAGE();
         RAISERROR(@error_message, 16, 1);
     END CATCH
@@ -342,25 +343,25 @@ CREATE OR ALTER PROCEDURE abm.Sustitucion_Baja
 AS
 BEGIN
     SET NOCOUNT ON;
-    
+
     BEGIN TRY
         BEGIN TRANSACTION;
-        
+
         IF NOT EXISTS (SELECT 1 FROM dbo.Sustitucion WHERE id_sustitucion = @id_sustitucion)
         BEGIN
             RAISERROR('La sustitucion especificada no existe.', 16, 1);
         END
-        
+
         DELETE FROM dbo.Sustitucion WHERE id_sustitucion = @id_sustitucion;
-        
+
         COMMIT TRANSACTION;
         PRINT 'Sustitucion eliminada exitosamente.';
-        
+
     END TRY
     BEGIN CATCH
         IF @@TRANCOUNT > 0
             ROLLBACK TRANSACTION;
-        
+
         DECLARE @error_message NVARCHAR(MAX) = ERROR_MESSAGE();
         RAISERROR(@error_message, 16, 1);
     END CATCH

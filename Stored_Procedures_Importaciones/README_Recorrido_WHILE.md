@@ -1,4 +1,4 @@
-# Recorrido con WHILE: Reemplazo y Personal_Tecnico
+﻿# Recorrido con WHILE: Reemplazo y Personal_Tecnico
 
 La correccion del docente prohibe los cursores SQL en todo el proyecto.
 La primera adaptacion comprendio Reemplazo, Personal_Tecnico y la preparacion
@@ -77,15 +77,15 @@ y reportar errores parciales conforme a la entrega.
 
 ## Validacion
 
-Ejecutar las pruebas existentes en una base aislada:
+Ejecutar las pruebas existentes en MUNDIALDEFUTBOL:
 
 - `Test_Negocio/14_Test_Registrar_Reemplazo.sql`.
 - `Test_Importaciones/14_Test_Carga_Reemplazos.sql`.
 - `Test_Importaciones/09_Test_Importar_Personal_Tecnico_CSV.sql`, con el CSV real
   y el fixture opcional `Test/Datos_Importacion/personal_tecnico_casos.csv`.
 
-La prueba de carga de Reemplazo exige una base vacia y su propio prefijo de
-nombre. La de Personal_Tecnico revierte sus datos al finalizar. Los archivos de
+La prueba de carga de Reemplazo exige Seleccion y Jugador vacias, antes de
+poblarlas; no exige un prefijo de base auxiliar. La de Personal_Tecnico revierte sus datos al finalizar. Los archivos de
 prueba indican sus requisitos y no deben ejecutarse sin revisar esas condiciones.
 
 Verificado en SQL Server el 07/11/2026, en una base aislada:

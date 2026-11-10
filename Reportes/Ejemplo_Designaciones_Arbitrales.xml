@@ -1,0 +1,60 @@
+<?xml version='1.0' encoding='utf-8'?>
+<ReporteDesignacionesArbitrales>
+  <Arbitro id="6">
+    <Nombre>Arbitro &amp; A RDA_4C7DAE82-F19D-4906-BC30-6A1D942EBA00</Nombre>
+    <Pais>Pais de prueba</Pais>
+    <Resumen partidosAsignados="3" partidosComoPrincipal="2" amonestaciones="2" expulsiones="1" />
+    <Partidos>
+      <Partido id="5">
+        <Fecha>2026-06-11</Fecha>
+        <Fase>GRUPOS</Fase>
+        <Seleccion1>RDA_4C7DAE82-F19D-4906-BC30-6A1D942EBA00 &amp; Local</Seleccion1>
+        <Seleccion2>RDA_4C7DAE82-F19D-4906-BC30-6A1D942EBA00 Visitante</Seleccion2>
+        <Rol>PRINCIPAL</Rol>
+        <Resumen amonestaciones="2" expulsiones="1" />
+        <Tarjetas atribuibles="true">
+          <Tarjeta idIncidencia="14">
+            <Tipo>AMONESTACION</Tipo>
+            <Jugador id="1262">Jugador &amp; Uno RDA_4C7DAE82-F19D-4906-BC30-6A1D942EBA00</Jugador>
+            <Seleccion>RDA_4C7DAE82-F19D-4906-BC30-6A1D942EBA00 &amp; Local</Seleccion>
+            <Minuto>24</Minuto>
+            <Periodo>PRIMER TIEMPO</Periodo>
+          </Tarjeta>
+          <Tarjeta idIncidencia="15">
+            <Tipo>AMONESTACION</Tipo>
+            <Jugador id="1262">Jugador &amp; Uno RDA_4C7DAE82-F19D-4906-BC30-6A1D942EBA00</Jugador>
+            <Seleccion>RDA_4C7DAE82-F19D-4906-BC30-6A1D942EBA00 &amp; Local</Seleccion>
+            <Minuto>68</Minuto>
+            <Periodo>SEGUNDO TIEMPO</Periodo>
+            <Motivo>Segunda amarilla simulada</Motivo>
+          </Tarjeta>
+          <Tarjeta idIncidencia="16">
+            <Tipo>EXPULSION</Tipo>
+            <Jugador id="1262">Jugador &amp; Uno RDA_4C7DAE82-F19D-4906-BC30-6A1D942EBA00</Jugador>
+            <Seleccion>RDA_4C7DAE82-F19D-4906-BC30-6A1D942EBA00 &amp; Local</Seleccion>
+            <Minuto>68</Minuto>
+            <Periodo>SEGUNDO TIEMPO</Periodo>
+            <Motivo>Expulsion por segunda amarilla</Motivo>
+          </Tarjeta>
+        </Tarjetas>
+      </Partido>
+      <Partido id="6">
+        <Fecha>2026-06-12</Fecha>
+        <Fase>GRUPOS</Fase>
+        <Seleccion1>RDA_4C7DAE82-F19D-4906-BC30-6A1D942EBA00 &amp; Local</Seleccion1>
+        <Seleccion2>RDA_4C7DAE82-F19D-4906-BC30-6A1D942EBA00 Visitante</Seleccion2>
+        <Rol>CUARTO ARBITRO</Rol>
+        <Tarjetas atribuibles="false" />
+      </Partido>
+      <Partido id="7">
+        <Fecha>2026-06-13</Fecha>
+        <Fase>GRUPOS</Fase>
+        <Seleccion1>RDA_4C7DAE82-F19D-4906-BC30-6A1D942EBA00 &amp; Local</Seleccion1>
+        <Seleccion2>RDA_4C7DAE82-F19D-4906-BC30-6A1D942EBA00 Visitante</Seleccion2>
+        <Rol>PRINCIPAL</Rol>
+        <Resumen amonestaciones="0" expulsiones="0" />
+        <Tarjetas atribuibles="true" />
+      </Partido>
+    </Partidos>
+  </Arbitro>
+</ReporteDesignacionesArbitrales>

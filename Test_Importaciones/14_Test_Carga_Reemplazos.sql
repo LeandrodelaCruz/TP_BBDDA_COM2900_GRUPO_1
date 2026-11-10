@@ -1,22 +1,22 @@
-/*
+﻿/*
     Universidad: Universidad Nacional de La Matanza - UNLaM
     Materia: Bases de Datos Aplicada - Comision 01-2900
     Integrantes: Caro, Nicolas Dario; Clara, Lucas Nicolas;
                  de la Cruz, Leandro Ariel; Rodriguez, Elias Uriel.
     Fecha: 03/11/2026
     Objetivo: verificar preparacion atomica, errores parciales y repeticion.
-    SOLO ejecutar en una base AISLADA y vacia cuyo nombre comience por
-    MUNDIALDEFUTBOL_Test_Reemplazos_. Seleccionar esa base en SSMS.
+    Ejecutar en MUNDIALDEFUTBOL antes de poblar Seleccion y Jugador.
+    Conserva el requisito de esas tablas vacias; no elimina datos para prepararlas.
     Requiere tablas, esquemas, ABM 03/04/10/13/14 y negocio 14 e importaciones 14.
     Crea datos minimos, un fixture y un trigger transitorio de fallo.
-    Conserva la evidencia en la base de pruebas; no limpia tablas ajenas.
+    Conserva la evidencia en MUNDIALDEFUTBOL; no limpia tablas ajenas.
 */
+USE MUNDIALDEFUTBOL;
+GO
 SET NOCOUNT ON;
 SET XACT_ABORT ON;
-IF DB_NAME() NOT LIKE N'MUNDIALDEFUTBOL[_]Test[_]Reemplazos[_]%'
-    THROW 51700, N'Seleccione una base aislada MUNDIALDEFUTBOL_Test_Reemplazos_ antes de ejecutar.', 1;
 IF @@TRANCOUNT <> 0 OR EXISTS (SELECT 1 FROM dbo.Jugador) OR EXISTS (SELECT 1 FROM dbo.Seleccion)
-    THROW 51700, N'El test requiere una base vacia y sin transacciones abiertas.', 1;
+    THROW 51700, N'El test requiere Seleccion y Jugador vacias y ninguna transaccion abierta.', 1;
 
 DECLARE @plantillas TABLE
 (orden INT IDENTITY(1,1) PRIMARY KEY,

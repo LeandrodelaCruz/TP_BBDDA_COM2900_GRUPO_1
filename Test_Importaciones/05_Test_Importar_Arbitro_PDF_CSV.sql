@@ -6,7 +6,7 @@
     Fecha: 2026-11-02
 
     Descripción:
-    Test de importacion.SP_Importar_Arbitro_PDF_CSV.
+    Test de importacion.Importar_Arbitro_PDF_CSV.
     Ejecuta la importación desde el CSV generado por el extractor del PDF
     oficial de FIFA 2026 y verifica que se realice el UPSERT correctamente.
 
@@ -29,8 +29,8 @@ BEGIN
     /* ------------------------------------------------------------------
        1. Ejecutar la importación desde el CSV generado por el extractor.
     ------------------------------------------------------------------ */
-    EXEC importacion.SP_Importar_Arbitro_PDF_CSV
-        @archivo = N'C:\Users\elias\Downloads\TP BDA\TP_BBDDA_COM2900_GRUPO_1\Archivos_Importacion\arbitros_fifa_pdf.csv';
+    EXEC importacion.Importar_Arbitro_PDF_CSV
+        @archivo = N'/var/opt/mssql/import/arbitros_fifa_completo.csv';
 
     /* ------------------------------------------------------------------
        2. Verificar que existan árbitros importados.
@@ -46,8 +46,8 @@ BEGIN
        3. Segunda ejecución: debe realizar actualizaciones (Upsert) y no
           generar duplicados.
     ------------------------------------------------------------------ */
-    EXEC importacion.SP_Importar_Arbitro_PDF_CSV
-        @archivo = N'C:\Users\elias\Downloads\TP BDA\TP_BBDDA_COM2900_GRUPO_1\Archivos_Importacion\arbitros_fifa_pdf.csv';
+    EXEC importacion.Importar_Arbitro_PDF_CSV
+        @archivo = N'/var/opt/mssql/import/arbitros_fifa_completo.csv';
 
     SELECT
         (SELECT COUNT(*) FROM dbo.Arbitro) AS total_arbitros,

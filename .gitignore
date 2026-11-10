@@ -4,3 +4,4 @@
 Doc/*md
 .venv/
 __pycache__/
+AGENTS.md

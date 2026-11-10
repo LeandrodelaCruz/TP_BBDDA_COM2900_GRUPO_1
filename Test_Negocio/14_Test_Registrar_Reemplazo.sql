@@ -1,4 +1,4 @@
-/*
+﻿/*
     Universidad: Universidad Nacional de La Matanza - UNLaM
     Materia: Bases de Datos Aplicada - Comision 01-2900
     Integrantes: Caro, Nicolas Dario; Clara, Lucas Nicolas;
@@ -6,7 +6,7 @@
     Fecha: 02/11/2026
     Objetivo: probar el reemplazo de convocatoria y su atomicidad.
     Requisitos: tablas, ABM de Seleccion/Jugador/Reemplazo y negocio 14.
-    Ejecutar en una base de pruebas. No usa ni elimina datos ajenos.
+    Ejecutar en MUNDIALDEFUTBOL. No usa ni elimina datos ajenos.
     Cada caso revierte sus datos; los contadores IDENTITY pueden avanzar.
 */
 USE MUNDIALDEFUTBOL;

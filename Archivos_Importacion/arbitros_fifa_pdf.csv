@@ -1,171 +1,171 @@
-nombre,apellido,fecha_nacimiento,pais,puesto
-Abdulrahman,Al Jassim,,Qatar,Principal
-Khalid,Al Turais,,Saudi Arabia,Principal
-Yusuke,Araki,,Japan,Principal
-Omar Abdulkadir,Artan,,Somalia,Principal
-Pierre,Atcho,,Gabon,Principal
-Ivan,Barton,,El Salvador,Principal
-Dahane,Beida,,Mauritania,Principal
-Juan Gabriel,Benitez,,Paraguay,Principal
-Juan,Calderon,,Costa Rica,Principal
-Raphael,Claus,,Brazil,Principal
-Ismail,Elfath,,United States,Principal
-Espen,Eskas,,Norway,Principal
-Alireza,Faghani,,Australia,Principal
-Yael,Falcon Perez,,Argentina,Principal
-Drew,Fischer,,Canada,Principal
-Cristian,Garay,,Chile,Principal
-Katia,Garcia,,Mexico,Principal
-Mustapha,Ghorbal,,Algeria,Principal
-Alejandro,Hernandez,,Spain,Principal
-Dario,Herrera,,Argentina,Principal
-Jalal,Jayed,,Morocco,Principal
-Campbell-Kirk,Kawana-Waugh,,New Zealand,Principal
-Istvan,Kovacs,,Romania,Principal
-Francois,Letexier,,France,Principal
-Ning,Ma,,China,Principal
-Adham,Makhadmeh,,Jordan,Principal
-Danny,Makkelie,,Netherlands,Principal
-Szymon,Marciniak,,Poland,Principal
-Maurizio,Mariani,,Italy,Principal
-Hector Said,Martinez,,Honduras,Principal
-Amin,Mohamed,,Egypt,Principal
-Oshane,Nation,,Jamaica,Principal
-Glenn,Nyberg,,Sweden,Principal
+nombre,apellido,fecha_nacimiento,pais,puesto,idiomas
+Abdulrahman,Al Jassim,,Qatar,Principal,
+Khalid,Al Turais,,Saudi Arabia,Principal,
+Yusuke,Araki,,Japan,Principal,
+Omar Abdulkadir,Artan,,Somalia,Principal,
+Pierre,Atcho,,Gabon,Principal,
+Ivan,Barton,,El Salvador,Principal,
+Dahane,Beida,,Mauritania,Principal,
+Juan Gabriel,Benitez,,Paraguay,Principal,
+Juan,Calderon,,Costa Rica,Principal,
+Raphael,Claus,,Brazil,Principal,
+Ismail,Elfath,,United States,Principal,
+Espen,Eskas,,Norway,Principal,
+Alireza,Faghani,,Australia,Principal,
+Yael,Falcon Perez,,Argentina,Principal,
+Drew,Fischer,,Canada,Principal,
+Cristian,Garay,,Chile,Principal,
+Katia,Garcia,,Mexico,Principal,
+Mustapha,Ghorbal,,Algeria,Principal,
+Alejandro,Hernandez,,Spain,Principal,
+Dario,Herrera,,Argentina,Principal,
+Jalal,Jayed,,Morocco,Principal,
+Campbell-Kirk,Kawana-Waugh,,New Zealand,Principal,
+Istvan,Kovacs,,Romania,Principal,
+Francois,Letexier,,France,Principal,
+Ning,Ma,,China,Principal,
+Adham,Makhadmeh,,Jordan,Principal,
+Danny,Makkelie,,Netherlands,Principal,
+Szymon,Marciniak,,Poland,Principal,
+Maurizio,Mariani,,Italy,Principal,
+Hector Said,Martinez,,Honduras,Principal,
+Amin,Mohamed,,Egypt,Principal,
+Oshane,Nation,,Jamaica,Principal,
+Glenn,Nyberg,,Sweden,Principal,
 Michael,Oliver,,England,Principal
-,Omar al Ali,,United Arab Emirates,Principal
-Kevin,Ortega,,Peru,Principal
-Tori,Penso,,United States,Principal
-Joao,Pinheiro,,Portugal,Principal
-,Ramon Abatti,,Brazil,Principal
-Cesar,Ramos,,Mexico,Principal
-Andres,Rojas,,Colombia,Principal
-Sandro,Schaerer,,Switzerland,Principal
-Ilgiz,Tantashev,,Uzbekistan,Principal
-Anthony,Taylor,,England,Principal
-Gustavo,Tejera,,URU,Principal
-Facundo,Tello,,Argentina,Principal
-Abongile,Tom,,South Africa,Principal
-Clement,Turpin,,France,Principal
-Jesus,Valenzuela,,Venezuela,Principal
-Slavko,Vincic,,Slovenia,Principal
-,Wilton Sampaio,,Brazil,Principal
-Felix,Zwayer,,Germany,Principal
-Amos,Abeigne,,Gabon,Asistente
-George,Lakrindis,,Australia,Asistente
-Mahmoud,Abouelregal,,Egypt,Asistente
-James,Lindsay,,Australia,Asistente
-Mostafa,Akarkad,,Morocco,Asistente
-Tomasz,Listkiewicz,,Poland,Asistente
-Mohammed,Al Abakry,,Saudi Arabia,Asistente
-Walter,Lopez,,Honduras,Asistente
-Mohamed,Al Hammadi,,United Arab Emirates,Asistente
-Luciano,Maia,,Portugal,Asistente
-Mohammad,Al Kalaf,,Jordan,Asistente
-James,Mainwaring,,England,Asistente
-Saoud,Al Maqaleh,,Qatar,Asistente
-Mihai,Marica,,Romania,Asistente
-Taleb,Al Marri,,Qatar,Asistente
-Brooke,Mayo,,United States,Asistente
-Ahmad,Al Roalle,,Jordan,Asistente
-Jun,Mihara,,Japan,Asistente
-Lyes,Arfa,,Canada,Asistente
-Juan Carlos,Mora,,Costa Rica,Asistente
-Kyle,Atkins,,United States,Asistente
-David,Moran,,El Salvador,Asistente
-Carlos,Barreiro,,URU,Asistente
-Tulio,Moreno,,Venezuela,Asistente
-Micheal,Barwegen,,Canada,Asistente
-Alberto,Morin,,Mexico,Asistente
-Isaak,Bashevkin,,Norway,Asistente
-Cyril,Mugnier,,France,Asistente
-Adam,Kupsik,,Poland,Asistente
-Jose Enrique,Naranjo Perez,,Spain,Asistente
-Mahbod,Beigi,,Sweden,Asistente
-Cristian,Navarro,,Argentina,Asistente
-Juan Pablo,Belatti,,Argentina,Asistente
-Kathryn,Nesbitt,,United States,Asistente
-Gary,Beswick,,England,Asistente
-Elvis,Noupue,,Cameroon,Asistente
-Daniele,Bindoni,,Italy,Asistente
-Adam,Nunn,,England,Asistente
-Marco,Bisguerra,,Mexico,Asistente
-Michael,Orue,,Peru,Asistente
-Zakaria,Brinsi,,Morocco,Asistente
-Benjamin,Pages,,France,Asistente
-,Bruno Boschilia,,Brazil,Asistente
-Corey,Parker,,United States,Asistente
-,Bruno Pires,,Brazil,Asistente
-Antonio,Pupiro,,Nicaragua,Asistente
-Stuart,Burt,,England,Asistente
-,Rafael Alves,,Brazil,Asistente
-Eduardo,Cardozo,,Paraguay,Asistente
-Mehdi,Rahmouni,,France,Asistente
-Gabriel,Chade,,Argentina,Asistente
-Christian,Ramirez,,Honduras,Asistente
-,Danilo Manis,,Brazil,Asistente
-Sandra,Ramirez,,Mexico,Asistente
-Nicolas,Danos,,France,Asistente
-Jose,Retamal,,Chile,Asistente
-Stephane,De Almeida,,Switzerland,Asistente
-Miguel,Rocha,,Chile,Asistente
-Jan,De Vries,,Netherlands,Asistente
-Facundo,Rodriguez,,Argentina,Asistente
-Maximiliano,Del Yesso,,Argentina,Asistente
-Milciades,Saldivar,,Paraguay,Asistente
-Christian,Dietz,,Germany,Asistente
-Diego,Sanchez,,Spain,Asistente
-Boris,Ditsoga,,Gabon,Asistente
-Zakhele,Siwela,,South Africa,Asistente
-Jan Erik,Engan,,Norway,Asistente
-Andreas,Soderkvist,,Sweden,Asistente
-Rodrigo,Figueiredo,,Brazil,Asistente
-Hessel,Steegstra,,Netherlands,Asistente
-Timur,Gaynullin,,Uzbekistan,Asistente
-Nicolas,Taran,,URU,Asistente
-Mokrane,Gourari,,Algeria,Asistente
-Alberto,Tegoni,,Italy,Asistente
-Alexander,Guzman,,Colombia,Asistente
-Isaac,Trevis,,New Zealand,Asistente
-Ahmed,Hossam Taha,,Egypt,Asistente
-Andrey,Tsapenko,,Uzbekistan,Asistente
-,Jerson Santos,,Angola,Asistente
-Ferencz,Tunyogi,,Romania,Asistente
-Bruno,Jesus,,Portugal,Asistente
-Jorge,Urrego,,Venezuela,Asistente
-Robert,Kempter,,Germany,Asistente
-Caleb,Wales,,Trinidad and Tobago,Asistente
-Tomaz,Klancnik,,Slovenia,Asistente
-Abbes Akram,Zerhouni,,Algeria,Asistente
-Andraz,Kovacic,,Slovenia,Asistente
-Fei,Zhou,,China,Asistente
-Khamis,Al-Marri,,Qatar,VAR
-Abdullah,Alshehri,,Saudi Arabia,VAR
-Mahmoud,Ashour,,Egypt,VAR
-Ivan,Bebek,,Croatia,VAR
-Jerome,Brisard,,France,VAR
-Bastian,Dankert,,Germany,VAR
-Carlos,Del Cerro Grande,,Spain,VAR
-Willy,Delajod,,France,VAR
-Marco,Di Bello,,Italy,VAR
-Joe,Dickerson,,United States,VAR
-Hamza,El Fariq,,Morocco,VAR
-Shaun,Evans,,Australia,VAR
-Ming,Fu,,China,VAR
-Nicolas,Gallo,,Colombia,VAR
-Antonio,Garcia,,URU,VAR
-Jarred,Gillett,,England,VAR
-Leodan,Gonzalez,,URU,VAR
-Tatiana,Guzman,,Nicaragua,VAR
-Dennis,Higler,,Netherlands,VAR
-Tomasz,Kwiatkowski,,Poland,VAR
-Juan,Lara,,Chile,VAR
-Hernan,Mastrangelo,,Argentina,VAR
-Erick,Miranda,,Mexico,VAR
-,Mohammed Obaid Khadim,,United Arab Emirates,VAR
-Guillermo,Pacheco,,Mexico,VAR
-Fedayi,San,,Switzerland,VAR
-Juan,Soto,,Venezuela,VAR
-Rodolpho,Toski,,Brazil,VAR
-Bram,Van Driessche,,Belgium,VAR
-Armando,Villarreal,,United States,VAR
+,Omar al Ali,,United Arab Emirates,Principal,
+Kevin,Ortega,,Peru,Principal,
+Tori,Penso,,United States,Principal,
+Joao,Pinheiro,,Portugal,Principal,
+,Ramon Abatti,,Brazil,Principal,
+Cesar,Ramos,,Mexico,Principal,
+Andres,Rojas,,Colombia,Principal,
+Sandro,Schaerer,,Switzerland,Principal,
+Ilgiz,Tantashev,,Uzbekistan,Principal,
+Anthony,Taylor,,England,Principal,
+Gustavo,Tejera,,URU,Principal,
+Facundo,Tello,,Argentina,Principal,
+Abongile,Tom,,South Africa,Principal,
+Clement,Turpin,,France,Principal,
+Jesus,Valenzuela,,Venezuela,Principal,
+Slavko,Vincic,,Slovenia,Principal,
+,Wilton Sampaio,,Brazil,Principal,
+Felix,Zwayer,,Germany,Principal,
+Amos,Abeigne,,Gabon,Asistente,
+George,Lakrindis,,Australia,Asistente,
+Mahmoud,Abouelregal,,Egypt,Asistente,
+James,Lindsay,,Australia,Asistente,
+Mostafa,Akarkad,,Morocco,Asistente,
+Tomasz,Listkiewicz,,Poland,Asistente,
+Mohammed,Al Abakry,,Saudi Arabia,Asistente,
+Walter,Lopez,,Honduras,Asistente,
+Mohamed,Al Hammadi,,United Arab Emirates,Asistente,
+Luciano,Maia,,Portugal,Asistente,
+Mohammad,Al Kalaf,,Jordan,Asistente,
+James,Mainwaring,,England,Asistente,
+Saoud,Al Maqaleh,,Qatar,Asistente,
+Mihai,Marica,,Romania,Asistente,
+Taleb,Al Marri,,Qatar,Asistente,
+Brooke,Mayo,,United States,Asistente,
+Ahmad,Al Roalle,,Jordan,Asistente,
+Jun,Mihara,,Japan,Asistente,
+Lyes,Arfa,,Canada,Asistente,
+Juan Carlos,Mora,,Costa Rica,Asistente,
+Kyle,Atkins,,United States,Asistente,
+David,Moran,,El Salvador,Asistente,
+Carlos,Barreiro,,URU,Asistente,
+Tulio,Moreno,,Venezuela,Asistente,
+Micheal,Barwegen,,Canada,Asistente,
+Alberto,Morin,,Mexico,Asistente,
+Isaak,Bashevkin,,Norway,Asistente,
+Cyril,Mugnier,,France,Asistente,
+Adam,Kupsik,,Poland,Asistente,
+Jose Enrique,Naranjo Perez,,Spain,Asistente,
+Mahbod,Beigi,,Sweden,Asistente,
+Cristian,Navarro,,Argentina,Asistente,
+Juan Pablo,Belatti,,Argentina,Asistente,
+Kathryn,Nesbitt,,United States,Asistente,
+Gary,Beswick,,England,Asistente,
+Elvis,Noupue,,Cameroon,Asistente,
+Daniele,Bindoni,,Italy,Asistente,
+Adam,Nunn,,England,Asistente,
+Marco,Bisguerra,,Mexico,Asistente,
+Michael,Orue,,Peru,Asistente,
+Zakaria,Brinsi,,Morocco,Asistente,
+Benjamin,Pages,,France,Asistente,
+,Bruno Boschilia,,Brazil,Asistente,
+Corey,Parker,,United States,Asistente,
+,Bruno Pires,,Brazil,Asistente,
+Antonio,Pupiro,,Nicaragua,Asistente,
+Stuart,Burt,,England,Asistente,
+,Rafael Alves,,Brazil,Asistente,
+Eduardo,Cardozo,,Paraguay,Asistente,
+Mehdi,Rahmouni,,France,Asistente,
+Gabriel,Chade,,Argentina,Asistente,
+Christian,Ramirez,,Honduras,Asistente,
+,Danilo Manis,,Brazil,Asistente,
+Sandra,Ramirez,,Mexico,Asistente,
+Nicolas,Danos,,France,Asistente,
+Jose,Retamal,,Chile,Asistente,
+Stephane,De Almeida,,Switzerland,Asistente,
+Miguel,Rocha,,Chile,Asistente,
+Jan,De Vries,,Netherlands,Asistente,
+Facundo,Rodriguez,,Argentina,Asistente,
+Maximiliano,Del Yesso,,Argentina,Asistente,
+Milciades,Saldivar,,Paraguay,Asistente,
+Christian,Dietz,,Germany,Asistente,
+Diego,Sanchez,,Spain,Asistente,
+Boris,Ditsoga,,Gabon,Asistente,
+Zakhele,Siwela,,South Africa,Asistente,
+Jan Erik,Engan,,Norway,Asistente,
+Andreas,Soderkvist,,Sweden,Asistente,
+Rodrigo,Figueiredo,,Brazil,Asistente,
+Hessel,Steegstra,,Netherlands,Asistente,
+Timur,Gaynullin,,Uzbekistan,Asistente,
+Nicolas,Taran,,URU,Asistente,
+Mokrane,Gourari,,Algeria,Asistente,
+Alberto,Tegoni,,Italy,Asistente,
+Alexander,Guzman,,Colombia,Asistente,
+Isaac,Trevis,,New Zealand,Asistente,
+Ahmed,Hossam Taha,,Egypt,Asistente,
+Andrey,Tsapenko,,Uzbekistan,Asistente,
+,Jerson Santos,,Angola,Asistente,
+Ferencz,Tunyogi,,Romania,Asistente,
+Bruno,Jesus,,Portugal,Asistente,
+Jorge,Urrego,,Venezuela,Asistente,
+Robert,Kempter,,Germany,Asistente,
+Caleb,Wales,,Trinidad and Tobago,Asistente,
+Tomaz,Klancnik,,Slovenia,Asistente,
+Abbes Akram,Zerhouni,,Algeria,Asistente,
+Andraz,Kovacic,,Slovenia,Asistente,
+Fei,Zhou,,China,Asistente,
+Khamis,Al-Marri,,Qatar,VAR,
+Abdullah,Alshehri,,Saudi Arabia,VAR,
+Mahmoud,Ashour,,Egypt,VAR,
+Ivan,Bebek,,Croatia,VAR,
+Jerome,Brisard,,France,VAR,
+Bastian,Dankert,,Germany,VAR,
+Carlos,Del Cerro Grande,,Spain,VAR,
+Willy,Delajod,,France,VAR,
+Marco,Di Bello,,Italy,VAR,
+Joe,Dickerson,,United States,VAR,
+Hamza,El Fariq,,Morocco,VAR,
+Shaun,Evans,,Australia,VAR,
+Ming,Fu,,China,VAR,
+Nicolas,Gallo,,Colombia,VAR,
+Antonio,Garcia,,URU,VAR,
+Jarred,Gillett,,England,VAR,
+Leodan,Gonzalez,,URU,VAR,
+Tatiana,Guzman,,Nicaragua,VAR,
+Dennis,Higler,,Netherlands,VAR,
+Tomasz,Kwiatkowski,,Poland,VAR,
+Juan,Lara,,Chile,VAR,
+Hernan,Mastrangelo,,Argentina,VAR,
+Erick,Miranda,,Mexico,VAR,
+,Mohammed Obaid Khadim,,United Arab Emirates,VAR,
+Guillermo,Pacheco,,Mexico,VAR,
+Fedayi,San,,Switzerland,VAR,
+Juan,Soto,,Venezuela,VAR,
+Rodolpho,Toski,,Brazil,VAR,
+Bram,Van Driessche,,Belgium,VAR,
+Armando,Villarreal,,United States,VAR,

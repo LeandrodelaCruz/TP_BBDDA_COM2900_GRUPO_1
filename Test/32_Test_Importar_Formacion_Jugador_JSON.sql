@@ -136,5 +136,5 @@ GO
     N'C:\TP_BBDDA_COM2900_GRUPO_1-main\Archivos_Importacion\alineaciones_extraidas.json'
 */
 EXEC test.Importar_Formacion_Jugador_JSON_Test
-    @archivo = N'C:\TP_BBDDA_COM2900_GRUPO_1-main\Archivos_Importacion\alineaciones_extraidas.json';
+    @archivo = N'/var/opt/mssql/import/alineaciones_extraidas.json';
 GO
