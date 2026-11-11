@@ -8,25 +8,26 @@ Integrantes: Caro, Nicolás Darío; Clara, Lucas Nicolas; de la Cruz, Leandro Ar
 
 Se implementan tres roles de base de datos mediante procedimientos almacenados. Cada rol tiene un usuario de prueba WITHOUT LOGIN, sin contraseña y sin posibilidad de iniciar una conexión propia. Las pruebas se ejecutan desde una conexión DBA mediante EXECUTE AS USER y finalizan con REVERT, incluso ante errores capturables. No se crean roles de servidor ni se asigna db_owner a los usuarios.
 
-| Rol | Usuario de prueba | Permisos |
-| --- | --- | --- |
-| rol_admin_funcional | usr_prueba_admin | EXECUTE sobre los esquemas abm, negocio, importacion, carga y reportes. |
-| rol_gestor_publicidad | usr_prueba_publicidad | EXECUTE únicamente sobre los 28 SP publicitarios enumerados abajo. |
-| rol_consulta | usr_prueba_consulta | EXECUTE sobre el esquema reportes. |
+## Cuadro de permisos por rol
 
-| Operación | Administrador funcional | Gestor de publicidad | Consulta |
+Base de datos: `MUNDIALDEFUTBOL`. El cuadro refleja los permisos definidos en [00_Roles_Usuarios.sql](00_Roles_Usuarios.sql).
+
+| Permiso o ámbito | Administrador funcional (`rol_admin_funcional`) | Gestor de publicidad (`rol_gestor_publicidad`) | Consulta (`rol_consulta`) |
 | --- | --- | --- | --- |
-| ABM de anunciantes, regiones, campañas, piezas, destinos y asignaciones | Sí | Sí | No |
-| Generar asignación publicitaria | Sí | Sí | No |
-| Reportes de ocupación publicitaria y prime time | Sí | Sí | Sí |
-| Resto de reportes | Sí | No | Sí |
-| Resto de ABM y procesos de negocio | Sí | No | No |
-| Invocar SP de importación y carga | Sí (*) | No | No |
-| SELECT, INSERT, UPDATE o DELETE directos sobre dbo | No | No | No |
-| Administrar usuarios/roles o crear tablas/SP | No | No | No |
-| Ejecutar SP de configuración de seguridad | No | No | No |
+| Usuario de prueba | `usr_prueba_admin` | `usr_prueba_publicidad` | `usr_prueba_consulta` |
+| `EXECUTE` en `abm` | Todo el esquema | 25 SP publicitarios de la lista siguiente | Sin concesión |
+| `EXECUTE` en `negocio` | Todo el esquema | `negocio.Generar_Asignacion_Publicitaria` | Sin concesión |
+| `EXECUTE` en `importacion` | Todo el esquema (1) | Sin concesión | Sin concesión |
+| `EXECUTE` en `carga` | Todo el esquema (1) | Sin concesión | Sin concesión |
+| `EXECUTE` en `reportes` | Todo el esquema | `reportes.Reporte_Ocupacion_Publicitaria` y `reportes.Reporte_Matriz_Prime_Time` | Todo el esquema |
+| `SELECT`, `INSERT`, `UPDATE` y `DELETE` directos sobre el esquema `dbo` | DENY | DENY | DENY |
+| `ALTER ANY ROLE` y `ALTER ANY USER` en la base | DENY | DENY | DENY |
+| `CREATE TABLE` y `CREATE PROCEDURE` en la base | DENY | DENY | DENY |
+| `EXECUTE` de `dbo.Configurar_Roles_Entrega8` y `dbo.Crear_Usuarios_Prueba_Entrega8` | DENY | DENY | DENY |
 
-(*) El permiso EXECUTE habilita la invocación. Las importaciones existentes usan BULK INSERT u OPENROWSET con SQL dinámico y necesitan permisos adicionales del motor y acceso a los archivos. Este cambio no concede privilegios de servidor ni garantiza que un usuario WITHOUT LOGIN pueda hacer importaciones masivas. Las ejecuta el DBA hasta implementar y validar una delegación específica (por ejemplo, firma de módulos). Los SP que usan SQL dinámico requieren revisar sus permisos internos; la cadena de propiedad no cubre ese SQL.
+**Sin concesión** indica que el script no otorga ese permiso al rol. **DENY** indica una denegación explícita. El gestor de publicidad recibe 28 permisos `EXECUTE` por objeto, detallados en la sección siguiente.
+
+(1) El permiso `EXECUTE` habilita la invocación. Las importaciones masivas que usan `BULK INSERT` u `OPENROWSET` con SQL dinámico requieren permisos adicionales del motor y acceso a los archivos. En la configuración actual las ejecuta el DBA.
 
 ## Procedimientos autorizados al gestor de publicidad
 
