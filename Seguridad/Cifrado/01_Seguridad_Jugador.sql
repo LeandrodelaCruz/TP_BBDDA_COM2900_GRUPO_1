@@ -19,9 +19,9 @@ go
 set nocount on;
 go
 
-/* =========================================================
-   1. DATABASE MASTER KEY
-   ========================================================= */
+
+--   1. DATABASE MASTER KEY
+
 if not exists (
     select 1
     from sys.symmetric_keys
@@ -39,9 +39,9 @@ begin
 end;
 go
 
-/* =========================================================
-   2. CERTIFICADO
-   ========================================================= */
+
+ --  2. CERTIFICADO
+
 if not exists (
     select 1
     from sys.certificates
@@ -59,9 +59,9 @@ begin
 end;
 go
 
-/* =========================================================
-   3. CLAVE SIMETRICA AES-256
-   ========================================================= */
+
+--   3. CLAVE SIMETRICA AES-256
+
 if not exists (
     select 1
     from sys.symmetric_keys

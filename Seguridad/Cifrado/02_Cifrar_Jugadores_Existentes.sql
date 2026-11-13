@@ -22,9 +22,9 @@ go
 set nocount on;
 go
 
-/* =========================================================
-   FASE 1 - VALIDAR ESTADO Y AGREGAR COLUMNAS CIFRADAS
-   ========================================================= */
+
+--   FASE 1 - VALIDAR ESTADO Y AGREGAR COLUMNAS CIFRADAS
+
 if object_id(N'dbo.Jugador', N'U') is null
     throw 54001, N'No existe dbo.Jugador.', 1;
 
@@ -89,9 +89,9 @@ begin
 end;
 go
 
-/* =========================================================
-   FASE 2 - CIFRAR Y REEMPLAZAR COLUMNAS ORIGINALES
-   ========================================================= */
+
+--  FASE 2 - CIFRAR Y REEMPLAZAR COLUMNAS ORIGINALES
+
 set nocount on;
 
 declare
@@ -206,3 +206,4 @@ begin catch
 end catch;
 go
 
+select * from dbo.jugador;

@@ -17,9 +17,8 @@ go
 set nocount on;
 go
 
-/* =========================================================
-   FASE 1 - VALIDAR ESTADO Y RECREAR COLUMNAS ORIGINALES
-   ========================================================= */
+--   FASE 1 - VALIDAR ESTADO Y RECREAR COLUMNAS ORIGINALES
+
 if object_id(N'dbo.Jugador', N'U') is null
     throw 54300, N'No existe dbo.Jugador.', 1;
 
@@ -84,9 +83,8 @@ begin
 end;
 go
 
-/* =========================================================
-   FASE 2 - DESCIFRAR Y RESTAURAR LA ESTRUCTURA ORIGINAL
-   ========================================================= */
+--  FASE 2 - DESCIFRAR Y RESTAURAR LA ESTRUCTURA ORIGINAL
+
 set nocount on;
 
 declare

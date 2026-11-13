@@ -18,9 +18,9 @@ go
 set nocount on;
 go
 
-/* =========================================================
-   JUGADOR CIFRADO - ALTA
-   ========================================================= */
+
+--   JUGADOR CIFRADO - ALTA
+
 create or alter procedure abm.Jugador_Cifrado_Alta
     @fecha_nacimiento date,
     @club_origen nvarchar(100),
@@ -121,9 +121,9 @@ begin
 end;
 go
 
-/* =========================================================
-   JUGADOR CIFRADO - MODIFICACION
-   ========================================================= */
+
+--   JUGADOR CIFRADO - MODIFICACION
+
 create or alter procedure abm.Jugador_Cifrado_Modificar
     @id_jugador int,
     @fecha_nacimiento date,
@@ -220,9 +220,9 @@ begin
 end;
 go
 
-/* =========================================================
-   JUGADOR CIFRADO - BAJA
-   ========================================================= */
+
+--   JUGADOR CIFRADO - BAJA
+
 create or alter procedure abm.Jugador_Cifrado_Baja
     @id_jugador int
 as

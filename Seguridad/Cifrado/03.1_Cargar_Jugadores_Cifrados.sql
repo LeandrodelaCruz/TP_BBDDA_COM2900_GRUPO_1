@@ -21,9 +21,7 @@ go
 set nocount on;
 go
 
-------------------------------------------------------------
 -- VALIDACIONES PREVIAS
-------------------------------------------------------------
 
 if object_id(N'dbo.Jugador', N'U') is null
     throw 54200, N'No existe dbo.Jugador.', 1;
@@ -55,10 +53,7 @@ begin
 end;
 go
 
-
-------------------------------------------------------------
 -- OBTENER ALGUNAS SELECCIONES EXISTENTES
-------------------------------------------------------------
 
 declare
     @seleccion_1 int,

@@ -65,5 +65,3 @@ go
 
 exec test.Jugador_Descifrado_Test;
 go
-
-
