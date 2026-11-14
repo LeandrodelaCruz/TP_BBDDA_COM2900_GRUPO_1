@@ -20,7 +20,9 @@ CREATE OR ALTER PROCEDURE abm.Sede_Alta
     @ciudad NVARCHAR(80),
     @pais NVARCHAR(80),
     @capacidad INT,
-    @huso_horario VARCHAR(100)
+    @huso_horario VARCHAR(100),
+    @latitud DECIMAL(9,6) = NULL,
+    @longitud DECIMAL(9,6) = NULL
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -59,15 +61,22 @@ BEGIN
        )
         SET @errores += N'- Ya existe esa sede (mismo estadio, ciudad y país). ';
 
+    IF @latitud IS NOT NULL AND (@latitud < -90 OR @latitud > 90)
+        SET @errores += N'- La latitud debe estar entre -90 y 90. ';
+    IF @longitud IS NOT NULL AND (@longitud < -180 OR @longitud > 180)
+        SET @errores += N'- La longitud debe estar entre -180 y 180. ';
+
     IF @errores <> N'' THROW 50201, @errores, 1;
 
-    INSERT INTO dbo.Sede(nombre_estadio, ciudad, pais, capacidad, huso_horario)
+    INSERT INTO dbo.Sede(nombre_estadio, ciudad, pais, capacidad, huso_horario, latitud, longitud)
     VALUES (
         LTRIM(RTRIM(@nombre_estadio)),
         LTRIM(RTRIM(@ciudad)),
         LTRIM(RTRIM(@pais)),
         @capacidad,
-        LTRIM(RTRIM(@huso_horario))
+        LTRIM(RTRIM(@huso_horario)),
+        @latitud,
+        @longitud
     );
 
     SELECT CAST(SCOPE_IDENTITY() AS INT) AS id_sede_creada;
@@ -80,7 +89,9 @@ CREATE OR ALTER PROCEDURE abm.Sede_Modificar
     @ciudad NVARCHAR(80),
     @pais NVARCHAR(80),
     @capacidad INT,
-    @huso_horario VARCHAR(100)
+    @huso_horario VARCHAR(100),
+    @latitud DECIMAL(9,6) = NULL,
+    @longitud DECIMAL(9,6) = NULL
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -127,6 +138,11 @@ BEGIN
        )
         SET @errores += N'- Ya existe esa sede (mismo estadio, ciudad y país). ';
 
+    IF @latitud IS NOT NULL AND (@latitud < -90 OR @latitud > 90)
+        SET @errores += N'- La latitud debe estar entre -90 y 90. ';
+    IF @longitud IS NOT NULL AND (@longitud < -180 OR @longitud > 180)
+        SET @errores += N'- La longitud debe estar entre -180 y 180. ';
+
     IF @errores <> N'' THROW 50202, @errores, 1;
 
     UPDATE dbo.Sede
@@ -134,7 +150,9 @@ BEGIN
            ciudad = LTRIM(RTRIM(@ciudad)),
            pais = LTRIM(RTRIM(@pais)),
            capacidad = @capacidad,
-           huso_horario = LTRIM(RTRIM(@huso_horario))
+           huso_horario = LTRIM(RTRIM(@huso_horario)),
+           latitud = @latitud,
+           longitud = @longitud
      WHERE id_sede = @id_sede;
 
     SELECT * FROM dbo.Sede WHERE id_sede = @id_sede;

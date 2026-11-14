@@ -88,6 +88,10 @@ BEGIN
         @ciudad_raw NVARCHAR(200),
         @pais_raw NVARCHAR(100),
         @capacidad_raw NVARCHAR(50),
+        @latitud_raw NVARCHAR(100),
+        @longitud_raw NVARCHAR(100),
+        @latitud DECIMAL(9,6),
+        @longitud DECIMAL(9,6),
         @nombre_estadio NVARCHAR(300),
         @ciudad NVARCHAR(200),
         @pais NVARCHAR(100),
@@ -111,12 +115,14 @@ BEGIN
         ciudad NVARCHAR(80),
         pais NVARCHAR(80),
         capacidad INT,
-        huso_horario VARCHAR(100)
+        huso_horario VARCHAR(100),
+        latitud DECIMAL(9,6),
+        longitud DECIMAL(9,6)
     );
 
     -- Copia fija de las filas a procesar; conserva el orden del proceso original.
     SELECT ROW_NUMBER() OVER (ORDER BY (SELECT NULL)) AS orden_recorrido,
-           venue_id, stadium_name, city, country, capacity
+           venue_id, stadium_name, city, country, capacity, latitude, longitude
     INTO #Trabajo_Recorrido
     FROM #Sede_Staging;
     CREATE UNIQUE CLUSTERED INDEX IX_Trabajo_Recorrido
@@ -132,13 +138,17 @@ BEGIN
                @nombre_estadio_raw = stadium_name,
                @ciudad_raw = city,
                @pais_raw = country,
-               @capacidad_raw = capacity
+               @capacidad_raw = capacity,
+               @latitud_raw = latitude,
+               @longitud_raw = longitude
         FROM #Trabajo_Recorrido WHERE orden_recorrido = @fila_recorrido;
         BEGIN TRY
             SET @nombre_estadio = LTRIM(RTRIM(@nombre_estadio_raw));
             SET @ciudad = LTRIM(RTRIM(@ciudad_raw));
             SET @pais = NULL;
             SET @capacidad = TRY_CONVERT(INT, NULLIF(LTRIM(RTRIM(@capacidad_raw)), N''));
+            SET @latitud = TRY_CONVERT(DECIMAL(9,6), NULLIF(LTRIM(RTRIM(@latitud_raw)), N''));
+            SET @longitud = TRY_CONVERT(DECIMAL(9,6), NULLIF(LTRIM(RTRIM(@longitud_raw)), N''));
             SET @huso_horario = NULL;
             SET @id_sede = NULL;
 
@@ -180,6 +190,12 @@ BEGIN
 
             IF @capacidad IS NULL OR @capacidad <= 0
                 THROW 51116, 'La capacidad no es un número entero válido mayor que cero.', 1;
+
+            IF @latitud IS NULL OR @latitud < -90 OR @latitud > 90
+                THROW 51119, 'La latitud no es un número válido entre -90 y 90.', 1;
+
+            IF @longitud IS NULL OR @longitud < -180 OR @longitud > 180
+                THROW 51120, 'La longitud no es un número válido entre -180 y 180.', 1;
 
             /*
                 El CSV no incluye huso horario. Se deriva a partir de la ciudad del estadio.
@@ -230,7 +246,9 @@ BEGIN
                     @ciudad = @ciudad,
                     @pais = @pais,
                     @capacidad = @capacidad,
-                    @huso_horario = @huso_horario;
+                    @huso_horario = @huso_horario,
+                    @latitud = @latitud,
+                    @longitud = @longitud;
 
                 SET @insertados += 1;
             END
@@ -245,7 +263,9 @@ BEGIN
                     ciudad,
                     pais,
                     capacidad,
-                    huso_horario
+                    huso_horario,
+                    latitud,
+                    longitud
                 )
                 EXEC abm.Sede_Modificar
                     @id_sede = @id_sede,
@@ -253,7 +273,9 @@ BEGIN
                     @ciudad = @ciudad,
                     @pais = @pais,
                     @capacidad = @capacidad,
-                    @huso_horario = @huso_horario;
+                    @huso_horario = @huso_horario,
+                    @latitud = @latitud,
+                    @longitud = @longitud;
 
                 SET @actualizados += 1;
             END;

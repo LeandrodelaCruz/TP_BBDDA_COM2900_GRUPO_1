@@ -1,8 +1,17 @@
-﻿<Solution>
+<Solution>
   <Configurations>
     <BuildType Name="Default" />
     <Platform Name="Default" />
   </Configurations>
+  <Folder Name="/Stored_Procedures_Reportes/">
+    <File Path="Stored_Procedures_Reportes/00_Reportes_Goleadores.sql" />
+    <File Path="Stored_Procedures_Reportes/01_Reportes_Tarjetas.sql" />
+    <File Path="Stored_Procedures_Reportes/02_Reporte_Designaciones_Arbitrales_XML.sql" />
+    <File Path="Stored_Procedures_Reportes/03_Reporte_Ocupacion_Publicitaria.sql" />
+    <File Path="Stored_Procedures_Reportes/04_Reporte_Matriz_Prime_Time.sql" />
+    <File Path="Stored_Procedures_Reportes/05_Reporte_Selecciones_Plantillas_XML.sql" />
+    <File Path="Stored_Procedures_Reportes/06_Reporte_Resultados.sql" />
+  </Folder>
   <Folder Name="/Table/">
     <File Path="Table/00_Script_DB_Schemas_Creacion.sql" />
     <File Path="Table/01_Script_Tablas_Creacion.sql" />
@@ -62,6 +71,9 @@
     <File Path="Stored_Procedures_Negocio/16_Designacion_Arbitral.sql" />
     <File Path="Stored_Procedures_Negocio/14_Registrar_Reemplazo.sql" />
     <File Path="Stored_Procedures_Negocio/15_Generar_Asignacion_Publicitaria.sql" />
+    <File Path="Stored_Procedures_Negocio/19_Simular_Penales.sql" />
+    <File Path="Stored_Procedures_Negocio/20_Simular_Partido.sql" />
+    <File Path="Stored_Procedures_Negocio/21_Completar_Partidos.sql" />
     <File Path="Stored_Procedures_Negocio/README.md" />
   </Folder>
   <Folder Name="/Test/">
@@ -110,6 +122,8 @@
   </Folder>
   <Folder Name="/Test_Negocio/">
     <File Path="Test_Negocio/13_Test_Mapa_Cruces.sql" />
+    <File Path="Test_Negocio/20_Test_Simular_Partido.sql" />
+    <File Path="Test_Negocio/21_Test_Completar_Partidos.sql" />
     <File Path="Test_Negocio/README_Verificacion_Arbitral.md" />
     <File Path="Test_Negocio/16_Test_Designacion_Arbitral.sql" />
     <File Path="Test_Negocio/14_Test_Registrar_Reemplazo.sql" />
@@ -123,26 +137,18 @@
     <File Path="Test_Importaciones/Datos_Recorridos/12_Jugadores_26.json" />
     <File Path="Test_Importaciones/Datos_Recorridos/12_Jugadores_Limite.json" />
   </Folder>
-  <Folder Name="/Reportes/">
-    <File Path="Reportes/README_Reporte_Resultados.md" />
-    <File Path="Reportes/25_Test_Reporte_Resultados.sql" />
-    <File Path="Reportes/24_Reporte_Resultados.sql" />
-    <File Path="Reportes/Ejemplo_Selecciones_Plantillas.xml" />
-    <File Path="Reportes/README_Reporte_Selecciones_Plantillas.md" />
-    <File Path="Reportes/21_Test_Reporte_Selecciones_Plantillas_XML.sql" />
-    <File Path="Reportes/20_Reporte_Selecciones_Plantillas_XML.sql" />
-    <File Path="Reportes/Ejemplo_Designaciones_Arbitrales.xml" />
-    <File Path="Reportes/README_Reporte_Designaciones_Arbitrales.md" />
-    <File Path="Reportes/01_Reporte_Ocupacion_Publicitaria.sql" />
-    <File Path="Reportes/02_Test_Reporte_Ocupacion_Publicitaria.sql" />
-    <File Path="Reportes/16_Reporte_Matriz_Prime_Time.sql" />
-    <File Path="Reportes/17_Test_Reporte_Matriz_Prime_Time.sql" />
-    <File Path="Reportes/18_Reporte_Designaciones_Arbitrales_XML.sql" />
-    <File Path="Reportes/19_Test_Reporte_Designaciones_Arbitrales_XML.sql" />
-  </Folder>
   <Folder Name="/Doc/">
     <File Path="Doc/Com2900_Grupo01_Entrega6_Guia_Arbitral.pdf" />
     <File Path="Doc/Com2900_Grupo01_Entrega6_Verificacion_Arbitral.pdf" />
+  </Folder>
+  <Folder Name="/Test_Reportes/">
+    <File Path="Test_Reportes/00_Test_Reportes_Goleadores.sql" />
+    <File Path="Test_Reportes/01_Test_Reportes_Tarjetas.sql" />
+    <File Path="Test_Reportes/02_Test_Reporte_Designaciones_Arbitrales_XML.sql" />
+    <File Path="Test_Reportes/03_Test_Reporte_Ocupacion_Publicitaria.sql" />
+    <File Path="Test_Reportes/04_Test_Reporte_Matriz_Prime_Time.sql" />
+    <File Path="Test_Reportes/05_Test_Reporte_Selecciones_Plantillas_XML.sql" />
+    <File Path="Test_Reportes/06_Test_Reporte_Resultados.sql" />
   </Folder>
   <Project Path="Solucion.ssmssqlproj" Type="4f2e2c19-372f-40d8-9fa7-9d2138c6997a">
     <Platform Project="?" />
