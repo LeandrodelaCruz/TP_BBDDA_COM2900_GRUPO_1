@@ -1,8 +1,13 @@
-﻿<Solution>
+<Solution>
   <Configurations>
     <BuildType Name="Default" />
     <Platform Name="Default" />
   </Configurations>
+  <Folder Name="/Stored_Procedures_Roles/">
+    <File Path="Stored_Procedures_Roles/00_Roles_Usuarios.sql" />
+    <File Path="Stored_Procedures_Roles/01_Configurar_Roles_Usuarios.sql" />
+    <File Path="Stored_Procedures_Roles/02_Consultar_Usuarios_Roles.sql" />
+  </Folder>
   <Folder Name="/Table/">
     <File Path="Table/00_Script_DB_Schemas_Creacion.sql" />
     <File Path="Table/01_Script_Tablas_Creacion.sql" />
@@ -38,9 +43,12 @@
   </Folder>
   <Folder Name="/Stored_Procedures_Importaciones/">
     <File Path="Stored_Procedures_Importaciones/README_Sanciones_Arbitrales.md" />
+    <File Path="Stored_Procedures_Importaciones/17_Importar_Incidencia_CSV.sql" />
     <File Path="Stored_Procedures_Importaciones/18_Cargar_Sanciones_Arbitrales_Manuales.sql" />
     <File Path="Stored_Procedures_Importaciones/README_Designaciones_Arbitrales.md" />
     <File Path="Stored_Procedures_Importaciones/16_Cargar_Designaciones_Arbitrales.sql" />
+    <File Path="Stored_Procedures_Importaciones/11_Importar_Formacion_JSON.sql" />
+    <File Path="Stored_Procedures_Importaciones/12_Importar_Formacion_Jugador_JSON.sql" />
     <File Path="Stored_Procedures_Importaciones/13.1_Cargar_Cruces_Dataset.sql" />
     <File Path="Stored_Procedures_Importaciones/01_Importar_Anunciante_CSV.sql" />
     <File Path="Stored_Procedures_Importaciones/01_Importar_Seleccion_CSV.sql" />
@@ -62,6 +70,9 @@
     <File Path="Stored_Procedures_Negocio/16_Designacion_Arbitral.sql" />
     <File Path="Stored_Procedures_Negocio/14_Registrar_Reemplazo.sql" />
     <File Path="Stored_Procedures_Negocio/15_Generar_Asignacion_Publicitaria.sql" />
+    <File Path="Stored_Procedures_Negocio/19_Simular_Penales.sql" />
+    <File Path="Stored_Procedures_Negocio/20_Simular_Partido.sql" />
+    <File Path="Stored_Procedures_Negocio/21_Completar_Partidos.sql" />
     <File Path="Stored_Procedures_Negocio/README.md" />
   </Folder>
   <Folder Name="/Test/">
