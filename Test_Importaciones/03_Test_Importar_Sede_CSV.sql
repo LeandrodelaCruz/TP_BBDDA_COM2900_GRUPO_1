@@ -33,13 +33,7 @@ BEGIN
         @archivo = @archivo;
 
     PRINT '===== SEDES CARGADAS =====';
-    SELECT
-        id_sede,
-        nombre_estadio,
-        ciudad,
-        pais,
-        capacidad,
-        huso_horario
+    SELECT *
     FROM dbo.Sede
     ORDER BY id_sede;
 

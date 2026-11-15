@@ -9,10 +9,10 @@
     - Rodriguez Elias Uriel
 
     Descripcion:
-    Test de los reportes de tarjetas (XML):
+    Test de los reportes de tarjetas (resultsets, sin XML):
       - reportes.Tarjetas_Por_Seleccion
       - reportes.Tarjetas_Por_Jugador (incluye suspensiones por acumulacion)
-    Cada reporte se ejecuta y se muestra el XML resultante. Ademas se
+    Cada reporte se ejecuta y se muestran las filas resultantes. Ademas se
     verifica que los totales de amarillas y rojas de ambos reportes coincidan
     con las incidencias AMONESTACION y EXPULSION.
 
@@ -40,28 +40,34 @@ BEGIN
     DECLARE @amarillas_incidencias INT, @rojas_incidencias INT;
     DECLARE @amarillas_seleccion INT, @rojas_seleccion INT;
     DECLARE @amarillas_jugador INT, @rojas_jugador INT;
-    DECLARE @reporte_seleccion TABLE (reporte_xml XML);
-    DECLARE @reporte_jugador TABLE (reporte_xml XML);
+    DECLARE @reporte_seleccion TABLE (
+        seleccion NVARCHAR(100), amarillas INT, rojas INT
+    );
+    DECLARE @reporte_jugador TABLE (
+        id_jugador INT, seleccion NVARCHAR(100), jugador NVARCHAR(200), amarillas INT, rojas INT,
+        id_partido_amarilla_1 INT, id_partido_amarilla_2 INT, partido_suspendido INT,
+        estado_suspension NVARCHAR(20)
+    );
 
     /* ------------------------------------------------------------------
-       1. Tarjetas por seleccion (XML).
+       1. Tarjetas por seleccion.
     ------------------------------------------------------------------ */
-    PRINT '--- Tarjetas por seleccion (XML) ---';
-    INSERT INTO @reporte_seleccion (reporte_xml)
+    PRINT '--- Tarjetas por seleccion ---';
+    INSERT INTO @reporte_seleccion (seleccion, amarillas, rojas)
     EXEC reportes.Tarjetas_Por_Seleccion;
 
-    SELECT r.reporte_xml AS tarjetas_por_seleccion
-    FROM @reporte_seleccion r;
+    SELECT * FROM @reporte_seleccion;
 
     /* ------------------------------------------------------------------
-       2. Tarjetas por jugador con suspensiones (XML).
+       2. Tarjetas por jugador con suspensiones.
     ------------------------------------------------------------------ */
-    PRINT '--- Tarjetas por jugador y suspensiones (XML) ---';
-    INSERT INTO @reporte_jugador (reporte_xml)
+    PRINT '--- Tarjetas por jugador y suspensiones ---';
+    INSERT INTO @reporte_jugador (id_jugador, seleccion, jugador, amarillas, rojas,
+                                  id_partido_amarilla_1, id_partido_amarilla_2,
+                                  partido_suspendido, estado_suspension)
     EXEC reportes.Tarjetas_Por_Jugador;
 
-    SELECT r.reporte_xml AS tarjetas_por_jugador
-    FROM @reporte_jugador r;
+    SELECT * FROM @reporte_jugador;
 
     /* ------------------------------------------------------------------
        3. Verificacion de totales contra incidencias.
@@ -74,15 +80,17 @@ BEGIN
     FROM dbo.Incidencia
     WHERE tipo = 'EXPULSION';
 
-    SELECT @amarillas_seleccion = COALESCE(SUM(t.n.value('@amarillas', 'INT')), 0),
-           @rojas_seleccion     = COALESCE(SUM(t.n.value('@rojas', 'INT')), 0)
-    FROM @reporte_seleccion r
-    CROSS APPLY r.reporte_xml.nodes('//Seleccion') AS t(n);
+    /* Cada jugador se repite una fila por suspension: sumar solo una vez por jugador. */
+    SELECT @amarillas_seleccion = COALESCE(SUM(amarillas), 0),
+           @rojas_seleccion     = COALESCE(SUM(rojas), 0)
+    FROM @reporte_seleccion;
 
-    SELECT @amarillas_jugador = COALESCE(SUM(t.n.value('@amarillas', 'INT')), 0),
-           @rojas_jugador     = COALESCE(SUM(t.n.value('@rojas', 'INT')), 0)
-    FROM @reporte_jugador r
-    CROSS APPLY r.reporte_xml.nodes('//Jugador') AS t(n);
+    SELECT @amarillas_jugador = COALESCE(SUM(t.amarillas), 0),
+           @rojas_jugador     = COALESCE(SUM(t.rojas), 0)
+    FROM (
+        SELECT DISTINCT id_jugador, amarillas, rojas
+        FROM @reporte_jugador
+    ) t;
 
     SELECT @amarillas_incidencias AS amarillas_incidencias,
            @rojas_incidencias     AS rojas_incidencias,
@@ -98,6 +106,33 @@ BEGIN
         PRINT 'OK - Los totales de tarjetas de ambos reportes coinciden con las incidencias.';
     ELSE
         PRINT 'ERROR - Los totales de tarjetas no coinciden con las incidencias.';
+
+    /* ------------------------------------------------------------------
+       4. Verificacion de las vistas usadas por los reportes.
+    ------------------------------------------------------------------ */
+    DECLARE @amarillas_vista_jugador INT, @rojas_vista_jugador INT;
+    DECLARE @amarillas_vista_seleccion INT, @rojas_vista_seleccion INT;
+
+    SELECT @amarillas_vista_jugador = COALESCE(SUM(amarillas), 0),
+           @rojas_vista_jugador     = COALESCE(SUM(rojas), 0)
+    FROM reportes.v_Tarjetas_Por_Jugador;
+
+    SELECT @amarillas_vista_seleccion = COALESCE(SUM(amarillas), 0),
+           @rojas_vista_seleccion     = COALESCE(SUM(rojas), 0)
+    FROM reportes.v_Tarjetas_Por_Seleccion;
+
+    SELECT @amarillas_vista_jugador    AS amarillas_vista_jugador,
+           @rojas_vista_jugador        AS rojas_vista_jugador,
+           @amarillas_vista_seleccion  AS amarillas_vista_seleccion,
+           @rojas_vista_seleccion      AS rojas_vista_seleccion;
+
+    IF @amarillas_vista_jugador = @amarillas_incidencias
+       AND @rojas_vista_jugador = @rojas_incidencias
+       AND @amarillas_vista_seleccion = @amarillas_incidencias
+       AND @rojas_vista_seleccion = @rojas_incidencias
+        PRINT 'OK - Las vistas de tarjetas coinciden con las incidencias.';
+    ELSE
+        PRINT 'ERROR - Las vistas de tarjetas no coinciden con las incidencias.';
 END;
 GO
 
