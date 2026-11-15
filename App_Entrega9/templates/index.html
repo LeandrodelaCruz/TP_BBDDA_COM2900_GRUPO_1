@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Gestión de Anunciantes</title>
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='styles.css') }}"
+    >
+</head>
+
+<body>
+    <main class="contenedor">
+        <header class="encabezado">
+            <div>
+                <p class="eyebrow">MUNDIALDEFUTBOL · ENTREGA 9</p>
+                <h1>Gestión de anunciantes</h1>
+                <p class="subtitulo">
+                    Aplicación web conectada a los Stored Procedures del esquema
+                    <strong>abm</strong>.
+                </p>
+            </div>
+
+            <div class="estado">
+                <span class="punto"></span>
+                SQL Server · localhost:1433
+            </div>
+        </header>
+
+        {% if error_conexion %}
+            <div class="mensaje error">
+                <strong>Error:</strong> {{ error_conexion }}
+            </div>
+        {% endif %}
+
+        {% with mensajes = get_flashed_messages(with_categories=true) %}
+            {% for categoria, mensaje in mensajes %}
+                <div class="mensaje {{ categoria }}">
+                    {{ mensaje }}
+                </div>
+            {% endfor %}
+        {% endwith %}
+
+        <section class="grid-superior">
+            <article class="tarjeta">
+                <div class="titulo-tarjeta">
+                    <div>
+                        <span class="numero">01</span>
+                        <h2>Alta</h2>
+                    </div>
+                    <code>abm.Anunciante_Alta</code>
+                </div>
+
+                <form method="post" action="{{ url_for('alta') }}">
+                    <label>
+                        Nombre
+                        <input
+                            name="nombre"
+                            maxlength="120"
+                            placeholder="Ej.: TEST Entrega 9"
+                            required
+                        >
+                    </label>
+
+                    <label>
+                        País
+                        <input
+                            name="pais"
+                            maxlength="80"
+                            placeholder="Ej.: Argentina"
+                            required
+                        >
+                    </label>
+
+                    <button class="primario" type="submit">
+                        Crear anunciante
+                    </button>
+                </form>
+
+                <p class="ayuda">
+                    Flask envía los parámetros al SP. La validación real se
+                    ejecuta en SQL Server.
+                </p>
+            </article>
+
+            <article class="tarjeta">
+                <div class="titulo-tarjeta">
+                    <div>
+                        <span class="numero">02</span>
+                        <h2>Consultar por ID</h2>
+                    </div>
+                    <code>abm.Anunciante_ConsultarPorId</code>
+                </div>
+
+                <form method="get" action="{{ url_for('index') }}">
+                    <label>
+                        ID del anunciante
+                        <input
+                            type="number"
+                            min="1"
+                            name="id"
+                            value="{{ id_busqueda }}"
+                            placeholder="Ej.: 1"
+                            required
+                        >
+                    </label>
+
+                    <button class="secundario" type="submit">
+                        Consultar
+                    </button>
+                </form>
+
+                {% if buscado %}
+                    <div class="resultado-busqueda">
+                        <span>ID {{ buscado.id_anunciante }}</span>
+                        <strong>{{ buscado.nombre }}</strong>
+                        <small>{{ buscado.pais }}</small>
+                    </div>
+                {% endif %}
+            </article>
+        </section>
+
+        <section class="tarjeta tabla-tarjeta">
+            <div class="titulo-tarjeta">
+                <div>
+                    <span class="numero">03</span>
+                    <h2>Listado / ABM</h2>
+                </div>
+                <code>abm.Anunciante_Listar</code>
+            </div>
+
+            <div class="tabla-scroll">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>País</th>
+                            <th>Modificar</th>
+                            <th>Baja</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for anunciante in anunciantes %}
+                            <tr>
+                                <td class="id">
+                                    {{ anunciante.id_anunciante }}
+                                </td>
+
+                                <form
+                                    method="post"
+                                    action="{{ url_for(
+                                        'modificar',
+                                        id_anunciante=anunciante.id_anunciante
+                                    ) }}"
+                                >
+                                    <td>
+                                        <input
+                                            name="nombre"
+                                            maxlength="120"
+                                            value="{{ anunciante.nombre }}"
+                                            required
+                                        >
+                                    </td>
+
+                                    <td>
+                                        <input
+                                            name="pais"
+                                            maxlength="80"
+                                            value="{{ anunciante.pais }}"
+                                            required
+                                        >
+                                    </td>
+
+                                    <td>
+                                        <button
+                                            class="boton-tabla"
+                                            type="submit"
+                                        >
+                                            Guardar
+                                        </button>
+                                    </td>
+                                </form>
+
+                                <td>
+                                    <form
+                                        method="post"
+                                        action="{{ url_for(
+                                            'baja',
+                                            id_anunciante=anunciante.id_anunciante
+                                        ) }}"
+                                        onsubmit="
+                                            return confirm(
+                                                '¿Eliminar este anunciante?'
+                                            );
+                                        "
+                                    >
+                                        <button
+                                            class="peligro"
+                                            type="submit"
+                                        >
+                                            Eliminar
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td class="vacio" colspan="5">
+                                    No hay anunciantes para mostrar.
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <p class="ayuda inferior">
+                Para la demostración conviene crear un registro
+                <strong>TEST Entrega 9</strong>, modificarlo y eliminarlo,
+                sin alterar los anunciantes originales del módulo publicitario.
+            </p>
+        </section>
+    </main>
+</body>
+</html>

@@ -22,7 +22,7 @@ go
 
 --   1. DATABASE MASTER KEY
 
-if not exists (
+if not exists ( -- Crea la master key si no existe
     select 1
     from sys.symmetric_keys
     where name = N'##MS_DatabaseMasterKey##'
@@ -59,7 +59,6 @@ begin
 end;
 go
 
-
 --   3. CLAVE SIMETRICA AES-256
 
 if not exists (
@@ -68,9 +67,9 @@ if not exists (
     where name = N'Clave_Jugador'
 )
 begin
-    create symmetric key Clave_Jugador
-    with algorithm = AES_256
-    encryption by certificate Certificado_Jugador;
+    create symmetric key Clave_Jugador -- LLAVE (La clave que usamos para cifrar)
+    with algorithm = AES_256 -- METODO
+    encryption by certificate Certificado_Jugador; --Protegida por 
 
     print 'OK - Clave_Jugador AES-256 creada.';
 end

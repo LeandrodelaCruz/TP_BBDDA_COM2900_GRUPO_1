@@ -48,7 +48,7 @@ go
 --PRUEBAS
 
 -- Datos realmente almacenados
---select * from dbo.Jugador;
+select * from dbo.Jugador;
 
 -- Datos con al vista
-select * from dbo.vw_Jugador_Descifrado;
+--select * from dbo.vw_Jugador_Descifrado;
