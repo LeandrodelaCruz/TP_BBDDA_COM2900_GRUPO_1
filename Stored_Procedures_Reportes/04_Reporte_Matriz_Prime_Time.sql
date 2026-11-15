@@ -34,9 +34,7 @@ as
 begin
     set nocount on;
 
-    ------------------------------------------------------------
     -- 1. VALIDACIONES DE PARAMETROS
-    ------------------------------------------------------------
 
     if @id_partido is not null and @id_partido <= 0
         throw 53201, 'El id_partido debe ser mayor que cero.', 1;
