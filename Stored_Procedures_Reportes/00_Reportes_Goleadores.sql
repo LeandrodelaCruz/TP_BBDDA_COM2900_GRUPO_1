@@ -9,7 +9,7 @@
     - Rodriguez Elias Uriel
 
     Descripcion:
-    Reportes de goleadores. Los tres retornan un unico campo XML.
+    Reportes de goleadores. Los tres devuelven filas leidas de las vistas reportes.v_Goles_*.
       - reportes.Goleadores_Por_Seleccion : goleadores agrupados por seleccion.
       - reportes.Goleadores_Por_Fase      : goleadores agrupados por fase.
       - reportes.Goleadores_Por_Torneo    : goleadores de todo el torneo.
@@ -34,6 +34,67 @@ IF SCHEMA_ID(N'reportes') IS NULL
 GO
 
 /* ---------------------------------------------------------------
+   0. Vistas para Power BI (consultables como tablas)
+   Mismo criterio de conteo que los procedimientos de este archivo.
+   --------------------------------------------------------------- */
+CREATE OR ALTER VIEW reportes.v_Goles_Por_Jugador
+AS
+    SELECT i.id_jugador,
+           j.nombre + N' ' + j.apellido AS jugador,
+           s.id_seleccion,
+           s.pais AS seleccion,
+           j.apellido,
+           j.nombre,
+           COUNT(*) AS goles
+    FROM dbo.Incidencia i
+    JOIN dbo.Jugador j   ON j.id_jugador = i.id_jugador
+    JOIN dbo.Seleccion s ON s.id_seleccion = j.id_seleccion
+    WHERE i.tipo IN ('GOL', 'GOL DE PENAL')
+      AND i.periodo <> 'PENALES'
+    GROUP BY i.id_jugador, j.nombre, j.apellido, s.id_seleccion, s.pais;
+GO
+
+CREATE OR ALTER VIEW reportes.v_Goles_Por_Seleccion
+AS
+    SELECT s.id_seleccion,
+           s.pais AS seleccion,
+           COALESCE(SUM(gj.goles), 0) AS total_goles
+    FROM dbo.Seleccion s
+    LEFT JOIN reportes.v_Goles_Por_Jugador gj ON gj.id_seleccion = s.id_seleccion
+    GROUP BY s.id_seleccion, s.pais;
+GO
+
+CREATE OR ALTER VIEW reportes.v_Goles_Por_Fase
+AS
+    SELECT p.fase,
+           COUNT(*) AS goles
+    FROM dbo.Incidencia i
+    JOIN dbo.Partido p ON p.id_partido = i.id_partido
+    WHERE i.tipo IN ('GOL', 'GOL DE PENAL')
+      AND i.periodo <> 'PENALES'
+    GROUP BY p.fase;
+GO
+
+CREATE OR ALTER VIEW reportes.v_Goles_Por_Fase_Jugador
+AS
+    SELECT p.fase,
+           i.id_jugador,
+           j.nombre + N' ' + j.apellido AS jugador,
+           j.apellido,
+           j.nombre,
+           s.id_seleccion,
+           s.pais AS seleccion,
+           COUNT(*) AS goles
+    FROM dbo.Incidencia i
+    JOIN dbo.Partido p   ON p.id_partido = i.id_partido
+    JOIN dbo.Jugador j   ON j.id_jugador = i.id_jugador
+    JOIN dbo.Seleccion s ON s.id_seleccion = j.id_seleccion
+    WHERE i.tipo IN ('GOL', 'GOL DE PENAL')
+      AND i.periodo <> 'PENALES'
+    GROUP BY p.fase, i.id_jugador, j.nombre, j.apellido, s.id_seleccion, s.pais;
+GO
+
+/* ---------------------------------------------------------------
    1. Goleadores por seleccion
    --------------------------------------------------------------- */
 CREATE OR ALTER PROCEDURE reportes.Goleadores_Por_Seleccion
@@ -41,34 +102,14 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
-    WITH goles_jugador AS
-    (
-        SELECT i.id_jugador, COUNT(*) AS goles
-        FROM dbo.Incidencia i
-        WHERE i.tipo IN ('GOL', 'GOL DE PENAL')
-          AND i.periodo <> 'PENALES'
-        GROUP BY i.id_jugador
-    )
-    SELECT (
-        SELECT s.pais AS [@pais],
-               (SELECT COALESCE(SUM(gj.goles), 0)
-                FROM goles_jugador gj
-                JOIN dbo.Jugador jx ON jx.id_jugador = gj.id_jugador
-                WHERE jx.id_seleccion = s.id_seleccion) AS [@total_goles],
-               (SELECT j.nombre + N' ' + j.apellido AS [@jugador],
-                       gj.goles                    AS [@goles]
-                FROM goles_jugador gj
-                JOIN dbo.Jugador j ON j.id_jugador = gj.id_jugador
-                WHERE j.id_seleccion = s.id_seleccion
-                ORDER BY gj.goles DESC, j.apellido, j.nombre
-                FOR XML PATH('Goleador'), TYPE) AS [Goleadores]
-        FROM dbo.Seleccion s
-        WHERE EXISTS (SELECT 1 FROM goles_jugador gj
-                      JOIN dbo.Jugador jx ON jx.id_jugador = gj.id_jugador
-                      WHERE jx.id_seleccion = s.id_seleccion)
-        ORDER BY s.pais
-        FOR XML PATH('Seleccion'), ROOT('Goleadores_Por_Seleccion'), TYPE
-    ) AS reporte_xml;
+    SELECT gs.seleccion,
+           gs.total_goles,
+           gj.jugador,
+           gj.goles
+    FROM reportes.v_Goles_Por_Seleccion gs
+    JOIN reportes.v_Goles_Por_Jugador gj ON gj.id_seleccion = gs.id_seleccion
+    WHERE gs.total_goles > 0
+    ORDER BY gs.seleccion, gj.goles DESC, gj.apellido, gj.nombre;
 END;
 GO
 
@@ -80,30 +121,12 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
-    WITH goles_fase AS
-    (
-        SELECT p.fase, i.id_jugador, COUNT(*) AS goles
-        FROM dbo.Incidencia i
-        JOIN dbo.Partido p ON p.id_partido = i.id_partido
-        WHERE i.tipo IN ('GOL', 'GOL DE PENAL')
-          AND i.periodo <> 'PENALES'
-        GROUP BY p.fase, i.id_jugador
-    )
-    SELECT (
-        SELECT f.fase AS [@fase],
-               (SELECT j.nombre + N' ' + j.apellido AS [@jugador],
-                       s.pais                       AS [@seleccion],
-                       gf.goles                     AS [@goles]
-                FROM goles_fase gf
-                JOIN dbo.Jugador j ON j.id_jugador = gf.id_jugador
-                JOIN dbo.Seleccion s ON s.id_seleccion = j.id_seleccion
-                WHERE gf.fase = f.fase
-                ORDER BY gf.goles DESC, j.apellido, j.nombre
-                FOR XML PATH('Goleador'), TYPE) AS [Goleadores]
-        FROM (SELECT DISTINCT fase FROM goles_fase) f
-        ORDER BY f.fase
-        FOR XML PATH('Fase'), ROOT('Goleadores_Por_Fase'), TYPE
-    ) AS reporte_xml;
+    SELECT gf.fase,
+           gf.jugador,
+           gf.seleccion,
+           gf.goles
+    FROM reportes.v_Goles_Por_Fase_Jugador gf
+    ORDER BY gf.fase, gf.goles DESC, gf.apellido, gf.nombre;
 END;
 GO
 
@@ -115,23 +138,10 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
-    WITH goles_jugador AS
-    (
-        SELECT i.id_jugador, COUNT(*) AS goles
-        FROM dbo.Incidencia i
-        WHERE i.tipo IN ('GOL', 'GOL DE PENAL')
-          AND i.periodo <> 'PENALES'
-        GROUP BY i.id_jugador
-    )
-    SELECT (
-        SELECT j.nombre + N' ' + j.apellido AS [@jugador],
-               s.pais                       AS [@seleccion],
-               gj.goles                     AS [@goles]
-        FROM goles_jugador gj
-        JOIN dbo.Jugador j ON j.id_jugador = gj.id_jugador
-        JOIN dbo.Seleccion s ON s.id_seleccion = j.id_seleccion
-        ORDER BY gj.goles DESC, j.apellido, j.nombre
-        FOR XML PATH('Goleador'), ROOT('Goleadores_Torneo'), TYPE
-    ) AS reporte_xml;
+    SELECT gj.jugador,
+           gj.seleccion,
+           gj.goles
+    FROM reportes.v_Goles_Por_Jugador gj
+    ORDER BY gj.goles DESC, gj.apellido, gj.nombre;
 END;
 GO

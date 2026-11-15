@@ -70,14 +70,36 @@ BEGIN
         pais NVARCHAR(80) NOT NULL,
         capacidad INT NOT NULL,
         huso_horario VARCHAR(100) NOT NULL,
+        latitud DECIMAL(9,6) NULL,
+        longitud DECIMAL(9,6) NULL,
 
         CONSTRAINT PK_Sede
             PRIMARY KEY (id_sede),
 
         CONSTRAINT CK_Sede_Capacidad
-            CHECK (capacidad > 0)
+            CHECK (capacidad > 0),
+
+        CONSTRAINT CK_Sede_Latitud
+            CHECK (latitud BETWEEN -90 AND 90),
+
+        CONSTRAINT CK_Sede_Longitud
+            CHECK (longitud BETWEEN -180 AND 180)
     );
 END;
+GO
+
+/* Bases ya creadas antes de esta entrega: agrega las columnas de geolocalizacion. */
+IF COL_LENGTH('dbo.Sede', 'latitud') IS NULL
+    ALTER TABLE dbo.Sede ADD latitud DECIMAL(9,6) NULL;
+GO
+IF COL_LENGTH('dbo.Sede', 'longitud') IS NULL
+    ALTER TABLE dbo.Sede ADD longitud DECIMAL(9,6) NULL;
+GO
+IF OBJECT_ID('dbo.CK_Sede_Latitud', 'C') IS NULL
+    ALTER TABLE dbo.Sede ADD CONSTRAINT CK_Sede_Latitud CHECK (latitud BETWEEN -90 AND 90);
+GO
+IF OBJECT_ID('dbo.CK_Sede_Longitud', 'C') IS NULL
+    ALTER TABLE dbo.Sede ADD CONSTRAINT CK_Sede_Longitud CHECK (longitud BETWEEN -180 AND 180);
 GO
 
 
