@@ -1,0 +1,150 @@
+{% extends "base.html" %}
+
+{% block title %}Importación de Personal Técnico{% endblock %}
+{% block header_title %}Importación de Personal Técnico{% endblock %}
+{% block header_subtitle %}
+    Carga masiva desde CSV mediante el Stored Procedure
+    <code>importacion.Importar_Personal_Tecnico_CSV</code> (Entrega 6).
+{% endblock %}
+
+{% block content %}
+<section class="grid-superior">
+    <article class="tarjeta">
+        <div class="titulo-tarjeta">
+            <div>
+                <span class="numero">01</span>
+                <h2>Seleccionar archivo CSV</h2>
+            </div>
+            <code>importacion.Importar_Personal_Tecnico_CSV</code>
+        </div>
+
+        <form
+            method="post"
+            action="{{ url_for('importacion') }}"
+            enctype="multipart/form-data"
+        >
+            <label>
+                Subir nuevo archivo CSV (UTF-8)
+                <input
+                    type="file"
+                    name="archivo_csv"
+                    accept=".csv,text/csv"
+                >
+            </label>
+
+            {% if archivos_disponibles %}
+                <label>
+                    O elegir un CSV ya presente en la carpeta de importación
+                    <select name="archivo_existente">
+                        <option value="">-- Seleccionar archivo local --</option>
+                        {% for nombre in archivos_disponibles %}
+                            <option
+                                value="{{ nombre }}"
+                                {% if nombre == archivo_seleccionado %}selected{% endif %}
+                            >
+                                {{ nombre }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </label>
+            {% endif %}
+
+            <button class="primario" type="submit">
+                Ejecutar importación
+            </button>
+        </form>
+
+        <p class="ayuda">
+            Carpeta local: <code>{{ import_dir }}</code>.<br>
+            El archivo se guarda intacto y SQL Server ejecuta el
+            <code>BULK INSERT</code>, las validaciones y el <code>UPSERT</code>.
+        </p>
+    </article>
+
+    <article class="tarjeta">
+        <div class="titulo-tarjeta">
+            <div>
+                <span class="numero">02</span>
+                <h2>Resultado de ejecución</h2>
+            </div>
+            <code>Resumen SP</code>
+        </div>
+
+        {% if resumen %}
+            <div class="metricas-grid">
+                <div class="metrica">
+                    <span>Procesados</span>
+                    <strong>{{ resumen.registros_procesados }}</strong>
+                </div>
+                <div class="metrica ok">
+                    <span>Insertados</span>
+                    <strong>{{ resumen.registros_insertados }}</strong>
+                </div>
+                <div class="metrica info">
+                    <span>Actualizados</span>
+                    <strong>{{ resumen.registros_actualizados }}</strong>
+                </div>
+                <div class="metrica err">
+                    <span>Con error</span>
+                    <strong>{{ resumen.registros_con_error }}</strong>
+                </div>
+            </div>
+
+            <p class="ayuda inferior">
+                Archivo procesado: <code>{{ resumen.archivo }}</code>
+            </p>
+        {% else %}
+            <p class="ayuda">
+                Todavía no se ejecutó ninguna importación en esta sesión.
+                Columnas esperadas:
+                <code>seleccion,nombre_completo,rol,fecha_extraccion_utc</code>.
+            </p>
+        {% endif %}
+    </article>
+</section>
+
+{% if resumen %}
+<section class="tarjeta tabla-tarjeta">
+    <div class="titulo-tarjeta">
+        <div>
+            <span class="numero">03</span>
+            <h2>Detalle de registros rechazados</h2>
+        </div>
+        <code>#Errores</code>
+    </div>
+
+    <div class="tabla-scroll">
+        <table>
+            <thead>
+                <tr>
+                    <th>Reg. #</th>
+                    <th>Selección</th>
+                    <th>Nombre completo</th>
+                    <th>Rol</th>
+                    <th>Cód. Error</th>
+                    <th>Motivo informado por SQL Server</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for err in errores_importacion %}
+                    <tr>
+                        <td class="id">{{ err.registro_procesado }}</td>
+                        <td>{{ err.seleccion or '—' }}</td>
+                        <td>{{ err.nombre_completo or '—' }}</td>
+                        <td>{{ err.rol or '—' }}</td>
+                        <td><code>{{ err.numero_error }}</code></td>
+                        <td>{{ err.mensaje }}</td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td class="vacio" colspan="6">
+                            No se registraron errores de validación en los datos importados.
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endif %}
+{% endblock %}

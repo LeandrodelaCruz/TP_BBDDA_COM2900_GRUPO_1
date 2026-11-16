@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+
+{% block title %}Reporte de Designaciones Arbitrales (XML){% endblock %}
+{% block header_title %}Designaciones Arbitrales en XML{% endblock %}
+{% block header_subtitle %}
+    Generación y exportación desde el Stored Procedure
+    <code>reportes.Reporte_Designaciones_Arbitrales_XML</code> (Entrega 7).
+{% endblock %}
+
+{% block content %}
+<section class="grid-superior">
+    <article class="tarjeta">
+        <div class="titulo-tarjeta">
+            <div>
+                <span class="numero">01</span>
+                <h2>Parámetros del reporte</h2>
+            </div>
+            <code>reportes.Reporte_Designaciones_Arbitrales_XML</code>
+        </div>
+
+        <form method="get" action="{{ url_for('reporte_designaciones_arbitrales') }}">
+            <label>
+                ID Árbitro (opcional)
+                <input
+                    type="number"
+                    name="id_arbitro"
+                    value="{{ id_arbitro }}"
+                    placeholder="Dejar vacío para todos"
+                >
+            </label>
+
+            <label>
+                ID Partido (opcional)
+                <input
+                    type="number"
+                    name="id_partido"
+                    value="{{ id_partido }}"
+                    placeholder="Dejar vacío para todos"
+                >
+            </label>
+
+            <div class="acciones-form">
+                <button class="primario" type="submit">
+                    Consultar y guardar XML
+                </button>
+
+                <a
+                    class="boton-link secundario"
+                    href="{{ url_for(
+                        'descargar_reporte_xml',
+                        id_arbitro=id_arbitro,
+                        id_partido=id_partido
+                    ) }}"
+                >
+                    Descargar .XML
+                </a>
+            </div>
+        </form>
+
+        <p class="ayuda">
+            Las tarjetas se atribuyen únicamente al árbitro con rol
+            <strong>PRINCIPAL</strong>, según la regla definida en el SP.
+        </p>
+    </article>
+
+    <article class="tarjeta">
+        <div class="titulo-tarjeta">
+            <div>
+                <span class="numero">02</span>
+                <h2>Archivo XML guardado</h2>
+            </div>
+            <code>{{ nombre_archivo }}</code>
+        </div>
+
+        {% if ruta_guardada %}
+            <div class="resultado-busqueda">
+                <span>Archivo persistido en disco</span>
+                <strong>{{ nombre_archivo }}</strong>
+                <small>{{ ruta_guardada }}</small>
+            </div>
+
+            <form
+                method="post"
+                action="{{ url_for('reporte_designaciones_arbitrales') }}"
+                style="margin-top: 1rem;"
+            >
+                <input type="hidden" name="id_arbitro" value="{{ id_arbitro }}">
+                <input type="hidden" name="id_partido" value="{{ id_partido }}">
+                <button class="secundario" type="submit">
+                    Volver a guardar XML en disco
+                </button>
+            </form>
+        {% else %}
+            <p class="ayuda">
+                No se pudo generar el archivo XML. Revisá el mensaje de error superior.
+            </p>
+        {% endif %}
+    </article>
+</section>
+
+<section class="tarjeta tabla-tarjeta">
+    <div class="titulo-tarjeta">
+        <div>
+            <span class="numero">03</span>
+            <h2>Vista previa del XML generado</h2>
+        </div>
+        <code>FOR XML PATH</code>
+    </div>
+
+    {% if xml_contenido %}
+        <pre class="visor-xml"><code>{{ xml_contenido }}</code></pre>
+    {% else %}
+        <p class="vacio">No hay contenido XML para mostrar.</p>
+    {% endif %}
+</section>
+{% endblock %}

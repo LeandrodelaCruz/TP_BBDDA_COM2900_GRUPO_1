@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}MUNDIALDEFUTBOL · Entrega 9{% endblock %}</title>
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='styles.css') }}"
+    >
+</head>
+
+<body>
+    <main class="contenedor">
+        <header class="encabezado">
+            <div>
+                <p class="eyebrow">MUNDIALDEFUTBOL · ENTREGA 9</p>
+                <h1>{% block header_title %}Sistema de Gestión del Mundial{% endblock %}</h1>
+                <p class="subtitulo">
+                    {% block header_subtitle %}{% endblock %}
+                </p>
+            </div>
+
+            <div class="estado">
+                <span class="punto"></span>
+                SQL Server · localhost:1433
+            </div>
+        </header>
+
+        <nav class="navegacion" aria-label="Módulos de la aplicación">
+            <a
+                href="{{ url_for('index') }}"
+                class="nav-link {% if request.endpoint == 'index' %}activo{% endif %}"
+            >
+                ABM Anunciantes
+            </a>
+            <a
+                href="{{ url_for('importacion') }}"
+                class="nav-link {% if request.endpoint == 'importacion' %}activo{% endif %}"
+            >
+                Importación CSV (Entrega 6)
+            </a>
+            <a
+                href="{{ url_for('reporte_designaciones_arbitrales') }}"
+                class="nav-link {% if request.endpoint == 'reporte_designaciones_arbitrales' %}activo{% endif %}"
+            >
+                Reporte XML Árbitros (Entrega 7)
+            </a>
+        </nav>
+
+        {% if error_conexion %}
+            <div class="mensaje error">
+                <strong>Error:</strong> {{ error_conexion }}
+            </div>
+        {% endif %}
+
+        {% with mensajes = get_flashed_messages(with_categories=true) %}
+            {% for categoria, mensaje in mensajes %}
+                <div class="mensaje {{ categoria }}">
+                    {{ mensaje }}
+                </div>
+            {% endfor %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>
