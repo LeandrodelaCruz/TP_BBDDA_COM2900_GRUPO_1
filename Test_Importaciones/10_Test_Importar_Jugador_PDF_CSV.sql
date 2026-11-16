@@ -82,11 +82,9 @@ BEGIN
 END;
 GO
 
-/* Ruta esperada si SQL Server corre en el contenedor Docker "sqlserver":
-   /var/opt/mssql/import/jugadores_fifa_pdf.csv
-*/
+
 EXEC test.Importar_Jugador_PDF_CSV_Test
-    @archivo = N'/home/proyecto/jugadores_fifa_pdf.csv';
+    @archivo = N'/var/opt/mssql/import/jugadores_fifa_pdf.csv';
 GO
 
 select * from dbo.jugador;

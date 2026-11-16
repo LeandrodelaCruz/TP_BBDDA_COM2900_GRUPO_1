@@ -43,6 +43,38 @@ IF SCHEMA_ID(N'reportes') IS NULL
 GO
 
 /* ---------------------------------------------------------------
+   0. Vistas para Power BI (consultables como tablas)
+   Mismo criterio de conteo que los procedimientos de este archivo.
+   --------------------------------------------------------------- */
+CREATE OR ALTER VIEW reportes.v_Tarjetas_Por_Jugador
+AS
+    SELECT j.id_jugador,
+           j.nombre + N' ' + j.apellido AS jugador,
+           s.id_seleccion,
+           s.pais AS seleccion,
+           j.apellido,
+           j.nombre,
+           SUM(CASE WHEN i.tipo = 'AMONESTACION' THEN 1 ELSE 0 END) AS amarillas,
+           SUM(CASE WHEN i.tipo = 'EXPULSION'    THEN 1 ELSE 0 END) AS rojas
+    FROM dbo.Incidencia i
+    JOIN dbo.Jugador j   ON j.id_jugador = i.id_jugador
+    JOIN dbo.Seleccion s ON s.id_seleccion = j.id_seleccion
+    WHERE i.tipo IN ('AMONESTACION', 'EXPULSION')
+    GROUP BY j.id_jugador, j.nombre, j.apellido, s.id_seleccion, s.pais;
+GO
+
+CREATE OR ALTER VIEW reportes.v_Tarjetas_Por_Seleccion
+AS
+    SELECT s.id_seleccion,
+           s.pais AS seleccion,
+           COALESCE(SUM(tj.amarillas), 0) AS amarillas,
+           COALESCE(SUM(tj.rojas), 0)     AS rojas
+    FROM dbo.Seleccion s
+    LEFT JOIN reportes.v_Tarjetas_Por_Jugador tj ON tj.id_seleccion = s.id_seleccion
+    GROUP BY s.id_seleccion, s.pais;
+GO
+
+/* ---------------------------------------------------------------
    1. Tarjetas por seleccion
    --------------------------------------------------------------- */
 CREATE OR ALTER PROCEDURE reportes.Tarjetas_Por_Seleccion
@@ -50,25 +82,12 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
-    WITH tarjetas_seleccion AS
-    (
-        SELECT j.id_seleccion,
-               SUM(CASE WHEN i.tipo = 'AMONESTACION' THEN 1 ELSE 0 END) AS amarillas,
-               SUM(CASE WHEN i.tipo = 'EXPULSION'    THEN 1 ELSE 0 END) AS rojas
-        FROM dbo.Incidencia i
-        JOIN dbo.Jugador j ON j.id_jugador = i.id_jugador
-        WHERE i.tipo IN ('AMONESTACION', 'EXPULSION')
-        GROUP BY j.id_seleccion
-    )
-    SELECT (
-        SELECT s.pais AS [@pais],
-               ts.amarillas AS [@amarillas],
-               ts.rojas     AS [@rojas]
-        FROM tarjetas_seleccion ts
-        JOIN dbo.Seleccion s ON s.id_seleccion = ts.id_seleccion
-        ORDER BY ts.rojas DESC, ts.amarillas DESC, s.pais
-        FOR XML PATH('Seleccion'), ROOT('Tarjetas_Por_Seleccion'), TYPE
-    ) AS reporte_xml;
+    SELECT ts.seleccion,
+           ts.amarillas,
+           ts.rojas
+    FROM reportes.v_Tarjetas_Por_Seleccion ts
+    WHERE ts.amarillas > 0 OR ts.rojas > 0
+    ORDER BY ts.rojas DESC, ts.amarillas DESC, ts.seleccion;
 END;
 GO
 
@@ -122,43 +141,21 @@ BEGIN
         JOIN participaciones pa1 ON pa1.id_jugador = s.id_jugador AND pa1.nro = s.nro_amarilla_1
         JOIN participaciones pa2 ON pa2.id_jugador = s.id_jugador AND pa2.nro = s.nro_amarilla_2
         LEFT JOIN participaciones pc ON pc.id_jugador = s.id_jugador AND pc.nro = s.nro_cumplimiento
-    ),
-    tarjetas_jugador AS
-    (
-        SELECT j.id_jugador,
-               SUM(CASE WHEN i.tipo = 'AMONESTACION' THEN 1 ELSE 0 END) AS amarillas,
-               SUM(CASE WHEN i.tipo = 'EXPULSION'    THEN 1 ELSE 0 END) AS rojas
-        FROM dbo.Jugador j
-        JOIN dbo.Incidencia i ON i.id_jugador = j.id_jugador
-        WHERE i.tipo IN ('AMONESTACION', 'EXPULSION')
-        GROUP BY j.id_jugador
     )
-    SELECT (
-        SELECT s.pais AS [@seleccion],
-               (SELECT j.nombre + N' ' + j.apellido AS [@jugador],
-                       tj.amarillas                 AS [@amarillas],
-                       tj.rojas                     AS [@rojas],
-                       (SELECT sd.id_partido_amarilla_1 AS [@partido_amarilla_1],
-                               sd.id_partido_amarilla_2 AS [@partido_amarilla_2],
-                               sd.id_partido_cumplimiento AS [@partido_suspendido],
-                               CASE WHEN sd.resultado_cumplimiento IS NULL
-                                    THEN N'ACTIVA' ELSE N'CUMPLIDA' END AS [@estado]
-                        FROM suspension_detalle sd
-                        WHERE sd.id_jugador = j.id_jugador
-                        ORDER BY sd.id_partido_amarilla_2
-                        FOR XML PATH('Suspension'), TYPE) AS [Suspensiones]
-                FROM tarjetas_jugador tj
-                JOIN dbo.Jugador j ON j.id_jugador = tj.id_jugador
-                WHERE j.id_seleccion = s.id_seleccion
-                  AND (tj.amarillas > 0 OR tj.rojas > 0)
-                ORDER BY tj.rojas DESC, tj.amarillas DESC, j.apellido, j.nombre
-                FOR XML PATH('Jugador'), TYPE) AS [Jugadores]
-        FROM dbo.Seleccion s
-        WHERE EXISTS (SELECT 1 FROM tarjetas_jugador tj
-                      JOIN dbo.Jugador j ON j.id_jugador = tj.id_jugador
-                      WHERE j.id_seleccion = s.id_seleccion)
-        ORDER BY s.pais
-        FOR XML PATH('Seleccion'), ROOT('Tarjetas_Por_Jugador'), TYPE
-    ) AS reporte_xml;
+    SELECT tj.id_jugador,
+           tj.seleccion,
+           tj.jugador,
+           tj.amarillas,
+           tj.rojas,
+           sd.id_partido_amarilla_1,
+           sd.id_partido_amarilla_2,
+           sd.id_partido_cumplimiento AS partido_suspendido,
+           CASE WHEN sd.id_partido_amarilla_2 IS NULL THEN NULL
+                WHEN sd.resultado_cumplimiento IS NULL THEN N'ACTIVA'
+                ELSE N'CUMPLIDA' END AS estado_suspension
+    FROM reportes.v_Tarjetas_Por_Jugador tj
+    LEFT JOIN suspension_detalle sd ON sd.id_jugador = tj.id_jugador
+    WHERE tj.amarillas > 0 OR tj.rojas > 0
+    ORDER BY tj.seleccion, tj.rojas DESC, tj.amarillas DESC, tj.apellido, tj.nombre, sd.id_partido_amarilla_2;
 END;
 GO

@@ -15,7 +15,6 @@ GO
 SET NOCOUNT ON;
 GO
 
-
 /*============================================================
     ANUNCIANTE - ALTA
 ============================================================*/
@@ -39,24 +38,20 @@ BEGIN
         SET @errores +=
             N'- El nombre del anunciante es obligatorio. ';
 
-
     IF @nombre IS NOT NULL
        AND LEN(LTRIM(RTRIM(@nombre))) > 120
         SET @errores +=
             N'- El nombre no puede superar los 120 caracteres. ';
-
 
     IF @pais IS NULL
        OR LTRIM(RTRIM(@pais)) = N''
         SET @errores +=
             N'- El pais del anunciante es obligatorio. ';
 
-
     IF @pais IS NOT NULL
        AND LEN(LTRIM(RTRIM(@pais))) > 80
         SET @errores +=
             N'- El pais no puede superar los 80 caracteres. ';
-
 
     IF @nombre IS NOT NULL
        AND EXISTS
@@ -71,11 +66,8 @@ BEGIN
         SET @errores +=
             N'- Ya existe un anunciante con ese nombre. ';
 
-
     IF @errores <> N''
         THROW 50001, @errores, 1;
-
-
     ---------------------------------------------------------
     -- ALTA
     ---------------------------------------------------------
@@ -91,10 +83,8 @@ BEGIN
         LTRIM(RTRIM(@pais))
     );
 
-
     SET @id_anunciante =
         CAST(SCOPE_IDENTITY() AS INT);
-
 
     SELECT
         id_anunciante,
@@ -105,8 +95,6 @@ BEGIN
 
 END;
 GO
-
-
 
 /*============================================================
     ANUNCIANTE - MODIFICAR
@@ -121,12 +109,9 @@ BEGIN
     SET NOCOUNT ON;
 
     DECLARE @errores NVARCHAR(2048) = N'';
-
-
     ---------------------------------------------------------
     -- VALIDACIONES ID
     ---------------------------------------------------------
-
     IF @id_anunciante IS NULL
        OR @id_anunciante <= 0
         SET @errores +=
@@ -140,39 +125,30 @@ BEGIN
     )
         SET @errores +=
             N'- El anunciante indicado no existe. ';
-
-
     ---------------------------------------------------------
     -- VALIDACIONES NOMBRE
     ---------------------------------------------------------
-
     IF @nombre IS NULL
        OR LTRIM(RTRIM(@nombre)) = N''
         SET @errores +=
             N'- El nombre del anunciante es obligatorio. ';
 
-
     IF @nombre IS NOT NULL
        AND LEN(LTRIM(RTRIM(@nombre))) > 120
         SET @errores +=
             N'- El nombre no puede superar los 120 caracteres. ';
-
-
     ---------------------------------------------------------
     -- VALIDACIONES PAIS
     ---------------------------------------------------------
-
     IF @pais IS NULL
        OR LTRIM(RTRIM(@pais)) = N''
         SET @errores +=
             N'- El pais del anunciante es obligatorio. ';
 
-
     IF @pais IS NOT NULL
        AND LEN(LTRIM(RTRIM(@pais))) > 80
         SET @errores +=
             N'- El pais no puede superar los 80 caracteres. ';
-
 
     ---------------------------------------------------------
     -- VALIDAR DUPLICADO
@@ -192,10 +168,8 @@ BEGIN
         SET @errores +=
             N'- Ya existe un anunciante con ese nombre. ';
 
-
     IF @errores <> N''
         THROW 50002, @errores, 1;
-
 
     ---------------------------------------------------------
     -- MODIFICACION
@@ -207,7 +181,6 @@ BEGIN
         pais = LTRIM(RTRIM(@pais))
     WHERE id_anunciante = @id_anunciante;
 
-
     SELECT
         id_anunciante,
         nombre,
@@ -217,8 +190,6 @@ BEGIN
 
 END;
 GO
-
-
 
 /*============================================================
     ANUNCIANTE - BAJA
@@ -232,7 +203,6 @@ BEGIN
 
     DECLARE @errores NVARCHAR(2048) = N'';
 
-
     IF @id_anunciante IS NULL
        OR @id_anunciante <= 0
         SET @errores +=
@@ -247,18 +217,14 @@ BEGIN
         SET @errores +=
             N'- El anunciante indicado no existe. ';
 
-
     IF @errores <> N''
         THROW 50003, @errores, 1;
-
 
     DELETE FROM dbo.Anunciante
     WHERE id_anunciante = @id_anunciante;
 
 END;
 GO
-
-
 
 /*============================================================
     ANUNCIANTE - CONSULTAR POR ID
@@ -272,7 +238,6 @@ BEGIN
 
     DECLARE @errores NVARCHAR(2048) = N'';
 
-
     IF @id_anunciante IS NULL
        OR @id_anunciante <= 0
         SET @errores +=
@@ -287,10 +252,8 @@ BEGIN
         SET @errores +=
             N'- El anunciante indicado no existe. ';
 
-
     IF @errores <> N''
         THROW 50004, @errores, 1;
-
 
     SELECT
         id_anunciante,
@@ -301,9 +264,6 @@ BEGIN
 
 END;
 GO
-
-
-
 /*============================================================
     ANUNCIANTE - LISTAR
 ============================================================*/
@@ -312,7 +272,6 @@ CREATE OR ALTER PROCEDURE abm.Anunciante_Listar
 AS
 BEGIN
     SET NOCOUNT ON;
-
 
     SELECT
         id_anunciante,
@@ -323,3 +282,4 @@ BEGIN
 
 END;
 GO
+

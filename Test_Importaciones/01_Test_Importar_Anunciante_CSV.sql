@@ -95,7 +95,6 @@ BEGIN
 
         DECLARE @cantidad_encontrados INT;
 
-
         SELECT
             @cantidad_encontrados = COUNT(*)
         FROM @Esperados E
@@ -113,9 +112,7 @@ BEGIN
                   1;
         END;
 
-
         PRINT 'OK - Los 8 anunciantes fueron encontrados.';
-
 
         ----------------------------------------------------
         -- TEST 2
@@ -125,9 +122,7 @@ BEGIN
         PRINT '';
         PRINT 'TEST 2 - Verificando paises diferentes...';
 
-
         DECLARE @cantidad_paises INT;
-
 
         SELECT
             @cantidad_paises = COUNT(DISTINCT A.pais)
@@ -136,7 +131,6 @@ BEGIN
             ON UPPER(LTRIM(RTRIM(A.nombre)))
              = UPPER(LTRIM(RTRIM(E.nombre)));
 
-
         IF @cantidad_paises < 6
         BEGIN
             THROW 52002,
@@ -144,9 +138,7 @@ BEGIN
                   1;
         END;
 
-
         PRINT 'OK - Se cumple el minimo de 6 paises diferentes.';
-
 
         ----------------------------------------------------
         -- GUARDAR CANTIDAD ANTES DE SEGUNDA IMPORTACION
@@ -154,14 +146,12 @@ BEGIN
 
         DECLARE @cantidad_antes INT;
 
-
         SELECT
             @cantidad_antes = COUNT(*)
         FROM dbo.Anunciante A
         INNER JOIN @Esperados E
             ON UPPER(LTRIM(RTRIM(A.nombre)))
              = UPPER(LTRIM(RTRIM(E.nombre)));
-
 
         ----------------------------------------------------
         -- TEST 3
@@ -171,13 +161,10 @@ BEGIN
         PRINT '';
         PRINT 'TEST 3 - Ejecutando nuevamente el mismo archivo...';
 
-
         EXEC importacion.Importar_Anunciante_CSV
             @archivo = @archivo;
 
-
         DECLARE @cantidad_despues INT;
-
 
         SELECT
             @cantidad_despues = COUNT(*)
@@ -186,7 +173,6 @@ BEGIN
             ON UPPER(LTRIM(RTRIM(A.nombre)))
              = UPPER(LTRIM(RTRIM(E.nombre)));
 
-
         IF @cantidad_antes <> @cantidad_despues
         BEGIN
             THROW 52003,
@@ -194,10 +180,7 @@ BEGIN
                   1;
         END;
 
-
         PRINT 'OK - La segunda importacion no genero nuevos registros.';
-
-
         ----------------------------------------------------
         -- TEST 4
         -- VERIFICAR DUPLICADOS
@@ -318,3 +301,5 @@ EXEC test.Test_Importar_Anunciante_CSV
     @archivo =
     N'/var/opt/mssql/import/publicidad_mundial_scraping.csv';
 GO
+
+select * from dbo.anunciante;
