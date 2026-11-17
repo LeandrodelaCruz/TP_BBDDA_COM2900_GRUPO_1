@@ -35,4 +35,3 @@ WHERE r.name IN (N'rol_admin_funcional',N'rol_gestor_publicidad',N'rol_consulta'
 ORDER BY r.name,p.class,p.major_id,p.permission_name;
 -- Todos los usuarios tambien pertenecen implicitamente a public.
 GO
-
