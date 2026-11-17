@@ -207,6 +207,12 @@ BEGIN
             SET @n += 1;
         END
 
+        -- Cambio por lesion: con probabilidad 50% el equipo local sufre una lesion
+        -- dentro de los primeros 20 minutos (se reemplaza por una sustitucion).
+        IF ABS(CHECKSUM(NEWID())) % 2 = 0
+            INSERT INTO #plan (minuto, tipo, id_seleccion)
+            VALUES (CAST(8 + ABS(CHECKSUM(NEWID()) % 13) AS TINYINT), 'LESION', @id_local);
+
         -- Tiempo suplementario: solo en eliminatorias empatadas.
         -- 1 sustitucion por equipo en minutos 91..120.
         SET @hay_suplementario = CASE WHEN @goles_local = @goles_visitante
@@ -353,7 +359,7 @@ BEGIN
                 END
             END
 
-            ELSE IF @tipo = 'SUSTITUCION'
+            ELSE IF @tipo IN ('SUSTITUCION', 'LESION')
             BEGIN
                 SET @sale = NULL;
                 SET @entra = NULL;
@@ -388,6 +394,11 @@ BEGIN
                     -- Primera sustitucion del equipo: ventana 1 (bloque inicial)
                     SELECT @ventana = ventana_actual FROM #ventana_equipo WHERE id_seleccion = @sel;
 
+                    DECLARE @motivo_sus VARCHAR(100);
+                    SET @motivo_sus = CASE WHEN @tipo = 'LESION'
+                                           THEN 'Cambio por lesion simulado'
+                                           ELSE 'Cambio tactico simulado' END;
+
                     EXEC abm.Sustitucion_Alta
                         @id_partido       = @id_partido,
                         @id_jugador_sale  = @sale,
@@ -395,7 +406,7 @@ BEGIN
                         @minuto           = @minuto,
                         @periodo          = @periodo,
                         @numero_ventana   = @ventana,
-                        @motivo           = N'Cambio tactico simulado',
+                        @motivo           = @motivo_sus,
                         @id_sustitucion   = @id_sus OUTPUT;
                 END
             END
