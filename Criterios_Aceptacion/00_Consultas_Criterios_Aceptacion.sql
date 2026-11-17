@@ -559,6 +559,9 @@ GO
 USE MUNDIALDEFUTBOL;
 GO
 
+-- 0. Import con errores y jugadores rechazados por acumulación de amarillas
+EXEC importacion.Importar_Formacion_Jugador_JSON '/home/proyecto/alineaciones_extraidas_error.json';
+
 -- 1. Expulsiones
 SELECT *
 FROM dbo.vw_Caso_Expulsiones
