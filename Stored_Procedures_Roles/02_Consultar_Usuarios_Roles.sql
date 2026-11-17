@@ -23,7 +23,6 @@ WHERE u.name IN (N'usr_prueba_admin',N'usr_prueba_publicidad',N'usr_prueba_consu
   AND (@usuario IS NULL OR u.name=@usuario)
 ORDER BY u.name,r.name;
 
--- Permisos declarados en cada rol: no confundir con permisos efectivos.
 SELECT r.name AS Rol, p.state_desc AS Estado, p.permission_name AS Permiso,
        p.class_desc AS Ambito,
        CASE p.class WHEN 0 THEN DB_NAME()
@@ -36,3 +35,4 @@ WHERE r.name IN (N'rol_admin_funcional',N'rol_gestor_publicidad',N'rol_consulta'
 ORDER BY r.name,p.class,p.major_id,p.permission_name;
 -- Todos los usuarios tambien pertenecen implicitamente a public.
 GO
+
