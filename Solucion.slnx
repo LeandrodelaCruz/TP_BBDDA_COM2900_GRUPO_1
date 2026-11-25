@@ -19,7 +19,11 @@
     <File Path="Table/00_Script_DB_Schemas_Creacion.sql" />
     <File Path="Table/01_Script_Tablas_Creacion.sql" />
   </Folder>
+  <Folder Name="/Criterios_Aceptacion/">
+    <File Path="Criterios_Aceptacion/00_Consultas_Criterios_Aceptacion.sql" />
+  </Folder>
   <Folder Name="/Extras/">
+    <File Path="Extras/02_EXEC_Reportes.sql" />
     <File Path="Extras/Limpiar_Datos_Prueba.sql" />
     <File Path="Extras/Limpiar_Datos_Test_Lucas.sql" />
     <File Path="Extras/Script Manejo DB.sql" />
@@ -139,6 +143,7 @@
     <File Path="Test_Reportes/05_Test_Reporte_Selecciones_Plantillas_XML.sql" />
     <File Path="Test_Reportes/06_Test_Reporte_Resultados.sql" />
   </Folder>
+  <Folder Name="/Seguridad/" />
   <Folder Name="/Seguridad/Cifrado/">
     <File Path="Seguridad/Cifrado/01_Seguridad_Jugador.sql" />
     <File Path="Seguridad/Cifrado/02_Cifrar_Jugadores_Existentes.sql" />
@@ -153,6 +158,9 @@
     <File Path="Stored_Procedures_Roles/00_Roles_Usuarios.sql" />
     <File Path="Stored_Procedures_Roles/01_Configurar_Roles_Usuarios.sql" />
     <File Path="Stored_Procedures_Roles/02_Consultar_Usuarios_Roles.sql" />
+  </Folder>
+  <Folder Name="/Usuario BI/">
+    <File Path="Reportes/Usuario_Power_BI.sql" />
   </Folder>
   <Project Path="Solucion.ssmssqlproj" Type="4f2e2c19-372f-40d8-9fa7-9d2138c6997a">
     <Platform Project="?" />
