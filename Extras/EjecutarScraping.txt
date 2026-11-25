@@ -1,0 +1,18 @@
+$repo = 'D:\Leandro\Facultad\Bases de Datos Aplicadas\TP_BBDDA_COM2900_GRUPO_1'
+$python = Join-Path $repo '.venv\Scripts\python.exe'
+$scripts = Join-Path $repo 'Scraping'
+$datos = Join-Path $repo 'Archivos_Importacion'
+$nombreCarpeta = Get-Date -Format 'dd-MM-yyyy_HH-mm'
+$salida = (New-Item -ItemType Directory -Path (Join-Path $datos $nombreCarpeta) -ErrorAction Stop).FullName
+
+& $python "$scripts\01_Extraer_Arbitros_FIFA_PDF.py" "$datos\MEDIA-FWC26-Arbitros.pdf" --salida "$salida\arbitros_fifa_pdf.csv"
+& $python "$scripts\01_Extraer_Jugadores_FIFA_PDF.py" "$datos\SquadLists-Spanish.pdf" "$salida\jugadores_fifa_pdf.csv"
+& $python "$scripts\02_scrapear_publicidad_system1.py" "$salida\publicidad_mundial_scraping.csv"
+& $python "$scripts\03_scrapear_personal_tecnico_transfermarkt.py" --indice "$scripts\indice_selecciones_transfermarkt.csv" --salida "$salida\personal_tecnico.csv"
+
+Push-Location -LiteralPath $salida
+& $python "$scripts\11_Extraer_Formaciones_API.py"
+& $python "$scripts\12_Extraer_FormacionesJugadores_API.py"
+& $python "$scripts\13_Extraer_Partidos_API.py"
+Pop-Location
+
